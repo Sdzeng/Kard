@@ -1,0 +1,73 @@
+
+.splash {
+     //height:@splash-img-height;
+}
+
+
+.quote {
+    line-height: 1.8;
+  
+    >div{
+       position:absolute;
+       width:100%;
+       min-width: @body-min-width;
+       >blackquote{
+        position:relative;
+        display: inline-block;
+        overflow: hidden;
+       
+        text-align: center;
+       }
+     }
+}
+    
+.essay-content {
+   text-align: center;
+        
+   blackquote{
+     //top:250px;
+     //.transition(all 50ms linear);
+     color: #fff;
+     max-width: 520px;
+     //max-height:(@splash-img-height - 250px - 50px);
+     font-size: 17px;
+     font-family: "arkitalic","Georgia Italic","Georgia-Italic","Georgia",STKaiti,"AR PL UKai","AR PL KaitiM GB",KaiTi,KaiTi_GB2312,"TW-Kai",cursive;
+   }
+}
+    
+.essay-other{
+    text-align: right;
+
+    blackquote{
+     // top:290px;
+      right:5px;
+      border:2px solid #fff;
+     
+      max-width: 200px;
+      //max-height:(@splash-img-height - 300px - 10px);
+     div{
+       border:2px solid transparent;
+
+       background-color: transparent;
+     }
+     
+
+    }
+   
+   ul{
+    color:#2c2c2c;
+    padding:8px 18px;
+    background-color: #fff;
+     li{
+
+      &.author{
+       font-size:24px;
+     
+      }
+     }
+   }     
+  
+}
+
+
+

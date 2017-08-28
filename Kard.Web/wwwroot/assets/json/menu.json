@@ -1,0 +1,45 @@
+﻿{
+    "menu": {
+      "l1menu": [
+        {
+          "id": "1",
+          "name": "BS",
+          "namech": "首页",
+          "url": "home/index"
+        },
+        {
+          "id": "2",
+          "name": "BS",
+          "namech": "绘本",
+          "url": "home/index"
+        },
+        {
+          "id": "3",
+          "name": "BS",
+          "namech": "工艺",
+          "url": "home/index"
+        },
+        {
+          "id": "4",
+          "name": "BS",
+          "namech": "小件",
+          "url": "home/index"
+        },
+        {
+          "id": "5",
+          "name": "BS",
+          "namech": "摄影",
+          "url": "home/index"
+        },
+        {
+          "id": "6",
+          "name": "CS",
+          "namech": "More",
+           "url": "home/index"
+
+        }
+      ]
+            
+          
+    }
+}

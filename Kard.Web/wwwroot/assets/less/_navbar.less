@@ -1,0 +1,112 @@
+
+
+.navbar {
+  position: fixed;
+  right: 0;
+  left: 0;
+  margin:0;
+  padding:0 38px;
+  z-index: 10;
+  font-size: @navbar-font-size;
+  min-height: @navbar-height;
+  min-width: @body-min-width;
+  border:0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  //background-color:transparent !important;
+  .transition(min-height @navbar-transition-time ease);
+  &:extend(.clearfix all);
+  
+  .navbar-logo {
+    font-size:@navbar-logo-font-size;
+    float: left;
+    margin-right: 35px;
+    padding: (@navbar-logo-padding-vertical-avg * 1.4) 10px (@navbar-logo-padding-vertical-avg * 0.6);
+   .transition(all @navbar-transition-time ease);
+   
+    a{
+      color: #fff;
+      &:hover,
+      &:focus {
+        color: #FFF;
+        background-color: transparent;
+      }
+      img{
+        display: inline;
+        padding: 0 10px;
+        height:@navbar-logo-font-size;
+      }
+    }
+  }
+  
+
+  .navbar-left  {
+   ul{
+     float:left;
+   }
+  }
+  .navbar-right {
+    .pull-right();
+  }
+  
+  .navbar-nav {
+    li{
+       position: relative;
+       float: left;
+       padding: (@navbar-padding-vertical-avg * 1.4) 10px (@navbar-padding-vertical-avg * 0.6);
+       display: block;
+       .transition(all @navbar-transition-time ease);
+       
+       a{
+         color: #fff;
+         padding: 3px 13px;
+         border-radius: 8px;
+         &:hover,
+         &:focus {
+           .bg-variant-alpha(@alpha:0.4);
+          }
+       }
+       
+       &.active{
+        a{
+          &:hover,
+          &:focus {
+            .bg-variant-alpha(@alpha:0.5);
+          }
+         }
+       }
+       
+       &.disabled{
+        a{
+          &:hover,
+          &:focus {
+            .bg-variant-alpha(@alpha:0);
+          }
+         }
+       }
+       
+       
+    }
+  }
+
+}
+
+.navbar-min{
+        min-height:@navbar-min-height;
+
+        .navbar-logo {
+           padding: @navbar-min-logo-padding-vertical-avg 10px ;
+         }
+      
+        .navbar-nav  > li {
+           padding: @navbar-min-padding-vertical-avg 10px;
+         } 
+}
+
+.navbar-bottom-shadow {
+         border-bottom-color:rgba(0, 0, 0, 0.2);
+        .box-shadow(~"0 2px 5px 0 rgba(0,0,0,0.16),0 4px 10px 0 rgba(0,0,0,0.12)");
+        .navbar-min();
+} 
+  
+
+

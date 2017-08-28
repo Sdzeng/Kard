@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+
+
+  <ItemGroup>
+    <Compile Remove="DapperModule.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.2" />
+    <PackageReference Include="MySql.Data" Version="8.0.8-dmr" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kard.Core\Kard.Core.csproj" />
+    <ProjectReference Include="..\Kard\Kard.csproj" />
+  </ItemGroup>
+
+ 
+
+
+</Project>

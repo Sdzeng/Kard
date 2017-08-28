@@ -1,0 +1,36 @@
+@font-size-base:          13px;
+@font-size-h1:            floor((@font-size-base * 2.6)); // ~34px
+@font-size-h2:            floor((@font-size-base * 2.15)); // ~28px
+@font-size-h3:            ceil((@font-size-base * 1.5)); // ~19.5px
+@font-size-h4:            ceil((@font-size-base * 1.25)); // ~16px
+@font-size-h5:            @font-size-base;
+@font-size-h6:            ceil((@font-size-base * 0.85)); // ~11px
+
+@line-height-base:        1.428571429; // 20/14
+@line-height-computed:    floor((@font-size-base * @line-height-base)); // ~18.5px
+
+@body-min-width:          880px;
+//navbar
+@navbar-height:                    75px;
+@navbar-font-size:                 15px;
+@navbar-logo-font-size:            (@navbar-font-size * 1.2);
+@navbar-line-height:               ((@navbar-font-size * @line-height-base));
+@navbar-logo-line-height:          ((@navbar-logo-font-size * @line-height-base));
+@navbar-padding-vertical-avg:      ceil((@navbar-height - @navbar-line-height ) / 2);
+@navbar-logo-padding-vertical-avg: ceil((@navbar-height - @navbar-logo-line-height) / 2);
+ 
+
+
+@navbar-transition-time:           400ms;
+
+@navbar-min-height:                52px;
+@navbar-min-padding-vertical-avg:      ceil((@navbar-min-height - @navbar-line-height ) / 2);
+@navbar-min-logo-padding-vertical-avg: ceil((@navbar-min-height - @navbar-logo-line-height) / 2);
+
+
+ 
+@splash-img-background-position-y:100px;
+
+
+
+

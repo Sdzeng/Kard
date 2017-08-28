@@ -1,0 +1,16 @@
+﻿################################################################################
+# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
+################################################################################
+.vs
+obj
+bin
+*.cache
+*.user
+/logs
+/packages
+
+
+
+
+Kard.Publish
+/Kard.Web/Properties/PublishProfiles/*.pubxml
