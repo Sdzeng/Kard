@@ -1,3 +1,4 @@
+var baseUrl = "https://www.localyc.com";
 var defaults = {
 	type:"POST",
 	contentType:null,//"application/json;charset=utf-8",
@@ -97,7 +98,7 @@ var topMenu = {
 
 			
 			//菜单
-            $.when($.getJSON('/assets/json/menu.json'), $.get('/api/menu/'))
+            $.when($.getJSON(baseUrl + '/assets/json/menu.json'), $.get(baseUrl+'/api/menu/'))
 			.done(
 					function() {
 						//debugger;
@@ -201,7 +202,7 @@ var topCover = {
 			
 		    //设置首页封面
 			var helper=	new httpHelper({
-                url:"api/cover/",
+                url: baseUrl+"/api/cover/",
                 success: function (data) {
            
 					//data = JSON.parse(data);
