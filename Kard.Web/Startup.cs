@@ -39,12 +39,12 @@ namespace Kard.Web
             }
             else
             {
-                app.UseExceptionHandler("/pages/error.htm");
+               app.UseExceptionHandler("/error.htm");
             }
 
             DefaultFilesOptions options = new DefaultFilesOptions();
             options.DefaultFileNames.Clear();
-            options.DefaultFileNames.Add("/pages/index.htm");
+            options.DefaultFileNames.Add("index.htm");
             app.UseDefaultFiles(options);
 
             var provider = new FileExtensionContentTypeProvider();

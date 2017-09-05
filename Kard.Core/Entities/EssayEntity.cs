@@ -14,7 +14,7 @@ namespace Kard.Core.Entities
 
 
         public long Id { get; set; }
-        public string Category { get; set; }
+    
         public string Content { get; set; }
         public string Location { get; set; }
         public int RepostNum { get; set; }

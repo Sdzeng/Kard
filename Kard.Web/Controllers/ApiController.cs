@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Kard.Core.AppServices.Cover;
 using Kard.Core.Entities;
+using Kard.Core.IRepositories;
+using Kard.Core.AppServices.Media;
 
 namespace Kard.Web.Controllers
 {
@@ -17,10 +19,15 @@ namespace Kard.Web.Controllers
     {
         private readonly IMemoryCache _memoryCache;
         private readonly ICoverAppService _coverAppService;
-        public ApiController(IMemoryCache memoryCache, ICoverAppService coverAppService)
+        private readonly IMediaAppService _mediaAppService;
+        public ApiController(
+            IMemoryCache memoryCache,
+            ICoverAppService coverAppService,
+            IMediaAppService mediaAppService)
         {
             _memoryCache = memoryCache;
             _coverAppService = coverAppService;
+            _mediaAppService = mediaAppService;
         }
 
 
@@ -33,13 +40,20 @@ namespace Kard.Web.Controllers
         [HttpPost("cover")]
         public CoverEntity GetCover()
         {
-            var today = DateTime.Now.Date;
+            var today = new DateTime(2017,8,1);// DateTime.Now.Date;
             string cacheKey = $"cover[{today.ToString("yyyyMMdd")}]";
             CoverEntity coverEntity = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) => {
                 cacheEntry.SetAbsoluteExpiration(today.AddDays(1));
                 return _coverAppService.GetDateCover(today);
             });
             return coverEntity;
+        }
+
+        [HttpPost("topMediaPicture")]
+        public IEnumerable<MediaEntity> GetTopMediaPicture()
+        {
+            var aWeekAgo =  DateTime.Now.Date.AddMonths(-7);
+            return _mediaAppService.GetTopMediaPicture(aWeekAgo);
         }
 
 

@@ -1,23 +1,58 @@
 
 .section-style
 {
-padding:60px 80px;
+display:inline-block;
+width:100%;
+padding:60px 180px;
 
 }
 
-.section-title
-{
-  line-height: 1.1;
-  text-align:center;
-  & h2
-  {
-    word-spacing: 8px;
-    letter-spacing: 2px;
-    margin:10px auto;
-  }
-   & h6
-  {
-    letter-spacing: 1px;
-    margin:10px auto;
-  }
+.section-title {
+    padding: 20px 0px;
+    line-height: 1.1;
+    text-align: center;
+
+    & h2 {
+        word-spacing: 8px;
+        letter-spacing: 2px;
+        margin: 10px auto;
+    }
+
+    & h6 {
+        letter-spacing: 1px;
+        margin: 10px auto;
+    }
 }
+
+
+.section-host {
+    min-height: 400px;
+
+    &-left {
+        width: 30%;
+        border: 1px solid red;
+        float: left;
+        padding: 5px 5px;
+
+        .picture-warp {
+            width: 170px;
+            min-height: 170px;
+            float: left;
+        }
+    }
+
+    &-middle {
+        width: 50%;
+        border: 1px solid red;
+        float: left;
+        padding: 5px 5px;
+    }
+
+    &-right {
+        width: 20%;
+        border: 1px solid red;
+        float: left;
+        padding: 5px 5px;
+    }
+}
+

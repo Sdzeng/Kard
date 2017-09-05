@@ -4,6 +4,18 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
+    <PostBuildEvent></PostBuildEvent>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\assets\image\media\**" />
+    <Content Remove="wwwroot\assets\image\media\**" />
+    <EmbeddedResource Remove="wwwroot\assets\image\media\**" />
+    <None Remove="wwwroot\assets\image\media\**" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Remove="Controllers\CoverController.cs" />
     <Compile Remove="Controllers\ErrorController.cs" />
@@ -28,11 +40,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="logs\ngx\" />
+    <Folder Include="logs\supervisor\" />
     <Folder Include="wwwroot\assets\css\" />
+    <Folder Include="wwwroot\builds\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\pages\error.htm" />
+    <None Include="wwwroot\error.htm" />
   </ItemGroup>
 
 </Project>

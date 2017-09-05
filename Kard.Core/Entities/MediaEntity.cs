@@ -15,7 +15,15 @@ namespace Kard.Core.Entities
 
         public long Id { get; set; }
         public long EssayId { get; set; }
-        public string Path { get; set; }
+
+        public int Sort { get; set; }
+
+        public string MediaType { get; set; }
+
+        public string MediaExtension { get; set; }
+
+
+        public string CdnPath { get; set; }
         public long HeartNum { get; set; }
 
 

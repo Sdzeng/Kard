@@ -1,6 +1,7 @@
-var baseUrl = "https://www.localyc.com";
+var baseUrl = "";//"https://www.localyc.com";
 var defaults = {
-	type:"POST",
+    type: "POST",
+    async:true,
 	contentType:null,//"application/json;charset=utf-8",
 	data:null,
 	loading:"off"
@@ -27,7 +28,8 @@ $.extend(httpHelper.prototype, {
         
 		var _this=this;
 		_this.opts =opts;
-		_this.opts.type=opts.type||defaults.type;
+        _this.opts.type = opts.type || defaults.type;
+        _this.opts.async = opts.async || defaults.async;
 		_this.opts.contentType=opts.contentType||defaults.contentType;
 		_this.opts.data=opts.data||defaults.data;
 		_this.opts.loading=opts.loading||defaults.loading;
@@ -46,7 +48,8 @@ $.extend(httpHelper.prototype, {
 	        return $.Deferred(function ($dfd) {
 		        $.ajax({
 		            url: _this.opts.url,
-		            type: _this.opts.type,
+                    type: _this.opts.type,
+                    async: _this.opts.async,
 		            data: _this.opts.data,
 		            contentType: _this.opts.contentType,
 		            traditional: _this.opts.traditional,
@@ -98,13 +101,14 @@ var topMenu = {
 
 			
 			//菜单
-            $.when($.getJSON(baseUrl + '/assets/json/menu.json'), $.get(baseUrl+'/api/menu/'))
+            //$.when($.getJSON(baseUrl + '/assets/json/menu.json'), $.get(baseUrl + '/api/menu/'))
+            $.when($.getJSON(baseUrl + '/assets/json/menu.json'))
 			.done(
 					function() {
-						//debugger;
+					 
 						var arg=arguments;
-						var data = arguments[0][0];// root = arguments[1][0].toUpperCase().split(',');
-
+						//var data = arguments[0][0];// root = arguments[1][0].toUpperCase().split(',');
+                        var data = arguments[0];
 						_this.setMenu(data.menu||{});
 						// _this.initShow();
 			});
@@ -211,15 +215,15 @@ var topCover = {
 	                  return;
                     }
 
-                    
+           
 					//data.media.hasOwnProperty("path")&&
-					if(data.media.path&&data.media.kuser.nikeName)
-					{
-                        $(".bg-layer").css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(/assets/image/media/" + (data.media.path || "") +")");
+					 
+                       
+                        $(".bg-layer").css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(/assets/media/" + (data.media.cdnPath + "_2000x400." + data.media.mediaExtension || "") + ")").fadeIn("slow");
 						$(".essay-content>blackquote>q").text(data.media.essay.content||"");
 						$(".author").text(data.media.kuser.nikeName||"");
 						$(".location").text((data.media.essay.location||"")+" 凌晨5点");
-					}
+				 
 				 
 				
 				}

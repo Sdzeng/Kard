@@ -29,7 +29,7 @@ namespace Kard.Dapper.Mysql.Repositories
 		                        left join media on cover.mediaid = media.id   
 		                        left join essay on media.essayid = essay.id 
                                 left join kuser on essay.creator=kuser.id 
-                                where essay.isdeleted=0  ";
+                                where essay.isdeleted=0 and media.mediatype='picture' ";
                 var entityList= connecton.Query<CoverEntity, MediaEntity, EssayEntity,  KuserEntity, CoverEntity>(sql, (cover, media, essay, kuser ) =>
                   {
                       media.Essay = essay;
