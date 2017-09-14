@@ -1,14 +1,12 @@
 
-.section-style
-{
-display:inline-block;
-width:100%;
-padding:60px 180px;
-
+.section-style {
+    display: inline-block;
+    width: 100%;
+    padding: 60px 180px;
 }
 
 .section-title {
-    padding: 20px 0px;
+    padding: 15px 0px;
     line-height: 1.1;
     text-align: center;
 
@@ -29,15 +27,33 @@ padding:60px 180px;
     min-height: 400px;
 
     &-left {
+        min-width: 190px;
+        max-width: 370px;
         width: 30%;
-        border: 1px solid red;
         float: left;
         padding: 5px 5px;
 
         .picture-warp {
-            width: 170px;
+            margin: 5px;
+            min-width: 170px;
             min-height: 170px;
             float: left;
+
+            img {
+                border-radius: 3px;
+            }
+
+            .picture-desc {
+                padding: 3px 0;
+
+                .picture-name {
+                    padding-right: 5px;
+                }
+
+                .picture-num {
+                    color: #ccc;
+                }
+            }
         }
     }
 
@@ -46,6 +62,13 @@ padding:60px 180px;
         border: 1px solid red;
         float: left;
         padding: 5px 5px;
+
+        .essay-info {
+            &-top, &-middle, &-buttom {
+                width: 100%;
+                display:inline-block;
+            }
+        }
     }
 
     &-right {
@@ -55,4 +78,3 @@ padding:60px 180px;
         padding: 5px 5px;
     }
 }
-

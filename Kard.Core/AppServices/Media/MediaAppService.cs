@@ -1,4 +1,5 @@
-﻿using Kard.Core.Entities;
+﻿using Kard.Core.Dtos;
+using Kard.Core.Entities;
 using Kard.Core.IRepositories;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Kard.Core.AppServices.Media
 
         }
 
-        public IEnumerable<MediaEntity> GetTopMediaPicture(DateTime creationTime)
+        public IEnumerable<TopMediaDto> GetTopMediaPicture(DateTime creationTime)
         {
             return _mediaRepository.GetTopMediaPicture(creationTime);
         }

@@ -1,12 +1,11 @@
-﻿using Kard.Core.Entities;
+﻿using Kard.Core.Dtos;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Kard.Core.IRepositories
 {
     public interface IMediaRepository : IRepository
     {
-        IEnumerable<MediaEntity> GetTopMediaPicture(DateTime creationTime);
+        IEnumerable<TopMediaDto> GetTopMediaPicture(DateTime creationTime);
     }
 }

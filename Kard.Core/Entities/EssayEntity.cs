@@ -14,6 +14,8 @@ namespace Kard.Core.Entities
 
 
         public long Id { get; set; }
+
+        public string Title { get; set; }
     
         public string Content { get; set; }
         public string Location { get; set; }
@@ -21,6 +23,7 @@ namespace Kard.Core.Entities
         public int CommentNum { get; set; }
         public int GoodNum { get; set; }
  
+        public long? ParentEssayId { get; set; }
 
 
     }

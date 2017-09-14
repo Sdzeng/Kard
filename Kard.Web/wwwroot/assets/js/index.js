@@ -24,17 +24,17 @@
                 for (var index in data)
                 {
                     var media = data[index];
-                    var picturePath = baseUrl + "/assets/media/"+media.cdnPath + "_170x150." + media.mediaExtension;
+                    var picturePath = baseUrl + "/assets/media/" + media.cdnPath + "." + media.mediaExtension;
+                    var pictureCropPath = baseUrl + "/assets/media/"+media.cdnPath + "_170x150." + media.mediaExtension;
                     topMediaPictureHtml += "<div class='picture-warp'>"+
                         "<a href= '" + picturePath+"' >" +
-                        "<img src='" + picturePath + "' data-origin='" + picturePath+"' alt='' />" +
+                        "<img src='" + pictureCropPath + "' data-origin='" + picturePath+"' alt='' />" +
                         "</a >" +
                         "<div class='picture-desc'>" +
-                        "<span class='picture-name'><a href='" + picturePath + "'>夏日食材</a></span>" +
-                        "<span class='picture-num'>24张照片</span>" +
+                        "<span class='picture-name'><a href='" + picturePath + "'>" + (media.title || media.creatorNikeName)+"</a></span>" +
+                        "<span class='picture-num'>" + media.essayMediaCount+"张</span>" +
                         "</div>" +
                         "</div >";
-                   
                 }
                 _this.sectionHostLeftObj.append(topMediaPictureHtml);
             }

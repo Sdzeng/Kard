@@ -9,6 +9,7 @@ using Kard.Core.AppServices.Cover;
 using Kard.Core.Entities;
 using Kard.Core.IRepositories;
 using Kard.Core.AppServices.Media;
+using Kard.Core.Dtos;
 
 namespace Kard.Web.Controllers
 {
@@ -50,7 +51,7 @@ namespace Kard.Web.Controllers
         }
 
         [HttpPost("topMediaPicture")]
-        public IEnumerable<MediaEntity> GetTopMediaPicture()
+        public IEnumerable<TopMediaDto> GetTopMediaPicture()
         {
             var aWeekAgo =  DateTime.Now.Date.AddMonths(-7);
             return _mediaAppService.GetTopMediaPicture(aWeekAgo);
