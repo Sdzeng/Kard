@@ -220,7 +220,7 @@ var topCover = {
 					 
                        
                     $(".bg-layer").css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(/assets/media/" + (data.media.cdnPath + "." + data.media.mediaExtension || "") + ")").fadeIn("slow");
-						$(".essay-content>blackquote>q").text(data.media.essay.content||"");
+                    $(".essay-content>blackquote>q").text(data.media.essay.simpleContent||"");
 						$(".author").text("@"+data.media.kuser.nikeName||"");
 						$(".location").text((data.media.essay.location||"")+" 凌晨5点");
 				 

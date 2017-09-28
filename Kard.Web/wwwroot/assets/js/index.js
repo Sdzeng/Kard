@@ -31,8 +31,9 @@
                         "<img src='" + pictureCropPath + "' data-origin='" + picturePath+"' alt='' />" +
                         "</a >" +
                         "<div class='picture-desc'>" +
-                        "<span class='picture-name'><a href='" + picturePath + "'>" + (media.title || media.creatorNikeName)+"</a></span>" +
-                        "<span class='picture-num'>" + media.essayMediaCount+"张</span>" +
+                        "<span class='picture-name'><a href='" + picturePath + "'>" + (media.firstTagName || media.creatorNikeName).substring(0, 6) + "</a></span>" +
+                        "<span class='picture-num'>" + media.essayMediaCount + "张</span>" +
+                        "<span class='picture-like'>" + media.essayLikeNum + "人喜欢</span>" +
                         "</div>" +
                         "</div >";
                 }

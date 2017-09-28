@@ -21,12 +21,14 @@ namespace Kard.Dapper.Mysql.Repositories
             using (IDbConnection connecton = GetConnection())
             {
 
-                string sql = @"select t2.*,essay.Title,kuser.NikeName CreatorNikeName from (
-                select count(t.EssayId) EssayMediaCount,t.HeartNum MediaHeartNum,t.EssayId,t.CdnPath,t.MediaExtension,t.Creator 
-                                from(select * from media where CreationTime >@CreationTime and MediaType = 'picture' order by HeartNum desc) t
-                                    group by t.EssayId limit 4
-                )t2 LEFT join  essay on t2.EssayId=essay.Id LEFT JOIN kuser on t2.Creator=kuser.Id
-                ";
+                string sql = @"select t.EssayMediaCount,essay.LikeNum EssayLikeNum,media.EssayId,media.CdnPath,media.MediaExtension,essay.Content EssayContent,essay.Creator,kuser.NikeName CreatorNikeName from (
+                    select  media.EssayId,min(media.Sort) MinSort,count(media.Id) EssayMediaCount
+                    from media join essay on media.EssayId=essay.Id and media.MediaType='picture' and media.CreationTime>@CreationTime 
+                    group by media.EssayId  order by essay.LikeNum desc limit 4
+                    ) t join media on t.EssayId=media.EssayId and t.MinSort=media.Sort 
+                   join essay on media.EssayId=essay.Id 
+                   join kuser on essay.Creator=kuser.Id   
+                  order by EssayLikeNum desc";
                 var topMediaDtoList = connecton.Query<TopMediaDto>(sql, new { CreationTime = creationTime });
 
                 return topMediaDtoList;

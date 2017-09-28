@@ -24,8 +24,7 @@ namespace Kard.Core.Entities
 
 
         public string CdnPath { get; set; }
-        public long HeartNum { get; set; }
-
+ 
 
         public EssayEntity Essay;
 
