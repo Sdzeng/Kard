@@ -237,7 +237,7 @@ var topCover = {
 								var splashHeight = _this.splashObj.outerHeight();
 								var splashNoNavbarHeight=(splashHeight - navbarHeight);
 								
-								var contentBlackquoteTop= 250;//parseInt(_this.contentBlackquoteObj.css("top"));
+								var contentBlackquoteTop= 200;//parseInt(_this.contentBlackquoteObj.css("top"));
 								var contentBlackquoteHeight= _this.contentBlackquoteObj.outerHeight();
 								var contentBlackquoteTopRange=(splashHeight - contentBlackquoteTop - contentBlackquoteHeight);
 								var coeff=(scrollTop/(splashNoNavbarHeight - contentBlackquoteHeight));

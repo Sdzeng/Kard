@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace Kard.Dapper.Mysql.Repositories
 {
@@ -24,12 +25,14 @@ namespace Kard.Dapper.Mysql.Repositories
                 string sql = @"select t.EssayMediaCount,essay.LikeNum EssayLikeNum,media.EssayId,media.CdnPath,media.MediaExtension,essay.Content EssayContent,essay.Creator,kuser.NikeName CreatorNikeName from (
                     select  media.EssayId,min(media.Sort) MinSort,count(media.Id) EssayMediaCount
                     from media join essay on media.EssayId=essay.Id and media.MediaType='picture' and media.CreationTime>@CreationTime 
-                    group by media.EssayId  order by essay.LikeNum desc limit 4
+                    group by media.EssayId  order by essay.LikeNum desc limit 7
                     ) t join media on t.EssayId=media.EssayId and t.MinSort=media.Sort 
                    join essay on media.EssayId=essay.Id 
                    join kuser on essay.Creator=kuser.Id   
                   order by EssayLikeNum desc";
                 var topMediaDtoList = connecton.Query<TopMediaDto>(sql, new { CreationTime = creationTime });
+
+                topMediaDtoList=topMediaDtoList.Where((m, index) => index != 0);
 
                 return topMediaDtoList;
             }

@@ -2,7 +2,7 @@
 .section-style {
     display: inline-block;
     width: 100%;
-    padding: 50px 180px;
+    padding: 50px 260px;
 }
 
 .section-title {
@@ -27,14 +27,14 @@
     min-height: 400px;
 
     &-left {
-        min-width: 190px;
-        max-width: 370px;
+        min-width: 200px;
+        max-width: 380px;
         width: 30%;
         float: left;
-        padding: 5px 5px;
+        padding: 10px;
 
         .picture-warp {
-            margin: 5px;
+            margin: 0 5px 10px 5px;
             min-width: 170px;
             min-height: 170px;
             float: left;
@@ -66,14 +66,35 @@
 
     &-middle {
         width: 50%;
-        border: 1px solid red;
         float: left;
-        padding: 5px 5px;
+        padding: 10px;
 
         .essay-info {
-            &-top, &-middle, &-buttom {
-                width: 100%;
-                display: inline-block;
+            width: 100%;
+            display: inline-block;
+
+            &-right {
+
+                &-buttom {
+                    li {
+                        font-size: 12px;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        color: #b6b6b6;
+
+                        a {
+                            margin-left: 10px;
+                        }
+                    }
+
+                    &-tags {
+                        float: left;
+                    }
+
+                    &-nums {
+                        float: right;
+                    }
+                }
             }
         }
     }
