@@ -9,7 +9,7 @@
     setPicture: function () {
         var _this = this;
 
-        //设置首页封面
+        //设置host
         var helper = new httpHelper({
             url: baseUrl + "/api/topMediaPicture/",
             contentType:"application/json;charset=utf-8",
@@ -33,7 +33,7 @@
                         "<div class='picture-desc'>" +
                         "<span class='picture-name'><a href='" + picturePath + "'>" + (media.firstTagName || media.creatorNikeName).substring(0, 6) + "</a></span>" +
                         "<span class='picture-num'>" + media.essayMediaCount + "张</span>" +
-                        "<span class='picture-like'>" + media.essayLikeNum + "人喜欢</span>" +
+                        "<a class='href-label picture-like'>" + media.essayLikeNum + "人喜欢</a>" +
                         "</div>" +
                         "</div >";
                 }

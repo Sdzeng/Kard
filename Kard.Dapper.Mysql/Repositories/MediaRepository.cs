@@ -19,7 +19,7 @@ namespace Kard.Dapper.Mysql.Repositories
 
         public IEnumerable<TopMediaDto> GetTopMediaPicture(DateTime creationTime)
         {
-            using (IDbConnection connecton = GetConnection())
+            return ConnExecute(connecton =>
             {
 
                 string sql = @"select t.EssayMediaCount,essay.LikeNum EssayLikeNum,media.EssayId,media.CdnPath,media.MediaExtension,essay.Content EssayContent,essay.Creator,kuser.NikeName CreatorNikeName from (
@@ -32,10 +32,10 @@ namespace Kard.Dapper.Mysql.Repositories
                   order by EssayLikeNum desc";
                 var topMediaDtoList = connecton.Query<TopMediaDto>(sql, new { CreationTime = creationTime });
 
-                topMediaDtoList=topMediaDtoList.Where((m, index) => index != 0);
+                topMediaDtoList = topMediaDtoList.Where((m, index) => index != 0);
 
                 return topMediaDtoList;
-            }
+            });
         }
 
     }

@@ -1,11 +1,13 @@
 ﻿using Kard.Extensions;
 using Kard.Web.Middlewares.ApiAuthorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.IO.Compression;
@@ -37,10 +39,27 @@ namespace Kard.Web
                 options.Cookie.Name = ".Kard.Session";
                 options.IdleTimeout = TimeSpan.FromDays(7);
             });
-            services.AddApiAuthorization(options => {
-                options.PathMatch = "/user";
+            if (env.IsProduction())
+            {
+                services.AddApiAuthorization(options =>
+                {
+                    options.PathMatch = "/user";
+                });
+            }
+            else
+            {
+                services.AddApiAuthorization(options =>
+                {
+                    var alipaySectionConfig = Configuration.GetSection("ApiAuthorization");
+                    options.PathMatch = alipaySectionConfig["PathMatch"];
+                });
+            }
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+           .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
+           {
+             o.LoginPath = "/login";
+             o.AccessDeniedPath = "/login";
             });
-
             services.AddResponseCompression(options =>
             {
                 options.Providers.Add<GzipCompressionProvider>();
@@ -52,11 +71,15 @@ namespace Kard.Web
                 options.Level = CompressionLevel.Fastest;
             });
             services.AddModule();
+            //services.AddSingleton<IPasswordHasher<UsersEntity>, PasswordHasher<UsersEntity>>();
         }
 
         // 请求管道会按顺序执行下列委托（中间件），返回顺序则相反；
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -66,6 +89,7 @@ namespace Kard.Web
                app.UseExceptionHandler("/error.htm");
             }
 
+            app.UseAuthentication();
             app.UseApiAuthorization();
 
             DefaultFilesOptions options = new DefaultFilesOptions();

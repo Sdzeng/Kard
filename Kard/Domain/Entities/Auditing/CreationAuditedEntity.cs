@@ -6,7 +6,7 @@ namespace Kard.Domain.Entities.Auditing
 {
     public class CreationAuditedEntity: ICreationAuditedEntity
     {
-        public virtual long? Creator { get; set; }
+        public virtual long? CreatorUserId { get; set; }
         public virtual DateTime CreationTime { get; set; }
 
     }

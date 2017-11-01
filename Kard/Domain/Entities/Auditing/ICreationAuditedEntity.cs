@@ -6,7 +6,7 @@ namespace Kard.Domain.Entities.Auditing
 {
     public interface ICreationAuditedEntity : IEntity
     {
-        long? Creator { get; set; }
+        long? CreatorUserId { get; set; }
         DateTime CreationTime { get; set; }
 
     }

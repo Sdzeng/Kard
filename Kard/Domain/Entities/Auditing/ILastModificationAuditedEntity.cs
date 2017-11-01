@@ -6,7 +6,7 @@ namespace Kard.Domain.Entities.Auditing
 {
     public interface ILastModificationAuditedEntity
     {
-        long? LastModifier { get; set; }
+        long? LastModifierUserId { get; set; }
         DateTime? LastModificationTime { get; set; }
 
     }

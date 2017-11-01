@@ -17,9 +17,9 @@ namespace Kard.Dapper.Mysql.Repositories
 
         public CoverEntity GetDateCover(DateTime showDate)
         {
-            using (IDbConnection connecton = GetConnection())
+            return ConnExecute(connecton =>
             {
-                string   sql = @"select 
+                string sql = @"select 
                                 cover.*,
 	                            media.*,
                                 essay.*,
@@ -30,23 +30,23 @@ namespace Kard.Dapper.Mysql.Repositories
 		                        left join essay on media.essayid = essay.id 
                                 left join kuser on essay.creator=kuser.id 
                                 where essay.isdeleted=0 and media.mediatype='picture' ";
-                var entityList= connecton.Query<CoverEntity, MediaEntity, EssayEntity,  KuserEntity, CoverEntity>(sql, (cover, media, essay, kuser ) =>
+                var entityList = connecton.Query<CoverEntity, MediaEntity, EssayEntity, KuserEntity, CoverEntity>(sql, (cover, media, essay, kuser) =>
                   {
                       media.Essay = essay;
                       media.Kuser = kuser;
                       cover.Media = media;
                       return cover;
                   },
-                  new { ShowDate= showDate },
+                  new { ShowDate = showDate },
                   splitOn: "Id");
 
-                if (entityList!=null&&entityList.Any())
+                if (entityList != null && entityList.Any())
                 {
                     return entityList.First();
                 }
 
                 return null;
-            }
+            });
         }
 
 

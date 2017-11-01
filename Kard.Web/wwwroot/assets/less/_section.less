@@ -2,7 +2,20 @@
 .section-style {
     display: inline-block;
     width: 100%;
-    padding: 50px 260px;
+    padding: 50px 300px;
+
+    a.href-label {
+        padding: 0px 2px;
+        color: #18BC9C;
+        text-decoration: none;
+
+        &:hover {
+            color: #fff;
+            background-color: #128f76;
+            border-radius: 3px;
+        
+        }
+    }
 }
 
 .section-title {
@@ -27,11 +40,10 @@
     min-height: 400px;
 
     &-left {
-        min-width: 200px;
-        max-width: 380px;
-        width: 30%;
+        display: inline-block;
+        width: 392px;
         float: left;
-        padding: 10px;
+        padding: 16px;
 
         .picture-warp {
             margin: 0 5px 10px 5px;
@@ -47,27 +59,25 @@
                 padding: 3px 0;
 
                 .picture-name {
-                    padding-right: 5px;
+                    margin-right: 5px;
                 }
 
                 .picture-num {
-                    padding-right: 5px;
+                    margin-right: 5px;
                     color: #ccc;
                 }
 
                 .picture-like {
-                    border: 1px solid #ccc;
-                    border-radius: 3px;
-                    padding: 0px 5px;
+                    margin-right: 5px;
                 }
             }
         }
     }
 
     &-middle {
-        width: 50%;
+        display: inline-block;
         float: left;
-        padding: 10px;
+        padding: 16px;
 
         .essay-info {
             width: 100%;
@@ -100,9 +110,51 @@
     }
 
     &-right {
-        width: 20%;
-        border: 1px solid red;
-        float: left;
-        padding: 5px 5px;
+        display: inline-block;
+        padding: 16px;
+        margin-left: 24px;
+        width: 220px;
+
+        ul {
+            padding: 0px 10px;
+            border-top: 1px dotted #b6b6b6;
+
+
+
+            li {
+                overflow: hidden;
+                white-space: nowrap;
+                color: #b6b6b6;
+                border-bottom: 1px dotted #b6b6b6;
+                padding: 8px 0px;
+                line-height: 24px;
+
+                &:first-child {
+                    line-height: 34px;
+                }
+
+
+                span.section-host-right-li-num {
+                    float: left;
+                    width: 24px;
+                    height: 24px;
+                    text-align: center;
+                    font-size: 16px;
+                    margin-right: 10px;
+                    background: #ec4d00;
+                    color: #fff;
+                }
+
+                div.section-host-right-li-left {
+                    display: inline-block;
+                    float: left;
+                }
+
+                div.section-host-right-li-right {
+                    display: inline-block;
+                    float: right;
+                }
+            }
+        }
     }
 }

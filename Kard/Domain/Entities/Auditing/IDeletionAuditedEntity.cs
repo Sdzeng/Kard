@@ -6,7 +6,7 @@ namespace Kard.Domain.Entities.Auditing
 {
     public interface IDeletionAuditedEntity
     {
-        long? Deleter { get; set; }
+        long? DeleterUserId { get; set; }
          DateTime? DeletionTime { get; set; }
          bool IsDeleted { get; set; }
     }
