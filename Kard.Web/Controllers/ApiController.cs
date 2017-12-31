@@ -57,6 +57,13 @@ namespace Kard.Web.Controllers
             return _mediaAppService.GetTopMediaPicture(aWeekAgo);
         }
 
+        [HttpPost("topMediaPicture")]
+        public IEnumerable<TopMediaDto> GetTopMediaPicture()
+        {
+            var aWeekAgo = DateTime.Now.Date.AddMonths(-7);
+            return _mediaAppService.GetTopMediaPicture(aWeekAgo);
+        }
+
 
 
 
