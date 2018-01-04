@@ -4,10 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Kard.Core.AppServices.Media
+namespace Kard.Core.IRepositories
 {
-    public interface IMediaAppService : IAppService
+    public interface IDefaultRepository: IRepository
     {
+        CoverEntity GetDateCover(DateTime showDate);
+
         IEnumerable<TopMediaDto> GetTopMediaPicture(DateTime creationTime);
+
+        bool IsExistUser(string name, string phone, string email);
     }
 }

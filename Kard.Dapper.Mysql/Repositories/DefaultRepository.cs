@@ -2,24 +2,25 @@
 using Kard.Core.Dtos;
 using Kard.Core.Entities;
 using Kard.Core.IRepositories;
+using Kard.Runtime.Session;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 
 namespace Kard.Dapper.Mysql.Repositories
 {
-    public class DefaultRepository : Repository, ICoverRepository
+    public class DefaultRepository : Repository, IDefaultRepository
     {
+      
 
-        public DefaultRepository(IConfiguration configuration) : base(configuration)
+        public DefaultRepository(IKardSession session,IConfiguration configuration) : base(session,configuration)
         {
         }
 
         public CoverEntity GetDateCover(DateTime showDate)
         {
-            return ConnExecute(connecton =>
+            return ConnExecute(conn =>
             {
                 string sql = @"select 
                                 cover.*,
@@ -32,7 +33,7 @@ namespace Kard.Dapper.Mysql.Repositories
 		                        left join essay on media.essayid = essay.id 
                                 left join kuser on essay.creator=kuser.id 
                                 where essay.isdeleted=0 and media.mediatype='picture' ";
-                var entityList = connecton.Query<CoverEntity, MediaEntity, EssayEntity, KuserEntity, CoverEntity>(sql, (cover, media, essay, kuser) =>
+                var entityList = conn.Query<CoverEntity, MediaEntity, EssayEntity, KuserEntity, CoverEntity>(sql, (cover, media, essay, kuser) =>
                   {
                       media.Essay = essay;
                       media.Kuser = kuser;
@@ -54,7 +55,7 @@ namespace Kard.Dapper.Mysql.Repositories
 
         public IEnumerable<TopMediaDto> GetTopMediaPicture(DateTime creationTime)
         {
-            return ConnExecute(connecton =>
+            return ConnExecute(conn =>
             {
 
                 string sql = @"select t.EssayMediaCount,essay.LikeNum EssayLikeNum,media.EssayId,media.CdnPath,media.MediaExtension,essay.Content EssayContent,essay.Creator,kuser.NikeName CreatorNikeName from (
@@ -65,13 +66,21 @@ namespace Kard.Dapper.Mysql.Repositories
                    join essay on media.EssayId=essay.Id 
                    join kuser on essay.Creator=kuser.Id   
                   order by EssayLikeNum desc";
-                var topMediaDtoList = connecton.Query<TopMediaDto>(sql, new { CreationTime = creationTime });
+                var topMediaDtoList = conn.Query<TopMediaDto>(sql, new { CreationTime = creationTime });
 
                 topMediaDtoList = topMediaDtoList.Where((m, index) => index != 0);
 
                 return topMediaDtoList;
             });
         }
+
+        public bool IsExistUser(string name, string phone, string email)
+        {
+            string sql = "select count(1)  from kuser where `Name`=@Name or Phone=@Phone or Email=@Email";
+            var result=ConnExecute(conn => conn.ExecuteScalar<int>(sql, new { Name = name, Phone = phone, Email = email }));
+            return result > 0;
+        }
+   
 
     }
 }

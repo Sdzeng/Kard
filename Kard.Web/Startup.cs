@@ -1,8 +1,10 @@
-﻿using Kard.Extensions;
+﻿using Kard.Core.Entities;
+using Kard.Extensions;
 using Kard.Web.Middlewares.ApiAuthorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +14,7 @@ using Microsoft.Net.Http.Headers;
 using System;
 using System.IO.Compression;
 using System.Linq;
+
 
 namespace Kard.Web
 {
@@ -34,11 +37,18 @@ namespace Kard.Web
          
             services.AddMvc();
             services.AddMemoryCache();
-            services.AddSession(options =>
+            services.AddLogging(builder =>
             {
-                options.Cookie.Name = ".Kard.Session";
-                options.IdleTimeout = TimeSpan.FromDays(7);
+                builder
+                    .AddConfiguration(Configuration.GetSection("Logging"))
+                    .AddFilter("Microsoft", LogLevel.Warning)
+                    .AddConsole();
             });
+            //services.AddSession(options =>
+            //{
+            //    options.Cookie.Name = ".Kard.Session";
+            //    options.IdleTimeout = TimeSpan.FromDays(7);
+            //});
             if (env.IsProduction())
             {
                 services.AddApiAuthorization(options =>
@@ -71,7 +81,7 @@ namespace Kard.Web
                 options.Level = CompressionLevel.Fastest;
             });
             services.AddModule();
-            //services.AddSingleton<IPasswordHasher<UsersEntity>, PasswordHasher<UsersEntity>>();
+            services.AddSingleton<IPasswordHasher<KuserEntity>, PasswordHasher<KuserEntity>>();
         }
 
         // 请求管道会按顺序执行下列委托（中间件），返回顺序则相反；
@@ -88,13 +98,13 @@ namespace Kard.Web
             {
                app.UseExceptionHandler("/error.htm");
             }
-
+            //app.UseSession();
             app.UseAuthentication();
             app.UseApiAuthorization();
 
             DefaultFilesOptions options = new DefaultFilesOptions();
             options.DefaultFileNames.Clear();
-            options.DefaultFileNames.Add("index.htm");
+            options.DefaultFileNames.Add("home.htm");
             app.UseDefaultFiles(options);
 
             var provider = new FileExtensionContentTypeProvider();

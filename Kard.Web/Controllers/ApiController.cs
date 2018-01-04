@@ -1,34 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Kard.Core.AppServices.Default;
+using Kard.Core.Dtos;
+using Kard.Core.Entities;
+using Kard.Extensions;
+using Kard.Runtime.Session;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Kard.Core.AppServices.Cover;
-using Kard.Core.Entities;
-using Kard.Core.IRepositories;
-using Kard.Core.AppServices.Media;
-using Kard.Core.Dtos;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Kard.Web.Controllers
 {
     //[Route("api/[controller]")]
     [Produces("application/json")]
     [Route("api")]
-    public class ApiController : Controller
+    public class ApiController : BaseController
     {
-        private readonly IMemoryCache _memoryCache;
-        private readonly ICoverAppService _coverAppService;
-        private readonly IMediaAppService _mediaAppService;
+         
+        private readonly IDefaultAppService _defaultAppService;
         public ApiController(
+            ILogger<ApiController> logger,
             IMemoryCache memoryCache,
-            ICoverAppService coverAppService,
-            IMediaAppService mediaAppService)
+            IDefaultAppService defaultAppService,
+            IKardSession kardSession) : base(logger, memoryCache, kardSession)
         {
-            _memoryCache = memoryCache;
-            _coverAppService = coverAppService;
-            _mediaAppService = mediaAppService;
+           
+            _defaultAppService = defaultAppService;
         }
 
 
@@ -41,11 +39,12 @@ namespace Kard.Web.Controllers
         [HttpPost("cover")]
         public CoverEntity GetCover()
         {
-            var today = new DateTime(2017,8,1);// DateTime.Now.Date;
+            var today = new DateTime(2017, 8, 1);// DateTime.Now.Date;
             string cacheKey = $"cover[{today.ToString("yyyyMMdd")}]";
-            CoverEntity coverEntity = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) => {
+            CoverEntity coverEntity = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
+            {
                 cacheEntry.SetAbsoluteExpiration(today.AddDays(1));
-                return _coverAppService.GetDateCover(today);
+                return _defaultAppService.GetDateCover(today);
             });
             return coverEntity;
         }
@@ -53,24 +52,18 @@ namespace Kard.Web.Controllers
         [HttpPost("topMediaPicture")]
         public IEnumerable<TopMediaDto> GetTopMediaPicture()
         {
-            var aWeekAgo =  DateTime.Now.Date.AddMonths(-7);
-            return _mediaAppService.GetTopMediaPicture(aWeekAgo);
-        }
-
-        [HttpPost("topMediaPicture")]
-        public IEnumerable<TopMediaDto> GetTopMediaPicture()
-        {
             var aWeekAgo = DateTime.Now.Date.AddMonths(-7);
-            return _mediaAppService.GetTopMediaPicture(aWeekAgo);
+            return _defaultAppService.GetTopMediaPicture(aWeekAgo);
         }
 
+ 
 
 
-
+        #region test
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            var y = _coverAppService.GetDateCover(DateTime.Now).Id;
+            var y = _defaultAppService.GetDateCover(DateTime.Now).Id;
             return new string[] { "value1", "value2" };
         }
 
@@ -101,5 +94,7 @@ namespace Kard.Web.Controllers
         public void Delete(int id)
         {
         }
+
+        #endregion
     }
 }

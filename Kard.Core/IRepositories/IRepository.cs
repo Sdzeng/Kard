@@ -1,42 +1,70 @@
-﻿using Kard.DI;
+﻿using DapperExtensions.Core20;
+using Kard.Core.Dtos;
+using Kard.DI;
 using Kard.Domain.Entities.Auditing;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Kard.Core.IRepositories
 {
+
     public interface IRepository : ISingletonService
     {
-        bool Create<T>(T entity) where T : class, ICreationAuditedEntity;
+        IDatabase GetDb();
 
-        Task<bool> CreateAsync<T>(T entity) where T : class, ICreationAuditedEntity;
+        IDbConnection GetConnection();
 
-        T FirstOrDefault<TKey, T>(TKey id) where T : class;
+        TResult ConnExecute<TResult>(Func<IDbConnection, TResult> predicate);
 
-        Task<T> FirstOrDefaultAsync<TKey, T>(TKey id) where T : class;
+        TResult TransExecute<TResult>(Func<IDbConnection, IDbTransaction, TResult> predicate);
 
-        T UniquenessOrDefault<T>(object predicate) where T : class;
+        TResult DbExecute<TResult>(Func<IDatabase, TResult> predicate);
+
+        #region CRUD
+
+        #region Create
+        ResultDto<TKey> CreateAndGetId<T, TKey>(T entity, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class;
 
 
+        bool Create<T>(IEnumerable<T> entities, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class;
+        #endregion
 
-        IEnumerable<T> GetList<T>() where T : class;
+        #region Retrieve
 
-        Task<IEnumerable<T>> GetListAsync<T>() where T : class;
+        IEnumerable<T> Query<T>(string sql, IDictionary<string, object> parameters = null, bool serializeParameters = false, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?));
 
-        IEnumerable<T> GetList<T>(object predicate) where T : class;
+        T FirstOrDefault<TKey, T>(TKey id, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class;
 
-        Task<IEnumerable<T>> GetListAsync<T>(object predicate) where T : class;
+        T UniquenessOrDefault<T>(object predicate, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class;
 
-        IEnumerable<T> GetPage<T>(object predicate, int page, int resultsPerPage) where T : class;
+        long GetCount(string tableName, IDictionary<string, object> parameters = null, bool serializeParameters = false, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null);
 
-        bool Update<T>(T entity) where T : class, ILastModificationAuditedEntity;
+        IEnumerable<T> GetList<T>(object predicate = null, IList<ISort> sort = null, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class;
 
-        Task<bool> UpdateAsync<T>(T entity) where T : class, ILastModificationAuditedEntity;
 
-        bool Delete<T>(T entity) where T : class;
+      
 
-        Task<bool> DeleteAsync<T>(T entity) where T : class;
+        #endregion
+
+        #region Update
+        bool Update<T>(T entity, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class;
+
+       
+        #endregion
+
+        #region Delete
+        bool Delete<T>(T entity, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class;
+
+       
+
+        bool Delete<T>(object predicate, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class;
+
+        #endregion
+
+     
+        #endregion
     }
 }

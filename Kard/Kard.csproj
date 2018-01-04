@@ -8,6 +8,7 @@
   <ItemGroup>
     <Compile Remove="Domain\Entities\IKeyEntity.cs" />
     <Compile Remove="Domain\Entities\KeyEntity.cs" />
+    <Compile Remove="Runtime\Session\NullKardSession.cs" />
   </ItemGroup>
 
   <ItemGroup>

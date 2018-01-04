@@ -50,4 +50,6 @@
     <None Include="wwwroot\error.htm" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties Properties_4launchSettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
+
 </Project>

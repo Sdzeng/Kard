@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Kard.Runtime.Session;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -12,6 +13,7 @@ namespace Kard.Web.Middlewares.ApiAuthorization
         private readonly ApiAuthorizationOptions _options;
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
+        private readonly IKardSession _session;
 
         /// <summary>
         /// Creates a new instance of the ApiAuthorizedMiddleware.
@@ -20,7 +22,7 @@ namespace Kard.Web.Middlewares.ApiAuthorization
         /// <param name="hostingEnv">The <see cref="IHostingEnvironment"/> used by this middleware.</param>
         /// <param name="options">The configuration options.</param>
         /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance used to create loggers.</param>
-        public ApiAuthorizationMiddleware(RequestDelegate next, IHostingEnvironment hostingEnv, IOptions<ApiAuthorizationOptions> options, ILoggerFactory loggerFactory)
+        public ApiAuthorizationMiddleware(RequestDelegate next, IHostingEnvironment hostingEnv, IOptions<ApiAuthorizationOptions> options, ILoggerFactory loggerFactory,IKardSession session)
         {
             if (next == null)
             {
@@ -45,6 +47,7 @@ namespace Kard.Web.Middlewares.ApiAuthorization
             _next = next;
             _options = options.Value;
             _logger = loggerFactory.CreateLogger<ApiAuthorizationMiddleware>();
+            _session = session;
         }
 
         /// <summary>
@@ -59,7 +62,7 @@ namespace Kard.Web.Middlewares.ApiAuthorization
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (context.Request.Path.StartsWithSegments(_options.PathMatch))
+            if (context.Request.Path.StartsWithSegments(_options.PathMatch)&&(_session.IsLogin==null|| (!_session.IsLogin.Value)))
             {
                 context.Response.StatusCode = 401;
                 await context.Response.WriteAsync("You are not authorized!");

@@ -1,10 +1,12 @@
-﻿using Kard.Domain.Entities.Auditing;
+﻿using DapperExtensions.Core20.Mapper;
+using Kard.Domain.Entities.Auditing;
 using System;
+using System.Security.Principal;
 
 namespace Kard.Core.Entities 
 {
          //Table:user
-        public class KuserEntity : LastModificationAuditedEntity,ILastModificationAuditedEntity
+        public class KuserEntity : LastModificationAuditedEntity,ILastModificationAuditedEntity, IIdentity
     {
     
         public KuserEntity()
@@ -23,8 +25,25 @@ namespace Kard.Core.Entities
           public string CoverPath{get; set;}  
           public string Sex{get; set;}  
           public int ExperienceValue{get; set;}  
-          public int KroleId{get; set;}  
-           
+          public int KroleId{get; set;}
+
+        public string AuthenticationType { get; set; }
+
+        public bool IsAuthenticated { get; set; }
+
     }
-    
+
+
+    public class KuserMapper : ClassMapper<KuserEntity>
+    {
+
+        public KuserMapper()
+        {
+            Table("kuser");
+            Map(e => e.AuthenticationType).Ignore();
+            Map(e => e.IsAuthenticated).Ignore();
+            AutoMap();
+        }
+    }
+
 }
