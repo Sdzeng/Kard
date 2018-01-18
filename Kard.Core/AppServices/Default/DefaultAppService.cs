@@ -54,7 +54,7 @@ namespace Kard.Core.AppServices.Default
         public ResultDto<ClaimsIdentity> Login(string name, string password)
         {
             var result = new ResultDto<ClaimsIdentity>();
-            var userList = _defaultRepository.GetList<KuserEntity>(new { UserName = name });
+            var userList = _defaultRepository.GetList<KuserEntity>(new { Name = name });
             if (userList?.Count() != 1)
             {
                 result.Result = false;
@@ -62,8 +62,10 @@ namespace Kard.Core.AppServices.Default
                 return result;
             }
 
-
+         
             var user = userList.First();
+            //user.Password = password;
+            //var pa = _passwordHasher.HashPassword(user, password);
             var loginResult = _passwordHasher.VerifyHashedPassword(user, user.Password, password);
             if (loginResult == PasswordVerificationResult.Success || loginResult == PasswordVerificationResult.SuccessRehashNeeded)
             {

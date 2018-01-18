@@ -6,6 +6,8 @@ obj
 bin
 *.cache
 *.user
+*.key
+*.pem
 /logs
 /packages
 

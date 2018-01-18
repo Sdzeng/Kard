@@ -10,9 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Middlewares\KardStaticFile\**" />
     <Compile Remove="wwwroot\assets\image\media\**" />
+    <Content Remove="Middlewares\KardStaticFile\**" />
     <Content Remove="wwwroot\assets\image\media\**" />
+    <EmbeddedResource Remove="Middlewares\KardStaticFile\**" />
     <EmbeddedResource Remove="wwwroot\assets\image\media\**" />
+    <None Remove="Middlewares\KardStaticFile\**" />
     <None Remove="wwwroot\assets\image\media\**" />
   </ItemGroup>
 
@@ -21,12 +25,18 @@
     <Compile Remove="Controllers\ErrorController.cs" />
     <Compile Remove="Controllers\HomeController.cs" />
     <Compile Remove="Controllers\ValuesController.cs" />
+    <Compile Remove="Middlewares\ImageHandle\ImageHandleExtensions.cs" />
+    <Compile Remove="Middlewares\ImageHandle\ImageHandleFileContext.cs" />
+    <Compile Remove="Middlewares\ImageHandle\ImageHandleMiddleware.cs" />
+    <Compile Remove="Middlewares\ImageHandle\ImageHandleServiceExtensions.cs" />
     <Compile Remove="WebModule.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FreeImage-dotnet-core" Version="4.3.6" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-rc6" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,6 +58,12 @@
 
   <ItemGroup>
     <None Include="wwwroot\error.htm" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties Properties_4launchSettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>

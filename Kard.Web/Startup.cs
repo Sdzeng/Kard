@@ -1,6 +1,6 @@
 ﻿using Kard.Core.Entities;
 using Kard.Extensions;
-using Kard.Web.Middlewares.ApiAuthorization;
+using Kard.Web.Middlewares.ImageHandle;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,13 +9,15 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
+using NLog.Extensions.Logging;
 using System;
 using System.IO.Compression;
 using System.Linq;
 
-
+//dotnet publish --framework netcoreapp2.0 --output "D:\GitRepository\Kard.Publish" --configuration Release
 namespace Kard.Web
 {
     public class Startup
@@ -37,38 +39,42 @@ namespace Kard.Web
          
             services.AddMvc();
             services.AddMemoryCache();
+            //services.AddImageHandle();
             services.AddLogging(builder =>
             {
                 builder
-                    .AddConfiguration(Configuration.GetSection("Logging"))
-                    .AddFilter("Microsoft", LogLevel.Warning)
-                    .AddConsole();
+                    .AddConfiguration(Configuration.GetSection("Logging"));
+                    //.AddFilter("Microsoft", LogLevel.Warning)
+                    //.AddDebug()
+                    //.AddConsole();
             });
+           
             //services.AddSession(options =>
             //{
             //    options.Cookie.Name = ".Kard.Session";
             //    options.IdleTimeout = TimeSpan.FromDays(7);
             //});
-            if (env.IsProduction())
-            {
-                services.AddApiAuthorization(options =>
-                {
-                    options.PathMatch = "/user";
-                });
-            }
-            else
-            {
-                services.AddApiAuthorization(options =>
-                {
-                    var alipaySectionConfig = Configuration.GetSection("ApiAuthorization");
-                    options.PathMatch = alipaySectionConfig["PathMatch"];
-                });
-            }
+            //if (env.IsProduction())
+            //{
+            //    services.AddApiAuthorization(options =>
+            //    {
+            //        options.PathMatch = "/user";
+            //    });
+            //}
+            //else
+            //{
+            //    services.AddApiAuthorization(options =>
+            //    {
+            //        var alipaySectionConfig = Configuration.GetSection("ApiAuthorization");
+            //        options.PathMatch = alipaySectionConfig["PathMatch"];
+            //    });
+            //}
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
            {
-             o.LoginPath = "/login";
-             o.AccessDeniedPath = "/login";
+             o.LoginPath = "/user/login";
+             o.AccessDeniedPath = "/user/login";
             });
             services.AddResponseCompression(options =>
             {
@@ -87,8 +93,12 @@ namespace Kard.Web
         // 请求管道会按顺序执行下列委托（中间件），返回顺序则相反；
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            //添加NLog
+            loggerFactory.AddNLog();
+            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            //loggerFactory.AddDebug();
+            //var logger=loggerFactory.CreateLogger<Startup>();
+            //logger.LogInformation("开始启动");
 
             if (env.IsDevelopment())
             {
@@ -98,19 +108,25 @@ namespace Kard.Web
             {
                app.UseExceptionHandler("/error.htm");
             }
+
+            //app.UseImageHandle();
             //app.UseSession();
             app.UseAuthentication();
-            app.UseApiAuthorization();
-
-            DefaultFilesOptions options = new DefaultFilesOptions();
+            // app.UseApiAuthorization();
+            
+             DefaultFilesOptions options = new DefaultFilesOptions();
             options.DefaultFileNames.Clear();
             options.DefaultFileNames.Add("home.htm");
             app.UseDefaultFiles(options);
 
             var provider = new FileExtensionContentTypeProvider();
             provider.Mappings.Add(".less", "text/css");
+         
+ 
             app.UseStaticFiles(new StaticFileOptions
             {
+                //添加图片处理
+                FileProvider = new KardPhysicalFileProvider(env, new ImageHandleOptions(), loggerFactory),
                 ContentTypeProvider = provider,
                 OnPrepareResponse = ctx =>
                 {

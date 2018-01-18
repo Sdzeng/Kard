@@ -31,7 +31,7 @@ namespace Kard.Dapper.Mysql.Repositories
 		                        (select * from cover where showdate <= @ShowDate order by showdate desc limit 1 ) cover
 		                        left join media on cover.mediaid = media.id   
 		                        left join essay on media.essayid = essay.id 
-                                left join kuser on essay.creator=kuser.id 
+                                left join kuser on essay.creatoruserid=kuser.id 
                                 where essay.isdeleted=0 and media.mediatype='picture' ";
                 var entityList = conn.Query<CoverEntity, MediaEntity, EssayEntity, KuserEntity, CoverEntity>(sql, (cover, media, essay, kuser) =>
                   {
@@ -58,13 +58,13 @@ namespace Kard.Dapper.Mysql.Repositories
             return ConnExecute(conn =>
             {
 
-                string sql = @"select t.EssayMediaCount,essay.LikeNum EssayLikeNum,media.EssayId,media.CdnPath,media.MediaExtension,essay.Content EssayContent,essay.Creator,kuser.NikeName CreatorNikeName from (
+                string sql = @"select t.EssayMediaCount,essay.LikeNum EssayLikeNum,media.EssayId,media.CdnPath,media.MediaExtension,essay.Content EssayContent,essay.CreatorUserId,kuser.NikeName CreatorNikeName from (
                     select  media.EssayId,min(media.Sort) MinSort,count(media.Id) EssayMediaCount
                     from media join essay on media.EssayId=essay.Id and media.MediaType='picture' and media.CreationTime>@CreationTime 
                     group by media.EssayId  order by essay.LikeNum desc limit 7
                     ) t join media on t.EssayId=media.EssayId and t.MinSort=media.Sort 
                    join essay on media.EssayId=essay.Id 
-                   join kuser on essay.Creator=kuser.Id   
+                   join kuser on essay.CreatorUserId=kuser.Id   
                   order by EssayLikeNum desc";
                 var topMediaDtoList = conn.Query<TopMediaDto>(sql, new { CreationTime = creationTime });
 

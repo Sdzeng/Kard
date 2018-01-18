@@ -37,7 +37,7 @@ namespace Kard.Core.Dtos
 
         public string EssayContent { get; set; }
 
-        public string Creator { get; set; }
+        public string CreatorUserId { get; set; }
 
         public string CreatorNikeName { get; set; }
 

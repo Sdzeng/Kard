@@ -6,6 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="IO\**" />
+    <Compile Remove="Net\**" />
+    <EmbeddedResource Remove="IO\**" />
+    <EmbeddedResource Remove="Net\**" />
+    <None Remove="IO\**" />
+    <None Remove="Net\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Domain\Entities\IKeyEntity.cs" />
     <Compile Remove="Domain\Entities\KeyEntity.cs" />
     <Compile Remove="Runtime\Session\NullKardSession.cs" />

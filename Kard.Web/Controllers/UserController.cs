@@ -4,16 +4,18 @@ using Kard.Extensions;
 using Kard.Runtime.Session;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Kard.Web.Controllers
 {
-
+    [Route("user")]
     public class UserController : BaseController
     {
 
@@ -47,9 +49,9 @@ namespace Kard.Web.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(string name, string password, string returnUrl)
+        public async Task<IActionResult> Login(string username, [DataType(DataType.Password)] string password, string returnUrl)
         {
-            var result = _defaultAppService.Login(name, password);
+            var result = _defaultAppService.Login(username, password);
             if (result.Result)
             {
                 var identity = result.Data;
@@ -66,13 +68,13 @@ namespace Kard.Web.Controllers
             return Json("{result:false,message:'登录失败，用户名密码不正确'}");
         }
 
-   
 
 
-        [HttpPost("user/cover")]
+        [Authorize]
+        [Route("cover")]
         public IActionResult GetUserCover()
         {
-            return Json("");
+            return Json("{session:'"+ _kardSession .NikeName+ "'}");
         }
     }
 }
