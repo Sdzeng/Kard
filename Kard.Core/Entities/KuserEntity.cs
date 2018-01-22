@@ -1,12 +1,10 @@
-﻿using DapperExtensions.Core20.Mapper;
-using Kard.Domain.Entities.Auditing;
-using System;
+﻿using Kard.Domain.Entities.Auditing;
 using System.Security.Principal;
 
-namespace Kard.Core.Entities 
+namespace Kard.Core.Entities
 {
-         //Table:user
-        public class KuserEntity : LastModificationAuditedEntity,ILastModificationAuditedEntity, IIdentity
+    //Table:user
+    public class KuserEntity : LastModificationAuditedEntity,ILastModificationAuditedEntity, IIdentity
     {
     
         public KuserEntity()
@@ -34,16 +32,16 @@ namespace Kard.Core.Entities
     }
 
 
-    public class KuserMapper : ClassMapper<KuserEntity>
-    {
+    //public class KuserMapper : ClassMapper<KuserEntity>
+    //{
 
-        public KuserMapper()
-        {
-            Table("kuser");
-            Map(e => e.AuthenticationType).Ignore();
-            Map(e => e.IsAuthenticated).Ignore();
-            AutoMap();
-        }
-    }
+    //    public KuserMapper()
+    //    {
+    //        Table("kuser");
+    //        Map(e => e.AuthenticationType).Ignore();
+    //        Map(e => e.IsAuthenticated).Ignore();
+    //        AutoMap();
+    //    }
+    //}
 
 }

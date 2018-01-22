@@ -1,4 +1,4 @@
-var baseUrl = "http://localhost:3706";//"https://www.localyc.com";
+var baseUrl = "http://localhost:3707";//"https://www.localyc.com";
 var defaults = {
     type: "POST",
     async:true,

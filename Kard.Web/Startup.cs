@@ -4,6 +4,7 @@ using Kard.Web.Middlewares.ImageHandle;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
@@ -36,8 +37,20 @@ namespace Kard.Web
             //ASP.NET 提供的功能和中间件，例如 MVC，遵循约定——使用一个单一的 AddService扩展方法来注册所有该功能所需的服务。
             //IMvcBuilder mvcBuilder= services.AddMvc();
             //string assemblyParts = string.Join(",", mvcBuilder.PartManager.ApplicationParts.Select(a=>a.Name));
-         
+
+
+            services.Configure<IISOptions>(options =>
+            {
+                //options.ForwardClientCertificate = false;
+
+            });
+
+
             services.AddMvc();
+
+
+         
+
             services.AddMemoryCache();
             //services.AddImageHandle();
             services.AddLogging(builder =>
@@ -88,6 +101,7 @@ namespace Kard.Web
             });
             services.AddModule();
             services.AddSingleton<IPasswordHasher<KuserEntity>, PasswordHasher<KuserEntity>>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // 请求管道会按顺序执行下列委托（中间件），返回顺序则相反；

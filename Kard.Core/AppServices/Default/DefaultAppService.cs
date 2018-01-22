@@ -54,7 +54,7 @@ namespace Kard.Core.AppServices.Default
         public ResultDto<ClaimsIdentity> Login(string name, string password)
         {
             var result = new ResultDto<ClaimsIdentity>();
-            var userList = _defaultRepository.GetList<KuserEntity>(new { Name = name });
+            var userList = _defaultRepository.Query<KuserEntity>("select * from Kuser where ·name·=@Name",new { Name = name });
             if (userList?.Count() != 1)
             {
                 result.Result = false;
