@@ -7,13 +7,11 @@ using System.Text;
 
 namespace Kard.Core.AppServices.Default
 {
-    public interface IDefaultAppService: IAppService
+    public interface ILoginAppService: IAppService
     {
-        CoverEntity GetDateCover(DateTime date);
 
-        IEnumerable<TopMediaDto> GetTopMediaPicture(DateTime creationTime);
 
-        ResultDto Signup(KuserEntity user);
+        //ResultDto Signup(KuserEntity user);
 
         ResultDto<ClaimsIdentity> Login(string name, string password);
 

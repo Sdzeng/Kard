@@ -10,8 +10,13 @@ namespace Kard.Core.IRepositories
     {
         CoverEntity GetDateCover(DateTime showDate);
 
+ 
         IEnumerable<TopMediaDto> GetTopMediaPicture(DateTime creationTime);
 
         bool IsExistUser(string name, string phone, string email);
+
+        KuserEntity GetUser(long id);
     }
+
+  
 }

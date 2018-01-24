@@ -1,6 +1,7 @@
 ﻿using Kard.Core.AppServices.Default;
 using Kard.Core.Dtos;
 using Kard.Core.Entities;
+using Kard.Core.IRepositories;
 using Kard.Extensions;
 using Kard.Runtime.Session;
 using Microsoft.AspNetCore.Mvc;
@@ -18,15 +19,15 @@ namespace Kard.Web.Controllers
     public class ApiController : BaseController
     {
          
-        private readonly IDefaultAppService _defaultAppService;
+        private readonly IDefaultRepository _defaultRepository;
         public ApiController(
             ILogger<ApiController> logger,
             IMemoryCache memoryCache,
-            IDefaultAppService defaultAppService,
+            IDefaultRepository defaultRepository,
             IKardSession kardSession) : base(logger, memoryCache, kardSession)
         {
            
-            _defaultAppService = defaultAppService;
+            _defaultRepository = defaultRepository;
         }
 
 
@@ -39,12 +40,12 @@ namespace Kard.Web.Controllers
         [HttpPost("cover")]
         public CoverEntity GetCover()
         {
-            var today = new DateTime(2017, 8, 1);// DateTime.Now.Date;
-            string cacheKey = $"cover[{today.ToString("yyyyMMdd")}]";
+            var today = DateTime.Now.Date;
+            string cacheKey = $"homeCover[{today.ToString("yyyyMMdd")}]";
             CoverEntity coverEntity = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
             {
                 cacheEntry.SetAbsoluteExpiration(today.AddDays(1));
-                return _defaultAppService.GetDateCover(today);
+                return _defaultRepository.GetDateCover(today);
             });
             return coverEntity;
         }
@@ -53,7 +54,7 @@ namespace Kard.Web.Controllers
         public IEnumerable<TopMediaDto> GetTopMediaPicture()
         {
             var aWeekAgo = DateTime.Now.Date.AddMonths(-7);
-            return _defaultAppService.GetTopMediaPicture(aWeekAgo);
+            return _defaultRepository.GetTopMediaPicture(aWeekAgo);
         }
 
  
@@ -63,7 +64,7 @@ namespace Kard.Web.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            var y = _defaultAppService.GetDateCover(DateTime.Now).Id;
+            var y = _defaultRepository.GetDateCover(DateTime.Now).Id;
             return new string[] { "value1", "value2" };
         }
 

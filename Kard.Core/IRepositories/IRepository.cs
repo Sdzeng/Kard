@@ -32,6 +32,8 @@ namespace Kard.Core.IRepositories
 
         IEnumerable<T> Query<T>(string sql, object parameters = null,  IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?));
 
+        T FirstOrDefault<T>(string sql, object parameters = null, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null);
+
         //T FirstOrDefault<TKey, T>(TKey id, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class;
 
         //T UniquenessOrDefault<T>(object predicate, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class;

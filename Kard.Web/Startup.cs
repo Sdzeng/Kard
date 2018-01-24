@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
@@ -34,6 +35,7 @@ namespace Kard.Web
         public void ConfigureServices(IServiceCollection services)
         {
             IHostingEnvironment env = services.GetHostingEnvironment();
+          
             //ASP.NET 提供的功能和中间件，例如 MVC，遵循约定——使用一个单一的 AddService扩展方法来注册所有该功能所需的服务。
             //IMvcBuilder mvcBuilder= services.AddMvc();
             //string assemblyParts = string.Join(",", mvcBuilder.PartManager.ApplicationParts.Select(a=>a.Name));
@@ -100,8 +102,8 @@ namespace Kard.Web
                 options.Level = CompressionLevel.Fastest;
             });
             services.AddModule();
-            services.AddSingleton<IPasswordHasher<KuserEntity>, PasswordHasher<KuserEntity>>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.TryAddScoped<IPasswordHasher<KuserEntity>, PasswordHasher<KuserEntity>>();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // 请求管道会按顺序执行下列委托（中间件），返回顺序则相反；
@@ -140,7 +142,7 @@ namespace Kard.Web
             app.UseStaticFiles(new StaticFileOptions
             {
                 //添加图片处理
-                FileProvider = new KardPhysicalFileProvider(env, new ImageHandleOptions(), loggerFactory),
+                FileProvider = new KardPhysicalFileProvider(env.WebRootPath,new ImageHandleOptions(), loggerFactory),
                 ContentTypeProvider = provider,
                 OnPrepareResponse = ctx =>
                 {

@@ -1,14 +1,17 @@
 ﻿using Kard.Core.AppServices.Default;
 using Kard.Core.Entities;
+using Kard.Core.IRepositories;
 using Kard.Extensions;
 using Kard.Runtime.Session;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -18,28 +21,28 @@ namespace Kard.Web.Controllers
     [Route("user")]
     public class UserController : BaseController
     {
-
-        private readonly IDefaultAppService _defaultAppService;
-        public UserController(ILogger<UserController> logger,
-            IMemoryCache memoryCache, 
-            IDefaultAppService defaultAppService,
-            IKardSession kardSession) 
-            :base(logger, memoryCache, kardSession)
+        private readonly IHostingEnvironment _env;
+        private readonly ILoginAppService _loginAppService;
+        private readonly IDefaultRepository _defaultRepository;
+        public UserController(IHostingEnvironment env,
+            ILogger<UserController> logger,
+            IMemoryCache memoryCache,
+            ILoginAppService loginAppService,
+            IDefaultRepository defaultRepository,
+            IKardSession kardSession)
+            : base(logger, memoryCache, kardSession)
         {
             //HttpContext.Session.SetString("UserId", user.Id.ToString());
-            _defaultAppService = defaultAppService;
+            _env = env;
+            _loginAppService = loginAppService;
+            _defaultRepository = defaultRepository;
         }
 
-        [HttpGet("signup")]
-        public IActionResult Signup()
+        [Authorize(Roles = "member", AuthenticationSchemes= "members")]
+        [HttpGet("test")]
+        public IActionResult Test(long? userId)
         {
-            return Content(GetPageFile("login.htm"), "text/html;charset=utf-8");
-        }
-
-        [HttpPost("signup")]
-        public IActionResult Signup(KuserEntity user)
-        {
-            return Content(GetPageFile("login.htm"), "text/html;charset=utf-8");
+            return Content("已登陆");
         }
 
         [HttpGet("login")]
@@ -51,15 +54,15 @@ namespace Kard.Web.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(string username, [DataType(DataType.Password)] string password, string returnUrl)
         {
-            var result = _defaultAppService.Login(username, password);
+            var result = _loginAppService.Login(username, password);
             if (result.Result)
             {
                 var identity = result.Data;
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
-            
+
                 if (returnUrl.IsNullOrEmpty())
                 {
-                    return Content(GetPageFile("user.htm"), "text/html;charset=utf-8");
+                    return RedirectToAction("Index");
                 }
 
                 return Redirect(returnUrl);
@@ -68,13 +71,49 @@ namespace Kard.Web.Controllers
             return Json("{result:false,message:'登录失败，用户名密码不正确'}");
         }
 
+        [Authorize]
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return Content(GetPageFile("user.htm"), "text/html;charset=utf-8");
+        }
+
+        [Authorize]
+        [HttpGet("{userId}")]
+        public IActionResult Index(long? userId)
+        {
+            return Json(GetUser(userId));
+        }
+
+        [Authorize]
+        [HttpPost("cover")]
+        public IActionResult GetCover()
+        {
+            return Json(GetUser(_kardSession.UserId));
+        }
+
+
+        private KuserEntity GetUser(long? userId)
+        {
+            string cacheKey = $"user[{userId}]";
+            KuserEntity kuserEntity = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
+            {
+                cacheEntry.SetAbsoluteExpiration(DateTime.Now.Date.AddDays(60));
+                return _defaultRepository.GetUser(_kardSession.UserId.Value);
+            });
+            return kuserEntity;
+        }
+     
 
 
         [Authorize]
-        [Route("cover")]
-        public IActionResult GetUserCover()
+        [Route("logout")]
+        public IActionResult Logout()
         {
-            return Json("{session:'"+ _kardSession .NikeName+ "'}");
+ 
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return Redirect("/");
         }
+
     }
 }

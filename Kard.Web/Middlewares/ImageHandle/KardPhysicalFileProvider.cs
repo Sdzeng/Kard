@@ -9,14 +9,12 @@ namespace Kard.Web.Middlewares.ImageHandle
 {
     public class KardPhysicalFileProvider : PhysicalFileProvider, IFileProvider
     {
-        private readonly IHostingEnvironment _env;
         private readonly ILogger _logger;
         private readonly Stopwatch _stopwatch;
         private readonly ImageHandleOptions _options;
 
-        public KardPhysicalFileProvider(IHostingEnvironment env, ImageHandleOptions options, ILoggerFactory loggerFactory) : base(env.WebRootPath)
+        public KardPhysicalFileProvider(string root,ImageHandleOptions options, ILoggerFactory loggerFactory) : base(root)
         {
-            _env = env;
             _logger = loggerFactory.CreateLogger<KardPhysicalFileProvider>();
             _stopwatch = new Stopwatch();
             _options = options;

@@ -5,11 +5,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="AppServices\Default\**" />
+    <EmbeddedResource Remove="AppServices\Default\**" />
+    <None Remove="AppServices\Default\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="CoreModule.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Kard\Kard.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="AppServices\Login\" />
   </ItemGroup>
 
 </Project>

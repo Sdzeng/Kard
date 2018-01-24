@@ -13,48 +13,39 @@ using System.Text;
 
 namespace Kard.Core.AppServices.Default
 {
-    public class DefaultAppService: IDefaultAppService
+    public class LoginAppService: ILoginAppService
     {
         private readonly IPasswordHasher<KuserEntity> _passwordHasher;
         private readonly IDefaultRepository _defaultRepository;
 
-        public DefaultAppService(IPasswordHasher<KuserEntity> passwordHasher,IDefaultRepository defaultRepository)
+        public LoginAppService(IPasswordHasher<KuserEntity> passwordHasher,IDefaultRepository defaultRepository)
         {
             _passwordHasher = passwordHasher;
             _defaultRepository = defaultRepository;
-
         }
+ 
 
-        public CoverEntity GetDateCover(DateTime showDate)
-        {
-            return _defaultRepository.GetDateCover(showDate);
-        }
+  
 
-        public IEnumerable<TopMediaDto> GetTopMediaPicture(DateTime creationTime)
-        {
-            return _defaultRepository.GetTopMediaPicture(creationTime);
-        }
+        //public ResultDto Signup(KuserEntity user)
+        //{
+        //    var resultDto = new ResultDto();
+        //    bool isExist=  _defaultRepository.IsExistUser(user.Name,user.Phone, user.Email);
+        //    if (isExist)
+        //    {
+        //        resultDto.Message = $"已存在登陆名{user.Name}";
+        //        return resultDto;
+        //    }
 
-
-        public ResultDto Signup(KuserEntity user)
-        {
-            var resultDto = new ResultDto();
-            bool isExist=  _defaultRepository.IsExistUser(user.Name,user.Phone, user.Email);
-            if (isExist)
-            {
-                resultDto.Message = $"已存在登陆名{user.Name}";
-                return resultDto;
-            }
-
-            return resultDto;
-        }
+        //    return resultDto;
+        //}
 
 
 
         public ResultDto<ClaimsIdentity> Login(string name, string password)
         {
             var result = new ResultDto<ClaimsIdentity>();
-            var userList = _defaultRepository.Query<KuserEntity>("select * from Kuser where ·name·=@Name",new { Name = name });
+            var userList = _defaultRepository.Query<KuserEntity>("select * from Kuser where `Name`=@Name",new { Name = name });
             if (userList?.Count() != 1)
             {
                 result.Result = false;

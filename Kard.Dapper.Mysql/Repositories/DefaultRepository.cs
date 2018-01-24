@@ -12,9 +12,9 @@ namespace Kard.Dapper.Mysql.Repositories
 {
     public class DefaultRepository : Repository, IDefaultRepository
     {
-      
 
-        public DefaultRepository(IKardSession session,IConfiguration configuration) : base(session,configuration)
+
+        public DefaultRepository(IKardSession session, IConfiguration configuration) : base(session, configuration)
         {
         }
 
@@ -43,7 +43,7 @@ namespace Kard.Dapper.Mysql.Repositories
                   new { ShowDate = showDate },
                   splitOn: "Id");
 
-            if (entityList != null && entityList.Any())
+                if (entityList != null && entityList.Any())
                 {
                     return entityList.First();
                 }
@@ -52,6 +52,8 @@ namespace Kard.Dapper.Mysql.Repositories
             });
         }
 
+
+ 
 
         public IEnumerable<TopMediaDto> GetTopMediaPicture(DateTime creationTime)
         {
@@ -77,10 +79,15 @@ namespace Kard.Dapper.Mysql.Repositories
         public bool IsExistUser(string name, string phone, string email)
         {
             string sql = "select count(1)  from kuser where `Name`=@Name or Phone=@Phone or Email=@Email";
-            var result=ConnExecute(conn => conn.ExecuteScalar<int>(sql, new { Name = name, Phone = phone, Email = email }));
+            var result = ConnExecute(conn => conn.ExecuteScalar<int>(sql, new { Name = name, Phone = phone, Email = email }));
             return result > 0;
         }
-   
+
+
+        public KuserEntity GetUser(long id)
+        {
+            return base.FirstOrDefault<KuserEntity>("select * from Kuser where Id=@Id", new { Id = id });
+        }
 
     }
 }

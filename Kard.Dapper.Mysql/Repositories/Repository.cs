@@ -304,6 +304,21 @@ namespace Kard.Dapper.Mysql.Repositories
             return ConnExecute(conn => conn.Query<T>(sql, parameters, null, false, commandTimeout, commandType));
         }
 
+
+
+
+        public T FirstOrDefault<T>(string sql,object parameters=null, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) 
+        {
+            IEnumerable<T> entityList = Query<T>(sql, parameters, connection, transaction, commandTimeout);
+
+            if (entityList != null && entityList.Count()==1)
+            {
+                return entityList.First();
+            }
+
+            return default(T);
+        }
+
         //public T FirstOrDefault<TKey, T>(TKey id, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
         //{
         //    if (connection != null)
@@ -314,8 +329,8 @@ namespace Kard.Dapper.Mysql.Repositories
         //    return ConnExecute(conn => conn.Get<T>(id, null, commandTimeout));
         //}
 
- 
- 
+
+
 
         //public T UniquenessOrDefault<T>(object predicate, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
         //{

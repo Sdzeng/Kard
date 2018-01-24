@@ -41,5 +41,6 @@ namespace Kard.Web.Controllers
                 return htmlContent;
             }
         }
+
     }
 }
