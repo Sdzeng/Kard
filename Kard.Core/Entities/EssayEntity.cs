@@ -1,5 +1,6 @@
 ﻿using Kard.Domain.Entities.Auditing;
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Kard.Core.Entities
@@ -37,6 +38,11 @@ namespace Kard.Core.Entities
 
         public long? ParentEssayId { get; set; }
 
+        public KuserEntity Kuser;
+
+        public List<MediaEntity> MediaList;
+
+        public List<TagEntity> TagList;
 
     }
 

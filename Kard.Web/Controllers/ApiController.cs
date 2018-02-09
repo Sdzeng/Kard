@@ -50,14 +50,21 @@ namespace Kard.Web.Controllers
             return coverEntity;
         }
 
-        [HttpPost("topMediaPicture")]
-        public IEnumerable<TopMediaDto> GetTopMediaPicture()
+        [HttpPost("getpicture")]
+        public IEnumerable<TopMediaDto> GetPicture()
         {
             var aWeekAgo = DateTime.Now.Date.AddMonths(-7);
             return _defaultRepository.GetTopMediaPicture(aWeekAgo);
         }
 
- 
+        [HttpPost("getessay")]
+        public IEnumerable<TopMediaDto> GetEssay()
+        {
+            var aWeekAgo = DateTime.Now.Date.AddMonths(-7);
+            return _defaultRepository.GetTopMediaPicture(aWeekAgo);
+        }
+
+
 
 
         #region test

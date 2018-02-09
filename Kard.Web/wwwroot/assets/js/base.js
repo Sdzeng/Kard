@@ -154,6 +154,7 @@ var topMenu = {
     },
     // 触发load
     fireLoad: function (url, title, data) {
+        window.location.href = url;
 		/*	var _this = this;
 			_this.prog.begin();
 			pageview.load(url, title, function() {
@@ -168,9 +169,7 @@ var topMenu = {
             console.log(item.title + ":" + item.url);
             // item['@append_param'] = data;
             // _this.setHash(item.url);
-            if (getPath() != item.url) {
-                window.location.hash = '#!' + item.url;
-            }
+          
             _this.fireLoad(item.url, item.title, data);
         });
 

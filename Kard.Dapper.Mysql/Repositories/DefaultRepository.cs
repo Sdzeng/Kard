@@ -76,6 +76,40 @@ namespace Kard.Dapper.Mysql.Repositories
             });
         }
 
+        public IEnumerable<EssayEntity> GetEssay(DateTime creationTime)
+        {
+            return ConnExecute(conn =>
+            {
+
+                string sql = @"select *,(select NikeName from kuser where Id=essay.CreatorUserId) CreatorUserName 
+                from essay left join media on essay.Id=media.EssayId 
+                left join essay_tag_relations on essay.Id=essay_tag_relations.EssayId 
+                left join tag on essay_tag_relations.TagId=tag.Id
+                order by essay.LikeNum desc,media.Sort ";
+                var essayList = conn.Query<EssayEntity, MediaEntity, TagEntity, EssayEntity>(sql, (essay, media, tag) =>
+                {
+                    essay.MediaList =essay.MediaList ?? new List<MediaEntity>();
+                    essay.TagList = essay.TagList ?? new List<TagEntity>();
+                    if(!essay.MediaList.Where(m=>m.Id== media.Id).Any())
+                    {
+                        essay.MediaList.Add(media);
+                    }
+
+                    if (!essay.TagList.Where(t => t.Id == tag.Id).Any())
+                    {
+                        essay.TagList.Add(tag);
+                    }
+
+                    return essay;
+                },
+                  splitOn: "Id");
+
+            
+
+                return essayList;
+            });
+        }
+
         public bool IsExistUser(string name, string phone, string email)
         {
             string sql = "select count(1)  from kuser where `Name`=@Name or Phone=@Phone or Email=@Email";
