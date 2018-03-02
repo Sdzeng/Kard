@@ -1,0 +1,116 @@
+<view class="page">
+  <view class="section month_kard_section">
+
+
+    <view class="calendar_info">
+      <view class="calendar_info_head">
+        <view class="calendar_info_head_left">
+          <view class="calendar_info_head_left_circle iconfont icon-remind" hover-class="view_click_class" hover-stay-time="{{100}}"></view>
+
+        </view>
+        <view class="calendar_info_head_center">
+          <view bindtap="chooseYearAndMonth" class="calendar_info_head_years" hover-class="view_click_class" hover-stay-time="{{100}}">{{viewYear||"--"}}.{{viewMonth||"--"}}</view>
+          <!-- .
+          <view bindtap="handleCalendar" data-handle="next" class="calendar_info_head_months" hover-class="view_click_class" hover-stay-time="{{100}}">{{viewMonth||"--"}}</view> -->
+          <view bindtap="handleCalendar" data-handle="today" class="calendar_info_head_today" hover-class="view_click_class" hover-stay-time="{{100}}">今</view>
+        </view>
+        <view class="calendar_info_head_right "> </view>
+      </view>
+
+
+      <!-- <view class="calender_info_week"><view class="calender_info_week_days" wx:for="{{weeksCh}}" wx:key="{{index}}" data-idx="{{index}}">{{item}}</view></view> -->
+      <view class="calender_info_days">
+        <view bindtap="handleCalendar" data-handle="prev" class="calendar_info_days_prev iconfont icon-back"></view>
+
+        <view class="calender_info_days_boxs">
+          <!-- 填充空格 -->
+          <view wx:if="{{hasEmptyGrid}}" class="calender_info_days_boxs_empty" wx:for="{{empytGrids}}" wx:key="{{index}}" data-idx="{{index}}"></view>
+          <view class="calender_info_days_boxs_grid" wx:for="{{days}}" wx:key="{{index}}" data-idx="{{index}}" bindtap="tapDayItem">
+            <view class="calender_info_days_boxs_entity {{item.choosed ? 'calender_info_days_entity_choosed' : ''}} {{item.isToday?'calender_info_days_entity_today':''}}" style="{{(item.dayOfWeek==6?'color:#84d8fa;':'')+(item.dayOfWeek==0?'color:pink;':'')}}">{{item.isToday?"今":item.day}}</view>
+          </view>
+        </view>
+
+        <view bindtap="handleCalendar" data-handle="next" class="calendar_info_days_next iconfont icon-more"></view>
+      </view>
+    </view>
+
+    <view wx:if="{{showPicker}}" class="dialogMarsk"></view>
+    <view wx:if="{{showPicker}}" class="dialog">
+      <view class="calender_info_choose_yearmonths_btns">
+        <view style="margin-left: 50rpx;" data-type="cancel" bindtap="tapPickerBtn">取消</view>
+        <view style="margin-right: 50rpx;" data-type="confirm"  bindtap="tapPickerBtn">确定</view>
+      </view>
+      <picker-view class="calender_info_choose_yearmonths_picker_view" indicator-style="height: 50px;"  value="{{pickerValue}}" bindchange="pickerChange">
+        <picker-view-column>
+          <view class="calender_info_choose_yearmonths_picker_view_cols" wx:for="{{pickerYearList}}" wx:key="*this">{{item}}年</view>
+        </picker-view-column>
+        <picker-view-column>
+          <view class="calender_info_choose_yearmonths_picker_view_cols" wx:for="{{pickerMonthList}}" wx:key="*this">{{item}}月</view>
+        </picker-view-column>
+      </picker-view>
+    </view>
+
+  </view>
+
+
+  <view class="section task-section">
+      <view style="width；100%；background-color: #ccc;">
+      <input style="margin:20px 40px;  background: #eeeeee;  
+      placeholder-style=" text-align:center; " placeholder="添加任务 " type="text " confirm-type="send " bindconfirm="btnAdd " />  
+      </view>
+  
+      <!-- <icon type="download " size="30 "/> -->
+      
+      <!-- <button style="margin-bottom:20px; " bindtap="add ">添加任务</button> -->
+    
+      <!-- <view wx:for="{{taskList}} " wx:key="txt " class="task_info ">
+    
+          <view class="task_info_inner task_info_txt " style="{{item.txtStyle}} "  bindtouchstart="touchS " bindtouchmove="touchM " bindtouchend="touchE "  data-index="{{index}} "  > 
+            <view class="task_info_index ">{{index+1}}</view>  
+            <view class="task_info_name ">{{item.txt}}</view>
+
+          
+          </view>  
+
+  
+
+            
+          <view data-index="{{index}} " bindtap="delItem " class="task_info_inner task_info_btn ">
+              <view class="task_info_btn_public " data-addressid="{{item.txt}} " catchtap="setDefaultAddress ">发布</view>
+              <view class="task_info_btn_delete " data-addressid="{{item.txt}} " data-index="{{index}} " catchtap="delAddress ">删除</view>
+          </view> 
+          
+        
+
+  
+    
+        
+        
+        
+  
+      
+      </view> -->
+
+  
+  <view wx:for="{{taskList}}" wx:key="txt" class="task_info {{item.isTouchMove ? 'task_info_active' : ''}}" data-index="{{index}}" bindtouchstart="taskInfoTouchStart" bindtouchmove="taskInfoTouchMove" >
+    <view class="task_info_content">
+      <view class="task_info_content_index">{{index+1}}</view>  
+      <view class="task_info_content_txt"> <view>{{item.txt}}</view><view>{{item.time}}</view></view>
+      <view class="task_info_content_icon"> <icon type="info" size="26" color="#ccc"/></view>
+    </view>
+  
+    <view class="task_info_btn">
+      <view class="task_info_btn_complete" data-addressid="{{item.txt}} " catchtap="setDefaultAddress ">完成</view>
+      <view class="task_info_btn_delete" catchtap="btnDelete " data-index="{{index}} ">删除</view>
+    </view>
+  </view>
+  
+
+  
+  </view>
+ 
+
+ 
+</view>
+ 
+ <!-- <view class="task_info_operation "><icon type="info " size="26 "/><icon type="cancel " size="26 "/></view> -->
