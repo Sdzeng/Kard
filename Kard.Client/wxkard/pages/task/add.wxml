@@ -1,0 +1,47 @@
+<view class="page">
+  <form bindsubmit="formSubmit" bindreset="formReset">
+
+
+
+    <view class="section content-section">
+      <textarea name="taskContent" bindblur="bindTextAreaBlur" auto-height auto-focus />
+      <view class="task-datetime">
+        <view class="iconfont icon-clock"></view>
+        <view name="taskStartDate" class="task-start-datetime" hover-class='task-datetime-touch'>
+          <view class="task-date">今天，3月8日</view>
+          <view class="task-time">21:45</view>
+        </view>
+        <view class="task-angle" hover-class='task-datetime-touch'></view>
+        <view name="taskEndDate" class="task-end-datetime" hover-class='task-datetime-touch'>
+          <view class="task-date">今天，3月8日</view>
+          <view class="task-time">21:45</view>
+        </view>
+      </view>
+      <view class="task-week">
+        <view wx:for="{{weekList}}" wx:key="*this">{{item}}</view>
+      </view>
+    </view>
+
+
+
+
+
+
+
+    <view class="section btn-section">
+      <view class="btn-remind">
+        <view class="iconfont icon-remind" hover-class="view_click_class" hover-start-time="{{20}}" hover-stay-time="{{70}}"></view>
+        <view class="remind-txt">提醒</view>
+        <view class="remind-switch" hover-start-time="{{20}}" hover-stay-time="{{70}}">
+          <switch checked bindchange="switch1Change" />
+        </view>
+      </view>
+
+      <view class="btn-reset-sumit">
+        <button type="warn" formType="reset">取消</button>
+        <button type="primary" formType="submit">完成</button>
+      </view>
+    </view>
+
+  </form>
+</view>

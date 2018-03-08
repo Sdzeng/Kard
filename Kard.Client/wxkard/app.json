@@ -1,38 +1,52 @@
 {
   "pages":[
     "pages/index/index",
+    "pages/task/add",
+    
     "pages/social/social",
-    "pages/test/test",
-    "pages/test2/test2"
    
+    "pages/task/edit",
+    "pages/test/test",
+    "pages/test2/test2",
+    "pages/test3/index"
   ],
   "window":{
-  "navigationStyle": "custom"
+    "navigationStyle": "default",
+    "navigationBarBackgroundColor": "#fff",
+    "backgroundColor":"#f6f8f8",
+    "navigationBarTitleText": "记事本",
+    "navigationBarTextStyle": "black",
+    "backgroundTextStyle": "light"
   },
-  "tabBar":{
-    "color":"#1aad16",
-    "list":[{
-     "pagePath":"pages/index/index",
-     "text":"我的",
-     "iconPath": "/icons/account.png",
-     "selectedIconPath":"/icons/account_select.png"
-
+    "tabBar": {
+      "color": "#1aad16",
+      "list": [
+        {
+          "pagePath": "pages/index/index",
+          "text": "我的",
+          "iconPath": "/icons/account.png",
+          "selectedIconPath": "/icons/account_select.png"
+        },
+        {
+          "pagePath": "pages/social/social",
+          "text": "达人圈",
+          "iconPath": "/icons/lights.png",
+          "selectedIconPath": "/icons/lights_select.png"
+        },
+        {
+          "pagePath": "pages/test/test",
+          "text": "测试"
+        },
+        {
+          "pagePath": "pages/test2/test2",
+          "text": "测试2"
+        },
+        {
+          "pagePath": "pages/test3/index",
+          "text": "测试3"
+        }
+      ],
+      "position": "bottom"
     },
-    {
-      "pagePath": "pages/social/social",
-      "text": "达人圈",
-      "iconPath":"/icons/lights.png",
-      "selectedIconPath": "/icons/lights_select.png"
-    },
-    {
-    "pagePath": "pages/test/test",
-    "text": "测试"
-    },
-    {
-      "pagePath": "pages/test2/test2",
-      "text": "测试2"
-    }],
-   "position":"bottom"
-  },
   "debug":true
 }

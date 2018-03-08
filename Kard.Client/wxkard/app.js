@@ -5,6 +5,7 @@ App({
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
+    this.globalData.deviceInfo = wx.getSystemInfoSync();
 
     // 登录
     wx.login({
@@ -45,6 +46,8 @@ App({
   },
   globalData: {
     currentDate:{year:1900,month:1,day:1},
-    userInfo: null
+    userInfo: null,
+    deviceInfo: null
+
   }
 })

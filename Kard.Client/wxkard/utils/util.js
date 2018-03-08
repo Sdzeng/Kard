@@ -14,6 +14,18 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 
+ 
+ 
+function px2rpx(px, windowWidth) {
+  return Math.round(px * 750 / windowWidth);
+}
+
+function rpx2px(rpx, windowWidth) {
+  return Math.round(rpx / 750 * windowWidth);
+}
+
 module.exports = {
-  formatTime: formatTime
+  formatTime: formatTime,
+  px2rpx: px2rpx,
+  rpx2px: rpx2px,
 }

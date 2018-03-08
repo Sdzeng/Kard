@@ -1,0 +1,148 @@
+.section {
+  width: 100%;
+  background: #fff;
+  border-top: 2rpx solid #dfdfdf;
+  border-bottom: 2rpx solid #dfdfdf;
+  display: flex;
+  margin-bottom: 40rpx;
+  box-sizing: border-box;
+}
+
+.section:first-child {
+  border-top: 0;
+}
+
+.section:last-child {
+  border-bottom: 0;
+}
+
+.content-section {
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.content-section textarea {
+  padding: 2%;
+  width: 96%;
+  min-height: 100rpx;
+}
+
+.task-datetime {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 120rpx;
+  border-top: 2rpx solid #dfdfdf;
+  border-bottom: 2rpx solid #dfdfdf;
+}
+
+.task-datetime .icon-clock {
+  width: 15%;
+  text-align: center;
+  line-height: 120rpx;
+}
+
+.task-start-datetime {
+  width: 35%;
+  padding: 20rpx 0;
+}
+
+.task-date {
+  font-size: 30rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+}
+
+.task-time {
+  font-size: 38rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+}
+
+.task-angle {
+  width: 15%;
+  position: relative; /*方便相对于父元素进行定位*/
+}
+
+.task-angle::before, .task-angle::after {
+  content: "";
+  position: absolute; /*方便进行定位*/
+  height: 70rpx;
+  width: 2rpx;
+  background-color: #dfdfdf;
+}
+
+.task-angle::before {
+  top: -6rpx;
+  left: 16rpx; /*设置top和right使图像在20*20框中居中*/
+  transform: rotate(-30deg); /*进行旋转*/
+}
+
+.task-angle::after {
+  top: 56rpx;
+  left: 16rpx; /*设置top和right使图像在20*20框中居中*/
+  transform: rotate(30deg);
+}
+
+.task-end-datetime {
+  width: 35%;
+  padding: 20rpx 0;
+}
+
+.task-datetime-touch {
+  background-color: #ececec;
+}
+
+.task-week {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 50rpx 30rpx;
+}
+
+.task-week view {
+  border: 2rpx solid #dfdfdf;
+  width: 80rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  border-radius: 42rpx;
+  background-color: #ec4d00;
+  color: #fff;
+}
+
+.btn-section {
+  flex-direction: column;
+}
+
+.btn-remind {
+  height: 120rpx;
+  line-height: 120rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.btn-remind .icon-remind {
+  width: 15%;
+  text-align: center;
+}
+
+.remind-txt {
+  width: 65%;
+}
+
+.remind-switch {
+  width: 20%;
+  text-align: center;
+}
+
+.btn-reset-sumit {
+  display: flex;
+  flex-direction: row;
+}
+
+.btn-reset-sumit button {
+  width: 50%;
+  border-radius: 0rpx;
+}
