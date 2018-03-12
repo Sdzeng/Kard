@@ -3,15 +3,14 @@
 
 
     <view class="calendar_info">
-      <view class="calendar_info_head">
+      <!-- <view class="calendar_info_head">
         <view class="calendar_info_head_left">
 
 
         </view>
         <view class="calendar_info_head_center">
           <view bindtap="chooseYearAndMonth" class="calendar_info_head_years" hover-class="view_click_class" hover-start-time="{{20}}" hover-stay-time="{{70}}">{{viewYear||"--"}}.{{viewMonth||"--"}}</view>
-          <!-- .
-          <view bindtap="handleCalendar" data-handle="next" class="calendar_info_head_months" hover-class="view_click_class" hover-start-time="{{20}}" hover-stay-time="{{70}}">{{viewMonth||"--"}}</view> -->
+
           <view bindtap="handleCalendar" data-handle="today" class="calendar_info_head_today" hover-class="view_click_class" hover-start-time="{{20}}" hover-stay-time="{{70}}">今</view>
         </view>
         <view class="calendar_info_head_right ">
@@ -19,7 +18,7 @@
           <view class="calendar_info_head_circle iconfont icon-remind" hover-class="view_click_class" hover-start-time="{{20}}" hover-stay-time="{{70}}"></view>
           <view class="calendar_info_head_pin iconfont icon-pin" hover-class="view_click_class" hover-start-time="{{20}}" hover-stay-time="{{70}}"></view>
         </view>
-      </view>
+      </view> -->
 
 
       <!-- <view class="calender_info_week"><view class="calender_info_week_days" wx:for="{{weeksCh}}" wx:key="{{index}}" data-idx="{{index}}">{{item}}</view></view> -->
@@ -29,22 +28,37 @@
         <view class="calender_info_days_boxs">
           <!-- 填充空格 -->
           <view wx:if="{{hasEmptyGrid}}" class="calender_info_days_boxs_empty" wx:for="{{empytGrids}}" wx:key="{{index}}" data-idx="{{index}}"></view>
-          <view class="calender_info_days_boxs_grid" wx:for="{{days}}" wx:key="{{index}}" data-idx="{{index}}" bindtap="tapDayItem">
-            <view class="calender_info_days_boxs_entity {{item.choosed ? 'calender_info_days_entity_choosed' : ''}} {{item.isToday?'calender_info_days_entity_today':''}}" style="{{(item.dayOfWeek==6?'color:#84d8fa;':'')+(item.dayOfWeek==0?'color:pink;':'')}}">{{item.isToday?"今":item.day}}</view>
+
+
+          <view class="calender_info_days_boxs_grid_date">
+            <view class="calender_info_date_boxs_entity" bindtap="chooseYearAndMonth" >
+              <view style="height:20rpx;line-height:20rpx; font-size: 20rpx;">{{yearMonthGrids.year||"--"}}</view>
+              <view style="height:36rpx;line-height:36rpx;font-size:30rpx;">{{yearMonthGrids.month||"--"}}月</view>
+            </view>
+          </view>
+
+          <view class="calender_info_days_boxs_grid_date">
+            <view class="calender_info_date_boxs_entity" bindtap="handleCalendar"  data-handle="today" >今</view>
+          </view>
+
+          <view class="calender_info_days_boxs_grid_day" wx:for="{{dayGrids}}" wx:key="{{index}}" data-idx="{{index}}" bindtap="tapDayItem">
+            <view class="calender_info_days_boxs_entity {{item.choosed ? 'calender_info_days_entity_choosed' : ''}} {{item.isToday? 'calender_info_days_entity_today': ''}} " style="{{(item.dayOfWeek==6?'color:#84d8fa;':'')+(item.dayOfWeek==0?'color:pink;': '')}} ">{{item.day}}</view>
           </view>
         </view>
 
-        <view bindtap="handleCalendar" data-handle="next" class="calendar_info_days_next " hover-class="calendar_info_days_next_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}"></view>
+        <view bindtap="handleCalendar" data-handle="next" class="calendar_info_days_next" hover-class="calendar_info_days_next_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}">
+
+        <!-- <view class="iconfont icon-pin" hover-class="task_add_btn_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}" bindtap="btnAdd"></view> -->
+
+
+        </view>
       </view>
     </view>
 
-    <view wx:if="{{showPicker}}" class="dialogMarsk"></view>
-    <view wx:if="{{showPicker}}" class="dialog">
-      <view class="calender_info_choose_yearmonths_btns">
-        <view style="margin-left: 50rpx;" data-type="cancel" bindtap="tapPickerBtn">取消</view>
-        <view style="margin-right:50rpx;color:#09BB07;" data-type="confirm" bindtap="tapPickerBtn">确定</view>
-      </view>
-      <picker-view class="calender_info_choose_yearmonths_picker_view" indicator-style="height: 50px;" value="{{pickerValue}}" bindchange="pickerChange">
+    <view wx:if="{{showPicker}}" class="dialog-marsk" catchtouchmove="preventTouchMove"></view>
+    <view wx:if="{{showPicker}}" class="date-picker-dialog">
+
+      <picker-view class="calender_info_choose_yearmonths_picker_view" indicator-style="height:50px;color:#72d55d;" value="{{pickerValue}}" bindchange="pickerChange">
         <picker-view-column>
           <view class="calender_info_choose_yearmonths_picker_view_cols" wx:for="{{pickerYearList}}" wx:key="*this">{{item}}年</view>
         </picker-view-column>
@@ -52,17 +66,27 @@
           <view class="calender_info_choose_yearmonths_picker_view_cols" wx:for="{{pickerMonthList}}" wx:key="*this">{{item}}月</view>
         </picker-view-column>
       </picker-view>
+
+
+      <view class="calender_info_choose_yearmonths_btns">
+        <view data-type="cancel" bindtap="tapPickerBtn" class="btn-default" hover-class="btn-default-click" hover-start-time="{{20}}">取消</view>
+        <view data-type="confirm" bindtap="tapPickerBtn" class="btn-confirm" hover-class="btn-confirm-click" hover-start-time="{{20}}">确定</view>
+      </view>
+
     </view>
 
   </view>
 
 
   <view class="section task-section">
-    <view class="task_add">
+    <view class="task_operation_btns">
 
-      <view class="task_add_btn iconfont icon-add" hover-class="task_add_btn_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}" bindtap="btnAdd">
-
-      </view>
+      <view class="task_operation_btn iconfont icon-add" hover-class="task_operation_btn_touch" hover-start-time="{{20}}"   bindtap="btnAdd"></view>
+       <view class="task_operation_btn iconfont icon-search" hover-class="task_operation_btn_touch" hover-start-time="{{20}}" bindtap="btnSearch"></view>
+       <view class="task_operation_btn iconfont icon-pin" hover-class="task_operation_btn_touch" hover-start-time="{{20}}" bindtap="btnPin"></view> 
+       <!-- <view class="task_add_btn iconfont icon-attachment" hover-class="task_add_btn_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}" bindtap="btnAdd"></view>
+     <view class="task_add_btn iconfont icon-earth" hover-class="task_add_btn_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}" bindtap="btnAdd"></view>
+       -->
 
 
     </view>
@@ -72,19 +96,24 @@
     <view wx:for="{{taskList}}" wx:key="id" class="task_info {{item.isTouchMove ? 'task_info_active' : ''}}" id="{{item.id}}" bindtap="btnEdit" bindtouchstart="taskInfoTouchStart" bindtouchmove="taskInfoTouchMove" hover-class="task_info_touch" hover-start-time="{{20}}"
       hover-stay-time="{{200}}">
       <view class="task_info_content">
-        <view class="task_info_content_index">{{index+1}}</view>
-        <view class="task_info_content_txt">
-          <view>{{item.txt}}</view>
-          <view>{{item.time}}</view>
+        <view class="task_info_content_index"> <view class="task_info_content_index_entity">{{index+1}}</view></view>
+        <view class="task_info_content_basic">
+          <view class="task_info_content_basic_txt"> <view>{{item.txt}}</view><view>{{item.time}}</view> </view>
+            <view class="task_info_content_basic_tips">
+             <view>
+                  <!-- <view class="iconfont icon-pin" hover-class="task_operation_btn_touch" hover-start-time="{{20}}" bindtap="btnPin"></view> -->
+                  <view class="iconfont icon-favorite" hover-class="task_operation_btn_touch" hover-start-time="{{20}}" bindtap="btnPin"></view>
+             </view>
+             <view></view>
+         
+           </view>
         </view>
-        <view class="task_info_content_icon">
-          <icon type="info" size="26" color="#ccc" />
-        </view>
+       
       </view>
 
-      <view class="task_info_btn">
-        <view class="task_info_btn_complete" data-addressid="{{item.txt}} " catchtap="setDefaultAddress ">完成</view>
-        <view class="task_info_btn_delete" catchtap="btnDelete " data-index="{{index}} ">删除</view>
+      <view class="task_info_btn ">
+        <view class="task_info_btn_complete" data-addressid="{{item.txt}}" catchtap="setDefaultAddress">完成</view>
+        <view class="task_info_btn_delete" catchtap="btnDelete" data-index="{{index}}">删除</view>
       </view>
     </view>
 

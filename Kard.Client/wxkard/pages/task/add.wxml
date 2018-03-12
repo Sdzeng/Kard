@@ -1,24 +1,27 @@
 <view class="page">
-  <form bindsubmit="formSubmit" bindreset="formReset">
+  <form bindsubmit="formSubmit">
 
 
 
     <view class="section content-section">
-      <textarea name="taskContent" bindblur="bindTextAreaBlur" auto-height auto-focus />
+      <textarea name="taskContent" bindblur="bindTextAreaBlur" auto-height  />
       <view class="task-datetime">
-        <view class="iconfont icon-clock"></view>
-        <view name="taskStartDate" class="task-start-datetime" hover-class='task-datetime-touch'>
+        <view class="iconfont icon-calendar"></view>
+        <view catchtap="chooseTaskStartDate" class="task-start-datetime" hover-class='task-datetime-touch' hover-start-time="{{20}}" hover-stay-time="{{70}}">
           <view class="task-date">今天，3月8日</view>
           <view class="task-time">21:45</view>
         </view>
         <view class="task-angle" hover-class='task-datetime-touch'></view>
-        <view name="taskEndDate" class="task-end-datetime" hover-class='task-datetime-touch'>
+        <view name="taskEndDate" class="task-end-datetime" hover-class='task-datetime-touch' hover-start-time="{{20}}" hover-stay-time="{{70}}">
           <view class="task-date">今天，3月8日</view>
           <view class="task-time">21:45</view>
         </view>
       </view>
       <view class="task-week">
-        <view wx:for="{{weekList}}" wx:key="*this">{{item}}</view>
+        <view class="iconfont icon-process"></view>
+        <view class="task-week-btns">
+           <view class="task-week-btn" wx:for="{{weekList}}" wx:key="*this">{{item}}</view>
+        </view>
       </view>
     </view>
 
@@ -28,20 +31,27 @@
 
 
 
-    <view class="section btn-section">
-      <view class="btn-remind">
-        <view class="iconfont icon-remind" hover-class="view_click_class" hover-start-time="{{20}}" hover-stay-time="{{70}}"></view>
+    <view class="section remind-section">
+      
+        <view class="iconfont icon-remind"></view>
         <view class="remind-txt">提醒</view>
         <view class="remind-switch" hover-start-time="{{20}}" hover-stay-time="{{70}}">
           <switch checked bindchange="switch1Change" />
         </view>
-      </view>
-
-      <view class="btn-reset-sumit">
-        <button type="warn" formType="reset">取消</button>
-        <button type="primary" formType="submit">完成</button>
-      </view>
+       
     </view>
+
+    
+
+     <view class="btn-block">
+       
+
+      
+        <view class="btn-default" hover-class="btn-default-click"  catchtap='formReset'>取消</view>
+        <button type="primary" style="border:0;" formType="submit">完成</button>
+     
+    </view>
+
 
   </form>
 </view>

@@ -12,7 +12,7 @@
   ],
   "window":{
     "navigationStyle": "default",
-    "navigationBarBackgroundColor": "#fff",
+    "navigationBarBackgroundColor": "#f6f8f8",
     "backgroundColor":"#f6f8f8",
     "navigationBarTitleText": "记事本",
     "navigationBarTextStyle": "black",

@@ -12,10 +12,6 @@
   border-top: 0;
 }
 
-.section:last-child {
-  border-bottom: 0;
-}
-
 .content-section {
   flex-direction: column;
   box-sizing: border-box;
@@ -24,7 +20,7 @@
 .content-section textarea {
   padding: 2%;
   width: 96%;
-  min-height: 100rpx;
+  min-height: 160rpx;
 }
 
 .task-datetime {
@@ -36,8 +32,8 @@
   border-bottom: 2rpx solid #dfdfdf;
 }
 
-.task-datetime .icon-clock {
-  width: 15%;
+.task-datetime .icon-calendar {
+  width: 20%;
   text-align: center;
   line-height: 120rpx;
 }
@@ -60,7 +56,7 @@
 }
 
 .task-angle {
-  width: 15%;
+  width: 10%;
   position: relative; /*方便相对于父元素进行定位*/
 }
 
@@ -73,7 +69,7 @@
 }
 
 .task-angle::before {
-  top: -6rpx;
+  top: -4rpx;
   left: 16rpx; /*设置top和right使图像在20*20框中居中*/
   transform: rotate(-30deg); /*进行旋转*/
 }
@@ -90,32 +86,43 @@
 }
 
 .task-datetime-touch {
-  background-color: #ececec;
+  color: #00c000;
+  text-shadow: 1px 2px 4px rgba(0, 192, 0, 0.16);
 }
 
 .task-week {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  padding: 50rpx 30rpx;
+  height: 120rpx;
 }
 
-.task-week view {
-  border: 2rpx solid #dfdfdf;
-  width: 80rpx;
-  height: 80rpx;
-  line-height: 80rpx;
+.task-week .icon-process {
+  width: 20%;
   text-align: center;
-  border-radius: 42rpx;
-  background-color: #ec4d00;
+  line-height: 120rpx;
+}
+
+.task-week .task-week-btns {
+  width: 80%;
+  padding: 25rpx 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.task-week .task-week-btn {
+  /* border: 6rpx solid #00e676; */
+  width: 70rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  text-align: center;
+  font-size: 90%;
+  border-radius: 35rpx;
+  background-color: #00c000;
   color: #fff;
 }
 
-.btn-section {
-  flex-direction: column;
-}
-
-.btn-remind {
+.remind-section {
   height: 120rpx;
   line-height: 120rpx;
   display: flex;
@@ -123,13 +130,13 @@
   justify-content: space-between;
 }
 
-.btn-remind .icon-remind {
-  width: 15%;
+.remind-section .icon-remind {
+  width: 20%;
   text-align: center;
 }
 
 .remind-txt {
-  width: 65%;
+  width: 60%;
 }
 
 .remind-switch {
@@ -137,12 +144,22 @@
   text-align: center;
 }
 
-.btn-reset-sumit {
+.btn-block {
+  width: 100%;
+  background-color: #f6f8f8;
   display: flex;
   flex-direction: row;
+  position: absolute;
+  bottom: 0rpx;
+  border-top: 2rpx solid #f6f8f8;
 }
 
-.btn-reset-sumit button {
+.btn-block .btn-default {
+  width: 50%;
+  border-radius: 0rpx;
+}
+
+.btn-block button {
   width: 50%;
   border-radius: 0rpx;
 }

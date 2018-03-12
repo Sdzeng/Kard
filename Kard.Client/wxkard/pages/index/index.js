@@ -7,7 +7,9 @@ Page({
   data: {
     hasEmptyGrid: false,
     empytGrids: [],
-    days: [],
+    yearMonthGrids:{},
+    newYearMonthGrids:null,
+    dayGrids: [],
     keepPage:false,
     taskList: [
       { id:"001", txt: "游泳", time: "07:00至09:00" },
@@ -18,13 +20,11 @@ Page({
       { id: "006",txt: "看闲书", time: "22:00至22:30" },
       { id: "007",txt: "玩手机", time: "22:30至22:45" }
     ],
-    viewYear: "--",
-    viewMonth: "--",
     pickerValue: [],
     pickerYearList: [],
     pickerMonthList: [],
-    newPickerYear: 0,
-    newPickerMonth: 0,
+    // newPickerYear: 0,
+    // newPickerMonth: 0,
     showPicker: false,
     startX: 0, //开始坐标
     startY: 0,
@@ -47,8 +47,6 @@ Page({
     });
     //更新数据
     this.setData({
-      viewYear: app.globalData.currentDate.year,
-      viewMonth: app.globalData.currentDate.month,
       taskList: this.data.taskList
     });
     //日期选择器
@@ -91,68 +89,71 @@ Page({
   getFirstDayOfWeek(year, month) {
     return new Date(Date.UTC(year, month - 1, 1)).getDay();
   },
-  calculateEmptyGrids(year, month) {
+  calculateEmpty(year, month) {
     const firstDayOfWeek = this.getFirstDayOfWeek(year, month);
-
+    let emptyCount = firstDayOfWeek == 0 ? 7 : firstDayOfWeek;
+    emptyCount = emptyCount >= 2 ? (emptyCount - 2) : (7 - emptyCount);
+    console.log(firstDayOfWeek);
     let empytGrids = [];
-    if (firstDayOfWeek > 0) {
-      for (let i = 0; i < firstDayOfWeek; i++) {
+    
+    if (emptyCount>0) {
+      for (let i = 0; i < emptyCount; i++) {
         empytGrids.push(i);
       }
-      this.setData({
-        hasEmptyGrid: true,
-        empytGrids
-      });
-    } else {
-      this.setData({
-        hasEmptyGrid: false,
-        empytGrids: []
-      });
-    }
+     
+    }  
+
+    this.setData({
+      hasEmptyGrid: emptyCount > 0,
+      empytGrids
+    
+    });
 
     return firstDayOfWeek;
   },
+   
   calculateDays(year, month) {
-    var dayOfWeek = this.calculateEmptyGrids(year, month);
-
-    let days = [];
+    var firstDayOfWeek = this.calculateEmpty(year, month);
+    let yearMonthGrids = { year: year, month: month };
+    let dayGrids = [];
     const thisMonthDays = this.getThisMonthDays(year, month);
     const isCurrentMonth = (year == app.globalData.currentDate.year) && (month == app.globalData.currentDate.month);
-    for (let i = 1; i <= thisMonthDays; i++ , dayOfWeek = (dayOfWeek + 1) % 7) {
+    for (let i = 1; i <= thisMonthDays; i++ , firstDayOfWeek = (firstDayOfWeek + 1) % 7) {
 
-      days.push({
+      dayGrids.push({
         day: i,
         choosed: false,
-        dayOfWeek: dayOfWeek,
+        dayOfWeek: firstDayOfWeek,
         isToday: isCurrentMonth && (i == app.globalData.currentDate.day)
       });
     }
 
     this.setData({
-      days
+      yearMonthGrids,
+      dayGrids
+
     });
   },
   handleCalendar(e) {
     const handle = e.currentTarget.dataset.handle;
-    const viewYear = this.data.viewYear;
-    const viewMonth = this.data.viewMonth;
+    const yearMonthGrids = this.data.yearMonthGrids;
     let newYear = 0,
-      newMonth = 0;
+        newMonth = 0;
     switch (handle) {
       case "prev":
-        newMonth = viewMonth - 1;
-        newYear = viewYear;
+        newMonth = yearMonthGrids.month - 1;
+        newYear = yearMonthGrids.year;
         if (newMonth < 1) {
-          newYear = viewYear - 1;
+          newYear = yearMonthGrids.year - 1;
           newMonth = 12;
         }
         break;
 
       case "next":
-        newMonth = viewMonth + 1;
-        newYear = viewYear;
+        newMonth = yearMonthGrids.month + 1;
+        newYear = yearMonthGrids.year;
         if (newMonth > 12) {
-          newYear = viewYear + 1;
+          newYear = yearMonthGrids.year + 1;
           newMonth = 1;
         }
 
@@ -165,60 +166,52 @@ Page({
 
     this.calculateDays(newYear, newMonth);
 
-    this.setData({
-      viewYear: newYear,
-      viewMonth: newMonth
-    });
   },
   tapDayItem(e) {
     const idx = e.currentTarget.dataset.idx;
-    const days = this.data.days;
-    days[idx].choosed = !days[idx].choosed;
+    const dayGrids = this.data.dayGrids;
+    dayGrids[idx].choosed = !dayGrids[idx].choosed;
     this.setData({
-      days,
+      dayGrids
     });
   },
   chooseYearAndMonth() {
 
     let pickerYearList = [];
     let pickerMonthList = [];
-    for (let i = 1900; i <= 2100; i++) {
+    for (let i = 1900; i <= 2200; i++) {
       pickerYearList.push(i);
     }
     for (let i = 1; i <= 12; i++) {
       pickerMonthList.push(i);
     }
-    const idxYear = pickerYearList.indexOf(this.data.viewYear);
-    const idxMonth = pickerMonthList.indexOf(this.data.viewMonth);
+    const idxYear = pickerYearList.indexOf(this.data.yearMonthGrids.year);
+    const idxMonth = pickerMonthList.indexOf(this.data.yearMonthGrids.month);
     this.setData({
       pickerValue: [idxYear, idxMonth],
       pickerYearList,
       pickerMonthList,
       showPicker: true,
+      newYearMonthGrids:null
     });
   },
+  preventTouchMove(){},
   pickerChange(e) {
     const val = e.detail.value;
-    const newPickerYear = this.data.pickerYearList[val[0]];
-    const newPickerMonth = this.data.pickerMonthList[val[1]];
+    let newYearMonthGrids={year:this.data.pickerYearList[val[0]],month:this.data.pickerMonthList[val[1]]};
     this.setData({
-      newPickerYear,
-      newPickerMonth
+      newYearMonthGrids
     });
   },
   tapPickerBtn(e) {
     const type = e.currentTarget.dataset.type;
-    const o = {
-      showPicker: false,
-    };
-    if (type === 'confirm') {
-      o.viewYear = this.data.newPickerYear;
-      o.viewMonth = this.data.newPickerMonth;
-
-      this.calculateDays(this.data.newPickerYear, this.data.newPickerMonth);
+    if (type === 'confirm' && this.data.newYearMonthGrids!=null) {
+      this.calculateDays(this.data.newYearMonthGrids.year, this.data.newYearMonthGrids.month);
     }
 
-    this.setData(o);
+    this.setData({
+      showPicker: false,
+    });
   },
   //用户
   getUserInfo: function (e) {
