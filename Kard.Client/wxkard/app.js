@@ -40,6 +40,7 @@ App({
     this.globalData.currentDate.month = date.getMonth() + 1;
     this.globalData.currentDate.day = date.getDate();
   },
+
   onError:function(){
 
     console.log(msg)

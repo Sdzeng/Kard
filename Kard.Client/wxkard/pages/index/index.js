@@ -82,6 +82,13 @@ Page({
 
 
   },
+  onPullDownRefresh: function () {
+    wx.showNavigationBarLoading();
+
+    wx.hideNavigationBarLoading(); //完成停止加载
+    wx.stopPullDownRefresh(); //停止下拉刷新
+
+  },
   // 日历
   getThisMonthDays(year, month) {
     return new Date(year, month, 0).getDate();

@@ -118,7 +118,7 @@
   text-align: center;
   font-size: 90%;
   border-radius: 35rpx;
-  background-color: #00c000;
+  background-color: #a5d6a7;
   color: #fff;
 }
 

@@ -12,11 +12,12 @@
   ],
   "window":{
     "navigationStyle": "default",
-    "navigationBarBackgroundColor": "#f6f8f8",
+    "navigationBarBackgroundColor": "#fff",
     "backgroundColor":"#f6f8f8",
     "navigationBarTitleText": "记事本",
     "navigationBarTextStyle": "black",
-    "backgroundTextStyle": "light"
+    "backgroundTextStyle": "dark",
+    "enablePullDownRefresh":true
   },
     "tabBar": {
       "color": "#1aad16",

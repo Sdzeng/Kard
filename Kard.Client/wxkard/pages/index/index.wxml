@@ -55,6 +55,19 @@
       </view>
     </view>
 
+    <view class="task_operation_btns">
+
+      <view class="task_operation_btn iconfont icon-add" hover-class="task_operation_btn_touch" hover-start-time="{{20}}"   bindtap="btnAdd"></view>
+       <view class="task_operation_btn iconfont icon-search" hover-class="task_operation_btn_touch" hover-start-time="{{20}}" bindtap="btnSearch"></view>
+       <view class="task_operation_btn iconfont icon-pin" hover-class="task_operation_btn_touch" hover-start-time="{{20}}" bindtap="btnPin"></view> 
+       <!-- <view class="task_add_btn iconfont icon-attachment" hover-class="task_add_btn_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}" bindtap="btnAdd"></view>
+     <view class="task_add_btn iconfont icon-earth" hover-class="task_add_btn_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}" bindtap="btnAdd"></view>
+       -->
+
+
+    </view>
+
+
     <view wx:if="{{showPicker}}" class="dialog-marsk" catchtouchmove="preventTouchMove"></view>
     <view wx:if="{{showPicker}}" class="date-picker-dialog">
 
@@ -79,17 +92,7 @@
 
 
   <view class="section task-section">
-    <view class="task_operation_btns">
 
-      <view class="task_operation_btn iconfont icon-add" hover-class="task_operation_btn_touch" hover-start-time="{{20}}"   bindtap="btnAdd"></view>
-       <view class="task_operation_btn iconfont icon-search" hover-class="task_operation_btn_touch" hover-start-time="{{20}}" bindtap="btnSearch"></view>
-       <view class="task_operation_btn iconfont icon-pin" hover-class="task_operation_btn_touch" hover-start-time="{{20}}" bindtap="btnPin"></view> 
-       <!-- <view class="task_add_btn iconfont icon-attachment" hover-class="task_add_btn_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}" bindtap="btnAdd"></view>
-     <view class="task_add_btn iconfont icon-earth" hover-class="task_add_btn_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}" bindtap="btnAdd"></view>
-       -->
-
-
-    </view>
 
 
 
@@ -100,11 +103,11 @@
         <view class="task_info_content_basic">
           <view class="task_info_content_basic_txt"> <view>{{item.txt}}</view><view>{{item.time}}</view> </view>
             <view class="task_info_content_basic_tips">
-             <view>
-                  <!-- <view class="iconfont icon-pin" hover-class="task_operation_btn_touch" hover-start-time="{{20}}" bindtap="btnPin"></view> -->
+        
+             
                   <view class="iconfont icon-favorite" hover-class="task_operation_btn_touch" hover-start-time="{{20}}" bindtap="btnPin"></view>
-             </view>
-             <view></view>
+            
+          
          
            </view>
         </view>

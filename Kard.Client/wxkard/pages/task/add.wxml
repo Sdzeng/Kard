@@ -36,7 +36,7 @@
         <view class="iconfont icon-remind"></view>
         <view class="remind-txt">提醒</view>
         <view class="remind-switch" hover-start-time="{{20}}" hover-stay-time="{{70}}">
-          <switch checked bindchange="switch1Change" />
+          <switch checked bindchange="switch1Change" color="#a5d6a7" />
         </view>
        
     </view>
