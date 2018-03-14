@@ -1,56 +1,81 @@
 <view class="page">
   <form bindsubmit="formSubmit">
 
+   <view class="section">
+      <view class="btn-block">
+        <view class="btn-default" hover-class="btn-default-click"  catchtap='formReset'>取消</view>
+        <button type="primary" style="border:0;" formType="submit">完成</button>
+      </view>
+   </view>
 
-
-    <view class="section content-section">
-      <textarea name="taskContent" bindblur="bindTextAreaBlur" auto-height  />
-      <view class="task-datetime">
-        <view class="iconfont icon-calendar"></view>
-        <view catchtap="chooseTaskStartDate" class="task-start-datetime" hover-class='task-datetime-touch' hover-start-time="{{20}}" hover-stay-time="{{70}}">
-          <view class="task-date">今天，3月8日</view>
-          <view class="task-time">21:45</view>
-        </view>
-        <view class="task-angle" hover-class='task-datetime-touch'></view>
-        <view name="taskEndDate" class="task-end-datetime" hover-class='task-datetime-touch' hover-start-time="{{20}}" hover-stay-time="{{70}}">
-          <view class="task-date">今天，3月8日</view>
-          <view class="task-time">21:45</view>
+    <view class="section">
+       <view class="section-row">
+        <view class="section-row-icon iconfont icon-pin"></view>
+        <view class="section-row-content">
+           <view class="remind-txt">循环</view>
+            <view class="remind-switch" hover-start-time="{{20}}" hover-stay-time="{{70}}">
+              <switch bindchange="switchWeekList" color="#a5d6a7" />
+            </view>
         </view>
       </view>
-      <view class="task-week">
-        <view class="iconfont icon-process"></view>
-        <view class="task-week-btns">
+
+   
+
+       <view class="section-row">
+          <view class="section-row-icon iconfont icon-calendar"></view>
+          <view  class="section-row-content" >
+              <view catchtap="chooseTaskStartDate" class="task-datetime" hover-class='task-datetime-touch' hover-start-time="{{20}}" hover-stay-time="{{70}}">
+                <view name="taskStartDate">3月14</view>
+                <view wx:if="{{isLongTerm}}" name="taskEndDate">到3月20</view>
+              </view>
+              <view class="task-angle" hover-class='task-datetime-touch'></view>
+              <view  class="task-datetime" hover-class='task-datetime-touch' hover-start-time="{{20}}" hover-stay-time="{{70}}">
+                <view name="taskStartTime">20:00</view>
+                
+                <view name="taskEndTime">到01:00</view>
+              </view>
+          </view>
+       </view>
+ 
+
+      <view wx:if="{{isLongTerm}}" class="section-row">
+        <view class="section-row-icon iconfont icon-process"></view>
+        <view class="section-row-content task-week">
            <view class="task-week-btn" wx:for="{{weekList}}" wx:key="*this">{{item}}</view>
         </view>
       </view>
-    </view>
+
+
+      <view class="section-area-row">
+          <view class="section-row-icon iconfont icon-edit"></view>
+            <view  class="section-row-content" >
+            <textarea class="task-txt" name="taskContent" bindblur="bindTextAreaBlur" auto-height auto-focus placeholder="我的新目标" />
+            </view>
+       </view>
+
+   </view>
 
 
 
 
-
-
-
-    <view class="section remind-section">
+    <view class="section">
       
-        <view class="iconfont icon-remind"></view>
-        <view class="remind-txt">提醒</view>
-        <view class="remind-switch" hover-start-time="{{20}}" hover-stay-time="{{70}}">
-          <switch checked bindchange="switch1Change" color="#a5d6a7" />
+       <view class="section-row">
+        <view class="section-row-icon iconfont icon-remind"></view>
+        <view class="section-row-content">
+           <view class="remind-txt">提醒</view>
+            <view class="remind-switch" hover-start-time="{{20}}" hover-stay-time="{{70}}">
+              <switch checked bindchange="switch1Change" color="#a5d6a7" />
+            </view>
         </view>
+      </view>
+
+ 
        
     </view>
 
     
 
-     <view class="btn-block">
-       
-
-      
-        <view class="btn-default" hover-class="btn-default-click"  catchtap='formReset'>取消</view>
-        <button type="primary" style="border:0;" formType="submit">完成</button>
-     
-    </view>
 
 
   </form>

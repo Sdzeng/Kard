@@ -1,7 +1,8 @@
 {
   "pages":[
-    "pages/index/index",
     "pages/task/add",
+    "pages/index/index",
+
     
     "pages/social/social",
    

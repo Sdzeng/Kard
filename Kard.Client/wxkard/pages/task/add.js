@@ -34,7 +34,15 @@
 
 Page({
   data:{
+    isLongTerm:false,
     weekList:['日', '一', '二', '三', '四', '五', '六']
+
+  },
+  switchWeekList:function(e){
+    this.data.isLongTerm = e.detail.value;
+    this.setData({
+      isLongTerm: this.data.isLongTerm
+    });
   },
   chooseTaskStartDate:function(e){
   //   <picker-view class="calender_info_choose_yearmonths_picker_view" indicator- style="height: 50px;" value= "{{pickerValue}}" bindchange= "pickerChange" >
