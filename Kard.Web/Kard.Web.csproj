@@ -52,7 +52,6 @@
   <ItemGroup>
     <Folder Include="logs\ngx\" />
     <Folder Include="logs\supervisor\" />
-    <Folder Include="wwwroot\assets\css\" />
     <Folder Include="wwwroot\builds\" />
   </ItemGroup>
 

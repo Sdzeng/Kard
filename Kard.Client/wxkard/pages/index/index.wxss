@@ -260,7 +260,7 @@ border-radius: 12rpx; */
 }
 
 
-.calender_info_choose_yearmonths_picker_view {
+.yearmonths_picker_view {
   flex-grow: 1;
   width:96%;
   height: 400rpx;
@@ -269,14 +269,14 @@ border-radius: 12rpx; */
 
 }
 
-.calender_info_choose_yearmonths_picker_view_cols {
+.yearmonths_picker_view_cols {
   text-align: center;
   line-height: 50px;
 }
 
 
 
-.calender_info_choose_yearmonths_btns {
+.yearmonths_btns {
 
  
   display: flex;
@@ -285,11 +285,11 @@ border-radius: 12rpx; */
   justify-content: space-between;
 
 }
-.calender_info_choose_yearmonths_btns view{
+.yearmonths_btns view{
   width: 50%;
 
 }
-.calender_info_choose_yearmonths_btns view:last-child{
+.yearmonths_btns view:last-child{
 
     border-left: 2rpx solid #eee;
 

@@ -49,6 +49,19 @@
 }
 
 
+.section-row-txt {
+  line-height: 120rpx;
+  width: 80%;
+}
+
+.section-row-switch {
+  line-height: 120rpx;
+  width: 20%;
+  text-align: center;
+}
+
+
+
 .btn-block {
   width: 100%;
   border-top: 2rpx solid #dfdfdf;
@@ -148,15 +161,60 @@ min-height: 160rpx;
 
 
 
-.remind-txt {
-  line-height: 120rpx;
+ 
+
+.date-picker-dialog {
+
   width: 80%;
+  height:520prx;
+  overflow: hidden;
+  position: fixed;
+  top: 25%;
+  left: 0;
+  z-index: 9999;
+  background: #f9f9f9;
+  margin: 0 10%;
+  border-radius: 12rpx;
+
 }
 
-.remind-switch {
-  line-height: 120rpx;
-  width: 20%;
-  text-align: center;
+
+.yearmonths_picker_view {
+  flex-grow: 1;
+ margin: 20rpx;
+  height: 400rpx;
+  
+  overflow: hidden;
+
 }
+
+.yearmonths_picker_view_cols {
+  text-align: center;
+  line-height: 50px;
+}
+
+
+
+.yearmonths_btns {
+
+ 
+  border-top: 2rpx solid #dfdfdf;
+  z-index: 1000;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+}
+.yearmonths_btns view{
+  width: 50%;
+
+}
+.yearmonths_btns view:last-child{
+
+    border-left: 2rpx solid #eee;
+
+   
+}
+
 
 

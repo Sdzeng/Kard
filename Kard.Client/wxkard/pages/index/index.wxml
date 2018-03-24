@@ -71,17 +71,17 @@
     <view wx:if="{{showPicker}}" class="dialog-marsk" catchtouchmove="preventTouchMove"></view>
     <view wx:if="{{showPicker}}" class="date-picker-dialog">
 
-      <picker-view class="calender_info_choose_yearmonths_picker_view" indicator-style="height:50px;color:#72d55d;" value="{{pickerValue}}" bindchange="pickerChange">
+      <picker-view class="yearmonths_picker_view" indicator-style="height:50px;color:#72d55d;" value="{{pickerValue}}" bindchange="pickerChange">
         <picker-view-column>
-          <view class="calender_info_choose_yearmonths_picker_view_cols" wx:for="{{pickerYearList}}" wx:key="*this">{{item}}年</view>
+          <view class="yearmonths_picker_view_cols" wx:for="{{pickerYearList}}" wx:key="*this">{{item}}年</view>
         </picker-view-column>
         <picker-view-column>
-          <view class="calender_info_choose_yearmonths_picker_view_cols" wx:for="{{pickerMonthList}}" wx:key="*this">{{item}}月</view>
+          <view class="yearmonths_picker_view_cols" wx:for="{{pickerMonthList}}" wx:key="*this">{{item}}月</view>
         </picker-view-column>
       </picker-view>
 
 
-      <view class="calender_info_choose_yearmonths_btns">
+      <view class="yearmonths_btns">
         <view data-type="cancel" bindtap="tapPickerBtn" class="btn-default" hover-class="btn-default-click" hover-start-time="{{20}}">取消</view>
         <view data-type="confirm" bindtap="tapPickerBtn" class="btn-confirm" hover-class="btn-confirm-click" hover-start-time="{{20}}">确定</view>
       </view>

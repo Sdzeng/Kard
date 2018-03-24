@@ -12,9 +12,9 @@
        <view class="section-row">
         <view class="section-row-icon iconfont icon-pin"></view>
         <view class="section-row-content">
-           <view class="remind-txt">循环</view>
-            <view class="remind-switch" hover-start-time="{{20}}" hover-stay-time="{{70}}">
-              <switch bindchange="switchWeekList" color="#a5d6a7" />
+           <view class="section-row-txt">循环</view>
+            <view class="section-row-switch" hover-start-time="{{20}}" hover-stay-time="{{70}}">
+              <switch bindchange="switchIsLongTerm" color="#a5d6a7" />
             </view>
         </view>
       </view>
@@ -49,7 +49,7 @@
       <view class="section-area-row">
           <view class="section-row-icon iconfont icon-edit"></view>
             <view  class="section-row-content" >
-            <textarea class="task-txt" name="taskContent" bindblur="bindTextAreaBlur" auto-height auto-focus placeholder="我的新目标" />
+            <textarea class="task-txt" name="taskContent" bindblur="bindTextAreaBlur" auto-height auto-focus placeholder="先定一个小目标" />
             </view>
        </view>
 
@@ -63,8 +63,8 @@
        <view class="section-row">
         <view class="section-row-icon iconfont icon-remind"></view>
         <view class="section-row-content">
-           <view class="remind-txt">提醒</view>
-            <view class="remind-switch" hover-start-time="{{20}}" hover-stay-time="{{70}}">
+           <view class="section-row-txt">提醒</view>
+            <view class="section-row-switch" hover-start-time="{{20}}" hover-stay-time="{{70}}">
               <switch checked bindchange="switch1Change" color="#a5d6a7" />
             </view>
         </view>
@@ -79,4 +79,35 @@
 
 
   </form>
+
+
+
+  <view wx:if="{{showPicker}}" class="dialog-marsk" catchtouchmove="preventTouchMove"></view>
+    <view wx:if="{{showPicker}}" class="date-picker-dialog">
+
+      <picker-view class="yearmonths_picker_view" indicator-style="height:50px;color:#72d55d;" value="{{pickerValue}}" bindchange="pickerChange">
+        <picker-view-column>
+          <view class="yearmonths_picker_view_cols" wx:for="{{pickerYearList}}" wx:key="*this">{{item}}</view>
+        </picker-view-column>
+        <picker-view-column>
+          <view class="yearmonths_picker_view_cols" wx:for="{{pickerMonthList}}" wx:key="*this">{{item}}月</view>
+        </picker-view-column>
+          <picker-view-column class="yearmonths_picker_view_cols"> 到 </picker-view-column>
+          <picker-view-column>
+          <view class="yearmonths_picker_view_cols" wx:for="{{pickerYearList}}" wx:key="*this">{{item}}</view>
+        </picker-view-column>
+        <picker-view-column>
+          <view class="yearmonths_picker_view_cols" wx:for="{{pickerMonthList}}" wx:key="*this">{{item}}月</view>
+        </picker-view-column>
+      </picker-view>
+
+
+      <view class="yearmonths_btns">
+        <view data-type="cancel" bindtap="tapPickerBtn" class="btn-default" hover-class="btn-default-click" hover-start-time="{{20}}">取消</view>
+        <view data-type="confirm" bindtap="tapPickerBtn" class="btn-confirm" hover-class="btn-confirm-click" hover-start-time="{{20}}">确定</view>
+      </view>
+
+    </view>
+
+
 </view>
