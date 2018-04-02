@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 using System.Text.RegularExpressions;
 
-namespace DapperExtensions.Core20.Mapper
+namespace DapperExtensionsCore.Mapper
 {
     /// <summary>
     /// Automatically maps an entity to a table using a combination of reflection and naming conventions for keys. 

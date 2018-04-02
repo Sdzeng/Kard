@@ -10,6 +10,8 @@
         /// 用户编号
         /// </summary>
         long? UserId { get; }
+
+        string WxOpenId { get; }
         /// <summary>
         /// 登陆名
         /// </summary>

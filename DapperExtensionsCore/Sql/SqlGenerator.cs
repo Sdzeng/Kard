@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DapperExtensions.Core20.Mapper;
+using DapperExtensionsCore.Mapper;
 
-namespace DapperExtensions.Core20.Sql
+namespace DapperExtensionsCore.Sql
 {
     public interface ISqlGenerator
     {

@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DapperExtensionsCore\DapperExtensionsCore.csproj" />
     <ProjectReference Include="..\Kard\Kard.csproj" />
   </ItemGroup>
 

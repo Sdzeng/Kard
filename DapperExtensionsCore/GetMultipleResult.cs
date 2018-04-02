@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Dapper;
 
-namespace DapperExtensions.Core20
+namespace DapperExtensionsCore
 {
     public interface IMultipleResultReader
     {

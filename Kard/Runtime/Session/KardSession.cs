@@ -57,6 +57,22 @@ namespace Kard.Runtime.Session
             }
         }
 
+        public  string WxOpenId
+        {
+            get
+            {
+
+                var wxOpenIdClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.WxOpenId);
+                if (string.IsNullOrEmpty(wxOpenIdClaim?.Value))
+                {
+                    return null;
+                }
+
+                return wxOpenIdClaim.Value;
+            }
+        }
+
+
         /// <summary>
         /// 登陆名
         /// </summary>
@@ -65,13 +81,13 @@ namespace Kard.Runtime.Session
             get
             {
 
-                var userNameClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.Name);
-                if (string.IsNullOrEmpty(userNameClaim?.Value))
+                var nameClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.Name);
+                if (string.IsNullOrEmpty(nameClaim?.Value))
                 {
                     return null;
                 }
 
-                return userNameClaim.Value;
+                return nameClaim.Value;
             }
         }
 
@@ -84,13 +100,13 @@ namespace Kard.Runtime.Session
             get
             {
 
-                var nameClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.NikeName);
-                if (string.IsNullOrEmpty(nameClaim?.Value))
+                var nikeNameClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.NikeName);
+                if (string.IsNullOrEmpty(nikeNameClaim?.Value))
                 {
                     return null;
                 }
 
-                return nameClaim.Value;
+                return nikeNameClaim.Value;
             }
         }
 

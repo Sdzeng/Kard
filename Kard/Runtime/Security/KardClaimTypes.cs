@@ -21,6 +21,8 @@ namespace Kard.Runtime.Security
         /// </summary>
         public const string UserId = ClaimTypes.NameIdentifier;
 
+        public const string WxOpenId= "http://www.localyc.com/identity/claims/wxopenid";
+
         /// <summary>
         /// 登陆名
         /// </summary>

@@ -121,7 +121,7 @@ namespace Kard.Dapper.Mysql.Repositories
 
         public KuserEntity GetUser(long id)
         {
-            return base.FirstOrDefault<KuserEntity>("select * from Kuser where Id=@Id", new { Id = id });
+            return base.FirstOrDefault<KuserEntity>(new { Id = id });
         }
 
     }

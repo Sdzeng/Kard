@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using DapperExtensions.Core20.Mapper;
-using DapperExtensions.Core20.Sql;
+using DapperExtensionsCore.Mapper;
+using DapperExtensionsCore.Sql;
 
-namespace DapperExtensions.Core20
+namespace DapperExtensionsCore
 {
     public interface IDatabase : IDisposable
     {

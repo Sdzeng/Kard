@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DapperExtensions.Core20.Sql
+namespace DapperExtensionsCore.Sql
 {
     public class MySqlDialect : SqlDialectBase
     {

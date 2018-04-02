@@ -13,8 +13,10 @@ namespace Kard.Core.AppServices.Default
 
         //ResultDto Signup(KuserEntity user);
 
-        ResultDto<ClaimsIdentity> Login(string name, string password);
+        ResultDto<ClaimsIdentity> WebLogin(string name, string password);
 
+        ResultDto<ClaimsIdentity> WxAlive(string code);
 
+        ResultDto<ClaimsIdentity> WxLogin(KuserEntity user);
     }
 }

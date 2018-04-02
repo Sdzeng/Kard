@@ -4,10 +4,10 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using DapperExtensions.Core20.Sql;
-using DapperExtensions.Core20.Mapper;
+using DapperExtensionsCore.Sql;
+using DapperExtensionsCore.Mapper;
 
-namespace DapperExtensions.Core20
+namespace DapperExtensionsCore
 {
     public static class DapperExtensions
     {

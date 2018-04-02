@@ -5,10 +5,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
-using DapperExtensions.Core20.Mapper;
-using DapperExtensions.Core20.Sql;
+using DapperExtensionsCore.Mapper;
+using DapperExtensionsCore.Sql;
 
-namespace DapperExtensions.Core20
+namespace DapperExtensionsCore
 {
     public static class Predicates
     {

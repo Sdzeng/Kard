@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace DapperExtensions.Core20.Sql
+namespace DapperExtensionsCore.Sql
 {
     public class OracleDialect : SqlDialectBase
     {
