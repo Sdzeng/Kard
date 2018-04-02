@@ -1,9 +1,9 @@
 {
   "pages":[
-    "pages/task/add",
+    
     "pages/index/index",
 
-    
+    "pages/task/add",
     "pages/social/social",
    
     "pages/task/edit",
@@ -34,19 +34,7 @@
           "text": "达人圈",
           "iconPath": "/icons/lights.png",
           "selectedIconPath": "/icons/lights_select.png"
-        },
-        {
-          "pagePath": "pages/test/test",
-          "text": "测试"
-        },
-        {
-          "pagePath": "pages/test2/test2",
-          "text": "测试2"
-        },
-        {
-          "pagePath": "pages/test3/index",
-          "text": "测试3"
-        }
+        } 
       ],
       "position": "bottom"
     },

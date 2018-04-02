@@ -36,10 +36,10 @@
               <view style="height:36rpx;line-height:36rpx;font-size:30rpx;">{{yearMonthGrids.month||"--"}}月</view>
             </view>
           </view>
-
+<!-- 
           <view class="calender_info_days_boxs_grid_date">
             <view class="calender_info_date_boxs_entity" bindtap="handleCalendar"  data-handle="today" >今</view>
-          </view>
+          </view> -->
 
           <view class="calender_info_days_boxs_grid_day" wx:for="{{dayGrids}}" wx:key="{{index}}" data-idx="{{index}}" bindtap="tapDayItem">
             <view class="calender_info_days_boxs_entity {{item.choosed ? 'calender_info_days_entity_choosed' : ''}} {{item.isToday? 'calender_info_days_entity_today': ''}} " style="{{(item.dayOfWeek==6?'color:#84d8fa;':'')+(item.dayOfWeek==0?'color:pink;': '')}} ">{{item.day}}</view>
@@ -83,6 +83,7 @@
 
       <view class="yearmonths_btns">
         <view data-type="cancel" bindtap="tapPickerBtn" class="btn-default" hover-class="btn-default-click" hover-start-time="{{20}}">取消</view>
+        <view data-type="today" bindtap="tapPickerBtn" class="btn-today" hover-class="btn-today-click" hover-start-time="{{20}}">今天</view>
         <view data-type="confirm" bindtap="tapPickerBtn" class="btn-confirm" hover-class="btn-confirm-click" hover-start-time="{{20}}">确定</view>
       </view>
 

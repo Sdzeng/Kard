@@ -10,8 +10,7 @@
   background-color:#f6f8f8;
 } */
 
-.keep_page{
-
+.keep_page {
   position: fixed;
   top: 0;
   left: 0;
@@ -28,13 +27,10 @@
   display: flex;
   flex-direction: column;
   width: 100%;
- 
-  background-color:#fff;
+  background-color: #fff;
   border-bottom: 2rpx solid #eee;
   margin-bottom: 20rpx;
-
   /* box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 4px 10px 0 rgba(0,0,0,0.12); */
- 
 }
 
 /* Calendar */
@@ -161,8 +157,7 @@ content: ".";
   text-align: center;
   width: 100%;
   padding: 20rpx 0;
-
-     /* -webkit-transition: all 1s;
+  /* -webkit-transition: all 1s;
   transition: all 1s;  */
 }
 
@@ -173,11 +168,10 @@ content: ".";
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-
 }
-.calendar_info_days_prev_touch,.calendar_info_days_next_touch{
-  
-    color:#00c000;
+
+.calendar_info_days_prev_touch, .calendar_info_days_next_touch {
+  color: #00c000;
 }
 
 .calender_info_days_boxs {
@@ -190,9 +184,10 @@ content: ".";
   flex-wrap: wrap;
 }
 
-.calender_info_days_boxs_empty,.calender_info_days_boxs_grid_date,.calender_info_days_boxs_grid_day {
+.calender_info_days_boxs_empty, .calender_info_days_boxs_grid_date,
+.calender_info_days_boxs_grid_day {
   width: 80rpx;
-  height:80rpx;
+  height: 80rpx;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -202,9 +197,9 @@ content: ".";
 .calender_info_date_boxs_entity {
   display: flex;
   flex-direction: column;
-  justify-content:center;
-  align-items:center;
-  background-color:#ec4d00;
+  justify-content: center;
+  align-items: center;
+  background-color: #ec4d00;
   text-align: center;
   color: #fff;
   margin: 4rpx;
@@ -213,7 +208,6 @@ content: ".";
   font-size: 30rpx;
   font-weight: 300%;
 }
- 
 
 .calender_info_days_boxs_entity {
   background-color: rgba(255, 255, 255, 0.3);
@@ -238,7 +232,7 @@ content: ".";
 }
 
 .date-picker-dialog {
-/* width: 70%;
+  /* width: 70%;
 position: fixed; 
 left:15%;
 top: 30%;
@@ -247,7 +241,7 @@ overflow-y: scroll;
 background-color:#fff;
 border-radius: 12rpx; */
   width: 76%;
-  height:520prx;
+  height: 520prx;
   overflow: hidden;
   position: fixed;
   top: 25%;
@@ -256,17 +250,13 @@ border-radius: 12rpx; */
   background: #f9f9f9;
   margin: 0 12%;
   border-radius: 12rpx;
-
 }
-
 
 .yearmonths_picker_view {
   flex-grow: 1;
-  width:96%;
+  width: 96%;
   height: 400rpx;
-
   overflow: hidden;
-
 }
 
 .yearmonths_picker_view_cols {
@@ -274,29 +264,32 @@ border-radius: 12rpx; */
   line-height: 50px;
 }
 
-
-
 .yearmonths_btns {
-
- 
   display: flex;
   z-index: 1000;
   flex-direction: row;
   justify-content: space-between;
-
-}
-.yearmonths_btns view{
-  width: 50%;
-
-}
-.yearmonths_btns view:last-child{
-
-    border-left: 2rpx solid #eee;
-
-   
 }
 
+.yearmonths_btns view {
+  width: 33.333%;
+}
 
+.btn-today {
+  text-align: center;
+  height: 46px;
+  line-height: 46px;
+  color: #fff;
+  background-color: #ec4d00;
+}
+
+.btn-today-click {
+  text-align: center;
+  height: 46px;
+  line-height: 46px;
+  color: #fff;
+  background-color: #ef4000;
+}
 
 /* 任务列表 */
 
@@ -306,39 +299,32 @@ border-radius: 12rpx; */
   overflow-y: scroll;  */
 }
 
-
-
-
-.task_operation_btns{
+.task_operation_btns {
   display: flex;
   flex-direction: row;
-  justify-content:center;
-  align-items:center;
-  padding:30rpx 20rpx;
+  justify-content: center;
+  align-items: center;
+  padding: 30rpx 20rpx;
 }
 
-.task_operation_btn{
-
-  width:120rpx;
-  height:80rpx;
-  line-height:80rpx;
+.task_operation_btn {
+  width: 120rpx;
+  height: 80rpx;
+  line-height: 80rpx;
   text-align: center;
-  background-color:#f8f8f8; 
+  background-color: #f8f8f8;
   font-weight: 200%;
   border-radius: 10rpx;
   margin: 4rpx;
-   /* -webkit-transition: all 0.2s;
+  /* -webkit-transition: all 0.2s;
   transition: all 0.2s; */
-
-
 }
- 
 
- .task_operation_btn_touch{
+.task_operation_btn_touch {
   /* background-color:rgba(236, 236,236, 0.3);  */
-  color:#fff;
+  color: #fff;
   background: #a5d6a7;
-} 
+}
 
 .task_info {
   display: flex;
@@ -348,17 +334,16 @@ border-radius: 12rpx; */
   height: 120rpx;
   line-height: 120rpx;
   overflow: hidden;
-  background-color:#fff;
+  background-color: #fff;
 }
 
-.task_info:last-child{
+.task_info:last-child {
   border-bottom: 2rpx solid #eee;
 }
 
-.task_info_touch{
-    background-color:#ececec; 
+.task_info_touch {
+  background-color: #ececec;
 }
-
 
 .task_info_content {
   width: 100%;
@@ -378,24 +363,19 @@ border-radius: 12rpx; */
   padding: 10rpx;
   width: 13%;
   height: 80rpx;
-
 }
 
-.task_info_content_index_entity{
-
+.task_info_content_index_entity {
   width: 80rpx;
   height: 80rpx;
   line-height: 80rpx;
   border-radius: 40rpx;
   text-align: center;
- 
   background: #a5d6a7;
-  /* #a5d6a7 */
-  /* #00c000 */
-  /* #ec4d00; */
+  /* #a5d6a7 *//* #00c000 *//* #ec4d00; */
   color: #fff;
-
 }
+
 .task_info_content_basic {
   display: flex;
   flex-direction: row;
@@ -405,44 +385,32 @@ border-radius: 12rpx; */
   overflow: hidden;
 }
 
-.task_info_content_basic_txt{
- 
+.task_info_content_basic_txt {
 }
+
 .task_info_content_basic_txt>view:first-child {
   line-height: 60rpx;
 }
-
 
 .task_info_content_basic_txt>view:last-child {
   line-height: 40rpx;
   font-size: 60%;
 }
 
-.task_info_content_basic_tips{
+.task_info_content_basic_tips {
   margin: 10rpx;
   height: 80rpx;
   display: flex;
   flex-direction: row;
-  justify-content:flex-end;
-
+  justify-content: flex-end;
 }
 
-
-.task_info_content_basic_tips>view{
-width: 80rpx;
-height: 80rpx;
-line-height: 80rpx;
-text-align: center;
+.task_info_content_basic_tips>view {
+  width: 80rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
 }
-
-
-
-
- 
-
- 
-
-
 
 .task_info_btn {
   background-color: orangered;
@@ -475,8 +443,7 @@ text-align: center;
   background-color: #f44336;
 }
 
-
-.view_click_class{
-   background-color:rgba(0, 0,0, 0.3); 
-    color:#00c000;
+.view_click_class {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: #00c000;
 }

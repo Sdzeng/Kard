@@ -99,7 +99,7 @@ Page({
   calculateEmpty(year, month) {
     const firstDayOfWeek = this.getFirstDayOfWeek(year, month);
     let emptyCount = firstDayOfWeek == 0 ? 7 : firstDayOfWeek;
-    emptyCount = emptyCount >= 2 ? (emptyCount - 2) : (7 - emptyCount);
+    emptyCount = emptyCount >= 1 ? (emptyCount - 1) : (7 - emptyCount);
     console.log(firstDayOfWeek);
     let empytGrids = [];
     
@@ -165,10 +165,7 @@ Page({
         }
 
         break;
-      case "today":
-        newMonth = app.globalData.currentDate.month;
-        newYear = app.globalData.currentDate.year;
-        break;
+    
     }
 
     this.calculateDays(newYear, newMonth);
@@ -211,9 +208,13 @@ Page({
     });
   },
   tapPickerBtn(e) {
-    const type = e.currentTarget.dataset.type;
-    if (type === 'confirm' && this.data.newYearMonthGrids!=null) {
+    const btnType = e.currentTarget.dataset.type;
+    if (btnType === 'confirm' && this.data.newYearMonthGrids!=null) {
       this.calculateDays(this.data.newYearMonthGrids.year, this.data.newYearMonthGrids.month);
+    }
+    else if (btnType === 'today')
+    {
+      this.calculateDays(app.globalData.currentDate.year, app.globalData.currentDate.month);
     }
 
     this.setData({
