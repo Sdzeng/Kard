@@ -4,10 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
-    <PostBuildEvent></PostBuildEvent>
-  </PropertyGroup>
+ 
 
   <ItemGroup>
     <Compile Remove="Middlewares\KardStaticFile\**" />
@@ -21,15 +18,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\ApiController.cs" />
     <Compile Remove="Controllers\CoverController.cs" />
     <Compile Remove="Controllers\ErrorController.cs" />
     <Compile Remove="Controllers\HomeController.cs" />
+    <Compile Remove="Controllers\UserController.cs" />
     <Compile Remove="Controllers\ValuesController.cs" />
     <Compile Remove="Middlewares\ImageHandle\ImageHandleExtensions.cs" />
     <Compile Remove="Middlewares\ImageHandle\ImageHandleFileContext.cs" />
     <Compile Remove="Middlewares\ImageHandle\ImageHandleMiddleware.cs" />
     <Compile Remove="Middlewares\ImageHandle\ImageHandleServiceExtensions.cs" />
     <Compile Remove="WebModule.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="web.config" />
   </ItemGroup>
 
   <ItemGroup>

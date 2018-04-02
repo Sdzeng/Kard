@@ -41,11 +41,11 @@ namespace Kard.Web
             //string assemblyParts = string.Join(",", mvcBuilder.PartManager.ApplicationParts.Select(a=>a.Name));
 
 
-            services.Configure<IISOptions>(options =>
-            {
-                //options.ForwardClientCertificate = false;
+            //services.Configure<IISOptions>(options =>
+            //{
+            //    //options.ForwardClientCertificate = false;
 
-            });
+            //});
 
 
             services.AddMvc();

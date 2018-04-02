@@ -17,7 +17,7 @@ namespace Kard.Web.Controllers
         protected readonly IKardSession _kardSession;
 
 
-        public BaseController(ILogger<BaseController> logger,IMemoryCache memoryCache, IKardSession kardSession)
+        public BaseController(ILogger<BaseController> logger,IMemoryCache memoryCache=null, IKardSession kardSession=null)
         {
             _logger = logger;
             _memoryCache = memoryCache;

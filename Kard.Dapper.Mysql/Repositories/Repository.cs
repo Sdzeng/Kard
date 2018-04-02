@@ -6,6 +6,7 @@ using Kard.Domain.Entities.Auditing;
 using Kard.Extensions;
 using Kard.Runtime.Session;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,8 @@ namespace Kard.Dapper.Mysql.Repositories
         //private static IDapperImplementor _dapperInstance;
         //private static IDapperAsyncImplementor _dapperAsyncInstance;
         private static string _connectionString;
-
+        protected readonly ILogger _logger;
+        protected readonly EventId _eventId = new EventId(1, "Repository");
         //static Repository()
         //{
         //    //1
@@ -45,10 +47,11 @@ namespace Kard.Dapper.Mysql.Repositories
 
 
 
-        public Repository(IKardSession session, IConfiguration configuration)
+        public Repository(IKardSession session, IConfiguration configuration, ILogger<Repository> logger)
         {
             Session = session;
             Configuration = configuration;
+            _logger = logger;
         }
 
         protected IConfiguration Configuration { get; }
@@ -138,21 +141,24 @@ namespace Kard.Dapper.Mysql.Repositories
 
         public TResult ConnExecute<TResult>(Func<IDbConnection, TResult> predicate)
         {
+            var result= default(TResult);
             try
             {
                 using (IDbConnection connection = GetConnection())
                 {
                     connection.Open();
-                    var result = predicate.Invoke(connection);
+                    result = predicate.Invoke(connection);
                     connection.Close();
-
-                    return result;
                 }
             }
             catch (Exception e)
             {
-                return default(TResult);
+                _logger.LogError(e,string.Empty, result);
+                result= default(TResult);
             }
+
+
+            return result;
         }
 
         public TResult TransExecute<TResult>(Func<IDbConnection, IDbTransaction, TResult> predicate)

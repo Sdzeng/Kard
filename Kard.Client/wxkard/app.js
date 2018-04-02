@@ -14,10 +14,11 @@ App({
         if (res.code) {
           //发起网络请求
           wx.request({
-            url: 'http://localhost/api/wx/login',
+            url: 'http://localhost:3706/api/wx/login',
             data: {
               code: res.code
             },
+            method:'POST',
             header: {
               'content-type': 'application/json' // 默认值
             },
