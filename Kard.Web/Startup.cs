@@ -88,8 +88,8 @@ namespace Kard.Web
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
            {
-             o.LoginPath = "/user/login";
-             o.AccessDeniedPath = "/user/login";
+             o.LoginPath = "/web/user/login";
+             o.AccessDeniedPath = "/web/user/login";
             });
             services.AddResponseCompression(options =>
             {

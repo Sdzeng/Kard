@@ -17,7 +17,7 @@ namespace Kard.Core.Mappers
 
         public override void Table(string tableName)
         {
-            tableName = tableName.Replace("Entity", "");
+            tableName = tableName.Replace("Entity", "").ToLower();
             base.Table(tableName);
         }
     }

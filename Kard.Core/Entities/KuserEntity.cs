@@ -1,4 +1,5 @@
-﻿using Kard.Domain.Entities.Auditing;
+﻿using DapperExtensionsCore.Mapper;
+using Kard.Domain.Entities.Auditing;
 using System.Security.Principal;
 
 namespace Kard.Core.Entities
@@ -43,16 +44,16 @@ namespace Kard.Core.Entities
     }
 
 
-    //public class KuserMapper : ClassMapper<KuserEntity>
-    //{
+    public class KuserMapper : ClassMapper<KuserEntity>
+    {
 
-    //    public KuserMapper()
-    //    {
-    //        Table("kuser");
-    //        Map(e => e.AuthenticationType).Ignore();
-    //        Map(e => e.IsAuthenticated).Ignore();
-    //        AutoMap();
-    //    }
-    //}
+        public KuserMapper()
+        {
+            Table("kuser");
+            Map(e => e.AuthenticationType).Ignore();
+            Map(e => e.IsAuthenticated).Ignore();
+            AutoMap();
+        }
+    }
 
 }

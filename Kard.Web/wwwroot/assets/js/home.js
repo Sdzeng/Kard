@@ -5,7 +5,7 @@
 
         //设置首页封面
         var helper = new httpHelper({
-            url: baseUrl+"/api/data/cover/",
+            url: baseUrl+"/api/cover/",
             success: function (data) {
 
                 //data = JSON.parse(data);
@@ -43,7 +43,7 @@ var hostSection = {
 
         //设置host
         var helper = new httpHelper({
-            url: baseUrl + "/api/data/getpicture/",
+            url: baseUrl + "/api/getpicture/",
             contentType: "application/json;charset=utf-8",
             success: function (data) {
 
@@ -78,7 +78,7 @@ var hostSection = {
 
         //设置host
         var helper = new httpHelper({
-            url: baseUrl + "/api/data/getessay/",
+            url: baseUrl + "/api/getessay/",
             contentType: "application/json;charset=utf-8",
             success: function (data) {
 

@@ -5,7 +5,7 @@ var userCover = {
 
         //ÉèÖÃÊ×Ò³·âÃæ
         var helper = new httpHelper({
-            url: baseUrl + "/api/web/cover/",
+            url: baseUrl + "/web/user/cover/",
             success: function (data) {
               
                 //data = JSON.parse(data);

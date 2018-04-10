@@ -13,12 +13,12 @@ using System.IO;
 
 namespace Kard.Web.Controllers
 {
-    //[Route("api/[controller]")]
+
     [Produces("application/json")]
-    [Route("api")]
+    [Route("[controller]")]
     public class ApiController : BaseController
     {
-         
+
         private readonly IDefaultRepository _defaultRepository;
         public ApiController(
             ILogger<ApiController> logger,
@@ -26,7 +26,7 @@ namespace Kard.Web.Controllers
             IDefaultRepository defaultRepository,
             IKardSession kardSession) : base(logger, memoryCache, kardSession)
         {
-           
+
             _defaultRepository = defaultRepository;
         }
 
