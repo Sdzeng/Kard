@@ -1,5 +1,6 @@
 ﻿using Kard.Core.Entities;
 using Kard.Extensions;
+using Kard.Runtime.Security.Authentication.WeChat;
 using Kard.Web.Middlewares.ImageHandle;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -64,11 +65,11 @@ namespace Kard.Web
                     //.AddConsole();
             });
 
-            services.AddSession(options =>
-            {
-                options.Cookie.Name = ".Kard.Session";
-                options.IdleTimeout = TimeSpan.FromDays(7);
-            });
+            //services.AddSession(options =>
+            //{
+            //    options.Cookie.Name = ".Kard.Session";
+            //    options.IdleTimeout = TimeSpan.FromDays(7);
+            //});
             //if (env.IsProduction())
             //{
             //    services.AddApiAuthorization(options =>
@@ -85,12 +86,22 @@ namespace Kard.Web
             //    });
             //}
 
+            //AddCookie内部调用AddScheme
+            //AddOAuth内部调用AddRemoteScheme（远程登陆） AddGoogle AddFacebook AddTwitter内部都是调用AddOAuth
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //添加登陆方案(scheme)1:web 
            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
            {
-             o.LoginPath = "/web/user/login";
-             o.AccessDeniedPath = "/web/user/login";
-            });
+               o.LoginPath = "/web/user/login";
+               o.AccessDeniedPath = "/web/user/login";
+           })
+            //添加登陆方案(scheme)2:wechatapp 
+            .AddCookie(WeChatAppDefaults.AuthenticationScheme);
+
+
+
+
+
             services.AddResponseCompression(options =>
             {
                 options.Providers.Add<GzipCompressionProvider>();
@@ -128,9 +139,11 @@ namespace Kard.Web
             //app.UseImageHandle();
             //app.UseSession();
             app.UseAuthentication();
+         
+
             // app.UseApiAuthorization();
-            
-             DefaultFilesOptions options = new DefaultFilesOptions();
+
+            DefaultFilesOptions options = new DefaultFilesOptions();
             options.DefaultFileNames.Clear();
             options.DefaultFileNames.Add("home.htm");
             app.UseDefaultFiles(options);

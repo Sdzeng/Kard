@@ -4,6 +4,7 @@ using Kard.Core.IRepositories;
 using Kard.Extensions;
 using Kard.Json;
 using Kard.Runtime.Security;
+using Kard.Runtime.Security.Authentication.WeChat;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -79,8 +80,8 @@ namespace Kard.Core.AppServices.Default
         public ResultDto<ClaimsIdentity> WxAlive(string code)
         {
             var result = new ResultDto<ClaimsIdentity>();
-            var appid = "*******";
-            var secret = "*******";
+            var appid = "******";
+            var secret = "******";
             var url = "https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code";
             url = string.Format(url, appid, secret, code);
             var client = new HttpClient();
@@ -98,7 +99,7 @@ namespace Kard.Core.AppServices.Default
                 user.WxOpenId = wxAuthDto.openid;
                 result.Result = true;
                 result.Message = "保持alive成功";
-                result.Data = AddSessionData(user);
+                result.Data = AddSessionData(user, WeChatAppDefaults.AuthenticationScheme);
             }
 
 
@@ -116,21 +117,25 @@ namespace Kard.Core.AppServices.Default
             var userCount = _defaultRepository.Count("select count(1) from kuser where WxOpenId=@WxOpenId", new { WxOpenId = user.WxOpenId });
             if (userCount <= 0)
             {
-             
-                var kuserEntity = new KuserEntity();
-
-                result.Result = false;
-                result.Message = "不存在该用户";
-                return result;
+                user.KroleId = 1;
+                var createResult=_defaultRepository.CreateAndGetId<KuserEntity,long>(user);
+                if (!createResult.Result)
+                {
+                    result.Result = false;
+                    result.Message = $"创建用户{user.NikeName}失败";
+                    return result;
+                }
             }
 
+            var userEntity=  _defaultRepository.FirstOrDefault<KuserEntity>(new { WxOpenId = user.WxOpenId });
 
-
+            result.Result = true;
+            result.Data = AddSessionData(userEntity, WeChatAppDefaults.AuthenticationScheme);
             return result;
         }
-        private ClaimsIdentity AddSessionData(KuserEntity user)
+        private ClaimsIdentity AddSessionData(KuserEntity user, string scheme= CookieAuthenticationDefaults.AuthenticationScheme)
         {
-            user.AuthenticationType = CookieAuthenticationDefaults.AuthenticationScheme;
+            user.AuthenticationType = scheme;
             var caimsIdentity = new ClaimsIdentity(user);
 
             caimsIdentity.AddClaim(new Claim(KardClaimTypes.IsLogin, (user.Id>0).ToString()));

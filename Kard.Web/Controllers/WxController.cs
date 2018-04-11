@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using Kard.Core.Entities;
+using Kard.Runtime.Security.Authentication.WeChat;
 
 namespace Kard.Web.Controllers
 {
@@ -25,7 +26,7 @@ namespace Kard.Web.Controllers
         public WxController(
           ILogger<ApiController> logger,
           IMemoryCache memoryCache,
-             ILoginAppService loginAppService,
+          ILoginAppService loginAppService,
           IKardSession kardSession) : base(logger, memoryCache, kardSession)
         {
             _loginAppService = loginAppService;
@@ -38,10 +39,11 @@ namespace Kard.Web.Controllers
             if (aliveResult.Result)
             {
                 var identity = aliveResult.Data;
-                //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+
+                await HttpContext.SignInAsync(WeChatAppDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
             }
 
-            var result = new ResultDto { Result = aliveResult.Result,Message= aliveResult.Message };
+            var result = new ResultDto { Result = aliveResult.Result, Message = aliveResult.Message };
             return result;
         }
 
@@ -53,8 +55,8 @@ namespace Kard.Web.Controllers
             if (aliveResult.Result)
             {
                 var identity = aliveResult.Data;
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+                await HttpContext.SignOutAsync(WeChatAppDefaults.AuthenticationScheme);
+                await HttpContext.SignInAsync(WeChatAppDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
             }
 
             var result = new ResultDto { Result = aliveResult.Result, Message = aliveResult.Message };

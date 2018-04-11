@@ -31,7 +31,9 @@ App({
                   'content-type': 'application/json' // 默认值
                 },
                 success: function (res) {
+                  console.log(JSON.stringify(res.header))
                   if (res.data.result) {
+                    wx.setStorageSync("cookie", res.header["Set-Cookie"])
                     that.auth()
                   }
                 }
@@ -91,6 +93,9 @@ App({
         wx.request({
           url: 'http://localhost:3706/wx/login',
           method:'POST',
+          header:{
+            'cookie': wx.getStorageSync("cookie")
+          },
           data:JSON.stringify(res.userInfo),
           //{
            // user:
