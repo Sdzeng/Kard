@@ -60,6 +60,8 @@
       <view class="task_operation_btn iconfont icon-add" hover-class="task_operation_btn_touch" hover-start-time="{{20}}"   bindtap="btnAdd"></view>
        <view class="task_operation_btn iconfont icon-search" hover-class="task_operation_btn_touch" hover-start-time="{{20}}" bindtap="btnSearch"></view>
        <view class="task_operation_btn iconfont icon-pin" hover-class="task_operation_btn_touch" hover-start-time="{{20}}" bindtap="btnPin"></view> 
+
+       <button class="task_operation_btn iconfont" hover-class="task_operation_btn_touch" hover-start-time="{{20}}"  bindtap='setting' >set</button>
        <!-- <view class="task_add_btn iconfont icon-attachment" hover-class="task_add_btn_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}" bindtap="btnAdd"></view>
      <view class="task_add_btn iconfont icon-earth" hover-class="task_add_btn_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}" bindtap="btnAdd"></view>
        -->

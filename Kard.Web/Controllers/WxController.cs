@@ -38,21 +38,22 @@ namespace Kard.Web.Controllers
             if (aliveResult.Result)
             {
                 var identity = aliveResult.Data;
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+                //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
             }
 
             var result = new ResultDto { Result = aliveResult.Result,Message= aliveResult.Message };
             return result;
         }
 
-        [HttpGet("login")]
-        public async Task<ResultDto> Login(KuserEntity user)
+        [HttpPost("login")]
+        public async Task<ResultDto> Login([FromBody]KuserEntity user)
         {
             user.WxOpenId = _kardSession.WxOpenId;
             var aliveResult = _loginAppService.WxLogin(user);
             if (aliveResult.Result)
             {
                 var identity = aliveResult.Data;
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
             }
 

@@ -8,11 +8,6 @@ App({
     this.globalData.deviceInfo = wx.getSystemInfoSync();
     this.login()
    
-
-
-
-
-   
   },
   login:function(){
     const that=this;
@@ -28,7 +23,7 @@ App({
             if (res.code) {
               //发起网络请求
               wx.request({
-                url: 'http://localhost:3706/api/wx/alive',
+                url: 'http://localhost:3706/wx/alive',
                 data: {
                   code: res.code
                 },
@@ -51,14 +46,13 @@ App({
 
   },
   auth:function(){
-    console.log('auth')
     const that=this
     // 获取用户信息
     wx.getSetting({
       success: res => {
        
         if (!res.authSetting['scope.userInfo']) {
-         
+          console.log("弹出")
           wx.authorize({
             scope: 'scope.userInfo',
             success(){
@@ -66,14 +60,17 @@ App({
               that.getUserInfo()
             },
             fail() {
-              console.log('fail')
               console.log('授权失败！')
+            },
+            complete(){
+              console.log('授权完成！')
+
             }
           })
         }
         else
         { 
-         
+          console.log("res" + JSON.stringify(res))
           that.getUserInfo()
         }
  
@@ -92,20 +89,20 @@ App({
         this.globalData.userInfo = res.userInfo
         //发起网络请求
         wx.request({
-          url: 'http://localhost:3706/api/wx/login',
-          data: {
-            user: res.userInfo
-            // NikeName: res.userInfo.nikeName,
-            // avatarUrl: avatarUrl,
+          url: 'http://localhost:3706/wx/login',
+          method:'POST',
+          data:JSON.stringify(res.userInfo),
+          //{
+           // user:
+           
+            //     "AvatarUrl": res.userInfo.avatarUrl
             // gender: gender,
             // city: city,
             // country:
-          },
-          header: {
-            'content-type': 'application/json' // 默认值
-          },
-          success: function (res) {
-            if (res.data.result) {
+          //},
+         
+          complete: function (res1) {
+            if (res1.data.result) {
               console.log('kard登陆成功')
             }
           }

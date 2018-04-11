@@ -79,8 +79,8 @@ namespace Kard.Core.AppServices.Default
         public ResultDto<ClaimsIdentity> WxAlive(string code)
         {
             var result = new ResultDto<ClaimsIdentity>();
-            var appid = "wx109fc14b4956fc70";
-            var secret = "a8e7f19d69cbde0272fd866fe7392874";
+            var appid = "*******";
+            var secret = "*******";
             var url = "https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code";
             url = string.Format(url, appid, secret, code);
             var client = new HttpClient();

@@ -63,12 +63,12 @@ namespace Kard.Web
                     //.AddDebug()
                     //.AddConsole();
             });
-           
-            //services.AddSession(options =>
-            //{
-            //    options.Cookie.Name = ".Kard.Session";
-            //    options.IdleTimeout = TimeSpan.FromDays(7);
-            //});
+
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".Kard.Session";
+                options.IdleTimeout = TimeSpan.FromDays(7);
+            });
             //if (env.IsProduction())
             //{
             //    services.AddApiAuthorization(options =>
