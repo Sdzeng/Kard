@@ -34,7 +34,7 @@ namespace Kard.Web.Controllers
 
         private string GetHtmlContent(string page)
         {
-            string pagePath = Path.Combine(Environment.CurrentDirectory, "wwwroot\\", page);
+            string pagePath = Path.Combine(Environment.CurrentDirectory, "wwwroot", page);
             using (StreamReader sr = new StreamReader(pagePath))
             {
                 string htmlContent = sr.ReadToEnd();

@@ -1,6 +1,8 @@
 <form bindsubmit="formSubmit" bindreset="formReset">
   <view class="section section_gap">
-      <input placeholder="这是一个可以自动聚焦的input" auto-focus/>
+   
+   <video src="blob:https://www.bilibili.com/70a4fe49-6f1e-40c5-8872-afdb876f008e" controls=""></video>
+      <!-- <input placeholder="这是一个可以自动聚焦的input" auto-focus/> -->
   </view>
   <view class="section section_gap">
     <view class="section__title">slider</view>

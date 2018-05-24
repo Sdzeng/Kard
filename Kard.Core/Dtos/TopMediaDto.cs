@@ -39,7 +39,7 @@ namespace Kard.Core.Dtos
 
         public string CreatorUserId { get; set; }
 
-        public string CreatorNikeName { get; set; }
+        public string CreatorNickName { get; set; }
 
     }
 }

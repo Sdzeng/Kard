@@ -15,13 +15,13 @@ namespace Kard.Web.Middlewares.ApiAuthorization
         private readonly ILogger _logger;
         private readonly IKardSession _session;
 
-        /// <summary>
-        /// Creates a new instance of the ApiAuthorizedMiddleware.
-        /// </summary>
-        /// <param name="next">The next middleware in the pipeline.</param>
-        /// <param name="hostingEnv">The <see cref="IHostingEnvironment"/> used by this middleware.</param>
-        /// <param name="options">The configuration options.</param>
-        /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance used to create loggers.</param>
+        ///// <summary>
+        ///// Creates a new instance of the ApiAuthorizedMiddleware.
+        ///// </summary>
+        ///// <param name="next">The next middleware in the pipeline.</param>
+        ///// <param name="hostingEnv">The <see cref="IHostingEnvironment"/> used by this middleware.</param>
+        ///// <param name="options">The configuration options.</param>
+        ///// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance used to create loggers.</param>
         public ApiAuthorizationMiddleware(RequestDelegate next, IHostingEnvironment hostingEnv, IOptions<ApiAuthorizationOptions> options, ILoggerFactory loggerFactory,IKardSession session)
         {
             if (next == null)

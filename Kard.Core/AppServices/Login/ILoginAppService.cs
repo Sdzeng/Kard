@@ -15,8 +15,8 @@ namespace Kard.Core.AppServices.Default
 
         ResultDto<ClaimsIdentity> WebLogin(string name, string password);
 
-        ResultDto<ClaimsIdentity> WxAlive(string code);
+        ResultDto<ClaimsIdentity> WxLogin(string code);
 
-        ResultDto<ClaimsIdentity> WxLogin(KuserEntity user);
+        ResultDto Register(KuserEntity user);
     }
 }

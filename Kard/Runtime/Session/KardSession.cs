@@ -73,6 +73,23 @@ namespace Kard.Runtime.Session
         }
 
 
+        //public string WxSessionKey
+        //{
+        //    get
+        //    {
+
+        //        var wxSessionKeyClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.WxSessionKey);
+        //        if (string.IsNullOrEmpty(wxSessionKeyClaim?.Value))
+        //        {
+        //            return null;
+        //        }
+
+        //        return wxSessionKeyClaim.Value;
+        //    }
+        //}
+
+
+
         /// <summary>
         /// 登陆名
         /// </summary>
@@ -95,18 +112,18 @@ namespace Kard.Runtime.Session
         /// <summary>
         /// 昵称
         /// </summary>
-        public virtual string NikeName
+        public virtual string NickName
         {
             get
             {
 
-                var nikeNameClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.NikeName);
-                if (string.IsNullOrEmpty(nikeNameClaim?.Value))
+                var nickNameClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.NickName);
+                if (string.IsNullOrEmpty(nickNameClaim?.Value))
                 {
                     return null;
                 }
 
-                return nikeNameClaim.Value;
+                return nickNameClaim.Value;
             }
         }
 

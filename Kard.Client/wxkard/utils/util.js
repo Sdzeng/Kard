@@ -24,8 +24,18 @@ function rpx2px(rpx, windowWidth) {
   return Math.round(rpx / 750 * windowWidth);
 }
 
+// 日历
+function getThisMonthDays(year, month) {
+  return new Date(year, month, 0).getDate();
+}
+function  getFirstDayOfWeek(year, month) {
+  return new Date(Date.UTC(year, month - 1, 1)).getDay();
+}
+
 module.exports = {
   formatTime: formatTime,
   px2rpx: px2rpx,
   rpx2px: rpx2px,
+  getThisMonthDays: getThisMonthDays,
+  getFirstDayOfWeek: getFirstDayOfWeek
 }

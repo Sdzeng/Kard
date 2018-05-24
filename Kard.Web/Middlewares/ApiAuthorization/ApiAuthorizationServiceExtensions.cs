@@ -3,9 +3,9 @@ using System;
 
 namespace Kard.Web.Middlewares.ApiAuthorization
 {
-    /// <summary>
-    /// 添加到DI
-    /// </summary>
+    ///// <summary>
+    ///// 添加到DI
+    ///// </summary>
     public static class ApiAuthorizationServiceExtensions
     {
 

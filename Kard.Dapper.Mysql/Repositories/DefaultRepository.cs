@@ -61,7 +61,7 @@ namespace Kard.Dapper.Mysql.Repositories
             return ConnExecute(conn =>
             {
 
-                string sql = @"select t.EssayMediaCount,essay.LikeNum EssayLikeNum,media.EssayId,media.CdnPath,media.MediaExtension,essay.Content EssayContent,essay.CreatorUserId,kuser.NikeName CreatorNikeName from (
+                string sql = @"select t.EssayMediaCount,essay.LikeNum EssayLikeNum,media.EssayId,media.CdnPath,media.MediaExtension,essay.Content EssayContent,essay.CreatorUserId,kuser.NickName CreatorNickName from (
                     select  media.EssayId,min(media.Sort) MinSort,count(media.Id) EssayMediaCount
                     from media join essay on media.EssayId=essay.Id and media.MediaType='picture' and media.CreationTime>@CreationTime 
                     group by media.EssayId  order by essay.LikeNum desc limit 7
@@ -82,7 +82,7 @@ namespace Kard.Dapper.Mysql.Repositories
             return ConnExecute(conn =>
             {
 
-                string sql = @"select *,(select NikeName from kuser where Id=essay.CreatorUserId) CreatorUserName 
+                string sql = @"select *,(select NickName from kuser where Id=essay.CreatorUserId) CreatorUserName 
                 from essay left join media on essay.Id=media.EssayId 
                 left join essay_tag_relations on essay.Id=essay_tag_relations.EssayId 
                 left join tag on essay_tag_relations.TagId=tag.Id

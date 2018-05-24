@@ -23,6 +23,7 @@ namespace Kard.Runtime.Security
 
         public const string WxOpenId= "http://www.localyc.com/identity/claims/wxopenid";
 
+        //public const string WxSessionKey= "http://www.localyc.com/identity/claims/wxsessionkey";
         /// <summary>
         /// 登陆名
         /// </summary>
@@ -31,13 +32,13 @@ namespace Kard.Runtime.Security
         /// <summary>
         /// 昵称
         /// </summary>
-        public const string NikeName = "http://www.localyc.com/identity/claims/nikename";
+        public const string NickName = "http://www.localyc.com/identity/claims/nickname";
 
 
         /// <summary>
         /// 手机
         /// </summary>
-        public const string Phone = "http://www.localyc.com/identity/claims/nikename";
+        public const string Phone = "http://www.localyc.com/identity/claims/phone";
 
 
         /// <summary>

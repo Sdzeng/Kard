@@ -1,4 +1,4 @@
-<view class="page {{keepPage ? '' : ''}}">
+<view class="page {{showPicker ? 'page-keep' : ''}}">
   <view class="section month_kard_section">
 
 
@@ -23,7 +23,8 @@
 
       <!-- <view class="calender_info_week"><view class="calender_info_week_days" wx:for="{{weeksCh}}" wx:key="{{index}}" data-idx="{{index}}">{{item}}</view></view> -->
       <view class="calender_info_days">
-        <view bindtap="handleCalendar" data-handle="prev" class="calendar_info_days_prev " hover-class="calendar_info_days_prev_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}"></view>
+        <view bindtap="handleCalendar" data-handle="prev" class="calendar_info_days_prev iconfont icon-back" hover-class="calendar_info_days_prev_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}">
+        </view>
 
         <view class="calender_info_days_boxs">
           <!-- 填充空格 -->
@@ -46,7 +47,7 @@
           </view>
         </view>
 
-        <view bindtap="handleCalendar" data-handle="next" class="calendar_info_days_next" hover-class="calendar_info_days_next_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}">
+        <view bindtap="handleCalendar" data-handle="next" class="calendar_info_days_next  iconfont icon-more" hover-class="calendar_info_days_next_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}">
 
         <!-- <view class="iconfont icon-pin" hover-class="task_add_btn_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}" bindtap="btnAdd"></view> -->
 
@@ -61,7 +62,7 @@
        <view class="task_operation_btn iconfont icon-search" hover-class="task_operation_btn_touch" hover-start-time="{{20}}" bindtap="btnSearch"></view>
        <view class="task_operation_btn iconfont icon-pin" hover-class="task_operation_btn_touch" hover-start-time="{{20}}" bindtap="btnPin"></view> 
 
-       <button class="task_operation_btn iconfont" hover-class="task_operation_btn_touch" hover-start-time="{{20}}"  bindtap='setting' >set</button>
+       <view class="task_operation_btn iconfont icon-set" hover-class="task_operation_btn_touch" hover-start-time="{{20}}"  bindtap='setting' ></view>
        <!-- <view class="task_add_btn iconfont icon-attachment" hover-class="task_add_btn_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}" bindtap="btnAdd"></view>
      <view class="task_add_btn iconfont icon-earth" hover-class="task_add_btn_touch" hover-start-time="{{20}}" hover-stay-time="{{70}}" bindtap="btnAdd"></view>
        -->
@@ -84,9 +85,9 @@
 
 
       <view class="yearmonths_btns">
-        <view data-type="cancel" bindtap="tapPickerBtn" class="btn-default" hover-class="btn-default-click" hover-start-time="{{20}}">取消</view>
-        <view data-type="today" bindtap="tapPickerBtn" class="btn-today" hover-class="btn-today-click" hover-start-time="{{20}}">今天</view>
-        <view data-type="confirm" bindtap="tapPickerBtn" class="btn-confirm" hover-class="btn-confirm-click" hover-start-time="{{20}}">确定</view>
+        <view data-type="cancel" catchtap="tapPickerBtn" class="btn-default" hover-class="btn-default-click" hover-start-time="{{20}}">取消</view>
+        <view data-type="today" catchtap="tapPickerBtn" class="btn-today" hover-class="btn-today-click" hover-start-time="{{20}}">今天</view>
+        <view data-type="confirm" catchtap="tapPickerBtn" class="btn-confirm" hover-class="btn-confirm-click" hover-start-time="{{20}}">确定</view>
       </view>
 
     </view>
@@ -102,13 +103,13 @@
     <view wx:for="{{taskList}}" wx:key="id" class="task_info {{item.isTouchMove ? 'task_info_active' : ''}}" id="{{item.id}}" bindtap="btnEdit" bindtouchstart="taskInfoTouchStart" bindtouchmove="taskInfoTouchMove" hover-class="task_info_touch" hover-start-time="{{20}}"
       hover-stay-time="{{200}}">
       <view class="task_info_content">
-        <view class="task_info_content_index"> <view class="task_info_content_index_entity">{{index+1}}</view></view>
+        <view class="task_info_content_index"> <view class="{{item.isDone?'task_info_content_index_done iconfont icon-selected':'task_info_content_index_entity '}}">{{item.isDone?'':index+1}}</view></view>
         <view class="task_info_content_basic">
-          <view class="task_info_content_basic_txt"> <view>{{item.txt}}</view><view>{{item.time}}</view> </view>
+          <view class="task_info_content_basic_txt"> <view>{{item.content}}</view><view>{{item.startTime}}至{{item.endTime}}</view> </view>
             <view class="task_info_content_basic_tips">
         
              
-                  <view class="iconfont icon-favorite" hover-class="task_operation_btn_touch" hover-start-time="{{20}}" bindtap="btnPin"></view>
+                  <view class="{{item.isRemind?'iconfont icon-remind':''}}" hover-class="task_operation_btn_touch" hover-start-time="{{20}}" bindtap="btnPin"></view>
             
           
          

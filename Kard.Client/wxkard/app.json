@@ -15,7 +15,7 @@
     "navigationStyle": "default",
     "navigationBarBackgroundColor": "#fff",
     "backgroundColor":"#f6f8f8",
-    "navigationBarTitleText": "记事本",
+    "navigationBarTitleText": "目标大作战",
     "navigationBarTextStyle": "black",
     "backgroundTextStyle": "dark",
     "enablePullDownRefresh":true
@@ -34,9 +34,10 @@
           "text": "达人圈",
           "iconPath": "/icons/lights.png",
           "selectedIconPath": "/icons/lights_select.png"
-        } 
+        }
       ],
       "position": "bottom"
     },
+    
   "debug":true
 }

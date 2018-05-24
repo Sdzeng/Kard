@@ -12,6 +12,8 @@
         long? UserId { get; }
 
         string WxOpenId { get; }
+
+        //string WxSessionKey { get; }
         /// <summary>
         /// 登陆名
         /// </summary>
@@ -20,7 +22,7 @@
         /// <summary>
         /// 昵称
         /// </summary>
-        string NikeName { get; }
+        string NickName { get; }
 
         /// <summary>
         /// 手机

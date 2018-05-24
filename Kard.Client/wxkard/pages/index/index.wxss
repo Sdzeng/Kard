@@ -162,16 +162,18 @@ content: ".";
 }
 
 .calendar_info_days_prev, .calendar_info_days_next {
-  width: 50rpx;
+  width: 80rpx;
   height: 480rpx;
   font-size: 110%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
+
 }
 
 .calendar_info_days_prev_touch, .calendar_info_days_next_touch {
   color: #00c000;
+  
 }
 
 .calender_info_days_boxs {
@@ -246,10 +248,11 @@ border-radius: 12rpx; */
   position: fixed;
   top: 25%;
   left: 0;
-  z-index: 9999;
+  z-index: 1001;
   background: #f9f9f9;
   margin: 0 12%;
   border-radius: 12rpx;
+  
 }
 
 .yearmonths_picker_view {
@@ -257,16 +260,17 @@ border-radius: 12rpx; */
   width: 96%;
   height: 400rpx;
   overflow: hidden;
+ 
 }
 
 .yearmonths_picker_view_cols {
   text-align: center;
-  line-height: 50px;
+  line-height: 100rpx;
 }
 
 .yearmonths_btns {
   display: flex;
-  z-index: 1000;
+   z-index: 1002;
   flex-direction: row;
   justify-content: space-between;
 }
@@ -374,6 +378,19 @@ border-radius: 12rpx; */
   background: #a5d6a7;
   /* #a5d6a7 *//* #00c000 *//* #ec4d00; */
   color: #fff;
+}
+
+.task_info_content_index_done{
+
+  width: 80rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 40rpx;
+  text-align: center;
+  background: #E57373;
+  /* #a5d6a7 *//* #00c000 *//* #ec4d00; */
+  color: #fff;
+  font-size: 150%;
 }
 
 .task_info_content_basic {

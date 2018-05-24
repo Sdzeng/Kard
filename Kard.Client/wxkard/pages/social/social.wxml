@@ -8,7 +8,7 @@
         
         <view class="user_info">
         
-           <view class="user_info_date">{{currentDate}}</view>
+           <view class="user_info_date">{{currentDate}}{{userInfo.nickName}}</view>
            <view class="user_info_nikename">{{currentMonth}}月 | 加油</view>
         </view>
        

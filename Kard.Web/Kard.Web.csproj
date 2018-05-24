@@ -4,15 +4,24 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netcoreapp2.0\Kard.Web.xml</DocumentationFile>
+    <NoWarn>1701;1702;1705;1591</NoWarn>
+  </PropertyGroup>
+
  
 
   <ItemGroup>
+    <Compile Remove="Middlewares\ApiAuthorization\**" />
     <Compile Remove="Middlewares\KardStaticFile\**" />
     <Compile Remove="wwwroot\assets\image\media\**" />
+    <Content Remove="Middlewares\ApiAuthorization\**" />
     <Content Remove="Middlewares\KardStaticFile\**" />
     <Content Remove="wwwroot\assets\image\media\**" />
+    <EmbeddedResource Remove="Middlewares\ApiAuthorization\**" />
     <EmbeddedResource Remove="Middlewares\KardStaticFile\**" />
     <EmbeddedResource Remove="wwwroot\assets\image\media\**" />
+    <None Remove="Middlewares\ApiAuthorization\**" />
     <None Remove="Middlewares\KardStaticFile\**" />
     <None Remove="wwwroot\assets\image\media\**" />
   </ItemGroup>
@@ -40,6 +49,7 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-rc6" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -63,11 +73,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="hosting.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties Properties_4launchSettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties Properties_4launchSettings_1json__JSONSchema="" appsettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

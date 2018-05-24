@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 
 namespace Kard.Web.Controllers
 {
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     [Route("[controller]")]
     public class WebController : BaseController
     {
@@ -38,7 +39,7 @@ namespace Kard.Web.Controllers
             _defaultRepository = defaultRepository;
         }
 
-        [Authorize(Roles = "member", AuthenticationSchemes= "members")]
+        //[Authorize(Roles = "member", AuthenticationSchemes= "members")]
         [HttpGet("test")]
         public IActionResult Test(long? userId)
         {
@@ -47,12 +48,27 @@ namespace Kard.Web.Controllers
 
 
         #region user
-        [HttpGet("user/login")]
-        public IActionResult Login()
-        {
-            return Content(GetPageFile("login.htm"), "text/html;charset=utf-8");
-        }
 
+
+        ///// <summary>
+        ///// 登陆接口
+        ///// </summary>
+        ///// <returns></returns>
+        //[AllowAnonymous]
+        //[HttpGet("user/login")]
+        //public IActionResult Login()
+        //{
+        //    return Content(GetPageFile("login.htm"), "text/html;charset=utf-8");
+        //}
+
+        /// <summary>
+        /// 登陆接口
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
         [HttpPost("user/login")]
         public async Task<IActionResult> Login(string username, [DataType(DataType.Password)] string password, string returnUrl)
         {
@@ -62,33 +78,43 @@ namespace Kard.Web.Controllers
                 var identity = result.Data;
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
-                if (returnUrl.IsNullOrEmpty())
-                {
-                    return RedirectToAction("Index");
-                }
+                //if (returnUrl.IsNullOrEmpty())
+                //{
+                //    return RedirectToAction("Index");
+                //}
 
-                return Redirect(returnUrl);
+                //return Redirect(returnUrl);
+                return Json(new { result = true, message = "登录成功" });
             }
-
-            return Json("{result:false,message:'登录失败，用户名密码不正确'}");
+            return Json(new { result=false,message= "登录失败，用户名密码不正确"} );
         }
 
-        [Authorize]
-        [HttpGet("user")]
-        public IActionResult Index()
-        {
-            return Content(GetPageFile("user.htm"), "text/html;charset=utf-8");
-        }
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <returns></returns>
+        // [HttpGet("user")]
+        // public IActionResult Index()
+        // {
+        //     return Content(GetPageFile("user.htm"), "text/html;charset=utf-8");
+        // }
 
-        [Authorize]
+        /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpGet("user/{userId}")]
         public IActionResult Index(long? userId)
         {
             return Json(GetUser(userId));
         }
 
-        [Authorize]
-        [HttpPost("user/cover")]
+        /// <summary>
+        /// 获取用户封面
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("user/cover")]
         public IActionResult GetCover()
         {
             return Json(GetUser(_kardSession.UserId));
@@ -105,17 +131,40 @@ namespace Kard.Web.Controllers
             });
             return kuserEntity;
         }
-     
 
 
-        [Authorize]
-        [Route("user/logout")]
+
+        /// <summary>
+        /// 退出
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("user/logout")]
         public IActionResult Logout()
         {
- 
+
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Redirect("/");
+            return Json(new { result = true, message = "退出成功" });
         }
-      #endregion
+
+        /// <summary>
+        /// 未登录返回结果
+        /// </summary>
+        /// <returns></returns>
+  
+        [HttpGet("user/notlogin")]
+        [AllowAnonymous]
+        public IActionResult NotLogin()
+        {
+            var json = new
+            {
+                code = "000",
+                message = $"您未登录不能使用该接口",
+            };
+            var rs = new JsonResult(json);
+
+            rs.StatusCode = 401;
+            return rs;
+        }
+        #endregion
     }
 }

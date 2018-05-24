@@ -17,19 +17,19 @@ using System.Text;
 
 namespace Kard.Core.AppServices.Default
 {
-    public class LoginAppService: ILoginAppService
+    public class LoginAppService : ILoginAppService
     {
         private readonly IPasswordHasher<KuserEntity> _passwordHasher;
         private readonly IDefaultRepository _defaultRepository;
 
-        public LoginAppService(IPasswordHasher<KuserEntity> passwordHasher,IDefaultRepository defaultRepository)
+        public LoginAppService(IPasswordHasher<KuserEntity> passwordHasher, IDefaultRepository defaultRepository)
         {
             _passwordHasher = passwordHasher;
             _defaultRepository = defaultRepository;
         }
- 
 
-  
+
+
 
         //public ResultDto Signup(KuserEntity user)
         //{
@@ -49,7 +49,7 @@ namespace Kard.Core.AppServices.Default
         public ResultDto<ClaimsIdentity> WebLogin(string name, string password)
         {
             var result = new ResultDto<ClaimsIdentity>();
-            var userList = _defaultRepository.Query<KuserEntity>("select * from kuser where `Name`=@Name",new { Name = name });
+            var userList = _defaultRepository.Query<KuserEntity>("select * from kuser where `Name`=@Name", new { Name = name });
             if (userList?.Count() != 1)
             {
                 result.Result = false;
@@ -57,7 +57,7 @@ namespace Kard.Core.AppServices.Default
                 return result;
             }
 
-         
+
             var user = userList.First();
             //user.Password = password;
             //var pa = _passwordHasher.HashPassword(user, password);
@@ -77,11 +77,11 @@ namespace Kard.Core.AppServices.Default
             return result;
         }
 
-        public ResultDto<ClaimsIdentity> WxAlive(string code)
+        public ResultDto<ClaimsIdentity> WxLogin(string code)
         {
             var result = new ResultDto<ClaimsIdentity>();
-            var appid = "******";
-            var secret = "******";
+            var appid = "wx109fc14b4956fc70";
+            var secret = "a8e7f19d69cbde0272fd866fe7392874";
             var url = "https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code";
             url = string.Format(url, appid, secret, code);
             var client = new HttpClient();
@@ -93,54 +93,83 @@ namespace Kard.Core.AppServices.Default
                 result.Message = $"{wxAuthDto.errcode}:{wxAuthDto.errmsg}";
                 return result;
             }
+
+         
+       
+            var user = _defaultRepository.FirstOrDefault<KuserEntity>(new { WxOpenId = wxAuthDto.openid });
+            if (user!=null)
+            {
+                user.WxSessionKey = wxAuthDto.session_key;
+                if (!_defaultRepository.Update(user))
+                {
+                    result.Result = false;
+                    result.Message = $"用户{user.NickName}被带晕";
+                    return result;
+                }
+            }
             else
             {
-                var user = new KuserEntity();
+                user = new KuserEntity();
                 user.WxOpenId = wxAuthDto.openid;
-                result.Result = true;
-                result.Message = "保持alive成功";
-                result.Data = AddSessionData(user, WeChatAppDefaults.AuthenticationScheme);
-            }
-
-
-
-
-            return result;
-        }
-
-
-
-        public ResultDto<ClaimsIdentity> WxLogin(KuserEntity user)
-        {
-            var result = new ResultDto<ClaimsIdentity>();
-
-            var userCount = _defaultRepository.Count("select count(1) from kuser where WxOpenId=@WxOpenId", new { WxOpenId = user.WxOpenId });
-            if (userCount <= 0)
-            {
+                user.WxSessionKey = wxAuthDto.session_key;
+                user.UserType = "WeChatApp";
                 user.KroleId = 1;
-                var createResult=_defaultRepository.CreateAndGetId<KuserEntity,long>(user);
+                var createResult = _defaultRepository.CreateAndGetId<KuserEntity, long>(user);
                 if (!createResult.Result)
                 {
                     result.Result = false;
-                    result.Message = $"创建用户{user.NikeName}失败";
+                    result.Message = $"用户{user.NickName}被迷路";
                     return result;
                 }
             }
 
-            var userEntity=  _defaultRepository.FirstOrDefault<KuserEntity>(new { WxOpenId = user.WxOpenId });
+
 
             result.Result = true;
-            result.Data = AddSessionData(userEntity, WeChatAppDefaults.AuthenticationScheme);
+            result.Message = "login成功";
+            result.Data = AddSessionData(user, WeChatAppDefaults.AuthenticationScheme);
+
             return result;
         }
-        private ClaimsIdentity AddSessionData(KuserEntity user, string scheme= CookieAuthenticationDefaults.AuthenticationScheme)
+
+
+
+        public ResultDto Register(KuserEntity user)
+        {
+            var result = new ResultDto();
+
+            var userEntity = _defaultRepository.FirstOrDefault<KuserEntity>( new { WxOpenId = user.WxOpenId });
+            if (userEntity ==null)
+            {
+                result.Result = false;
+                result.Message = $"用户{user.NickName}未登陆成功，注册失败";
+                return result;
+            }
+
+            userEntity.AvatarUrl = user.AvatarUrl;
+            userEntity.NickName = user.NickName;
+            userEntity.City = user.City;
+            userEntity.Language = user.Language;
+            if (!_defaultRepository.Update(userEntity))
+            {
+                result.Result = false;
+                result.Message = $"用户{user.NickName}注册失败";
+                return result;
+            }
+
+            result.Result = true;
+            result.Message = "注册成功";
+            return result;
+        }
+
+        private ClaimsIdentity AddSessionData(KuserEntity user, string scheme = CookieAuthenticationDefaults.AuthenticationScheme)
         {
             user.AuthenticationType = scheme;
             var caimsIdentity = new ClaimsIdentity(user);
 
-            caimsIdentity.AddClaim(new Claim(KardClaimTypes.IsLogin, (user.Id>0).ToString()));
+            caimsIdentity.AddClaim(new Claim(KardClaimTypes.IsLogin, (user.Id > 0).ToString()));
 
-            if (user.Id>0)
+            if (user.Id > 0)
             {
                 caimsIdentity.AddClaim(new Claim(KardClaimTypes.UserId, user.Id.ToString()));
             }
@@ -150,15 +179,20 @@ namespace Kard.Core.AppServices.Default
                 caimsIdentity.AddClaim(new Claim(KardClaimTypes.WxOpenId, user.WxOpenId));
             }
 
+            //if (!user.WxSessionKey.IsNullOrEmpty())
+            //{
+            //    caimsIdentity.AddClaim(new Claim(KardClaimTypes.WxSessionKey, user.WxSessionKey));
+            //}
+
 
             if (!user.Name.IsNullOrEmpty())
             {
                 caimsIdentity.AddClaim(new Claim(KardClaimTypes.Name, user.Name));
             }
 
-            if (!user.NikeName.IsNullOrEmpty())
+            if (!user.NickName.IsNullOrEmpty())
             {
-                caimsIdentity.AddClaim(new Claim(KardClaimTypes.NikeName, user.NikeName));
+                caimsIdentity.AddClaim(new Claim(KardClaimTypes.NickName, user.NickName));
             }
 
 

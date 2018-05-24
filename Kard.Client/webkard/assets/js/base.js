@@ -1,4 +1,5 @@
-var baseUrl = "http://localhost:3706";//"https://www.localyc.com";
+var baseUrl = "http://localhost:3703";//window.location.protocol + "//"+window.location.host;// "http://localhost:3706";//"https://www.localyc.com";
+var imageUrl = baseUrl;//"http://image.localyc.com";
 var defaults = {
     type: "POST",
     async: true,
@@ -42,6 +43,10 @@ $.extend(httpHelper.prototype, {
         else
         { return _this; }
     },
+
+         
+
+
     // 发送数据
     send: function () {
         var _this = this;
@@ -49,9 +54,13 @@ $.extend(httpHelper.prototype, {
             $.ajax({
                 url: _this.opts.url,
                 type: _this.opts.type,
+                xhrFields: {
+                    withCredentials: true //配置http跨域请求中携带cookie
+                },
+                crossDomain: true,
                 async: _this.opts.async,
                 data: _this.opts.data,
-                contentType: _this.opts.contentType,
+                //contentType: _this.opts.contentType,
                 traditional: _this.opts.traditional,
                 success: function (data, textStatus, jqXHR) {//success
                     // session超时、操作失败
@@ -68,7 +77,7 @@ $.extend(httpHelper.prototype, {
                     else {
                         _this.opts.success && _this.opts.success.apply(this, arguments);
                     }
-
+                 
                 },
                 beforeSend: function () {
                     // loading();
@@ -102,7 +111,7 @@ var topMenu = {
 
         //菜单
         //$.when($.getJSON(baseUrl + '/assets/json/menu.json'), $.get(baseUrl + '/api/menu/'))
-        $.when($.getJSON(baseUrl + '/assets/json/menu.json'))
+        $.when($.getJSON('/assets/json/menu.json'))
             .done(
             function () {
 

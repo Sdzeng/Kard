@@ -16,8 +16,9 @@ namespace Kard.Core.Entities
 
         public long Id { get; set; }
 
+        public string UserType { get; set; }
         public string WxOpenId { get; set; }
-
+        public string WxSessionKey { get; set; }
 
         public string Name { get; set; }
 
@@ -25,10 +26,10 @@ namespace Kard.Core.Entities
         public string AvatarUrl { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public string NikeName { get; set; }
+        public string NickName { get; set; }
 
         public string CoverPath { get; set; }
-        public string Gender { get; set; }
+        public int Gender { get; set; }
 
         public string City { get; set; }
         public string Language { get; set; }

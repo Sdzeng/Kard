@@ -17,9 +17,9 @@
                 //data.media.hasOwnProperty("path")&&
 
 
-                $(".bg-layer").css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(/assets/media/" + (data.media.cdnPath + "." + data.media.mediaExtension || "") + ")").fadeIn("slow");
+                $(".bg-layer").css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + imageUrl+"/assets/media/" + (data.media.cdnPath + "." + data.media.mediaExtension || "") + ")").fadeIn("slow");
                 $(".essay-content>blackquote>q").text(data.media.essay.simpleContent || "");
-                $(".author").text("@" + data.media.kuser.nikeName || "");
+                $(".author").text("@" + data.media.kuser.nickName || "");
                 $(".location").text((data.media.essay.location || "") + " 凌晨5点");
 
                 topCover.scroll();
@@ -55,14 +55,14 @@ var hostSection = {
                 //data.media.hasOwnProperty("path")&&
                 for (var index in data) {
                     var media = data[index];
-                    var picturePath = baseUrl + "/assets/media/" + media.cdnPath + "." + media.mediaExtension;
-                    var pictureCropPath = baseUrl + "/assets/media/" + media.cdnPath + "_170x150." + media.mediaExtension;
+                    var picturePath = imageUrl + "/assets/media/" + media.cdnPath + "." + media.mediaExtension;
+                    var pictureCropPath = imageUrl + "/assets/media/" + media.cdnPath + "_170x150." + media.mediaExtension;
                     topMediaPictureHtml += "<div class='picture-warp'>" +
                         "<a href= '" + picturePath + "' >" +
                         "<img src='" + pictureCropPath + "' data-origin='" + picturePath + "' alt='' />" +
                         "</a >" +
                         "<div class='picture-desc'>" +
-                        "<span class='picture-name'><a href='" + picturePath + "'>" + (media.firstTagName || media.creatorNikeName).substring(0, 6) + "</a></span>" +
+                        "<span class='picture-name'><a href='" + picturePath + "'>" + (media.firstTagName || media.creatorNickName).substring(0, 6) + "</a></span>" +
                         "<span class='picture-num'>" + media.essayMediaCount + "张</span>" +
                         "<a class='href-label picture-like'>" + media.essayLikeNum + "人喜欢</a>" +
                         "</div>" +
@@ -90,14 +90,14 @@ var hostSection = {
                 //data.media.hasOwnProperty("path")&&
                 for (var index in data) {
                     var media = data[index];
-                    var picturePath = baseUrl + "/assets/media/" + media.cdnPath + "." + media.mediaExtension;
-                    var pictureCropPath = baseUrl + "/assets/media/" + media.cdnPath + "_170x150." + media.mediaExtension;
+                    var picturePath = imageUrl + "/assets/media/" + media.cdnPath + "." + media.mediaExtension;
+                    var pictureCropPath = imageUrl + "/assets/media/" + media.cdnPath + "_170x150." + media.mediaExtension;
                     topMediaPictureHtml += "<div class='picture-warp'>" +
                         "<a href= '" + picturePath + "' >" +
                         "<img src='" + pictureCropPath + "' data-origin='" + picturePath + "' alt='' />" +
                         "</a >" +
                         "<div class='picture-desc'>" +
-                        "<span class='picture-name'><a href='" + picturePath + "'>" + (media.firstTagName || media.creatorNikeName).substring(0, 6) + "</a></span>" +
+                        "<span class='picture-name'><a href='" + picturePath + "'>" + (media.firstTagName || media.creatorNickName).substring(0, 6) + "</a></span>" +
                         "<span class='picture-num'>" + media.essayMediaCount + "张</span>" +
                         "<a class='href-label picture-like'>" + media.essayLikeNum + "人喜欢</a>" +
                         "</div>" +
