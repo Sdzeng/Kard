@@ -76,7 +76,7 @@ namespace Kard.Web.Controllers
             if (result.Result)
             {
                 var identity = result.Data;
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), new AuthenticationProperties { IsPersistent = true });
 
                 //if (returnUrl.IsNullOrEmpty())
                 //{
@@ -155,12 +155,10 @@ namespace Kard.Web.Controllers
         [AllowAnonymous]
         public IActionResult NotLogin()
         {
-            var json = new
-            {
-                code = "000",
-                message = $"您未登录不能使用该接口",
-            };
-            var rs = new JsonResult(json);
+ 
+            var rs = new JsonResult(new {
+                message = "您未登录不能查看该内容"
+            });
 
             rs.StatusCode = 401;
             return rs;

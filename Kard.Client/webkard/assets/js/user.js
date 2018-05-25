@@ -1,93 +1,44 @@
-var userCover = {
-    init: function () {
+var userjs = {
+    data: { scope: $("#userPage") },
+ 
+    userCover:  function () {
 
-        var _this = this;
+            var _this = this;
 
-        //…Ë÷√ ◊“≥∑‚√Ê
-        var helper = new httpHelper({
-            url: baseUrl + "/web/user/cover/",
-            type:"GET",
-            success: function (data) {
-              
-                //data = JSON.parse(data);
-                if (!data) {
-                    return;
+            //…Ë÷√ ◊“≥∑‚√Ê
+            var helper = new httpHelper({
+                url: baseUrl + "/web/user/cover/",
+                type: "GET",
+                success: function (data) {
+
+                    //data = JSON.parse(data);
+                    if (!data) {
+                        return;
+                    }
+
+
+                    //data.media.hasOwnProperty("path")&&
+
+
+                    $(".bg-layer").css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + imageUrl + "/" + (data.coverPath || "") + ")").fadeIn("slow");
+                    $(".essay-content>blackquote>q").text("≤‚ ‘");
+                    $(".author").text("@" + data.nickName || "");
+
+
+                    topCover.scroll();
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                   
                 }
-
-
-                //data.media.hasOwnProperty("path")&&
-
-
-                $(".bg-layer").css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + imageUrl+"/"+( data.coverPath || "") + ")").fadeIn("slow");
-                $(".essay-content>blackquote>q").text("≤‚ ‘");
-                $(".author").text("@" + data.nickName || "");
-                
-
-                topCover.scroll();
-
-            },
-            error: function (jqXHR, textStatus, errorThrown)
-            {
-                //Unauthorized
-                if (jqXHR.status == 401) {
-                    //Location=context.RedirectUri
-                    var redirectUri = jqXHR.getResponseHeader("Location");
-                    redirectUri = redirectUri.substring(0, redirectUri.indexOf("?"));
-
-                    window.location.href = redirectUri;
-                }
-            }
-        });
-        helper.send();
-    },
-    testAuth:function () {
-        
-     $("#btnTest").click(function() {
-          var helper = new httpHelper({
-            url: baseUrl + "/web/user/1",
-            type:"GET",
-            success: function (data) {
-              
-               alert(data);
-                 
-
-            },
-            error: function (jqXHR, textStatus, errorThrown)
-            {
-               alert("error:"+textStatus);
-            }
-        });
-        helper.send();
-     })
-
-     $("#btnLogout").click(function(){
-
-           var helper = new httpHelper({
-            url: baseUrl + "/web/user/logout",
-            type:"GET",
-            success: function (data) {
-              if(data.result)
-            {
-                window.location.href="/home.htm"; 
-            }
-            else{
-              alert(data.message);
-            }
-
-            },
-            error: function (jqXHR, textStatus, errorThrown)
-            {
-               alert("error:"+textStatus);
-            }
-        });
-        helper.send();
-
-     })
+            });
+            helper.send();
+         
+       
     }
 };
 
 $(function () {
     //∑‚√Ê
-    userCover.init();
-    userCover.testAuth();
+    userjs.userCover();
 });

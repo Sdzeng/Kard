@@ -13,7 +13,6 @@
             color: #fff;
             background-color: #128f76;
             border-radius: 3px;
-        
         }
     }
 }
@@ -37,7 +36,7 @@
         }*/
     }
 
-    &-secondtitle  {
+    &-secondtitle {
         /*display: inline-block;
         width: 16.6%;
         min-height: 100px;
@@ -47,15 +46,16 @@
         display: flex;
         flex-direction: row;
         justify-content: center;
-        &>div{
-        width: 200px;
-        margin:0px 10px;
+
+        & > div {
+            width: 200px;
+            margin: 0px 10px;
         }
     }
 }
 
 .section-pictures {
-    background-color: #ececec;
+    background-color: #f6f7f9;
 
     .picture-warp {
         margin: 20px 12px;
@@ -84,6 +84,147 @@
             }
 
             .picture-desc {
+            }
+        }
+    }
+}
+
+
+.section-userinfo {
+
+    &-title {
+        padding: 15px 0px;
+        line-height: 1.1;
+        text-align: center;
+
+        & h2 {
+            word-spacing: 8px;
+            letter-spacing: 2px;
+            margin: 10px auto;
+        }
+
+        & h6 {
+            letter-spacing: 1px;
+            margin: 10px auto;
+        }
+    }
+
+
+    &-left {
+        display: inline-block;
+        width: 392px;
+        float: left;
+        padding: 16px;
+
+        .picture-warp {
+            margin: 0 5px 10px 5px;
+            min-width: 170px;
+            min-height: 170px;
+            float: left;
+
+            img {
+                border-radius: 3px;
+            }
+
+            .picture-desc {
+                padding: 3px 0;
+
+                .picture-name {
+                    margin-right: 5px;
+                }
+
+                .picture-num {
+                    margin-right: 5px;
+                    color: #ccc;
+                }
+
+                .picture-like {
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
+
+    &-middle {
+        display: inline-block;
+        float: left;
+        padding: 16px;
+
+        .essay-info {
+            width: 100%;
+            display: inline-block;
+
+            &-right {
+
+                &-buttom {
+                    li {
+                        font-size: 12px;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        color: #b6b6b6;
+
+                        a {
+                            margin-left: 10px;
+                        }
+                    }
+
+                    &-tags {
+                        float: left;
+                    }
+
+                    &-nums {
+                        float: right;
+                    }
+                }
+            }
+        }
+    }
+
+    &-right {
+        display: inline-block;
+        padding: 16px;
+        margin-left: 24px;
+        width: 220px;
+
+        ul {
+            padding: 0px 10px;
+            border-top: 1px dotted #b6b6b6;
+
+
+
+            li {
+                overflow: hidden;
+                white-space: nowrap;
+                color: #b6b6b6;
+                border-bottom: 1px dotted #b6b6b6;
+                padding: 8px 0px;
+                line-height: 24px;
+
+                &:first-child {
+                    line-height: 34px;
+                }
+
+
+                span.section-host-right-li-num {
+                    float: left;
+                    width: 24px;
+                    height: 24px;
+                    text-align: center;
+                    font-size: 16px;
+                    margin-right: 10px;
+                    background: #ec4d00;
+                    color: #fff;
+                }
+
+                div.section-host-right-li-left {
+                    display: inline-block;
+                    float: left;
+                }
+
+                div.section-host-right-li-right {
+                    display: inline-block;
+                    float: right;
+                }
             }
         }
     }

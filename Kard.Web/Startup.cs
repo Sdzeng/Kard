@@ -41,7 +41,7 @@ namespace Kard.Web
         public void ConfigureServices(IServiceCollection services)
         {
             IHostingEnvironment env = services.GetHostingEnvironment();
-          
+
             //ASP.NET 提供的功能和中间件，例如 MVC，遵循约定——使用一个单一的 AddService扩展方法来注册所有该功能所需的服务。
             //IMvcBuilder mvcBuilder= services.AddMvc();
             //string assemblyParts = string.Join(",", mvcBuilder.PartManager.ApplicationParts.Select(a=>a.Name));
@@ -62,20 +62,23 @@ namespace Kard.Web
             });
 
             #region api文档
-            services.AddSwaggerGen(c =>
+            if (env.IsDevelopment())
             {
-                c.SwaggerDoc("v1", new Info
+                services.AddSwaggerGen(c =>
                 {
-                    Version = "v1",
-                    Title = "Kard接口文档",
-                    Description = "RESTful API for Kard"
+                    c.SwaggerDoc("v1", new Info
+                    {
+                        Version = "v1",
+                        Title = "Kard接口文档",
+                        Description = "RESTful API for Kard"
+                    });
+
+                    //Set the comments path for the swagger json and ui.
+                    var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "Kard.Web.xml");
+                    c.IncludeXmlComments(filePath);
+
                 });
-
-                //Set the comments path for the swagger json and ui.
-                var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath,  "Kard.Web.xml");
-                c.IncludeXmlComments(filePath);
-
-            });
+            }
 
             //services.AddMvcCore().AddApiExplorer();
             #endregion
@@ -95,18 +98,23 @@ namespace Kard.Web
 
             #endregion
 
-
+            #region 内存缓存
             services.AddMemoryCache();
             //services.AddImageHandle();
+
+            #endregion
+
+            #region 日志
             services.AddLogging(builder =>
             {
                 builder.AddConfiguration(Configuration.GetSection("Logging"));
-                    //.AddFilter("Microsoft", LogLevel.Warning)
-                    //.AddDebug()
-                    //.AddConsole();
+                //.AddFilter("Microsoft", LogLevel.Warning)
+                //.AddDebug()
+                //.AddConsole();
             });
+            #endregion
 
-            //未授权时使用的session cookie默认名称.AspNetCore.Session
+            #region 未授权时使用的session cookie默认名称.AspNetCore.Session
             //services.AddSession(options =>
             //{
             //    options.IdleTimeout = TimeSpan.FromDays(7);
@@ -127,7 +135,7 @@ namespace Kard.Web
             //    });
             //}
 
-            #region cookie 鉴权方案
+
             //services.ConfigureApplicationCookie(options =>
             //{
             //    // Cookie settings
@@ -142,7 +150,9 @@ namespace Kard.Web
             //    options.SlidingExpiration = true;
             //    //options.ExpireTimeSpan = TimeSpan.FromDays(3);
             //});
-   
+            #endregion
+
+            #region cookie 鉴权方案
             //授权后使用的session cookie名称按选择的AuthenticationScheme（授权方案）定，比如.AspNetCore.WeChatApp
             //AddCookie内部调用AddScheme
             //AddOAuth内部调用AddRemoteScheme（远程登陆） AddGoogle AddFacebook AddTwitter内部都是调用AddOAuth
@@ -154,14 +164,16 @@ namespace Kard.Web
                o.LoginPath = "/web/user/notlogin";
                o.AccessDeniedPath = "/web/user/notlogin";
                o.SlidingExpiration = true;
+               //当HttpContext.SignInAsync的IsPersistent = true 时生效
+               o.ExpireTimeSpan = TimeSpan.FromDays(7);
+               //o.SessionStore = true;
            })
             //添加登陆方案(scheme)2:wechatapp 
             .AddCookie(WeChatAppDefaults.AuthenticationScheme);
 
             #endregion
 
-
-
+            #region 静态资源压缩
             services.AddResponseCompression(options =>
             {
                 options.Providers.Add<GzipCompressionProvider>();
@@ -172,23 +184,31 @@ namespace Kard.Web
             {
                 options.Level = CompressionLevel.Fastest;
             });
+            #endregion
+
+            #region IOC
             services.AddModule();
+
             services.TryAddScoped<IPasswordHasher<KuserEntity>, PasswordHasher<KuserEntity>>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            #endregion
         }
 
         // 请求管道会按顺序执行下列委托（中间件），返回顺序则相反；
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             #region api文档
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
-
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
+            if (env.IsDevelopment())
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Kard1.0接口文档");
-            });
+                // Enable middleware to serve generated Swagger as a JSON endpoint.
+                app.UseSwagger();
+
+                // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Kard1.0接口文档");
+                });
+            }
             #endregion
 
             //添加NLog
@@ -204,13 +224,13 @@ namespace Kard.Web
             }
             else
             {
-               app.UseExceptionHandler("/error.htm");
+                app.UseExceptionHandler("/error.htm");
             }
 
             //app.UseImageHandle();
             //app.UseSession();
             app.UseAuthentication();
-         
+
 
             // app.UseApiAuthorization();
 
@@ -221,16 +241,16 @@ namespace Kard.Web
 
             //var provider = new FileExtensionContentTypeProvider();
             //provider.Mappings.Add(".less", "text/css");
-         
- 
+
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 //添加图片处理
-                FileProvider = new KardPhysicalFileProvider(env.WebRootPath,new ImageHandleOptions(), loggerFactory),
-               // ContentTypeProvider = provider,
+                FileProvider = new KardPhysicalFileProvider(env.WebRootPath, new ImageHandleOptions(), loggerFactory),
+                // ContentTypeProvider = provider,
                 OnPrepareResponse = ctx =>
                 {
-                    ctx.Context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.CacheControl] =$"max-age={ (60 * 60 * 24 * 7).ToString()}";
+                    ctx.Context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.CacheControl] = $"max-age={ (60 * 60 * 24 * 7).ToString()}";
                 }
             });
 
@@ -241,7 +261,7 @@ namespace Kard.Web
 
             app.UseMvc();
 
-        
+
             //if (env.IsDevelopment())
             //{
             //    app.UseDeveloperExceptionPage();

@@ -1,3 +1,4 @@
+//该配置文件发布后不需要用到
 {
   "iisSettings": {
     "windowsAuthentication": false,
@@ -21,7 +22,8 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development" //Production
+
       },
       "applicationUrl": "http://localhost:3703/"
     }

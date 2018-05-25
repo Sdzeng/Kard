@@ -62,7 +62,8 @@ namespace Kard.Core.AppServices.Default
             //user.Password = password;
             //var pa = _passwordHasher.HashPassword(user, password);
             var loginResult = _passwordHasher.VerifyHashedPassword(user, user.Password, password);
-            if (loginResult == PasswordVerificationResult.Success || loginResult == PasswordVerificationResult.SuccessRehashNeeded)
+            //if (loginResult == PasswordVerificationResult.Success || loginResult == PasswordVerificationResult.SuccessRehashNeeded
+            if (loginResult == PasswordVerificationResult.Success)
             {
                 result.Result = true;
                 result.Data = AddSessionData(user);
@@ -94,10 +95,10 @@ namespace Kard.Core.AppServices.Default
                 return result;
             }
 
-         
-       
+
+
             var user = _defaultRepository.FirstOrDefault<KuserEntity>(new { WxOpenId = wxAuthDto.openid });
-            if (user!=null)
+            if (user != null)
             {
                 user.WxSessionKey = wxAuthDto.session_key;
                 if (!_defaultRepository.Update(user))
@@ -138,8 +139,8 @@ namespace Kard.Core.AppServices.Default
         {
             var result = new ResultDto();
 
-            var userEntity = _defaultRepository.FirstOrDefault<KuserEntity>( new { WxOpenId = user.WxOpenId });
-            if (userEntity ==null)
+            var userEntity = _defaultRepository.FirstOrDefault<KuserEntity>(new { WxOpenId = user.WxOpenId });
+            if (userEntity == null)
             {
                 result.Result = false;
                 result.Message = $"用户{user.NickName}未登陆成功，注册失败";

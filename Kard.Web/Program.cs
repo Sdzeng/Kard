@@ -20,7 +20,7 @@ namespace Kard.Web
         public static IWebHost BuildWebHost(string[] args)
         {
             var config = new ConfigurationBuilder()
-           .AddJsonFile("hosting.json", optional: true)
+           .AddJsonFile("hosting.json", optional: true, reloadOnChange: true)
            .Build();
 
             return WebHost.CreateDefaultBuilder(args)

@@ -15,7 +15,7 @@ function getPath() {
 
         return hash.replace(reg, '');
     } else {
-        return hash;//storage.session.getItem('redirect') || '';
+        return hash;//storage.local.getItem('redirect') || '';
     }
 }
 
@@ -40,11 +40,10 @@ $.extend(httpHelper.prototype, {
             alert("url is empty");
             return null;
         }
-        else
-        { return _this; }
+        else { return _this; }
     },
 
-         
+
 
 
     // 发送数据
@@ -63,21 +62,7 @@ $.extend(httpHelper.prototype, {
                 //contentType: _this.opts.contentType,
                 traditional: _this.opts.traditional,
                 success: function (data, textStatus, jqXHR) {//success
-                    // session超时、操作失败
-                    if (/\"out\":true|\"flag\":false/.test(data)) {
-                        // dialog.alert(JSON.parse(data).msg, 'warn');
-                        // 用户登录框
-                        if (/\"out\":true/.test(data)) {
-                            alert("请重新登陆");
-                        }
-                        else {
-                            alert(data.msg || "内容有误");
-                        }
-                    }
-                    else {
-                        _this.opts.success && _this.opts.success.apply(this, arguments);
-                    }
-                 
+                      _this.opts.success && _this.opts.success.apply(this, arguments);
                 },
                 beforeSend: function () {
                     // loading();
@@ -88,9 +73,23 @@ $.extend(httpHelper.prototype, {
                     // _this.opts.loading !== 'off' && dialog.loading.fade();
                     _this.opts.complete && _this.opts.complete.apply(this, arguments);
                 },
+                
                 error: function (jqXHR, textStatus, errorThrown) {
+           
                     console.error(errorThrown);
-                    _this.opts.error && _this.opts.error.apply(this, arguments);
+                    //Unauthorized
+                    if (jqXHR.status == 401 || jqXHR.status == 403) {
+                        //Location=context.RedirectUri
+                        storage.local.setItem("isLogin", "false");
+                        _this.opts.error && _this.opts.error.apply(this, arguments);
+                        alert("您未登录不能查看该内容");
+                        //var redirectUri = jqXHR.getResponseHeader("Location");
+                        //redirectUri = redirectUri.substring(0, redirectUri.indexOf("?"));
+                        //window.location.href = redirectUri;
+                        window.location.href = "/home.htm";
+                      
+                        
+                    }
                 }
             });
         });
@@ -178,7 +177,7 @@ var topMenu = {
             console.log(item.title + ":" + item.url);
             // item['@append_param'] = data;
             // _this.setHash(item.url);
-          
+
             _this.fireLoad(item.url, item.title, data);
         });
 

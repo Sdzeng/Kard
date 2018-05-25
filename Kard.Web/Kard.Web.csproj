@@ -65,6 +65,7 @@
   <ItemGroup>
     <Folder Include="logs\ngx\" />
     <Folder Include="logs\supervisor\" />
+    <Folder Include="logs\web\" />
     <Folder Include="wwwroot\builds\" />
   </ItemGroup>
 
@@ -81,6 +82,6 @@
     </Content>
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties Properties_4launchSettings_1json__JSONSchema="" appsettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties Properties_4launchSettings_1json__JSONSchema="http://json.schemastore.org/coffeelint" appsettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>
