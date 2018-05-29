@@ -1,4 +1,5 @@
 ﻿using Kard.Core.AppServices.Default;
+using Kard.Core.Dtos;
 using Kard.Core.Entities;
 using Kard.Core.IRepositories;
 using Kard.Extensions;
@@ -12,40 +13,34 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Linq;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Kard.Web.Controllers
 {
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-    [Route("[controller]")]
-    public class WebController : BaseController
+    [Route("api/webuser")]
+    public class WebUserController : BaseController
     {
-        private readonly IHostingEnvironment _env;
+
         private readonly ILoginAppService _loginAppService;
-        private readonly IDefaultRepository _defaultRepository;
-        public WebController(IHostingEnvironment env,
-            ILogger<WebController> logger,
+        public WebUserController(
+            ILogger<WebUserController> logger,
             IMemoryCache memoryCache,
             ILoginAppService loginAppService,
-            IDefaultRepository defaultRepository,
             IKardSession kardSession)
             : base(logger, memoryCache, kardSession)
         {
             //HttpContext.Session.SetString("UserId", user.Id.ToString());
-            _env = env;
             _loginAppService = loginAppService;
-            _defaultRepository = defaultRepository;
         }
 
-        //[Authorize(Roles = "member", AuthenticationSchemes= "members")]
-        [HttpGet("test")]
-        public IActionResult Test(long? userId)
-        {
-            return Content("已登陆");
-        }
-
+     
 
         #region user
 
@@ -55,7 +50,7 @@ namespace Kard.Web.Controllers
         ///// </summary>
         ///// <returns></returns>
         //[AllowAnonymous]
-        //[HttpGet("user/login")]
+        //[HttpGet("login")]
         //public IActionResult Login()
         //{
         //    return Content(GetPageFile("login.htm"), "text/html;charset=utf-8");
@@ -69,7 +64,7 @@ namespace Kard.Web.Controllers
         /// <param name="returnUrl"></param>
         /// <returns></returns>
         [AllowAnonymous]
-        [HttpPost("user/login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login(string username, [DataType(DataType.Password)] string password, string returnUrl)
         {
             var result = _loginAppService.WebLogin(username, password);
@@ -86,59 +81,17 @@ namespace Kard.Web.Controllers
                 //return Redirect(returnUrl);
                 return Json(new { result = true, message = "登录成功" });
             }
-            return Json(new { result=false,message= "登录失败，用户名密码不正确"} );
+            return Json(new { result = false, message = "登录失败，用户名密码不正确" });
         }
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <returns></returns>
-        // [HttpGet("user")]
-        // public IActionResult Index()
-        // {
-        //     return Content(GetPageFile("user.htm"), "text/html;charset=utf-8");
-        // }
-
-        /// <summary>
-        /// 获取用户信息
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        [HttpGet("user/{userId}")]
-        public IActionResult Index(long? userId)
-        {
-            return Json(GetUser(userId));
-        }
-
-        /// <summary>
-        /// 获取用户封面
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("user/cover")]
-        public IActionResult GetCover()
-        {
-            return Json(GetUser(_kardSession.UserId));
-        }
-
-
-        private KuserEntity GetUser(long? userId)
-        {
-            string cacheKey = $"user[{userId}]";
-            KuserEntity kuserEntity = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
-            {
-                cacheEntry.SetAbsoluteExpiration(DateTime.Now.Date.AddDays(60));
-                return _defaultRepository.GetUser(_kardSession.UserId.Value);
-            });
-            return kuserEntity;
-        }
-
+ 
 
 
         /// <summary>
         /// 退出
         /// </summary>
         /// <returns></returns>
-        [HttpGet("user/logout")]
+        [HttpGet("logout")]
         public IActionResult Logout()
         {
 
@@ -146,23 +99,7 @@ namespace Kard.Web.Controllers
             return Json(new { result = true, message = "退出成功" });
         }
 
-        /// <summary>
-        /// 未登录返回结果
-        /// </summary>
-        /// <returns></returns>
-  
-        [HttpGet("user/notlogin")]
-        [AllowAnonymous]
-        public IActionResult NotLogin()
-        {
  
-            var rs = new JsonResult(new {
-                message = "您未登录不能查看该内容"
-            });
-
-            rs.StatusCode = 401;
-            return rs;
-        }
         #endregion
     }
 }

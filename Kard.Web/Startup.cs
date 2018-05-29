@@ -10,14 +10,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
-
 using NLog.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
@@ -161,8 +158,8 @@ namespace Kard.Web
            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
            {
                o.Cookie.HttpOnly = false;
-               o.LoginPath = "/web/user/notlogin";
-               o.AccessDeniedPath = "/web/user/notlogin";
+               o.LoginPath = "/api/user/notlogin";
+               o.AccessDeniedPath = "/api/user/notlogin";
                o.SlidingExpiration = true;
                //当HttpContext.SignInAsync的IsPersistent = true 时生效
                o.ExpireTimeSpan = TimeSpan.FromDays(7);
@@ -184,6 +181,14 @@ namespace Kard.Web
             {
                 options.Level = CompressionLevel.Fastest;
             });
+            #endregion
+
+            #region 上传文件
+            //services.Configure<FormOptions>(options =>
+            //{
+            //    options.ValueLengthLimit = int.MaxValue;
+            //    options.MultipartBodyLengthLimit = long.MaxValue;
+            //});
             #endregion
 
             #region IOC

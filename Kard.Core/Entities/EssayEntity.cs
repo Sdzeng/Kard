@@ -22,14 +22,14 @@ namespace Kard.Core.Entities
 
         public string Content { get; set; }
 
-        public string SimpleContent
-        {
-            get
-            {
-              var tt=  _regex.Replace(Content,"");
-                return tt;
-            }
-        }
+        //public string SimpleContent
+        //{
+        //    get
+        //    {
+        //      var tt=  _regex.Replace(Content,"");
+        //        return tt;
+        //    }
+        //}
 
         public string Location { get; set; }
         public int RepostNum { get; set; }

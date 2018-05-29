@@ -30,7 +30,7 @@ namespace Kard.Web.Controllers
         private readonly IDefaultRepository _defaultRepository;
 
         public WxController(
-          ILogger<ApiController> logger,
+          ILogger<WxController> logger,
           IMemoryCache memoryCache,
           ILoginAppService loginAppService,
           IKardSession kardSession,

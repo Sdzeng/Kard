@@ -1,54 +1,59 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Kard.Core.Dtos;
+using Kard.Core.Entities;
+using Kard.Core.IRepositories;
+using Kard.Runtime.Session;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
 using Microsoft.Extensions.Caching.Memory;
-using Kard.Extensions;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 
 namespace Kard.Web.Controllers
 {
+    [AllowAnonymous]
     [Produces("application/json")]
-    [Route("api")]
-    public class HomeController : Controller
+    [Route("api/home")]
+    public class HomeController : BaseController
     {
-        private IMemoryCache _memoryCache;
-        public HomeController(IMemoryCache memoryCache)
+        private readonly IDefaultRepository _defaultRepository;
+        public HomeController (ILogger<HomeController> logger,
+            IMemoryCache memoryCache,
+            IDefaultRepository defaultRepository,
+            IKardSession kardSession) : base(logger, memoryCache, kardSession)
         {
-            _memoryCache = memoryCache;
-        }
-
-        [HttpGet]
-        public IActionResult Index()
-        {
-            //string page = "index";
-            //string cacheKey = $"pages[{page}]";
-            //string htmlContent = _memoryCache.GetCache(cacheKey, () => GetHtmlContent(page),7*24*60*60);
-            //return Content(htmlContent, "text/html;charset=utf-8");
-            return File("/pages/index.html", "text/html;charset=utf-8");
-        }
-
-        [HttpGet]
-        public IActionResult Error()
-        {
-            string page = "error";
-            string cacheKey = $"pages[{page}]";
-            string htmlContent = _memoryCache.GetCache(cacheKey, () => GetHtmlContent(page));
-            return Content(htmlContent, "text/html;charset=utf-8");
+            _defaultRepository = defaultRepository;
         }
 
 
-
-        private string GetHtmlContent(string page)
+        /// <summary>
+        /// 获取封面
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("cover")]
+        public CoverEntity GetCover()
         {
-            string pagePath = Path.Combine(Environment.CurrentDirectory, "Pages\\", page + ".html");
-            using (StreamReader sr = new StreamReader(pagePath))
+            var today = DateTime.Now.Date;
+            string cacheKey = $"homeCover[{today.ToString("yyyyMMdd")}]";
+            CoverEntity coverEntity = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
             {
-                string htmlContent = sr.ReadToEnd();
-                return htmlContent;
-            }
+                cacheEntry.SetAbsoluteExpiration(today.AddDays(1));
+                return _defaultRepository.GetDateCover(today);
+            });
+            return coverEntity;
         }
+
+
+        /// <summary>
+        /// 获取单品图片
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("pictures")]
+        public IEnumerable<TopMediaDto> GetPicture()
+        {
+            var aWeekAgo = DateTime.Now.Date.AddYears(-7);
+            return _defaultRepository.GetHomeMediaPicture(aWeekAgo);
+        }
+
     }
 }

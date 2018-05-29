@@ -56,7 +56,7 @@ namespace Kard.Dapper.Mysql.Repositories
 
  
 
-        public IEnumerable<TopMediaDto> GetTopMediaPicture(DateTime creationTime)
+        public IEnumerable<TopMediaDto> GetHomeMediaPicture(DateTime creationTime)
         {
             return ConnExecute(conn =>
             {
@@ -64,7 +64,7 @@ namespace Kard.Dapper.Mysql.Repositories
                 string sql = @"select t.EssayMediaCount,essay.LikeNum EssayLikeNum,media.EssayId,media.CdnPath,media.MediaExtension,essay.Content EssayContent,essay.CreatorUserId,kuser.NickName CreatorNickName from (
                     select  media.EssayId,min(media.Sort) MinSort,count(media.Id) EssayMediaCount
                     from media join essay on media.EssayId=essay.Id and media.MediaType='picture' and media.CreationTime>@CreationTime 
-                    group by media.EssayId  order by essay.LikeNum desc limit 7
+                    group by media.EssayId  order by essay.LikeNum desc  
                     ) t join media on t.EssayId=media.EssayId and t.MinSort=media.Sort 
                    join essay on media.EssayId=essay.Id 
                    join kuser on essay.CreatorUserId=kuser.Id   
@@ -72,6 +72,26 @@ namespace Kard.Dapper.Mysql.Repositories
                 var topMediaDtoList = conn.Query<TopMediaDto>(sql, new { CreationTime = creationTime });
 
                 topMediaDtoList = topMediaDtoList.Where((m, index) => index != 0);
+
+                return topMediaDtoList;
+            });
+        }
+
+
+        public IEnumerable<TopMediaDto> GetUserMediaPicture(int count)
+        {
+            return ConnExecute(conn =>
+            {
+                string sql = @"select t.EssayMediaCount,essay.LikeNum EssayLikeNum,media.EssayId,media.CdnPath,media.MediaExtension,essay.Content EssayContent,essay.CreatorUserId,kuser.NickName CreatorNickName from (
+                    select  media.EssayId,min(media.Sort) MinSort,count(media.Id) EssayMediaCount
+                    from media join essay on media.EssayId=essay.Id and media.MediaType='picture'  
+                    where media.CreatorUserId=@CreatorUserId 
+                    group by media.EssayId  order by essay.LikeNum desc  limit @Count 
+                    ) t join media on t.EssayId=media.EssayId and t.MinSort=media.Sort 
+                   join essay on media.EssayId=essay.Id 
+                   join kuser on essay.CreatorUserId=kuser.Id   
+                  order by EssayLikeNum desc";
+                var topMediaDtoList = conn.Query<TopMediaDto>(sql, new { CreatorUserId= KardSession.UserId, Count = count });
 
                 return topMediaDtoList;
             });

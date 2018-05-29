@@ -3,7 +3,9 @@ var imageUrl = baseUrl;//"http://image.localyc.com";
 var defaults = {
     type: "POST",
     async: true,
-    contentType: null,//"application/json;charset=utf-8",
+    contentType: "application/x-www-form-urlencoded",//"application/json;charset=utf-8",
+    traditional: false,
+    processData:true,
     data: null,
     loading: "off"
 };
@@ -30,8 +32,10 @@ $.extend(httpHelper.prototype, {
         var _this = this;
         _this.opts = opts;
         _this.opts.type = opts.type || defaults.type;
-        _this.opts.async = opts.async || defaults.async;
-        _this.opts.contentType = opts.contentType || defaults.contentType;
+        _this.opts.async = (opts.async == null) ?defaults.async: opts.async;
+        _this.opts.contentType = (opts.contentType == null) ?defaults.contentType: opts.contentType;
+        _this.opts.traditional = (opts.traditional == null) ? defaults.traditional : opts.traditional;
+        _this.opts.processData = (opts.processData == null) ? defaults.processData : opts.processData;
         _this.opts.data = opts.data || defaults.data;
         _this.opts.loading = opts.loading || defaults.loading;
 
@@ -59,8 +63,9 @@ $.extend(httpHelper.prototype, {
                 crossDomain: true,
                 async: _this.opts.async,
                 data: _this.opts.data,
-                //contentType: _this.opts.contentType,
+                contentType: _this.opts.contentType ,
                 traditional: _this.opts.traditional,
+                processData: _this.opts.processData ,
                 success: function (data, textStatus, jqXHR) {//success
                       _this.opts.success && _this.opts.success.apply(this, arguments);
                 },

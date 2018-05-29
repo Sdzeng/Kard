@@ -27,11 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\ApiController.cs" />
     <Compile Remove="Controllers\ApiController2.cs" />
     <Compile Remove="Controllers\CoverController.cs" />
     <Compile Remove="Controllers\ErrorController.cs" />
-    <Compile Remove="Controllers\HomeController.cs" />
-    <Compile Remove="Controllers\UserController.cs" />
     <Compile Remove="Controllers\ValuesController.cs" />
     <Compile Remove="Middlewares\ImageHandle\ImageHandleExtensions.cs" />
     <Compile Remove="Middlewares\ImageHandle\ImageHandleFileContext.cs" />

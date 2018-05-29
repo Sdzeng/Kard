@@ -11,7 +11,9 @@ namespace Kard.Core.IRepositories
         CoverEntity GetDateCover(DateTime showDate);
 
  
-        IEnumerable<TopMediaDto> GetTopMediaPicture(DateTime creationTime);
+        IEnumerable<TopMediaDto> GetHomeMediaPicture(DateTime creationTime);
+
+        IEnumerable<TopMediaDto> GetUserMediaPicture(int count);
 
         bool IsExistUser(string name, string phone, string email);
 

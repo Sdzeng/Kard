@@ -41,7 +41,7 @@ namespace Kard.Web.Controllers
         }
 
         /// <summary>
-        /// 获取封面
+        /// 获取封面 
         /// </summary>
         /// <returns></returns>
         [HttpGet("cover")]
@@ -65,19 +65,10 @@ namespace Kard.Web.Controllers
         public IEnumerable<TopMediaDto> GetPicture()
         {
             var aWeekAgo = DateTime.Now.Date.AddYears(-7);
-            return _defaultRepository.GetTopMediaPicture(aWeekAgo);
+            return _defaultRepository.GetTopMediaPicture(4,aWeekAgo);
         }
 
-        /// <summary>
-        /// 获取记录
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("getessay")]
-        public IEnumerable<TopMediaDto> GetEssay()
-        {
-            var aWeekAgo = DateTime.Now.Date.AddMonths(-7);
-            return _defaultRepository.GetTopMediaPicture(aWeekAgo);
-        }
+       
 
         /// <summary>
         /// 添加纪录
