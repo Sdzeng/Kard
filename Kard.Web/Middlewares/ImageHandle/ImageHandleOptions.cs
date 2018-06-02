@@ -39,7 +39,7 @@ namespace Kard.Web.Middlewares.ImageHandle
             imageHandleDto.ImageName = match.Groups["imagename"].Value;
             imageHandleDto.ImageWidth = Convert.ToInt32(match.Groups["width"].Value);
             imageHandleDto.ImageHeight = Convert.ToInt32(match.Groups["height"].Value);
-            imageHandleDto.ImageExtensions = match.Groups["extensions"].Value;
+            imageHandleDto.ImageExtensions = match.Groups["extensions"].Value.ToLower();
             
             return resultDto.Set(true, "匹配成功", imageHandleDto);
         };

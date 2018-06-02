@@ -115,16 +115,12 @@ var topMenu = {
 
         //菜单
         //$.when($.getJSON(baseUrl + '/assets/json/menu.json'), $.get(baseUrl + '/api/menu/'))
-        $.when($.getJSON('/assets/json/menu.json'))
-            .done(
-            function () {
-
-                var arg = arguments;
-                //var data = arguments[0][0];// root = arguments[1][0].toUpperCase().split(',');
-                var data = arguments[0];
-                _this.setMenu(data.menu || {});
+        $.getJSON('/assets/json/menu.json', function (data) {
+          
+            _this.setMenu(data.menu || {});
                 // _this.initShow();
-            });
+        });
+       
     },
     setMenu: function (menuObj) {
         var _this = this;

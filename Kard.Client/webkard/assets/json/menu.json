@@ -10,31 +10,31 @@
         {
           "id": "2",
           "name": "BS",
-          "namech": "绘本",
+          "namech": "单品",
           "url": "home/index"
         },
         {
           "id": "3",
           "name": "BS",
-          "namech": "工艺",
+          "namech": "潮拍",
           "url": "home/index"
         },
         {
           "id": "4",
-          "name": "BS",
-          "namech": "小件",
+          "name": "something",
+          "namech": "发布会",
           "url": "home/index"
         },
         {
           "id": "5",
           "name": "BS",
-          "namech": "摄影",
+          "namech": "下载",
           "url": "home/index"
         },
         {
           "id": "6",
           "name": "CS",
-          "namech": "More",
+          "namech": "关于我们",
            "url": "home/index"
 
         }

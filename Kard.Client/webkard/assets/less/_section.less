@@ -58,10 +58,9 @@
 }
 
 .section-picture {
-    background-color: #f6f7f9;
-    
+    background-color: #f6f7f9; //#eaf3e8;
     &-list {
-         width:1300px;
+        width: 1300px;
 
         .picture-warp {
             margin: 20px 12px;
@@ -186,8 +185,8 @@
             border-radius: 5px;
             margin-bottom: 50px;
 
-            &-textarea {
-                border: 1px solid #ccc;
+            &-input {
+                border: 0px;
                 width: 100%;
                 color: initial;
                 letter-spacing: normal;
@@ -197,16 +196,21 @@
                 text-shadow: none;
                 display: inline-block;
                 text-align: start;
-                border: 1px solid #ccc;
                 padding: 3px;
                 font-size: 14px;
                 resize: none;
+
 
                 &:focus {
                     outline: none;
                     outline-color: initial;
                     outline-style: none;
                     outline-width: initial;
+                }
+
+                &:first-child {
+                    line-height: 25px;
+                    margin-bottom: 6px;
                 }
             }
 
@@ -231,7 +235,7 @@
                 }
 
                 &-btns {
-                    height:50px;
+                    height: 50px;
                     line-height: 50px;
 
                     &-submit {

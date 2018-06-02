@@ -12,22 +12,24 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace Kard.Web.Controllers
 {
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     [Authorize(AuthenticationSchemes = WeChatAppDefaults.AuthenticationScheme)]
     [Route("api/user")]
-    public class WebController : BaseController
+    public class UserController : BaseController
     {
         private readonly IHostingEnvironment _env;
        
         private readonly IDefaultRepository _defaultRepository;
-        public WebController(IHostingEnvironment env,
-            ILogger<WebController> logger,
+        public UserController(IHostingEnvironment env,
+            ILogger<UserController> logger,
             IMemoryCache memoryCache,
             IDefaultRepository defaultRepository,
             IKardSession kardSession)
@@ -40,18 +42,42 @@ namespace Kard.Web.Controllers
 
         //[Authorize(Roles = "member", AuthenticationSchemes= "members")]
         [HttpGet("test")]
-        public IActionResult Test(long? userId)
+        public async Task<IActionResult> TestAsync(int? connNum=10)
         {
-            return Content("已登陆");
+            var milliseconds=await RunTask(connNum);
+            _logger.LogDebug($"耗时：{milliseconds}ms");
+            return Content($"耗时：{milliseconds}ms");
         }
+
+        private async Task<long> RunTask(int? taskNum) {
+            var taskList = new List<Task<long>>();
+            for (int i=0; i < taskNum; i++){
+                taskList.Add(Task.Run(() =>
+                {
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+                    for (int j = 0; j < taskNum; j++)
+                    {
+                        _defaultRepository.TransExecute((conn, trans) => { return true; });
+                    }
+                    sw.Stop();
+                    return sw.ElapsedMilliseconds;
+                }));
+            }
+
+            var result = await Task.WhenAll(taskList);
+            return  (result.Sum() / (taskNum.Value* taskNum.Value));
+        }
+
+ 
 
 
         #region user
 
- 
- 
 
- 
+
+
+
         /// <summary>
         /// 获取用户信息
         /// </summary>
@@ -126,14 +152,14 @@ namespace Kard.Web.Controllers
             if (mediaFlie.Length > 0)
             {
                 string fileName = now.ToString("ddHHmmssffff");
-                string fileExtension = Path.GetExtension(ContentDispositionHeaderValue.Parse(mediaFlie.ContentDisposition).FileName.Trim('"'));
+                string fileExtension = Path.GetExtension(mediaFlie.FileName.Trim('"')).ToLower(); // Path.GetExtension(ContentDispositionHeaderValue.Parse(mediaFlie.ContentDisposition).FileName.Trim('"'));
                 string fullPath = Path.Combine(newPath, fileName + fileExtension);
                 using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
                     mediaFlie.CopyTo(stream);
                 }
                 result.Result = true;
-                result.Data = new { FileUrl = Path.Combine(newFolder, fileName), FileExtension = fileExtension };
+                result.Data = new { FileUrl = Path.Combine(newFolder, fileName).Replace("\\","/"), FileExtension = fileExtension };
                 return Json(result);
             }
 
@@ -151,25 +177,49 @@ namespace Kard.Web.Controllers
         [HttpPost("addessay")]
         public IActionResult AddEssay(EssayEntity essayEntity, IEnumerable<MediaEntity> mediaList)
         {
+            IEnumerable<TagEntity> tagList = new List<TagEntity>();
+            if (essayEntity.Content.Contains('#'))
+            {
+                var contentList = essayEntity.Content.Split('#');
+                int contentListLastIndex = contentList.Length - 1;
+                tagList = contentList.Where((item, index) =>((!string.IsNullOrEmpty(item))&& (index!= contentListLastIndex))).Select(item=>new TagEntity {  TagName=item });
+                essayEntity.Content = contentList.Last();
+            }
+
             var result = _defaultRepository.TransExecute((conn, trans) =>
             {
                 var resultDto = _defaultRepository.CreateAndGetId<EssayEntity, long>(essayEntity, conn, trans);
-
-                if (resultDto.Result)
+                if (!resultDto.Result)
                 {
-                    mediaList = mediaList.Select(meida =>
-                    {
-                        meida.EssayId = resultDto.Data;
-                        meida.MediaExtension = meida.MediaExtension.Replace(".", "");
-                        return meida;
-                    });
-                    return _defaultRepository.Create(mediaList, conn, trans);
+                    return false;
                 }
 
-                return false;
+                tagList = tagList.Select(tag => {
+                    tag.EssayId = resultDto.Data;
+                    return tag;
+                });
+                if (!_defaultRepository.Create(tagList, conn, trans))
+                {
+                    return false;
+                }
+
+                mediaList = mediaList.Select(meida =>
+                {
+                    meida.EssayId = resultDto.Data;
+                    meida.MediaExtension = meida.MediaExtension.Replace(".", "");
+                    return meida;
+                });
+
+                return _defaultRepository.Create(mediaList, conn, trans);
+
+            
             });
 
-
+            if (result)
+            {
+                string cacheKey = $"homeCover[{DateTime.Now.ToString("yyyyMMdd")}]";
+                _memoryCache.Remove(cacheKey);
+            }
             return Json(new ResultDto { Result = result });
         }
 

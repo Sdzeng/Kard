@@ -4,7 +4,7 @@ using System;
 namespace Kard.Core.Entities 
 {
          //Table:tag
-        public class TagEntity : LastModificationAuditedEntity,ILastModificationAuditedEntity
+        public class TagEntity : CreationAuditedEntity, ICreationAuditedEntity
     {
     
         public TagEntity()
@@ -13,8 +13,11 @@ namespace Kard.Core.Entities
         }
         
     
-        public int Id{get; set;}  
-        public string Name{get; set;}  
+        public int Id{get; set;}
+
+        public long EssayId { get; set; }
+
+        public string TagName{get; set;}  
            
     }
     

@@ -33,7 +33,7 @@ namespace Kard.Dapper.Mysql.Repositories
 		                        left join media on cover.mediaid = media.id   
 		                        left join essay on media.essayid = essay.id 
                                 left join kuser on essay.creatoruserid=kuser.id 
-                                where essay.isdeleted=0 and media.mediatype='picture' ";
+                                where essay.isdeleted=0 and media.mediatype='picture'  ";
                 var entityList = conn.Query<CoverEntity, MediaEntity, EssayEntity, KuserEntity, CoverEntity>(sql, (cover, media, essay, kuser) =>
                   {
                       media.Essay = essay;
@@ -68,10 +68,10 @@ namespace Kard.Dapper.Mysql.Repositories
                     ) t join media on t.EssayId=media.EssayId and t.MinSort=media.Sort 
                    join essay on media.EssayId=essay.Id 
                    join kuser on essay.CreatorUserId=kuser.Id   
-                  order by EssayLikeNum desc";
+                  order by EssayLikeNum desc,essay.CreationTime desc";
                 var topMediaDtoList = conn.Query<TopMediaDto>(sql, new { CreationTime = creationTime });
 
-                topMediaDtoList = topMediaDtoList.Where((m, index) => index != 0);
+                //topMediaDtoList = topMediaDtoList.Where((m, index) => index != 0);
 
                 return topMediaDtoList;
             });
@@ -90,7 +90,7 @@ namespace Kard.Dapper.Mysql.Repositories
                     ) t join media on t.EssayId=media.EssayId and t.MinSort=media.Sort 
                    join essay on media.EssayId=essay.Id 
                    join kuser on essay.CreatorUserId=kuser.Id   
-                  order by EssayLikeNum desc";
+                  order by EssayLikeNum desc,essay.CreationTime desc";
                 var topMediaDtoList = conn.Query<TopMediaDto>(sql, new { CreatorUserId= KardSession.UserId, Count = count });
 
                 return topMediaDtoList;

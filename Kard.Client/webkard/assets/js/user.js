@@ -1,11 +1,11 @@
-var userjs = {
+ï»¿var userjs = {
     data: { scope: $("#userPage") },
 
     userCover: function () {
 
         var _this = this;
 
-        //ÉèÖÃÊ×Ò³·âÃæ
+        //è®¾ç½®é¦–é¡µå°é¢
         var helper = new httpHelper({
             url: baseUrl + "/api/user/cover/",
             type: "GET",
@@ -21,7 +21,7 @@ var userjs = {
 
 
                 $(".bg-layer").css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + imageUrl + "/" + (data.coverPath || "") + ")").fadeIn("slow");
-                //$(".essay-content>blackquote>q").text("²âÊÔ");
+                //$(".essay-content>blackquote>q").text("æµ‹è¯•");
                 $(".author").text("@" + data.nickName || "");
 
 
@@ -39,7 +39,7 @@ var userjs = {
     setPictures: function () {
         var _this = this;
 
-        //ÉèÖÃhost
+        //è®¾ç½®host
         var helper = new httpHelper({
             url: baseUrl + "/api/user/pictures/",
             type: "GET",
@@ -62,8 +62,8 @@ var userjs = {
                         "</a >" +
                         "<div class='picture-desc'>" +
                         "<span class='picture-name'><a href='" + picturePath + "'>" + (media.firstTagName || media.creatorNickName).substring(0, 6) + "</a></span>" +
-                        "<span class='picture-num'>" + media.essayMediaCount + "ÕÅ</span>" +
-                        "<a class='href-label picture-like'>" + media.essayLikeNum + "ÈËÏ²»¶</a>" +
+                        "<span class='picture-num'>" + media.essayMediaCount + "å¼ </span>" +
+                        "<a class='href-label picture-like'>" + media.essayLikeNum + "äººå–œæ¬¢</a>" +
                         "</div>" +
                         "</div >";
                 }
@@ -94,7 +94,7 @@ var userjs = {
             //    formData.append("PictureContent", files[0]);
             //}
             ////else if (!$("#PicturePath", $maskScope).val()) {
-            ////    dialog.alert("ÇëÑ¡Ôñ°Ú·ÅÊ¾ÒâÍ¼", "warn").load();
+            ////    dialog.alert("è¯·é€‰æ‹©æ‘†æ”¾ç¤ºæ„å›¾", "warn").load();
             ////    return false;
             ////}
 
@@ -119,7 +119,7 @@ var userjs = {
             //    },
             //    error: function (res) {
             //        console.log(res);
-            //        //layer.msg("ÍøÂçÒì³££¬ÇëÉÔºóÔÙÊÔ", { time: 1500 });
+            //        //layer.msg("ç½‘ç»œå¼‚å¸¸ï¼Œè¯·ç¨åå†è¯•", { time: 1500 });
             //    }
             //});
 
@@ -151,7 +151,7 @@ var userjs = {
         var _this = this;
 
         $(".isay-info-buttom-btns-submit", _this.data.scope).click(function () {
-            debugger;
+           
             var mediaArr = [];
             $(".isay-info-buttom-medias>img", _this.data.scope).each(function (index, item) {
                 var $item = $(item);
@@ -167,12 +167,15 @@ var userjs = {
                 url: baseUrl + "/api/user/addEssay/",
                 type: 'POST',
                 data: {
-                    essayEntity: { content: $("#content_textarea").val() },
+                    essayEntity: { title: $("#isayTitle" , _this.data.scope).val(), content: $("#isayContent", _this.data.scope).val() },
                     mediaList: mediaArr
                 },
                 success: function (data) {
                     if (data.result) {
-                        alert("Ìí¼Ó³É¹¦");
+                        $("#isayTitle", _this.data.scope).empty();
+                        $("#isayContent", _this.data.scope).empty();
+                        $(".isay-info-buttom-medias>img", _this.data.scope).remove();
+                        alert("æˆåŠŸæˆåŠŸ");
                     }
                 }
             });
@@ -187,7 +190,7 @@ var userjs = {
 };
 
 $(function () {
-    //·âÃæ
+    //å°é¢
     userjs.userCover();
     userjs.setPictures();
     userjs.uploadImg();

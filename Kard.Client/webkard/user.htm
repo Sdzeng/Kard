@@ -2,19 +2,19 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
-    <title>海棠设计</title>
+    <title>最IN</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="icon" href="assets/icon/kard_16X16.ico" sizes="16x16">
-    <link rel="stylesheet/less" href="/assets/less/home.less" media="screen">
-    <script src="/assets/js/less.js" type="text/javascript"></script>
+    <link rel="icon" href="builds/image/kard_16X16.ico" sizes="16x16">
+    <link rel="stylesheet" href="/builds/css/home.css" type="text/css"  media="screen">
+ 
 </head>
 <body id="userPage">
     <!--公共导航栏 -->
     <nav id="navbar" class="navbar bg-layer">
 
         <div class="navbar-logo">
-            <a href="/"><img src="/assets/image/logo-nav.png">海棠设计</a>
+            <a href="/"><img src="/builds/image/logo-nav.png">最IN</a>
         </div>
         <div class="navbar-left">
             <ul id="menuList" class="navbar-nav"></ul>
@@ -83,18 +83,18 @@
             <div class="section-userinfo-middle">
 
                 <div class="isay-info">
-
-                    <textarea name="text" class="isay-info-textarea" id="content_textarea" rows="5" placeholder="我的推荐理由..."></textarea>
+                    <input   class="isay-info-input" id="isayTitle" rows="5" placeholder="牌子 or 名字" />
+                    <textarea   class="isay-info-input" id="isayContent" rows="5" placeholder="#标签#我的推荐理由..."></textarea>
 
                     <div class="isay-info-buttom">
                         <div class="isay-info-buttom-medias">
 
-                            <div id="btnAddPic" class="isay-info-buttom-medias-item" style="border:1px dotted #ccc;line-height:50px;text-align:center;font-size:200%;">+</div>
+                            <div id="btnAddPic" class="isay-info-buttom-medias-item" style="border:1px dotted #ccc;line-height:50px;text-align:center;font-size:200%;background-color:white;">+</div>
                             <input type="file" id="btnAddPicHide" name="btnAddPicHide" style="display:none;" />
                         </div>
                         <div class="isay-info-buttom-btns">
                             <span class="overnum">140</span>
-                            <a  class="isay-info-buttom-btns-submit">发布</a>
+                            <a class="isay-info-buttom-btns-submit">发布</a>
                         </div>
                     </div>
                 </div>
@@ -300,12 +300,12 @@
     </footer>
 
     <!-- 公共js -->
-    <script src="/assets/js/jquery-3.1.1.min.js"></script>
-    <script src="/assets/js/storage.js" type="text/javascript"></script>
-    <script src="/assets/js/base.js" asp-append-version="true"></script>
+    <script src="/builds/js/jquery-3.1.1.min.js"></script>
+    <script src="/builds/js/storage.js" type="text/javascript"></script>
+    <script src="/builds/js/base.js" asp-append-version="true"></script>
 
-    <script src="/assets/js/login.js" type="text/javascript"></script>
-    <script src="/assets/js/user.js" type="text/javascript"></script>
+    <script src="/builds/js/login.js" type="text/javascript"></script>
+    <script src="/builds/js/user.js" type="text/javascript"></script>
 
 
 </body>
