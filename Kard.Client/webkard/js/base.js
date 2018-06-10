@@ -1,29 +1,36 @@
-var baseUrl = "http://localhost:3703";//window.location.protocol + "//"+window.location.host;// "http://localhost:3706";//"https://www.localyc.com";
-var imageUrl = baseUrl;//"http://image.localyc.com";
-var defaults = {
-    type: "POST",
-    async: true,
-    contentType: "application/x-www-form-urlencoded",//"application/json;charset=utf-8",
-    traditional: false,
-    processData:true,
-    data: null,
-    loading: "off"
-};
+var basejs = {
+    requestDomain: "http://localhost:3703",//window.location.protocol + "//"+window.location.host;// "http://localhost:3706";//"https://www.localyc.com";
+    cdnDomain: "http://localhost:3703",//"http://image.localyc.com";
+    defaults: {
+        type: "POST",
+        async: true,
+        contentType: "application/x-www-form-urlencoded",//"application/json;charset=utf-8",
+        traditional: false,
+        processData: true,
+        data: null,
+        loading: "off"
+    },
+    getPath: function () {
+        var hash = window.location.hash, reg = /^#!/;
+        if (reg.test(hash)) {
 
-
-function getPath() {
-    var hash = window.location.hash, reg = /^#!/;
-    if (reg.test(hash)) {
-
-        return hash.replace(reg, '');
-    } else {
-        return hash;//storage.local.getItem('redirect') || '';
+            return hash.replace(reg, '');
+        } else {
+            return hash;//storage.local.getItem('redirect') || '';
+        }
+    },
+    lazyInof: function (id) {
+        $(id).lazyload({ effect: "fadeIn", threshold: 50 });
+    },
+    worksDefaultPicInfo: function () {
+        return this.src = basejs.cdnDomain + "/image/default/default-picture_190x180.png";
     }
-}
+};
 
 var httpHelper = function httpHelper() {
     this.init.apply(this, arguments);
 };
+
 
 $.extend(httpHelper.prototype, {
 
@@ -31,13 +38,13 @@ $.extend(httpHelper.prototype, {
 
         var _this = this;
         _this.opts = opts;
-        _this.opts.type = opts.type || defaults.type;
-        _this.opts.async = (opts.async == null) ?defaults.async: opts.async;
-        _this.opts.contentType = (opts.contentType == null) ?defaults.contentType: opts.contentType;
-        _this.opts.traditional = (opts.traditional == null) ? defaults.traditional : opts.traditional;
-        _this.opts.processData = (opts.processData == null) ? defaults.processData : opts.processData;
-        _this.opts.data = opts.data || defaults.data;
-        _this.opts.loading = opts.loading || defaults.loading;
+        _this.opts.type = opts.type || basejs.defaults.type;
+        _this.opts.async = (opts.async == null) ? basejs.defaults.async : opts.async;
+        _this.opts.contentType = (opts.contentType == null) ? basejs.defaults.contentType : opts.contentType;
+        _this.opts.traditional = (opts.traditional == null) ? basejs.defaults.traditional : opts.traditional;
+        _this.opts.processData = (opts.processData == null) ? basejs.defaults.processData : opts.processData;
+        _this.opts.data = opts.data || basejs.defaults.data;
+        _this.opts.loading = opts.loading || basejs.defaults.loading;
 
         if (!_this.opts.url) {
             console.error("url is empty");
@@ -63,11 +70,11 @@ $.extend(httpHelper.prototype, {
                 crossDomain: true,
                 async: _this.opts.async,
                 data: _this.opts.data,
-                contentType: _this.opts.contentType ,
+                contentType: _this.opts.contentType,
                 traditional: _this.opts.traditional,
-                processData: _this.opts.processData ,
+                processData: _this.opts.processData,
                 success: function (data, textStatus, jqXHR) {//success
-                      _this.opts.success && _this.opts.success.apply(this, arguments);
+                    _this.opts.success && _this.opts.success.apply(this, arguments);
                 },
                 beforeSend: function () {
                     // loading();
@@ -78,9 +85,9 @@ $.extend(httpHelper.prototype, {
                     // _this.opts.loading !== 'off' && dialog.loading.fade();
                     _this.opts.complete && _this.opts.complete.apply(this, arguments);
                 },
-                
+
                 error: function (jqXHR, textStatus, errorThrown) {
-           
+
                     console.error(errorThrown);
                     //Unauthorized
                     if (jqXHR.status == 401 || jqXHR.status == 403) {
@@ -92,8 +99,8 @@ $.extend(httpHelper.prototype, {
                         //redirectUri = redirectUri.substring(0, redirectUri.indexOf("?"));
                         //window.location.href = redirectUri;
                         window.location.href = "/home.htm";
-                      
-                        
+
+
                     }
                 }
             });
@@ -114,13 +121,13 @@ var topMenu = {
 
 
         //菜单
-        //$.when($.getJSON(baseUrl + '/assets/json/menu.json'), $.get(baseUrl + '/api/menu/'))
-        $.getJSON('/assets/json/menu.json', function (data) {
-          
+        //$.when($.getJSON(basejs.requestDomain + '/assets/json/menu.json'), $.get(basejs.requestDomain + '/api/menu/'))
+        $.getJSON('/json/menu.json', function (data) {
+
             _this.setMenu(data.menu || {});
-                // _this.initShow();
+            // _this.initShow();
         });
-       
+
     },
     setMenu: function (menuObj) {
         var _this = this;
@@ -187,7 +194,7 @@ var topMenu = {
         // item['@append_param'] = null;
         // });
 
-        if (getPath().indexOf(item.url) > -1) {
+        if (basejs.getPath().indexOf(item.url) > -1) {
 
             _this.fireLoad(item.url, item.title);
             target.addClass("active");

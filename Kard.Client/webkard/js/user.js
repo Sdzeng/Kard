@@ -7,7 +7,7 @@
 
         //设置首页封面
         var helper = new httpHelper({
-            url: baseUrl + "/api/user/cover/",
+            url: basejs.requestDomain + "/api/user/cover/",
             type: "GET",
             success: function (data) {
 
@@ -20,7 +20,7 @@
                 //data.media.hasOwnProperty("path")&&
 
 
-                $(".bg-layer").css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + imageUrl + "/" + (data.coverPath || "") + ")").fadeIn("slow");
+                $(".bg-layer").css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.coverPath || "") + ")").fadeIn("slow");
                 //$(".essay-content>blackquote>q").text("测试");
                 $(".author").text("@" + data.nickName || "");
 
@@ -41,7 +41,7 @@
 
         //设置host
         var helper = new httpHelper({
-            url: baseUrl + "/api/user/pictures/",
+            url: basejs.requestDomain + "/api/user/pictures/",
             type: "GET",
             success: function (data) {
 
@@ -54,8 +54,8 @@
 
                 for (var index in data) {
                     var media = data[index];
-                    var picturePath = imageUrl + "/" + media.cdnPath + "." + media.mediaExtension;
-                    var pictureCropPath = imageUrl + "/" + media.cdnPath + "_170x150." + media.mediaExtension;
+                    var picturePath = basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension;
+                    var pictureCropPath = basejs.cdnDomain + "/" + media.cdnPath + "_170x150." + media.mediaExtension;
                     topMediaPictureHtml += "<div class='picture-warp'>" +
                         "<a href= '" + picturePath + "' >" +
                         "<img src='" + pictureCropPath + "' data-origin='" + picturePath + "' alt='' />" +
@@ -100,7 +100,7 @@
 
             //formData.append("RackGoodsLocationJson", JSON.stringify(rackGoodsLocation));
             //$.ajax({
-            //    url: baseUrl + "/web/user/uploadMedia/",
+            //    url: basejs.requestDomain + "/web/user/uploadMedia/",
             //    type: "POST",
             //    async: false,
             //    contentType: false,
@@ -129,7 +129,7 @@
                 formData.append("mediaFile", files[0]);
             }
             var helper = new httpHelper({
-                url: baseUrl + "/api/user/uploadMedia/",
+                url: basejs.requestDomain + "/api/user/uploadMedia/",
                 type: 'POST',
                 async: false,
                 data: formData,
@@ -137,7 +137,7 @@
                 processData: false,
                 success: function (data) {
                     if (data.result) {
-                        $("#btnAddPic", _this.data.scope).before("<img class='isay-info-buttom-medias-item' data-file-url='" + data.data.fileUrl + "' data-file-extension='" + data.data.fileExtension + "' src='" + baseUrl + "/" + data.data.fileUrl + "_50x50" + data.data.fileExtension + "'></img>");
+                        $("#btnAddPic", _this.data.scope).before("<img class='isay-info-buttom-medias-item' data-file-url='" + data.data.fileUrl + "' data-file-extension='" + data.data.fileExtension + "' src='" + basejs.requestDomain + "/" + data.data.fileUrl + "_50x50" + data.data.fileExtension + "'></img>");
                     }
                 }
             });
@@ -150,8 +150,12 @@
     saveIsay: function () {
         var _this = this;
 
-        $(".isay-info-buttom-btns-submit", _this.data.scope).click(function () {
-           
+        $(".isay-info-category-span", _this.data.scope).click(function () {
+            $(".isay-info-category-span-checked", _this.data.scope).removeClass("isay-info-category-span-checked");
+            $(this).addClass("isay-info-category-span-checked");
+        });
+
+        $(".isay-info-submit", _this.data.scope).click(function () {
             var mediaArr = [];
             $(".isay-info-buttom-medias>img", _this.data.scope).each(function (index, item) {
                 var $item = $(item);
@@ -162,18 +166,22 @@
                     mediaExtension: $item.attr("data-file-extension")
                 });
             });
-
+            alert($(".isay-info-category-span-checked", _this.data.scope).text());
             var helper = new httpHelper({
-                url: baseUrl + "/api/user/addEssay/",
+                url: basejs.requestDomain + "/api/user/addEssay/",
                 type: 'POST',
                 data: {
-                    essayEntity: { title: $("#isayTitle" , _this.data.scope).val(), content: $("#isayContent", _this.data.scope).val() },
+                    essayEntity: {
+                        title: $("#isayTitle", _this.data.scope).val(),
+                        category: $(".isay-info-category-span-checked", _this.data.scope).text(),
+                        content: $("#isayContent", _this.data.scope).val()
+                    },
                     mediaList: mediaArr
                 },
                 success: function (data) {
                     if (data.result) {
-                        $("#isayTitle", _this.data.scope).empty();
-                        $("#isayContent", _this.data.scope).empty();
+                        $("#isayTitle", _this.data.scope).val("");
+                        $("#isayContent", _this.data.scope).val("");
                         $(".isay-info-buttom-medias>img", _this.data.scope).remove();
                         alert("成功成功");
                     }

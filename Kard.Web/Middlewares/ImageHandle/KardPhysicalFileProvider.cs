@@ -13,7 +13,7 @@ namespace Kard.Web.Middlewares.ImageHandle
         private readonly Stopwatch _stopwatch;
         private readonly ImageHandleOptions _options;
 
-        public KardPhysicalFileProvider(string root,ImageHandleOptions options, ILoggerFactory loggerFactory) : base(root)
+        public KardPhysicalFileProvider(string root, ImageHandleOptions options, ILoggerFactory loggerFactory) : base(root)
         {
             _logger = loggerFactory.CreateLogger<KardPhysicalFileProvider>();
             _stopwatch = new Stopwatch();
@@ -129,23 +129,25 @@ namespace Kard.Web.Middlewares.ImageHandle
                     size = original.Height / (double)imageHandleDto.ImageHeight;
                 }
 
-                var width =original.Width / size;
-                var height =original.Height / size;
+                var width = original.Width / size;
+                var height = original.Height / size;
                 width = width > original.Width ? original.Width : width;
                 height = height > original.Height ? original.Height : height;
 
                 using (var resized = original.GetScaledInstance((int)width, (int)height, FREE_IMAGE_FILTER.FILTER_BICUBIC))
                 {
-             
-                    var halfWidth =Math.Floor(Convert.ToDouble(imageHandleDto.ImageWidth / 2));
-                    var halfHeight = Math.Floor(Convert.ToDouble(imageHandleDto.ImageHeight / 2));
-                    var centerX = Math.Floor(width / 2);
-                    var centerY= Math.Floor(height / 2);
 
-                    var left =centerX - halfWidth;
+                    var halfWidth = Math.Floor(Convert.ToDouble(imageHandleDto.ImageWidth / 2));
+                    var halfHeight = Math.Floor(Convert.ToDouble(imageHandleDto.ImageHeight / 2));
+                    var centerX = Math.Round(width / 2);
+                    var centerY = Math.Round(height / 2);
+
+                    var left = centerX - halfWidth;
+                    //left = (left < 0) ? 0 : left;
                     var top = centerY + halfHeight;
                     var right = centerX + halfWidth;
                     var bottom = centerY - halfHeight;
+                    //bottom = (bottom < 0) ? 0 : bottom;
                     using (var crop = resized.Copy((int)left, (int)top, (int)right, (int)bottom))
                     {
                         //, FREE_IMAGE_FORMAT.FIF_JPEG, FREE_IMAGE_SAVE_FLAGS.JPEG_QUALITYGOOD | FREE_IMAGE_SAVE_FLAGS.JPEG_BASELINE

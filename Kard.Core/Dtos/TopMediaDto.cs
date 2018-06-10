@@ -1,4 +1,5 @@
-﻿using Kard.Extensions;
+﻿using Kard.Core.Entities;
+using Kard.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,37 +10,37 @@ namespace Kard.Core.Dtos
 {
     public class TopMediaDto
     {
-        private static readonly Regex _regex = new Regex(@"(?'group1'#)([^#]+?)(?'-group1'#)");
+        public int Id { get; set; }
 
-        public int EssayMediaCount { get; set; }
+        public string Category { get; set; }
 
-        public int EssayLikeNum { get; set; }
+        public int CollectNum { get; set; }
 
-        public int EssayId { get; set; }
+        public int LikeNum { get; set; }
+
+        public int RepostNum { get; set; }
+
+        public int CommentNum { get; set; }
+
+        public string Title { get; set; }
+
+        public string CreatorUserId { get; set; }
+
+        public string CreatorNickName { get; set; }
+
+        public int MediaCount { get; set; }
 
         public string CdnPath { get; set; }
 
         public string MediaExtension { get; set; }
 
 
-        public string FirstTagName
-        {
-            get
-            {
-                if ((!this.EssayContent.IsNullOrEmpty()) && _regex.IsMatch(this.EssayContent))
-                {
-                    var matchCollection = _regex.Matches(this.EssayContent);
-                    return matchCollection.First()?.Value.Replace("#","");
-                }
-                return string.Empty;
-            }
-        }
 
-        public string EssayContent { get; set; }
 
-        public string CreatorUserId { get; set; }
 
-        public string CreatorNickName { get; set; }
+
+
+        public List<TagEntity> TagList;
 
     }
 }

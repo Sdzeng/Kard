@@ -51,8 +51,17 @@ namespace Kard.Web.Controllers
         [HttpGet("pictures")]
         public IEnumerable<TopMediaDto> GetPicture()
         {
-            var aWeekAgo = DateTime.Now.Date.AddYears(-7);
-            return _defaultRepository.GetHomeMediaPicture(aWeekAgo);
+            var sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+            try
+            {
+                //var aWeekAgo = DateTime.Now.Date.AddYears(-7);
+                return _defaultRepository.GetHomeMediaPicture(12);
+            }
+            finally {
+                sw.Stop();
+                _logger.LogDebug($"GetPicture耗时：{sw.ElapsedMilliseconds}");
+            }
         }
 
     }

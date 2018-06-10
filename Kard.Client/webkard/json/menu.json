@@ -10,7 +10,7 @@
         {
           "id": "2",
           "name": "BS",
-          "namech": "单品",
+          "namech": "衣妆",
           "url": "home/index"
         },
         {
@@ -21,21 +21,33 @@
         },
         {
           "id": "4",
-          "name": "something",
-          "namech": "发布会",
+          "name": "BS",
+          "namech": "创意",
           "url": "home/index"
         },
         {
           "id": "5",
           "name": "BS",
-          "namech": "下载",
+          "namech": "摘录",
           "url": "home/index"
         },
         {
           "id": "6",
+          "name": "something",
+          "namech": "发布会",
+          "url": "home/index"
+        },
+        {
+          "id": "7",
+          "name": "BS",
+          "namech": "下载",
+          "url": "home/index"
+        },
+        {
+          "id": "8",
           "name": "CS",
           "namech": "关于我们",
-           "url": "home/index"
+          "url": "home/index"
 
         }
       ]

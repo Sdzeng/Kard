@@ -177,6 +177,12 @@ namespace Kard.Web.Controllers
         [HttpPost("addessay")]
         public IActionResult AddEssay(EssayEntity essayEntity, IEnumerable<MediaEntity> mediaList)
         {
+            /*private static readonly Regex _regex = new Regex(@"(?'group1'#)([^#]+?)(?'-group1'#)");
+             if ((!this.EssayContent.IsNullOrEmpty()) && _regex.IsMatch(this.EssayContent))
+                {
+                    var matchCollection = _regex.Matches(this.EssayContent);
+                    return matchCollection.First()?.Value.Replace("#","");
+                }*/
             IEnumerable<TagEntity> tagList = new List<TagEntity>();
             if (essayEntity.Content.Contains('#'))
             {
