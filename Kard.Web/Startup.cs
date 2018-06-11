@@ -167,7 +167,16 @@ namespace Kard.Web
                //o.SessionStore = true;
            })
             //添加登陆方案(scheme)2:wechatapp 
-            .AddCookie(WeChatAppDefaults.AuthenticationScheme);
+            .AddCookie(WeChatAppDefaults.AuthenticationScheme, o =>
+            {
+                o.Cookie.HttpOnly = false;
+                o.LoginPath = "/api/user/notlogin";
+                o.AccessDeniedPath = "/api/user/notlogin";
+                o.SlidingExpiration = true;
+                //当HttpContext.SignInAsync的IsPersistent = true 时生效
+                o.ExpireTimeSpan = TimeSpan.FromDays(7);
+                //o.SessionStore = true;
+            });
 
             #endregion
 
@@ -230,7 +239,7 @@ namespace Kard.Web
             }
             else
             {
-                app.UseExceptionHandler("/error.htm");
+                app.UseExceptionHandler("/error.html");
             }
 
             //app.UseImageHandle();

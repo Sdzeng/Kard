@@ -56,16 +56,40 @@ namespace Kard.Dapper.Mysql.Repositories
 
 
 
-        public IEnumerable<TopMediaDto> GetHomeMediaPicture(int count)
+        public IEnumerable<TopMediaDto> GetHomeMediaPicture( int count, string type)
         {
-            return ConnExecute(conn =>
-            {
+            string sql = string.Empty;
 
-                string sql = @"select essay.Id,essay.Category,essay.CollectNum,essay.LikeNum,essay.RepostNum,essay.CommentNum,essay.title,essay.CreatorUserId,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaExtension,tag.*  from 
+            var param = new object();
+            switch (type)
+            {
+                case "热门单品":
+                    sql = @"select essay.Id,essay.Category,essay.CollectNum,essay.LikeNum,essay.RepostNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,kuser.AvatarUrl,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaExtension,tag.*  from 
                 (
                 select t.EssayId,t.CdnPath,t.MediaExtension,count(media.Id) MediaCount
                 from (
-                select EssayId,CdnPath,MediaExtension from media  where   Sort=1 and MediaType='picture' order by CreationTime desc limit @Count
+                select media.EssayId,media.CdnPath,media.MediaExtension from media join essay on media.EssayId=essay.Id  
+               where   media.Sort=1 and media.MediaType='picture' and media.CreationTime>=@CreationTime order by (essay.LikeNum+essay.CollectNum+essay.RepostNum+essay.CommentNum) desc,essay.CreationTime desc limit @Count
+                ) t join media on t.EssayId=media.EssayId
+                group by t.EssayId,t.CdnPath,t.MediaExtension
+                ) t2 
+                join essay on t2.EssayId=essay.Id 
+                join kuser on essay.CreatorUserId=kuser.Id  
+                join tag on essay.Id=tag.EssayId 
+                order by essay.LikeNum desc,essay.CreationTime desc";
+                    var creationTime= DateTime.Now.AddYears(-7);
+                    param = new { CreationTime= creationTime,Count = count };
+                    break;
+                case "衣妆":
+                case "潮拍":
+                case "创意":
+                case "摘录":
+                    sql = @"select essay.Id,essay.Category,essay.CollectNum,essay.LikeNum,essay.RepostNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,kuser.AvatarUrl,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaExtension,tag.*  from 
+                (
+                select t.EssayId,t.CdnPath,t.MediaExtension,count(media.Id) MediaCount
+                from (
+                select EssayId,CdnPath,MediaExtension from media  join essay on media.EssayId=essay.Id 
+                where   media.Sort=1 and media.MediaType='picture' and essay.Category=@Category order by essay.CreationTime desc limit @Count
                 ) t join media on t.EssayId=media.EssayId
                 group by t.EssayId,t.CdnPath,t.MediaExtension
                 ) t2 
@@ -74,24 +98,30 @@ namespace Kard.Dapper.Mysql.Repositories
                 join tag on essay.Id=tag.EssayId 
                 order by essay.LikeNum desc,essay.CreationTime desc";
 
-                var dtoList = new List<TopMediaDto>();
-                conn.Query<TopMediaDto, TagEntity,bool>(sql, (dto, tag) =>
-                  {
-                      var currentDto = dtoList.FirstOrDefault(d => d.Id == dto.Id);
-                      if (currentDto == null)
-                      {
-                          dto.TagList = new List<TagEntity>();
-                          dto.TagList.Add(tag);
-                          dtoList.Add(dto);
-                      }
-                      else
-                      {
-                          currentDto.TagList.Add(tag);
-                      }
+                    param = new {  Count = count, Category=type };
+                    break;
+            }
 
-                      return true;
-                  },
-                  param: new { Count = count },
+            return ConnExecute(conn =>
+            {
+                var dtoList = new List<TopMediaDto>();
+                conn.Query<TopMediaDto, TagEntity, bool>(sql, (dto, tag) =>
+                   {
+                       var currentDto = dtoList.FirstOrDefault(d => d.Id == dto.Id);
+                       if (currentDto == null)
+                       {
+                           dto.TagList = new List<TagEntity>();
+                           dto.TagList.Add(tag);
+                           dtoList.Add(dto);
+                       }
+                       else
+                       {
+                           currentDto.TagList.Add(tag);
+                       }
+
+                       return true;
+                   },
+                  param: param,
                   splitOn: "Id");
 
                 //topMediaDtoList = topMediaDtoList.Where((m, index) => index != 0);

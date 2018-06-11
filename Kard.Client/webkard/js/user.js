@@ -9,8 +9,8 @@
         var helper = new httpHelper({
             url: basejs.requestDomain + "/api/user/cover/",
             type: "GET",
-            success: function (data) {
-
+            success: function (resultDto) {
+                var data = resultDto.data;
                 //data = JSON.parse(data);
                 if (!data) {
                     return;
@@ -43,8 +43,8 @@
         var helper = new httpHelper({
             url: basejs.requestDomain + "/api/user/pictures/",
             type: "GET",
-            success: function (data) {
-
+            success: function (resultDto) {
+                var data = resultDto.data;
                 //data = JSON.parse(data);
                 if (!data) {
                     return;
@@ -136,8 +136,9 @@
                 contentType: false,
                 processData: false,
                 success: function (data) {
-                    if (data.result) {
-                        $("#btnAddPic", _this.data.scope).before("<img class='isay-info-buttom-medias-item' data-file-url='" + data.data.fileUrl + "' data-file-extension='" + data.data.fileExtension + "' src='" + basejs.requestDomain + "/" + data.data.fileUrl + "_50x50" + data.data.fileExtension + "'></img>");
+                  
+                    if (resultDto.result) {
+                        $("#btnAddPic", _this.data.scope).before("<img class='isay-info-buttom-medias-item' data-file-url='" + resultDto.data.fileUrl + "' data-file-extension='" + resultDto.data.fileExtension + "' src='" + basejs.requestDomain + "/" + resultDto.data.fileUrl + "_50x50" + resultDto.data.fileExtension + "'></img>");
                     }
                 }
             });
@@ -178,8 +179,8 @@
                     },
                     mediaList: mediaArr
                 },
-                success: function (data) {
-                    if (data.result) {
+                success: function (resultDto) {
+                    if (resultDto.result) {
                         $("#isayTitle", _this.data.scope).val("");
                         $("#isayContent", _this.data.scope).val("");
                         $(".isay-info-buttom-medias>img", _this.data.scope).remove();

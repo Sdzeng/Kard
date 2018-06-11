@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 namespace Kard.Web.Controllers
 {
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+    [Produces("application/json")]
     [Route("api/webuser")]
     public class WebUserController : BaseController
     {
@@ -65,7 +66,7 @@ namespace Kard.Web.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login(string username, [DataType(DataType.Password)] string password, string returnUrl)
+        public async Task<ResultDto> Login(string username, [DataType(DataType.Password)] string password, string returnUrl)
         {
             var result = _loginAppService.WebLogin(username, password);
             if (result.Result)
@@ -79,9 +80,9 @@ namespace Kard.Web.Controllers
                 //}
 
                 //return Redirect(returnUrl);
-                return Json(new { result = true, message = "登录成功" });
+                return new ResultDto() { Result = true, Message = "登录成功" }; 
             }
-            return Json(new { result = false, message = "登录失败，用户名密码不正确" });
+            return new ResultDto() { Result = false, Message = "登录失败，用户名密码不正确" };
         }
 
  
@@ -92,11 +93,11 @@ namespace Kard.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("logout")]
-        public IActionResult Logout()
+        public ResultDto Logout()
         {
 
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Json(new { result = true, message = "退出成功" });
+            return new ResultDto() { Result = true, Message = "退出成功" }; 
         }
 
  

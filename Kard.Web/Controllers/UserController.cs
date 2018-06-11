@@ -22,6 +22,7 @@ namespace Kard.Web.Controllers
 {
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     [Authorize(AuthenticationSchemes = WeChatAppDefaults.AuthenticationScheme)]
+    [Produces("application/json")]
     [Route("api/user")]
     public class UserController : BaseController
     {
@@ -42,11 +43,11 @@ namespace Kard.Web.Controllers
 
         //[Authorize(Roles = "member", AuthenticationSchemes= "members")]
         [HttpGet("test")]
-        public async Task<IActionResult> TestAsync(int? connNum=10)
+        public async Task<ResultDto<string>> TestAsync(int? connNum=10)
         {
             var milliseconds=await RunTask(connNum);
             _logger.LogDebug($"耗时：{milliseconds}ms");
-            return Content($"耗时：{milliseconds}ms");
+            return new ResultDto<string>() { Result = true, Data = $"耗时：{milliseconds}ms" }; 
         }
 
         private async Task<long> RunTask(int? taskNum) {
@@ -84,9 +85,10 @@ namespace Kard.Web.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("{userId}")]
-        public IActionResult Index(long? userId)
+        public ResultDto<KuserEntity> Index(long? userId)
         {
-            return Json(GetUser(userId));
+            var resultDto = new ResultDto<KuserEntity>() { Result = true, Data = GetUser(userId) };
+            return resultDto;
         }
 
         /// <summary>
@@ -94,9 +96,10 @@ namespace Kard.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("cover")]
-        public IActionResult GetCover()
+        public ResultDto<KuserEntity> GetCover()
         {
-            return Json(GetUser(_kardSession.UserId));
+            var resultDto = new ResultDto<KuserEntity>() { Result = true, Data = GetUser(_kardSession.UserId) };
+            return resultDto;
         }
 
 
@@ -119,9 +122,9 @@ namespace Kard.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("pictures")]
-        public IEnumerable<TopMediaDto> GetPicture()
-        {
-            return _defaultRepository.GetUserMediaPicture(4);
+        public ResultDto<IEnumerable<TopMediaDto>> GetPicture()
+        {  
+            return new ResultDto<IEnumerable<TopMediaDto>>() { Result = true, Data = _defaultRepository.GetUserMediaPicture(4) }; 
         }
 
 
@@ -134,7 +137,7 @@ namespace Kard.Web.Controllers
         [HttpPost("uploadMedia")]
         //[Consumes("multipart/form-data")]
         //[RequestSizeLimit(100_000_000)]
-        public IActionResult UploadMedia(IFormFile mediaFlie)
+        public ResultDto UploadMedia(IFormFile mediaFlie)
         {
             var result = new ResultDto();
             if (mediaFlie == null) mediaFlie = Request.Form.Files[0];
@@ -160,12 +163,12 @@ namespace Kard.Web.Controllers
                 }
                 result.Result = true;
                 result.Data = new { FileUrl = Path.Combine(newFolder, fileName).Replace("\\","/"), FileExtension = fileExtension };
-                return Json(result);
+                return result;
             }
 
             result.Result = false;
             result.Message = "上传失败";
-            return Json(result);
+            return result;
         }
 
 
@@ -175,7 +178,7 @@ namespace Kard.Web.Controllers
         /// <param name="essayEntity"></param>
         /// <param name="mediaList"></param>
         [HttpPost("addessay")]
-        public IActionResult AddEssay(EssayEntity essayEntity, IEnumerable<MediaEntity> mediaList)
+        public ResultDto AddEssay(EssayEntity essayEntity, IEnumerable<MediaEntity> mediaList)
         {
             /*private static readonly Regex _regex = new Regex(@"(?'group1'#)([^#]+?)(?'-group1'#)");
              if ((!this.EssayContent.IsNullOrEmpty()) && _regex.IsMatch(this.EssayContent))
@@ -226,7 +229,7 @@ namespace Kard.Web.Controllers
                 string cacheKey = $"homeCover[{DateTime.Now.ToString("yyyyMMdd")}]";
                 _memoryCache.Remove(cacheKey);
             }
-            return Json(new ResultDto { Result = result });
+            return new ResultDto { Result = result };
         }
 
         /// <summary>
@@ -298,7 +301,6 @@ namespace Kard.Web.Controllers
         [AllowAnonymous]
         public IActionResult NotLogin()
         {
-
             var rs = new JsonResult(new
             {
                 message = "您未登录不能查看该内容"

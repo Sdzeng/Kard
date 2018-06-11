@@ -136,18 +136,34 @@ namespace Kard.Web.Middlewares.ImageHandle
 
                 using (var resized = original.GetScaledInstance((int)width, (int)height, FREE_IMAGE_FILTER.FILTER_BICUBIC))
                 {
+                    double left, top, right, bottom;
+
 
                     var halfWidth = Math.Floor(Convert.ToDouble(imageHandleDto.ImageWidth / 2));
                     var halfHeight = Math.Floor(Convert.ToDouble(imageHandleDto.ImageHeight / 2));
                     var centerX = Math.Round(width / 2);
                     var centerY = Math.Round(height / 2);
 
-                    var left = centerX - halfWidth;
-                    //left = (left < 0) ? 0 : left;
-                    var top = centerY + halfHeight;
-                    var right = centerX + halfWidth;
-                    var bottom = centerY - halfHeight;
-                    //bottom = (bottom < 0) ? 0 : bottom;
+                    if (resized.Width > imageHandleDto.ImageWidth)
+                    {
+                        left = centerX - halfWidth;
+                        right = centerX + halfWidth;
+                    }
+                    else {
+                        left = 0;
+                        right = resized.Width;
+                    }
+
+                    if (resized.Height > imageHandleDto.ImageHeight)
+                    {
+                        bottom = centerY - halfHeight;
+                        top = centerY + halfHeight;
+                    }
+                    else {
+                        bottom = 0;
+                        top = resized.Height;
+                    }
+                 
                     using (var crop = resized.Copy((int)left, (int)top, (int)right, (int)bottom))
                     {
                         //, FREE_IMAGE_FORMAT.FIF_JPEG, FREE_IMAGE_SAVE_FLAGS.JPEG_QUALITYGOOD | FREE_IMAGE_SAVE_FLAGS.JPEG_BASELINE

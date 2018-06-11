@@ -24,6 +24,41 @@ var basejs = {
     },
     worksDefaultPicInfo: function () {
         return this.src = basejs.cdnDomain + "/image/default/default-picture_190x180.png";
+    },
+    getDateTimeStamp: function (dateStr) {
+        return Date.parse(dateStr.replace(/T/g, ' ').replace(/-/gi, "/"));
+    },
+    getDateDiff: function (dateTimeStamp) {
+        var minute = 1000 * 60;
+        var hour = minute * 60;
+        var day = hour * 24;
+        var halfamonth = day * 15;
+        var month = day * 30;
+        var now = new Date().getTime();
+        var diffValue = now - dateTimeStamp;
+        if (diffValue < 0) { return; }
+        var monthC = diffValue / month;
+        var weekC = diffValue / (7 * day);
+        var dayC = diffValue / day;
+        var hourC = diffValue / hour;
+        var minC = diffValue / minute;
+        if (monthC >= 1) {
+            result = "" + parseInt(monthC) + "月前";
+        }
+        else if (weekC >= 1) {
+            result = "" + parseInt(weekC) + "周前";
+        }
+        else if (dayC >= 1) {
+            result = "" + parseInt(dayC) + "天前";
+        }
+        else if (hourC >= 1) {
+            result = "" + parseInt(hourC) + "小时前";
+        }
+        else if (minC >= 1) {
+            result = "" + parseInt(minC) + "分钟前";
+        } else
+            result = "刚刚";
+        return result;
     }
 };
 
@@ -73,7 +108,7 @@ $.extend(httpHelper.prototype, {
                 contentType: _this.opts.contentType,
                 traditional: _this.opts.traditional,
                 processData: _this.opts.processData,
-                success: function (data, textStatus, jqXHR) {//success
+                success: function (resultDto, textStatus, jqXHR) {//success
                     _this.opts.success && _this.opts.success.apply(this, arguments);
                 },
                 beforeSend: function () {
@@ -98,7 +133,7 @@ $.extend(httpHelper.prototype, {
                         //var redirectUri = jqXHR.getResponseHeader("Location");
                         //redirectUri = redirectUri.substring(0, redirectUri.indexOf("?"));
                         //window.location.href = redirectUri;
-                        window.location.href = "/home.htm";
+                        window.location.href = "/home.html";
 
 
                     }

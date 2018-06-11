@@ -22,9 +22,15 @@ namespace Kard.Core.Dtos
 
         public int CommentNum { get; set; }
 
+        public string AvatarUrl { get; set; }
+
+        public string Location { get; set; }
+
         public string Title { get; set; }
 
         public string CreatorUserId { get; set; }
+
+        public DateTime CreationTime { get; set; }
 
         public string CreatorNickName { get; set; }
 

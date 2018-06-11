@@ -11,7 +11,7 @@ namespace Kard.Core.IRepositories
         CoverEntity GetDateCover(DateTime showDate);
 
  
-        IEnumerable<TopMediaDto> GetHomeMediaPicture(int count);
+        IEnumerable<TopMediaDto> GetHomeMediaPicture(int count, string type);
 
         IEnumerable<TopMediaDto> GetUserMediaPicture(int count);
 

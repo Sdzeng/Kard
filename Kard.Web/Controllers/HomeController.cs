@@ -17,7 +17,7 @@ namespace Kard.Web.Controllers
     public class HomeController : BaseController
     {
         private readonly IDefaultRepository _defaultRepository;
-        public HomeController (ILogger<HomeController> logger,
+        public HomeController(ILogger<HomeController> logger,
             IMemoryCache memoryCache,
             IDefaultRepository defaultRepository,
             IKardSession kardSession) : base(logger, memoryCache, kardSession)
@@ -31,7 +31,7 @@ namespace Kard.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("cover")]
-        public CoverEntity GetCover()
+        public ResultDto<CoverEntity> GetCover()
         {
             var today = DateTime.Now.Date;
             string cacheKey = $"homeCover[{today.ToString("yyyyMMdd")}]";
@@ -40,7 +40,7 @@ namespace Kard.Web.Controllers
                 cacheEntry.SetAbsoluteExpiration(today.AddDays(1));
                 return _defaultRepository.GetDateCover(today);
             });
-            return coverEntity;
+            return new ResultDto<CoverEntity>() { Result = true, Data = coverEntity };
         }
 
 
@@ -48,17 +48,46 @@ namespace Kard.Web.Controllers
         /// 获取单品图片
         /// </summary>
         /// <returns></returns>
-        [HttpGet("pictures")]
-        public IEnumerable<TopMediaDto> GetPicture()
+        [HttpGet("hostpictures")]
+        public ResultDto<IEnumerable<TopMediaDto>> GetHostPicture()
         {
+            var resultDto = new ResultDto<IEnumerable<TopMediaDto>>();
+
+           
+            resultDto.Result = true;
+            resultDto.Data = _defaultRepository.GetHomeMediaPicture(12, "热门单品");
+
+            //var aWeekAgo = DateTime.Now.Date.AddYears(-7);
+            return resultDto;
+
+        }
+
+
+        /// <summary>
+        /// 获取单品图片
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("categorypictures")]
+        public ResultDto GetCategoryPicture()
+        {
+            var resultDto = new ResultDto();
             var sw = new System.Diagnostics.Stopwatch();
             sw.Start();
             try
             {
+                resultDto.Result = true;
+                resultDto.Data = new
+                {
+                    CosmeticsList = _defaultRepository.GetHomeMediaPicture( 12, "衣妆"),
+                    FashionSenseList = _defaultRepository.GetHomeMediaPicture(12, "潮拍"),
+                    OriginalityList = _defaultRepository.GetHomeMediaPicture( 12, "创意"),
+                    ExcerptList = _defaultRepository.GetHomeMediaPicture(12, "摘录")
+                };
                 //var aWeekAgo = DateTime.Now.Date.AddYears(-7);
-                return _defaultRepository.GetHomeMediaPicture(12);
+                return resultDto;
             }
-            finally {
+            finally
+            {
                 sw.Stop();
                 _logger.LogDebug($"GetPicture耗时：{sw.ElapsedMilliseconds}");
             }
