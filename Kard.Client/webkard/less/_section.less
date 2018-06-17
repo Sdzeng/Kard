@@ -5,7 +5,13 @@
     justify-content: flex-start;
     align-items: center;
     width: 100%;
-    padding-top: 50px;
+    min-width: @page-min-width;
+    padding-top: 30px;
+
+    @media (min-width: @screen-lg-min) {
+        padding-top: 50px;
+    }
+
 
     &-title {
         width: 100%;
@@ -34,23 +40,26 @@
 
     &-body {
         width: 100%;
-        background-color: #f6f7f9; //#eaf3e8;
+        background-color: #f1f1f1; //#f6f7f9;; //#eaf3e8;
         min-height: 300px;
         display: flex;
         flex-direction: row;
         justify-content: center;
 
+
         &-block {
-           
-            min-width: 1386px;
-            padding:15px;
+            padding: 15px;
         }
 
         &-row {
             display: flex;
             flex-direction: row;
             justify-content: flex-start;
-       
+            min-width: 1200px;
+
+            @media (min-width: @screen-lg-min) {
+                min-width: 1380px;
+            }
         }
     }
 
@@ -69,21 +78,29 @@
 
 
 .picture-warp {
-    margin: 15px 8px;
     background-color: white;
-    min-width: 210px;
-    min-height: 180px;
+    margin: 10px 5px;
+    width: 190px;
     /*float: left;*/
-    border-radius: 5px;
+    /*border-radius: 5px;*/
+    @media (min-width: @screen-lg-min) {
+        margin: 15px 10px;
+        width: 210px;
+    }
 
 
     &:hover {
         box-shadow: 0 1px 3px 0 rgba(0,0,0,0.16), 0 4px 10px 0 rgba(0,0,0,0.12);
     }
 
-    img {
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
+    a {
+        img {
+            width: 190px;
+
+            @media (min-width: @screen-lg-min) {
+                width: 210px;
+            }
+        }
     }
 
     .picture-info {
@@ -92,6 +109,13 @@
         .picture-title {
             line-height: 30px;
             padding: 0px 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 210px;
+            height: 30px;
+            display: block;
         }
 
         .picture-body {
@@ -107,10 +131,24 @@
                 justify-content: flex-start;
 
                 span {
-                    margin-right: 5px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -o-text-overflow: ellipsis;
+                    white-space: nowrap;
+                    width: 24px;
+                    height: 30px;
+                    display: block;
+
+                    @media (min-width: @screen-lg-min) {
+                        width: 36px;
+                    }
+
+                    &:not(:first-child) {
+                        margin-left: 2px;
+                    }
 
                     &:hover {
-                        color: #90caf9;
+                        color: #4f946e;
                         cursor: pointer;
                     }
                 }
@@ -120,7 +158,10 @@
 
 
                 span {
-                    margin-left: 10px;
+                    &:not(:first-child) {
+                        margin-left: 3px;
+                    }
+
                     height: 25px;
 
                     &:before {
@@ -129,7 +170,7 @@
                         width: 16px;
                         height: 30px;
                         vertical-align: top;
-                        margin-right: 5px
+                        margin-right: 2px
                     }
                 }
 
@@ -160,6 +201,7 @@
             font-size: 12px;
 
             .essay-avatar {
+                margin-right: 5px;
 
                 img {
                     border-radius: 15px;
@@ -171,7 +213,7 @@
             .essay-city {
 
                 &:after {
-                    content: ".";
+                    content: " . ";
                 }
             }
         }

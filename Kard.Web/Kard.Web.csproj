@@ -69,10 +69,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\error.htm" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Update="hosting.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

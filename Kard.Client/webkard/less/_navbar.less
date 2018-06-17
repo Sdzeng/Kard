@@ -9,7 +9,7 @@
     z-index: 10;
     font-size: @navbar-font-size;
     min-height: @navbar-height;
-    min-width: @body-min-width;
+    min-width: @page-min-width;
     border: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     //background-color:transparent !important;
@@ -35,6 +35,7 @@
             span {
                 display: inline;
                 height: 25px;
+
                 &:last-child {
                     padding-left: 8px;
                     word-spacing: 6px;
@@ -113,7 +114,7 @@
 .navbar-bottom-shadow {
 
     border-bottom-color: rgba(0, 0, 0, 0.2);
-    .box-shadow(~"0 2px 5px 0 rgba(0,0,0,0.16),0 4px 10px 0 rgba(0,0,0,0.12)");
+    /*.box-shadow(~"0 2px 5px 0 rgba(0,0,0,0.16),0 4px 10px 0 rgba(0,0,0,0.12)");*/
     .navbar-min();
 } 
   

@@ -1,6 +1,6 @@
 var basejs = {
-    requestDomain: "http://localhost:3703",//window.location.protocol + "//"+window.location.host;// "http://localhost:3706";//"https://www.localyc.com";
-    cdnDomain: "http://localhost:3703",//"http://image.localyc.com";
+    requestDomain: "http://192.168.10.2:3703",//window.location.protocol + "//"+window.location.host;// "http://localhost:3706";//"https://www.localyc.com";
+    cdnDomain: "http://192.168.10.2:3703",//"http://image.localyc.com";
     defaults: {
         type: "POST",
         async: true,
@@ -58,6 +58,20 @@ var basejs = {
             result = "" + parseInt(minC) + "分钟前";
         } else
             result = "刚刚";
+        return result;
+    },
+    getNumberDiff: function (number) {
+ 
+        if (number < 1000) {
+            result = number;
+        }
+        else if (number < 10000) {
+            result = (number / 1000).toFixed(1) + "k";
+        }
+        else { 
+            result = (number / 10000).toFixed(1) + "w";
+        }
+        
         return result;
     }
 };

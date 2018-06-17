@@ -16,3 +16,5 @@ bin
 
 Kard.Publish
 /Kard.Web/Properties/PublishProfiles/*.pubxml
+builds
+node_modules

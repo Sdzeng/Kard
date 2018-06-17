@@ -22,12 +22,12 @@
                 var avatarArr = data.media.kuser.avatarUrl.split('.');
                 var avatarCropPath = basejs.cdnDomain + "/" + avatarArr[0] + "_30x30." + avatarArr[1];
 
-                $(".bg-layer").css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.media.cdnPath + "." + data.media.mediaExtension || "") + ")");
-                $(".essay-content>blackquote>q").text(data.media.essay.content || data.media.essay.title);
-                $(".essay-other>blackquote>img").attr("src", avatarCropPath);
-                $(".essay-other>blackquote>a").text( data.media.kuser.nickName || "");
-                $(".essay-other>blackquote>span:first").text((data.media.essay.location || ""));
-                $(".essay-other>blackquote>span:last").text(basejs.getDateDiff(basejs.getDateTimeStamp(data.media.essay.creationTime)));
+                $(".bg-layer",_this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.media.cdnPath + "_2560x1200." + data.media.mediaExtension || "") + ")");
+                $(".essay-content>blackquote>q", _this.data.scope).text(data.media.essay.content || data.media.essay.title);
+                $(".essay-other>blackquote>img", _this.data.scope).attr("src", avatarCropPath);
+                $(".essay-other>blackquote>a", _this.data.scope).text( data.media.kuser.nickName || "");
+                $(".essay-other>blackquote>span:first", _this.data.scope).text((data.media.essay.location || ""));
+                $(".essay-other>blackquote>span:last", _this.data.scope).text(basejs.getDateDiff(basejs.getDateTimeStamp(data.media.essay.creationTime)));
 
                 topCover.scroll();
 
@@ -57,12 +57,12 @@
         },
         template: {
             pictureRow: ("<div class='picture-warp'>" +
-                "<a href= '#{picturePath}' >" +
+                "<a href= '#{essayDetailPage}' >" +
                 "<img class='lazy' src='#{defaultPicturePath}' data-original='#{ pictureCropPath }'    />" +
                 "</a >" +
                 "<div class='picture-info'>" +
-                "<div class='picture-title'>#{title}</div>" +
-                "<div class='picture-body'><div class='picture-body-tag'><span>#{tagSpan}</span></div><div class='picture-body-num'><span class='essay-like-num'>#{ likeNum}</span><span class='essay-collect-num'>#{ collectNum}</span> <span class='essay-repost-num'>#{repostNum}</span></div></div>" +//media.creatorNickName).substring(0, 6) 
+                "<div class='picture-title' title='#{title}'>#{title}</div>" +
+                "<div class='picture-body'><div class='picture-body-tag'><span title='#{tagSpan}'>#{tagSpan}</span></div><div class='picture-body-num'><span class='essay-like-num'>#{ likeNum}</span><span class='essay-collect-num'>#{ collectNum}</span> <span class='essay-repost-num'>#{repostNum}</span></div></div>" +//media.creatorNickName).substring(0, 6) 
                 "<div class='picture-footer'><div class='picture-footer-author '><span class='essay-avatar'><img class='lazy' src='#{defaultAvatarPath}' data-original='#{ avatarCropPath }'   /> </span><span>#{creatorNickName} </span></div> <div><span class='essay-city'>#{location}</span><span>#{creationTime}</span></div></div>" +
                 "</div>" +
                 "</div >")
@@ -111,36 +111,36 @@
             var pictureRowHtml = "";
             //data.media.hasOwnProperty("path")&&
             for (var index in data) {
-                var media = data[index];
-                var picturePath = basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension;
+                var topMediaDto = data[index];
+                var essayDetailPage = "/essay-detail.html?id=" + topMediaDto.id;
                 var defaultPicturePath = "/image/default-picture_210x180.jpg";
-                var pictureCropPath = basejs.cdnDomain + "/" + media.cdnPath + "_210x180." + media.mediaExtension;
+                var pictureCropPath = basejs.cdnDomain + "/" + topMediaDto.cdnPath + "_210x180." + topMediaDto.mediaExtension;
                 var tagSpan = "";
                 var defaultAvatarPath = "/image/default-avatar.png";
-                var avatarArr = media.avatarUrl.split('.');
+                var avatarArr = topMediaDto.avatarUrl.split('.');
                 var avatarCropPath = basejs.cdnDomain + "/" + avatarArr[0] + "_30x30." + avatarArr[1];
                 var current = parseInt(index) + 1;
 
-                if (media.tagList.length > 0) {
-                    tagSpan = (media.tagList[0].tagName.length > 4 ? media.tagList[0].tagName.substr(0, 3) + "..." : media.tagList[0].tagName);
-                    titleTagArr.push(media.tagList[0].tagName);
+                if (topMediaDto.tagList.length > 0) {
+                    tagSpan = topMediaDto.tagList[0].tagName;//(topMediaDto.tagList[0].tagName.length > 4 ? topMediaDto.tagList[0].tagName.substr(0, 3) + "..." : topMediaDto.tagList[0].tagName);
+                    titleTagArr.push(topMediaDto.tagList[0].tagName);
                 }
             
                 pictureRowHtml += _this.template.pictureRow.format({
-                    picturePath,
+                    essayDetailPage,
                     defaultPicturePath,
                     pictureCropPath,
-                    title:media.title,
-                    creatorNickName:media.creatorNickName,
-                    likeNum: media.likeNum,
-                    collectNum: media.collectNum,
-                    repostNum:media.repostNum,
+                    title:topMediaDto.title,
+                    creatorNickName:topMediaDto.creatorNickName,
+                    likeNum: basejs.getNumberDiff(topMediaDto.likeNum),
+                    collectNum: basejs.getNumberDiff(topMediaDto.collectNum),
+                    repostNum: basejs.getNumberDiff(topMediaDto.repostNum),
                  
                     tagSpan,
                     defaultAvatarPath,
                     avatarCropPath,
-                    location: media.location,
-                    creationTime: basejs.getDateDiff(basejs.getDateTimeStamp(media.creationTime))
+                    location: topMediaDto.location,
+                    creationTime: basejs.getDateDiff(basejs.getDateTimeStamp(topMediaDto.creationTime))
 
                 });
 
