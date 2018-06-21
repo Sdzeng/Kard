@@ -49,17 +49,16 @@ namespace Kard.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("hostpictures")]
-        public ResultDto<IEnumerable<TopMediaDto>> GetHostPicture()
+        public ResultDto<IEnumerable<TopMediaDto>> GetHostPictures()
         {
             var resultDto = new ResultDto<IEnumerable<TopMediaDto>>();
 
-           
+
             resultDto.Result = true;
-            resultDto.Data = _defaultRepository.GetHomeMediaPicture(12, "热门单品");
+            resultDto.Data = _defaultRepository.GetHomeMediaPictureList(12, "热门单品");
 
             //var aWeekAgo = DateTime.Now.Date.AddYears(-7);
             return resultDto;
-
         }
 
 
@@ -68,7 +67,7 @@ namespace Kard.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("categorypictures")]
-        public ResultDto GetCategoryPicture()
+        public ResultDto GetCategoryPictures()
         {
             var resultDto = new ResultDto();
             var sw = new System.Diagnostics.Stopwatch();
@@ -78,10 +77,10 @@ namespace Kard.Web.Controllers
                 resultDto.Result = true;
                 resultDto.Data = new
                 {
-                    CosmeticsList = _defaultRepository.GetHomeMediaPicture( 12, "衣妆"),
-                    FashionSenseList = _defaultRepository.GetHomeMediaPicture(12, "潮拍"),
-                    OriginalityList = _defaultRepository.GetHomeMediaPicture( 12, "创意"),
-                    ExcerptList = _defaultRepository.GetHomeMediaPicture(12, "摘录")
+                    CosmeticsList = _defaultRepository.GetHomeMediaPictureList(12, "衣妆"),
+                    FashionSenseList = _defaultRepository.GetHomeMediaPictureList(12, "潮拍"),
+                    OriginalityList = _defaultRepository.GetHomeMediaPictureList(12, "创意")
+                    //ExcerptList = _defaultRepository.GetHomeMediaPicture(12, "摘录")
                 };
                 //var aWeekAgo = DateTime.Now.Date.AddYears(-7);
                 return resultDto;
@@ -91,6 +90,29 @@ namespace Kard.Web.Controllers
                 sw.Stop();
                 _logger.LogDebug($"GetPicture耗时：{sw.ElapsedMilliseconds}");
             }
+        }
+
+
+        /// <summary>
+        /// 获取单品图片
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("essay")]
+        public ResultDto GetEssay(long id)
+        {
+            //var sw = new System.Diagnostics.Stopwatch();
+            //sw.Start();
+            var essayEntity = _defaultRepository.GetEssay(id);
+            //sw.Stop();
+            //_logger.LogDebug($"GetEssay耗时：{sw.ElapsedMilliseconds}");
+            //sw.Restart();
+            //essayEntity= _defaultRepository.GetEssay2(id);
+            //sw.Stop();
+            //_logger.LogDebug($"GetEssay2耗时：{sw.ElapsedMilliseconds}");
+            var resultDto = new ResultDto();
+            resultDto.Result = essayEntity!=null;
+            resultDto.Data = essayEntity;
+            return resultDto;
         }
 
     }

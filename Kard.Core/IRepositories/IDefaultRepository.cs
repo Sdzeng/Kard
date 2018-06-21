@@ -11,14 +11,21 @@ namespace Kard.Core.IRepositories
         CoverEntity GetDateCover(DateTime showDate);
 
  
-        IEnumerable<TopMediaDto> GetHomeMediaPicture(int count, string type);
+        IEnumerable<TopMediaDto> GetHomeMediaPictureList(int count, string type);
 
-        IEnumerable<TopMediaDto> GetUserMediaPicture(int count);
+        IEnumerable<TopMediaDto> GetUserMediaPictureList(int count);
 
         bool IsExistUser(string name, string phone, string email);
 
-        KuserEntity GetUser(long id);
+        //KuserEntity GetUser(long id);
+
+        IEnumerable<EssayEntity> GetEssayList(DateTime creationTime);
+
+        EssayEntity GetEssay(long id);
+
+        EssayEntity GetEssay2(long id);
     }
+}
 
   
-}
+ 

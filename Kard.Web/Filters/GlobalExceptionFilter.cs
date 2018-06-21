@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Kard.Core.Dtos;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
@@ -15,41 +16,39 @@ namespace Kard.Web.Filters
     /// </summary>
     public class GlobalExceptionFilter : IExceptionFilter
     {
-        readonly ILoggerFactory _loggerFactory;
+        readonly ILogger _logger;
         readonly IHostingEnvironment _env;
 
-        public GlobalExceptionFilter(ILoggerFactory loggerFactory, IHostingEnvironment env)
+        public GlobalExceptionFilter(ILogger<GlobalExceptionFilter> logger, IHostingEnvironment env)
         {
-            _loggerFactory = loggerFactory;
+            _logger = logger;
             _env = env;
         }
 
         public void OnException(ExceptionContext context)
         {
-#if !DEBUG
-            var logger = _loggerFactory.CreateLogger(context.Exception.TargetSite.ReflectedType);
-
-            logger.LogError(new EventId(context.Exception.HResult),
+            //#if !DEBUG
+            _logger.LogError(new EventId(context.Exception.HResult),
             context.Exception,
-            context.Exception.Message);
+            $"全局捕获异常：{context.Exception.Message}");
 
-            var json = new JsonResultModel<object>()
+            var resultDto = new ResultDto()
             {
-                code = "500",
-                message = "请求发生异常错误",
+                Result =false,
+                Message = $"请求发生异常错误{context.Exception.Message}",
             };
 
             //if (_env.IsDevelopment()) json.remark = context.Exception.Message;
-            json.remark = context.Exception.Message;
+        
 
-            context.Result = new ApplicationErrorResult(json);
+            context.Result = new ApplicationErrorResult(resultDto);
             context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
             context.ExceptionHandled = true;
 
             //string msg = $"Action方法：{context.ActionDescriptor.DisplayName}，\r\n{context.Exception.MsgAndStackTraceString()}";
             //ErrorLogHelper.Log(ErrorLogType.Default.ToByte(), "", "", "未处理异常", msg);
-#endif
+//#endif
         }
 
         public class ApplicationErrorResult : ObjectResult

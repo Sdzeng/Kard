@@ -1,6 +1,5 @@
 ﻿var userjs = {
     data: { scope: $("#userPage") },
-
     userCover: function () {
 
         var _this = this;
@@ -135,7 +134,7 @@
                 data: formData,
                 contentType: false,
                 processData: false,
-                success: function (data) {
+                success: function (resultDto) {
                   
                     if (resultDto.result) {
                         $("#btnAddPic", _this.data.scope).before("<img class='isay-info-buttom-medias-item' data-file-url='" + resultDto.data.fileUrl + "' data-file-extension='" + resultDto.data.fileExtension + "' src='" + basejs.requestDomain + "/" + resultDto.data.fileUrl + "_50x50" + resultDto.data.fileExtension + "'></img>");

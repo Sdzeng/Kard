@@ -17,6 +17,8 @@ namespace Kard.Core.Entities
 
         public long EssayId { get; set; }
 
+        public int Sort { get; set; }
+
         public string TagName{get; set;}  
            
     }

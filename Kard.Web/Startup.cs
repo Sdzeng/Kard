@@ -151,32 +151,33 @@ namespace Kard.Web
             #endregion
 
             #region cookie 鉴权方案
-            //授权后使用的session cookie名称按选择的AuthenticationScheme（授权方案）定，比如.AspNetCore.WeChatApp
+            Action<CookieAuthenticationOptions> cookieSettingAction = (o) =>
+            {
+                o.Cookie.HttpOnly = true;//置为后台只读模式,前端无法通过JS来获取cookie值,可以有效的防止XXS攻击
+                o.LoginPath = "/api/user/notlogin";
+                o.AccessDeniedPath = "/api/user/notlogin";
+                o.SlidingExpiration = true;
+                o.ExpireTimeSpan = TimeSpan.FromDays(7);  //当HttpContext.SignInAsync的IsPersistent = true 时生效
+                //o.SessionStore = true;
+            };
+            //授权后使用的session cookie名称按选择的AuthenticationScheme（授权方案）定，比如.AspNetCore.Cookies 或  .AspNetCore.WeChatApp
             //AddCookie内部调用AddScheme
             //AddOAuth内部调用AddRemoteScheme（远程登陆） AddGoogle AddFacebook AddTwitter内部都是调用AddOAuth
             services.AddAuthentication()
             //添加登陆方案(scheme)1:web 
-           .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
-           {
-               o.Cookie.HttpOnly = false;
-               o.LoginPath = "/api/user/notlogin";
-               o.AccessDeniedPath = "/api/user/notlogin";
-               o.SlidingExpiration = true;
-               //当HttpContext.SignInAsync的IsPersistent = true 时生效
-               o.ExpireTimeSpan = TimeSpan.FromDays(7);
-               //o.SessionStore = true;
-           })
+           .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, cookieSettingAction)
             //添加登陆方案(scheme)2:wechatapp 
-            .AddCookie(WeChatAppDefaults.AuthenticationScheme, o =>
-            {
-                o.Cookie.HttpOnly = false;
-                o.LoginPath = "/api/user/notlogin";
-                o.AccessDeniedPath = "/api/user/notlogin";
-                o.SlidingExpiration = true;
-                //当HttpContext.SignInAsync的IsPersistent = true 时生效
-                o.ExpireTimeSpan = TimeSpan.FromDays(7);
-                //o.SessionStore = true;
-            });
+            .AddCookie(WeChatAppDefaults.AuthenticationScheme, cookieSettingAction);
+           
+
+            //GDPR 《通用数据保护条例》（General Data Protection Regulation，简称GDPR）
+            //services.Configure<CookiePolicyOptions>(options =>
+            //{
+            //    // This lambda determines whether user consent for non-essential cookies 
+            //    // is needed for a given request.
+            //    options.CheckConsentNeeded = context => true;
+            //    options.MinimumSameSitePolicy = SameSiteMode.None;
+            //});
 
             #endregion
 
@@ -250,6 +251,8 @@ namespace Kard.Web
             });
             app.UseAuthentication();
 
+            //GDPR规范
+            //app.UseCookiePolicy();
 
             // app.UseApiAuthorization();
 
@@ -275,6 +278,7 @@ namespace Kard.Web
 
             app.UseResponseCompression();
 
+           
             app.UseCors("AllowSpecificOrigin");
 
 

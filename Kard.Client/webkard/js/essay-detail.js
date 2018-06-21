@@ -1,5 +1,11 @@
 ﻿var essaydetailjs = {
     data: { scope: $("#essayDetailPage") },
+    init: function () {
+        var _this = this;
+
+        _this.topMenu();
+        _this.bindEssay();
+    },
     topMenu: function () {
         var _this = this;
 
@@ -17,11 +23,51 @@
             }
         });
         helper.send();
+    },
+    bindEssay: function(){
+        var _this = this;
+        var queryString = basejs.getQueryString();
+        //设置菜单封面
+        var helper = new httpHelper({
+            url: basejs.requestDomain + "/api/home/essay/",
+            type: "GET",
+            data: { id: queryString.id},
+            success: function (resultDto) {
+                var data = resultDto.data;
+                //data = JSON.parse(data);
+                if (!data) {
+                    return;
+                }
+                $("#category", _this.data.scope).text(data.category);
+                $(".essay-detail-title", _this.data.scope).text(data.title);
+
+                var tagSpan = "";
+                for (var i in data.tagList) {
+                    var tag = data.tagList[i];
+                    tagSpan += "<span data-tagid='" + tag.id + "'>" + tag.tagName + "</span>";
+                }
+                $(".essay-detail-tag", _this.data.scope).html(tagSpan);
+                $('.essay-detail-remark', _this.data.scope).html("<span>" + basejs.getDateDiff(basejs.getDateTimeStamp(data.creationTime)) + "发布</span> <span>" + data.location + "</span><span>" + data.browseNum + "阅读</span>");
+
+
+                var imgs = "";
+                for (var i in data.mediaList) {
+                    var media = data.mediaList[i]; 
+                    imgs += " <img src='" + basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension+"' style=''>";
+                }
+                $('.essay-detail-content', _this.data.scope).html("<p>" + data.content + "</p><p>" + imgs + "</p>");
+
+                $('.essay-detail-like-collect', _this.data.scope).html("<span>喜欢 " + data.likeNum + "</span><span>收藏 " + data.collectNum +"</span><span>举报</span>");
+
+                
+            }
+        });
+        helper.send();
     }
 }
 
 $(function () {
-    //菜单
-    essaydetailjs.topMenu();
-
+ 
+    essaydetailjs.init();
+ 
 });

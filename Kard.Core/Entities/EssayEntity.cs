@@ -27,7 +27,7 @@ namespace Kard.Core.Entities
         public string Category { get; set; }
 
         public int CollectNum { get; set; }
-        public int RepostNum { get; set; }
+        public int BrowseNum { get; set; }
         public int CommentNum { get; set; }
         public int LikeNum { get; set; }
 

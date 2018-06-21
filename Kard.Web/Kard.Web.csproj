@@ -15,15 +15,19 @@
     <Compile Remove="Middlewares\ApiAuthorization\**" />
     <Compile Remove="Middlewares\KardStaticFile\**" />
     <Compile Remove="wwwroot\assets\image\media\**" />
+    <Compile Remove="wwwroot\builds\**" />
     <Content Remove="Middlewares\ApiAuthorization\**" />
     <Content Remove="Middlewares\KardStaticFile\**" />
     <Content Remove="wwwroot\assets\image\media\**" />
+    <Content Remove="wwwroot\builds\**" />
     <EmbeddedResource Remove="Middlewares\ApiAuthorization\**" />
     <EmbeddedResource Remove="Middlewares\KardStaticFile\**" />
     <EmbeddedResource Remove="wwwroot\assets\image\media\**" />
+    <EmbeddedResource Remove="wwwroot\builds\**" />
     <None Remove="Middlewares\ApiAuthorization\**" />
     <None Remove="Middlewares\KardStaticFile\**" />
     <None Remove="wwwroot\assets\image\media\**" />
+    <None Remove="wwwroot\builds\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -65,7 +69,6 @@
     <Folder Include="logs\ngx\" />
     <Folder Include="logs\supervisor\" />
     <Folder Include="logs\web\" />
-    <Folder Include="wwwroot\builds\" />
   </ItemGroup>
 
   <ItemGroup>

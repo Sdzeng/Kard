@@ -1,0 +1,31 @@
+.navigation {
+    padding-top: 90px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+
+    &-link {
+        width: 1010px;
+        border-bottom: 1px solid #f4f4f4;
+        padding: 10px 0px;
+        color: #bbb;
+
+        @media (min-width: @screen-lg-min) {
+            width: 1150px;
+        }
+
+        a {
+            padding-right: 10px;
+            color: #bbb;
+
+            &:not(:first-child) {
+                padding-left: 10px;
+            }
+
+            &:hover{
+                color:black;
+            }
+        }
+    }
+}

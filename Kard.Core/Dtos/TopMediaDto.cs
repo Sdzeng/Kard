@@ -18,7 +18,7 @@ namespace Kard.Core.Dtos
 
         public int LikeNum { get; set; }
 
-        public int RepostNum { get; set; }
+        public int BrowseNum { get; set; }
 
         public int CommentNum { get; set; }
 

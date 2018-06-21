@@ -22,7 +22,8 @@
                 var avatarArr = data.media.kuser.avatarUrl.split('.');
                 var avatarCropPath = basejs.cdnDomain + "/" + avatarArr[0] + "_30x30." + avatarArr[1];
 
-                $(".bg-layer",_this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.media.cdnPath + "_2560x1200." + data.media.mediaExtension || "") + ")");
+                $(".bg-layer", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.media.cdnPath + "_2560x1200." + data.media.mediaExtension || "") + ")");
+                //$(".bg-layer", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.media.cdnPath + "_2560x1200.gif") + ")");
                 $(".essay-content>blackquote>q", _this.data.scope).text(data.media.essay.content || data.media.essay.title);
                 $(".essay-other>blackquote>img", _this.data.scope).attr("src", avatarCropPath);
                 $(".essay-other>blackquote>a", _this.data.scope).text( data.media.kuser.nickName || "");
@@ -49,8 +50,8 @@
             _this.fashionSenseBodyObj = $('#fashionSenseBody', homejs.data.scope);
             _this.originalityTitleObj = $('#originalityTitle', homejs.data.scope);
             _this.originalityBodyObj = $('#originalityBody', homejs.data.scope);
-            _this.excerptTitleObj = $('#excerptTitle', homejs.data.scope);
-            _this.excerptBodyObj = $('#excerptBody', homejs.data.scope);
+            //_this.excerptTitleObj = $('#excerptTitle', homejs.data.scope);
+            //_this.excerptBodyObj = $('#excerptBody', homejs.data.scope);
          
             _this.setPicture();
 
@@ -62,7 +63,7 @@
                 "</a >" +
                 "<div class='picture-info'>" +
                 "<div class='picture-title' title='#{title}'>#{title}</div>" +
-                "<div class='picture-body'><div class='picture-body-tag'><span title='#{tagSpan}'>#{tagSpan}</span></div><div class='picture-body-num'><span class='essay-like-num'>#{ likeNum}</span><span class='essay-collect-num'>#{ collectNum}</span> <span class='essay-repost-num'>#{repostNum}</span></div></div>" +//media.creatorNickName).substring(0, 6) 
+                "<div class='picture-body'><div class='picture-body-tag'><span title='#{tagSpan}'>#{tagSpan}</span></div><div class='picture-body-num'><span class='essay-like-num'>#{ likeNum}</span><span class='essay-collect-num'>#{ collectNum}</span> <span class='essay-browse-num'>#{browseNum}</span></div></div>" +//media.creatorNickName).substring(0, 6) 
                 "<div class='picture-footer'><div class='picture-footer-author '><span class='essay-avatar'><img class='lazy' src='#{defaultAvatarPath}' data-original='#{ avatarCropPath }'   /> </span><span>#{creatorNickName} </span></div> <div><span class='essay-city'>#{location}</span><span>#{creationTime}</span></div></div>" +
                 "</div>" +
                 "</div >")
@@ -90,7 +91,7 @@
                     _this.showPicture(_this.cosmeticsTitleObj, _this.cosmeticsBodyObj, resultDto.data.cosmeticsList);
                     _this.showPicture(_this.fashionSenseTitleObj, _this.fashionSenseBodyObj, resultDto.data.fashionSenseList);
                     _this.showPicture(_this.originalityTitleObj, _this.originalityBodyObj, resultDto.data.originalityList);
-                    _this.showPicture(_this.excerptTitleObj, _this.excerptBodyObj, resultDto.data.excerptList);
+                    //_this.showPicture(_this.excerptTitleObj, _this.excerptBodyObj, resultDto.data.excerptList);
 
                     //图片懒加载
                     basejs.lazyInof('.section-style-body-block:not(:first) img.lazy');
@@ -134,7 +135,7 @@
                     creatorNickName:topMediaDto.creatorNickName,
                     likeNum: basejs.getNumberDiff(topMediaDto.likeNum),
                     collectNum: basejs.getNumberDiff(topMediaDto.collectNum),
-                    repostNum: basejs.getNumberDiff(topMediaDto.repostNum),
+                    browseNum: basejs.getNumberDiff(topMediaDto.browseNum),
                  
                     tagSpan,
                     defaultAvatarPath,

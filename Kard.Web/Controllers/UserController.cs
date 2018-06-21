@@ -108,7 +108,8 @@ namespace Kard.Web.Controllers
             KuserEntity kuserEntity = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
             {
                 cacheEntry.SetAbsoluteExpiration(DateTime.Now.Date.AddDays(60));
-                return _defaultRepository.GetUser(_kardSession.UserId.Value);
+             
+                return _defaultRepository.FirstOrDefault<KuserEntity,long>(_kardSession.UserId.Value);
             });
             return kuserEntity;
         }
@@ -123,7 +124,7 @@ namespace Kard.Web.Controllers
         [HttpGet("pictures")]
         public ResultDto<IEnumerable<TopMediaDto>> GetPicture()
         {  
-            return new ResultDto<IEnumerable<TopMediaDto>>() { Result = true, Data = _defaultRepository.GetUserMediaPicture(4) }; 
+            return new ResultDto<IEnumerable<TopMediaDto>>() { Result = true, Data = _defaultRepository.GetUserMediaPictureList(4) }; 
         }
 
 
@@ -190,7 +191,7 @@ namespace Kard.Web.Controllers
             {
                 var contentList = essayEntity.Content.Split('#');
                 int contentListLastIndex = contentList.Length - 1;
-                tagList = contentList.Where((item, index) =>((!string.IsNullOrEmpty(item))&& (index!= contentListLastIndex))).Select(item=>new TagEntity {  TagName=item });
+                tagList = contentList.Where((item, index) =>((!string.IsNullOrEmpty(item))&& (index!= contentListLastIndex))).Select((item, index) => new TagEntity { Sort = (index + 1), TagName = item });
                 essayEntity.Content = contentList.Last();
             }
 
