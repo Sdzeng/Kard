@@ -1,5 +1,6 @@
 ﻿using Kard.Core.Entities;
 using Kard.Extensions;
+using Kard.Json;
 using Kard.Runtime.Security.Authentication.WeChat;
 using Kard.Web.Filters;
 using Kard.Web.Middlewares.ImageHandle;
@@ -217,7 +218,7 @@ namespace Kard.Web
         {
      
             var logger = loggerFactory.CreateLogger("Startup");
-            logger.LogDebug($"启动HostingEnvironment={Kard.Json.Serialize.ToJson(env)}");
+            logger.LogInformation($"启动环境:{Serialize.ToJson(env)}");
 
             if (env.IsDevelopment())
             {
