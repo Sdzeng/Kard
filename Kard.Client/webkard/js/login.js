@@ -15,7 +15,7 @@ var loginjs = {
                     //var result = JSON.parse(data);
                     if (data.result) {
                         storage.local.setItem("isLogin", "true");
-                        window.location.href = "/user.html";
+                        window.location.href = "/user-center.html";
                     }
                     else {
                         storage.local.setItem("isLogin", "false");

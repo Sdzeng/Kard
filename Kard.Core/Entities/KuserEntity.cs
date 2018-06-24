@@ -24,6 +24,9 @@ namespace Kard.Core.Entities
 
         public string Phone { get; set; }
         public string AvatarUrl { get; set; }
+
+        public string Introduction { get; set; }
+
         public string Email { get; set; }
         public string Password { get; set; }
         public string NickName { get; set; }

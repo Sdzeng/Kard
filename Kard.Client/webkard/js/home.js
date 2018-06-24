@@ -24,11 +24,11 @@
 
                 $(".bg-layer", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.media.cdnPath + "_2560x1200." + data.media.mediaExtension || "") + ")");
                 //$(".bg-layer", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.media.cdnPath + "_2560x1200.gif") + ")");
-                $(".essay-content>blackquote>q", _this.data.scope).text(data.media.essay.content || data.media.essay.title);
-                $(".essay-other>blackquote>img", _this.data.scope).attr("src", avatarCropPath);
-                $(".essay-other>blackquote>a", _this.data.scope).text( data.media.kuser.nickName || "");
-                $(".essay-other>blackquote>span:first", _this.data.scope).text((data.media.essay.location || ""));
-                $(".essay-other>blackquote>span:last", _this.data.scope).text(basejs.getDateDiff(basejs.getDateTimeStamp(data.media.essay.creationTime)));
+                $(".splash-content>blackquote>q", _this.data.scope).text(data.media.essay.content || data.media.essay.title);
+                $(".splash-other>blackquote>img", _this.data.scope).attr("src", avatarCropPath);
+                $(".splash-other>blackquote>a", _this.data.scope).text( data.media.kuser.nickName || "");
+                $(".splash-other>blackquote>span:first", _this.data.scope).text((data.media.essay.location || ""));
+                $(".splash-other>blackquote>span:last", _this.data.scope).text(basejs.getDateDiff(basejs.getDateTimeStamp(data.media.essay.creationTime)));
 
                 topCover.scroll();
 
@@ -63,7 +63,7 @@
                 "</a >" +
                 "<div class='picture-info'>" +
                 "<div class='picture-title' title='#{title}'>#{title}</div>" +
-                "<div class='picture-body'><div class='picture-body-tag'><span title='#{tagSpan}'>#{tagSpan}</span></div><div class='picture-body-num'><span class='essay-like-num'>#{ likeNum}</span><span class='essay-collect-num'>#{ collectNum}</span> <span class='essay-browse-num'>#{browseNum}</span></div></div>" +//media.creatorNickName).substring(0, 6) 
+                "<div class='picture-body'><div class='picture-body-tag'><span title='#{tagSpan}'>#{tagSpan}</span></div><div class='picture-body-num'><span class='essay-like-num'>#{ likeNum}</span><span class='essay-share-num'>#{ shareNum}</span> <span class='essay-browse-num'>#{browseNum}</span></div></div>" +//media.creatorNickName).substring(0, 6) 
                 "<div class='picture-footer'><div class='picture-footer-author '><span class='essay-avatar'><img class='lazy' src='#{defaultAvatarPath}' data-original='#{ avatarCropPath }'   /> </span><span>#{creatorNickName} </span></div> <div><span class='essay-city'>#{location}</span><span>#{creationTime}</span></div></div>" +
                 "</div>" +
                 "</div >")
@@ -127,19 +127,35 @@
                     titleTagArr.push(topMediaDto.tagList[0].tagName);
                 }
             
+                //pictureRowHtml += _this.template.pictureRow.format({
+                //    essayDetailPage,
+                //    defaultPicturePath,
+                //    pictureCropPath,
+                //    title:topMediaDto.title,
+                //    creatorNickName:topMediaDto.creatorNickName,
+                //    likeNum: basejs.getNumberDiff(topMediaDto.likeNum),
+                //    shareNum: basejs.getNumberDiff(topMediaDto.shareNum),
+                //    browseNum: basejs.getNumberDiff(topMediaDto.browseNum),
+                //    tagSpan,
+                //    defaultAvatarPath,
+                //    avatarCropPath,
+                //    location: topMediaDto.location,
+                //    creationTime: basejs.getDateDiff(basejs.getDateTimeStamp(topMediaDto.creationTime))
+
+                //});
+
                 pictureRowHtml += _this.template.pictureRow.format({
-                    essayDetailPage,
-                    defaultPicturePath,
-                    pictureCropPath,
-                    title:topMediaDto.title,
-                    creatorNickName:topMediaDto.creatorNickName,
+                    essayDetailPage:essayDetailPage,
+                    defaultPicturePath:defaultPicturePath,
+                    pictureCropPath:pictureCropPath,
+                    title: topMediaDto.title,
+                    creatorNickName: topMediaDto.creatorNickName,
                     likeNum: basejs.getNumberDiff(topMediaDto.likeNum),
-                    collectNum: basejs.getNumberDiff(topMediaDto.collectNum),
+                    shareNum: basejs.getNumberDiff(topMediaDto.shareNum),
                     browseNum: basejs.getNumberDiff(topMediaDto.browseNum),
-                 
-                    tagSpan,
-                    defaultAvatarPath,
-                    avatarCropPath,
+                    tagSpan: tagSpan,
+                    defaultAvatarPath: defaultAvatarPath,
+                    avatarCropPath: avatarCropPath,
                     location: topMediaDto.location,
                     creationTime: basejs.getDateDiff(basejs.getDateTimeStamp(topMediaDto.creationTime))
 

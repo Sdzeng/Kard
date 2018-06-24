@@ -1,0 +1,6 @@
+﻿{
+  "captureStartupErrors": true,
+  "detailedErrors": true,
+  "urls": "http://0.0.0.0:80",
+  "environment": "Production"
+}

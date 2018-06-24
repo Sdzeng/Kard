@@ -57,8 +57,11 @@
                 }
                 $('.essay-detail-content', _this.data.scope).html("<p>" + data.content + "</p><p>" + imgs + "</p>");
 
-                $('.essay-detail-like-collect', _this.data.scope).html("<span>喜欢 " + data.likeNum + "</span><span>收藏 " + data.collectNum +"</span><span>举报</span>");
+                $('.essay-detail-like-share', _this.data.scope).html("<span>喜欢 " + data.likeNum + "</span><span>分享 " + data.shareNum +"</span><span>举报</span>");
 
+                $(".essay-author-avatar>img", _this.data.scope).attr("src", basejs.cdnDomain + "/" +data.kuser.avatarUrl);
+                $(".essay-author-txt-name>span:eq(0)", _this.data.scope).text(data.kuser.nickName);
+                $(".essay-author-txt-introduction", _this.data.scope).text(data.kuser.introduction)
                 
             }
         });

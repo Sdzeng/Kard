@@ -314,3 +314,149 @@ ul, ol {
     background-size: cover;
     background-attachment: fixed;
 }
+
+
+.picture-warp {
+    background-color: white;
+    margin: 10px 5px;
+    width: 190px;
+    /* transition: all .35s; */
+    /*.transition(all .35s ease);*/
+    /*float: left;*/
+    /*border-radius: 5px;*/
+    @media (min-width: @screen-lg-min) {
+        margin: 15px 10px;
+        width: 210px;
+    }
+
+
+    &:hover {
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,0.16), 0 4px 10px 0 rgba(0,0,0,0.12);
+    }
+
+    a {
+        img {
+            width: 190px;
+
+            @media (min-width: @screen-lg-min) {
+                width: 210px;
+            }
+        }
+    }
+
+    .picture-info {
+        color: #666;
+
+        .picture-title {
+            line-height: 30px;
+            padding: 0px 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 210px;
+            height: 30px;
+            display: block;
+        }
+
+        .picture-body {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            color: #bbb;
+            font-size: 12px;
+            line-height: 30px;
+            padding: 0px 10px;
+
+            &-tag {
+                justify-content: flex-start;
+
+                span {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    -o-text-overflow: ellipsis;
+                    white-space: nowrap;
+                    width: 24px;
+                    height: 30px;
+                    display: block;
+
+                    @media (min-width: @screen-lg-min) {
+                        width: 36px;
+                    }
+
+                    &:not(:first-child) {
+                        margin-left: 2px;
+                    }
+
+                    &:hover {
+                        color: #4f946e;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            &-num {
+
+
+                span {
+                    &:not(:first-child) {
+                        margin-left: 3px;
+                    }
+
+                    height: 25px;
+
+                    &:before {
+                        content: "";
+                        display: inline-block;
+                        width: 16px;
+                        height: 30px;
+                        vertical-align: top;
+                        margin-right: 2px
+                    }
+                }
+
+                .essay-like-num:before {
+                    background: url(../image/svg/essay-like.svg?v=1) 0 7px no-repeat;
+                    background-size: 16px auto;
+                }
+
+                .essay-share-num:before {
+                    background: url(../image/svg/essay-share.svg?v=1) 0 6px no-repeat;
+                    background-size: 16px auto;
+                }
+
+                .essay-browse-num:before {
+                    background: url(../image/svg/essay-repost.svg?v=1) 0 9px no-repeat;
+                    background-size: 16px auto;
+                }
+            }
+        }
+
+        .picture-footer {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            border-top: 1px solid #f6f7f9;
+            line-height: 50px;
+            padding: 0px 10px;
+            font-size: 12px;
+
+            .essay-avatar {
+                margin-right: 5px;
+
+                img {
+                    border-radius: 15px;
+                    width: 30px;
+                    height: 30px;
+                }
+            }
+
+            .essay-city {
+
+                &:after {
+                    content: " . ";
+                }
+            }
+        }
+    }
+}

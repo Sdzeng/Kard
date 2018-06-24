@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
 using NLog.Extensions.Logging;
+using NLog.Web;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.IO;
@@ -103,13 +104,14 @@ namespace Kard.Web
             #endregion
 
             #region 日志
-            services.AddLogging(builder =>
-            {
-                builder.AddConfiguration(Configuration.GetSection("Logging"));
-                //.AddFilter("Microsoft", LogLevel.Warning)
-                //.AddDebug()
-                //.AddConsole();
-            });
+            //services.AddLogging(builder =>
+            //{
+            //    builder.AddConfiguration(Configuration.GetSection("Logging"));
+            //    //.AddFilter("Microsoft", LogLevel.Warning)
+            //    //.AddDebug()
+            //    //.AddConsole();
+            //});
+       
             #endregion
 
             #region 未授权时使用的session cookie默认名称.AspNetCore.Session
@@ -168,14 +170,14 @@ namespace Kard.Web
            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, cookieSettingAction)
             //添加登陆方案(scheme)2:wechatapp 
             .AddCookie(WeChatAppDefaults.AuthenticationScheme, cookieSettingAction);
-           
+
 
             //GDPR 《通用数据保护条例》（General Data Protection Regulation，简称GDPR）
             //services.Configure<CookiePolicyOptions>(options =>
             //{
             //    // This lambda determines whether user consent for non-essential cookies 
             //    // is needed for a given request.
-            //    options.CheckConsentNeeded = context => true;
+            //    options.CheckConsentNeeded = context => false;
             //    options.MinimumSameSitePolicy = SameSiteMode.None;
             //});
 
@@ -213,9 +215,15 @@ namespace Kard.Web
         // 请求管道会按顺序执行下列委托（中间件），返回顺序则相反；
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            #region api文档
+     
+            var logger = loggerFactory.CreateLogger("Startup");
+            logger.LogDebug($"启动HostingEnvironment={Kard.Json.Serialize.ToJson(env)}");
+
             if (env.IsDevelopment())
             {
+                app.UseDeveloperExceptionPage();
+
+                #region api文档
                 // Enable middleware to serve generated Swagger as a JSON endpoint.
                 app.UseSwagger();
 
@@ -224,19 +232,7 @@ namespace Kard.Web
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Kard1.0接口文档");
                 });
-            }
-            #endregion
-
-            //添加NLog
-            loggerFactory.AddNLog();
-            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            //loggerFactory.AddDebug();
-            //var logger=loggerFactory.CreateLogger<Startup>();
-            //logger.LogInformation("开始启动");
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
+                #endregion
             }
             else
             {
@@ -245,14 +241,20 @@ namespace Kard.Web
 
             //app.UseImageHandle();
             //app.UseSession();
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
-            app.UseAuthentication();
+            //有反向代理时开启
+            //app.UseForwardedHeaders(new ForwardedHeadersOptions
+            //{
+            //    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            //});
+
+            app.UseCors("AllowSpecificOrigin");
 
             //GDPR规范
-            //app.UseCookiePolicy();
+            //.UseCookiePolicy();
+
+
+            app.UseAuthentication();
+
 
             // app.UseApiAuthorization();
 
@@ -265,6 +267,7 @@ namespace Kard.Web
             //provider.Mappings.Add(".less", "text/css");
 
 
+       
             app.UseStaticFiles(new StaticFileOptions
             {
                 //添加图片处理
@@ -279,7 +282,7 @@ namespace Kard.Web
             app.UseResponseCompression();
 
            
-            app.UseCors("AllowSpecificOrigin");
+          
 
 
             app.UseMvc();

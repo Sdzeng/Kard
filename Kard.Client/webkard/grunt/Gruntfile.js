@@ -22,7 +22,7 @@ module.exports = function (grunt) {
                 files: [{
                     // compilation.css  :  source.less
 
-                    "../css/home.css": "../less/home.less",
+                    "../css/kard.css": "../less/kard.less",
 
 
                 }

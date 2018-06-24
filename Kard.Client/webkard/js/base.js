@@ -1,6 +1,6 @@
 var basejs = {
-    requestDomain: "http://192.168.10.2:3703",//window.location.protocol + "//"+window.location.host;// "http://localhost:3706";//"https://www.localyc.com";
-    cdnDomain: "http://192.168.10.2:3703",//"http://image.localyc.com";
+    requestDomain: "http://192.168.10.2:3703",//"http://api.localyc.com"window.location.protocol + "//"+window.location.host;// "http://localhost:3706";//"https://www.localyc.com";
+    cdnDomain: "http://192.168.10.2:3703",//"http://cdn.localyc.com",//"http://image.localyc.com";
     defaults: {
         type: "POST",
         async: true,
@@ -127,7 +127,7 @@ $.extend(httpHelper.prototype, {
     // 发送数据
     send: function () {
         var _this = this;
-        return $.Deferred(function ($dfd) {
+        //return $.Deferred(function ($dfd) {
             $.ajax({
                 url: _this.opts.url,
                 type: _this.opts.type,
@@ -171,7 +171,7 @@ $.extend(httpHelper.prototype, {
                     }
                 }
             });
-        });
+       // });
 
 
     }
@@ -278,7 +278,7 @@ var topCover = {
         _this.navbarObj = $('#navbar');
         _this.splashObj = $('#splash');
         _this.quoteObj = _this.splashObj.children('.quote');
-        _this.contentBlackquoteObj = _this.quoteObj.children('.essay-content').children("blackquote");
+        _this.contentBlackquoteObj = _this.quoteObj.children('.splash-content').children("blackquote");
         //_this.otherBlackquoteObj=_this.quoteObj.children('.essay-other').children("blackquote");
 
         //设置首页滚动样式

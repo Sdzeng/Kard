@@ -77,7 +77,7 @@ namespace Kard.Web.Controllers
                 resultDto.Result = true;
                 resultDto.Data = new
                 {
-                    CosmeticsList = _defaultRepository.GetHomeMediaPictureList(12, "衣妆"),
+                    CosmeticsList = _defaultRepository.GetHomeMediaPictureList(12, "妆品"),
                     FashionSenseList = _defaultRepository.GetHomeMediaPictureList(12, "潮拍"),
                     OriginalityList = _defaultRepository.GetHomeMediaPictureList(12, "创意")
                     //ExcerptList = _defaultRepository.GetHomeMediaPicture(12, "摘录")

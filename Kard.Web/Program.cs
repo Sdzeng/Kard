@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using NLog.Web;
 
 namespace Kard.Web
 {
@@ -19,12 +14,15 @@ namespace Kard.Web
 
         public static IWebHost BuildWebHost(string[] args)
         {
+            //正式环境启用
             var config = new ConfigurationBuilder()
-           .AddJsonFile("hosting.json", optional: true, reloadOnChange: true)
+           .AddJsonFile("hostsettings.json", optional: true, reloadOnChange: true)
            .Build();
 
+            NLogBuilder.ConfigureNLog("nlog.config");
+
             return WebHost.CreateDefaultBuilder(args)
-                
+                .UseNLog()
                 .UseConfiguration(config)
                 .UseStartup<Startup>()
                 // .UseIISIntegration()

@@ -4,6 +4,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
+using System.IO;
 
 namespace Kard.Web.Middlewares.ImageHandle
 {
@@ -22,7 +23,6 @@ namespace Kard.Web.Middlewares.ImageHandle
 
         public new IFileInfo GetFileInfo(string subpath)
         {
-
             var fileInfo = base.GetFileInfo(subpath);
             if (fileInfo.Exists)
             {
@@ -37,6 +37,7 @@ namespace Kard.Web.Middlewares.ImageHandle
             }
 
             var imageHandleDto = matchResult.Data;
+
             //生成文件
             fileInfo = base.GetFileInfo($"{imageHandleDto.ImagePath}{imageHandleDto.ImageName}.{imageHandleDto.ImageExtensions}");
             if (!fileInfo.Exists)
@@ -44,8 +45,7 @@ namespace Kard.Web.Middlewares.ImageHandle
                 return fileInfo;
             }
 
-            var newImagePath = $"{Root}{subpath}".Replace("\\/", "/").Replace("/", "\\");
-
+            var newImagePath =  Path.Join(Root,subpath).Replace("//","/");
 
             //_stopwatch.Start();
 

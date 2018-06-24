@@ -14,7 +14,7 @@ namespace Kard.Core.Dtos
 
         public string Category { get; set; }
 
-        public int CollectNum { get; set; }
+        public int ShareNum { get; set; }
 
         public int LikeNum { get; set; }
 

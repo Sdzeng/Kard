@@ -64,27 +64,27 @@ namespace Kard.Dapper.Mysql.Repositories
             switch (type)
             {
                 case "热门单品":
-                    sql = @"select essay.Id,essay.Category,essay.CollectNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,kuser.AvatarUrl,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaExtension,tag.*  from 
+                    sql = @"select essay.Id,essay.Category,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,kuser.AvatarUrl,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaExtension,tag.*  from 
                 (
                 select t.EssayId,t.CdnPath,t.MediaExtension,count(media.Id) MediaCount
                 from (
                 select media.EssayId,media.CdnPath,media.MediaExtension from media join essay on media.EssayId=essay.Id  
-               where   media.Sort=1 and media.MediaType='picture' and media.CreationTime>=@CreationTime order by (essay.LikeNum+essay.CollectNum+essay.BrowseNum+essay.CommentNum) desc,essay.CreationTime desc limit @Count
+               where   media.Sort=1 and media.MediaType='picture' and media.CreationTime>=@CreationTime order by (essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum) desc,essay.CreationTime desc limit @Count
                 ) t join media on t.EssayId=media.EssayId
                 group by t.EssayId,t.CdnPath,t.MediaExtension
                 ) t2 
                 join essay on t2.EssayId=essay.Id 
                 join kuser on essay.CreatorUserId=kuser.Id  
-                join tag on essay.Id=tag.EssayId 
-                order by(essay.LikeNum+essay.CollectNum+essay.BrowseNum+essay.CommentNum)  desc,essay.CreationTime desc,tag.Sort";
+                join tag on essay.Id=tag.EssayId and tag.Sort=1 
+                order by(essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum)  desc,essay.CreationTime desc";
                     var creationTime= DateTime.Now.AddYears(-7);
                     param = new { CreationTime= creationTime,Count = count };
                     break;
-                case "衣妆":
+                case "妆品":
                 case "潮拍":
                 case "创意":
-                case "摘录":
-                    sql = @"select essay.Id,essay.Category,essay.CollectNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,kuser.AvatarUrl,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaExtension,tag.*  from 
+                //case "摘录":
+                    sql = @"select essay.Id,essay.Category,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,kuser.AvatarUrl,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaExtension,tag.*  from 
                 (
                 select t.EssayId,t.CdnPath,t.MediaExtension,count(media.Id) MediaCount
                 from (
@@ -95,39 +95,54 @@ namespace Kard.Dapper.Mysql.Repositories
                 ) t2 
                 join essay on t2.EssayId=essay.Id 
                 join kuser on essay.CreatorUserId=kuser.Id  
-                join tag on essay.Id=tag.EssayId 
-                order by (essay.LikeNum+essay.CollectNum+essay.BrowseNum+essay.CommentNum) desc,essay.CreationTime desc,tag.Sort";
+                join tag on essay.Id=tag.EssayId and tag.Sort=1 
+                order by (essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum) desc,essay.CreationTime desc";
 
                     param = new {  Count = count, Category=type };
                     break;
             }
 
+            //return ConnExecute(conn =>
+            //{
+            //    var dtoList = new List<TopMediaDto>();
+            //    conn.Query<TopMediaDto, TagEntity, bool>(sql, (dto, tag) =>
+            //       {
+            //           var currentDto = dtoList.FirstOrDefault(d => d.Id == dto.Id);
+            //           if (currentDto == null)
+            //           {
+            //               dto.TagList = new List<TagEntity>();
+            //               dto.TagList.Add(tag);
+            //               dtoList.Add(dto);
+            //           }
+            //           else
+            //           {
+            //               currentDto.TagList.Add(tag);
+            //           }
+
+            //           return true;
+            //       },
+            //      param: param,
+            //      splitOn: "Id");
+
+            //    return dtoList;
+            //});
+
             return ConnExecute(conn =>
             {
-                var dtoList = new List<TopMediaDto>();
-                conn.Query<TopMediaDto, TagEntity, bool>(sql, (dto, tag) =>
-                   {
-                       var currentDto = dtoList.FirstOrDefault(d => d.Id == dto.Id);
-                       if (currentDto == null)
-                       {
-                           dto.TagList = new List<TagEntity>();
-                           dto.TagList.Add(tag);
-                           dtoList.Add(dto);
-                       }
-                       else
-                       {
-                           currentDto.TagList.Add(tag);
-                       }
-
-                       return true;
-                   },
+                
+                var dtoList=conn.Query<TopMediaDto, TagEntity, TopMediaDto>(sql, (dto, tag) =>
+                {
+                    dto.TagList = new List<TagEntity>();
+                    dto.TagList.Add(tag);
+                    return dto;
+                },
                   param: param,
                   splitOn: "Id");
 
-                //topMediaDtoList = topMediaDtoList.Where((m, index) => index != 0);
-
                 return dtoList;
             });
+
+       
         }
 
 
