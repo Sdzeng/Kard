@@ -7,7 +7,7 @@ var loginjs = {
             event.preventDefault();
 
             var helper = new httpHelper({
-                url: basejs.requestDomain + "/api/webuser/login",//this.url || this.form.action,
+                url: basejs.requestDomain + "/webuser/login",//this.url || this.form.action,
                 type: 'POST',
                 //contentType: "application/json;charset=utf-8",
                 data: $(this).serialize(),//{"username":$("#username").val()},//
@@ -41,7 +41,7 @@ var loginjs = {
         $("#btnLogout").click(function () {
 
             var helper = new httpHelper({
-                url: basejs.requestDomain + "/api/webuser/logout",
+                url: basejs.requestDomain + "/webuser/logout",
                 type: "GET",
                 success: function (data) {
                     if (data.result) {
@@ -66,7 +66,7 @@ var loginjs = {
 
         $("#btnTest").click(function () {
             var helper = new httpHelper({
-                url: basejs.requestDomain + "/api/user/1",
+                url: basejs.requestDomain + "/user/1",
                 type: "GET",
                 success: function (data) {
                     alert("登陆状态");

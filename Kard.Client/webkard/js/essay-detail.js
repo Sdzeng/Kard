@@ -11,7 +11,7 @@
 
         //设置菜单封面
         var helper = new httpHelper({
-            url: basejs.requestDomain + "/api/home/cover/",
+            url: basejs.requestDomain + "/home/cover",
             type: "GET",
             success: function (resultDto) {
                 var data = resultDto.data;
@@ -29,9 +29,8 @@
         var queryString = basejs.getQueryString();
         //设置菜单封面
         var helper = new httpHelper({
-            url: basejs.requestDomain + "/api/home/essay/",
+            url: basejs.requestDomain + "/essay/"+queryString.id,
             type: "GET",
-            data: { id: queryString.id},
             success: function (resultDto) {
                 var data = resultDto.data;
                 //data = JSON.parse(data);

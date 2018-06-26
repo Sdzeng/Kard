@@ -7,7 +7,7 @@
 
         //设置首页封面
         var helper = new httpHelper({
-            url: basejs.requestDomain + "/api/home/cover/",
+            url: basejs.requestDomain + "/home/cover",
             type: "GET",
             success: function (resultDto) {
                 var data = resultDto.data;
@@ -73,7 +73,7 @@
 
             //设置host
             var hostHelper = new httpHelper({
-                url: basejs.requestDomain + "/api/home/hostpictures/",
+                url: basejs.requestDomain + "/home/hostpictures",
                 type: "GET",
                 success: function (resultDto) {
                     _this.showPicture(_this.hostTitleObj, _this.hostBodyObj, resultDto.data);
@@ -84,7 +84,7 @@
             hostHelper.send();
 
             var categoryHelper = new httpHelper({
-                url: basejs.requestDomain + "/api/home/categorypictures/",
+                url: basejs.requestDomain + "/home/categorypictures",
                 type: "GET",
                 success: function (resultDto) {
                     

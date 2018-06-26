@@ -1,5 +1,5 @@
-﻿var userjs = {
-    data: { scope: $("#userPage") },
+﻿var usercenterjs = {
+    data: { scope: $("#userCenterPage") },
     userCover: function () {
 
         var _this = this;
@@ -21,8 +21,8 @@
 
                 $(".bg-layer").css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.coverPath || "") + ")").fadeIn("slow");
                 //$(".essay-content>blackquote>q").text("测试");
-                $(".author").text("@" + data.nickName || "");
-
+                $(".user-center-author-txt-name>span:eq(0)", _this.data.scope).text( data.nickName || "");
+                $(".user-center-author-avatar>img", _this.data.scope).attr("src", basejs.cdnDomain + "/" + data.avatarUrl);;
 
                 topCover.scroll();
 
@@ -128,14 +128,14 @@
                 formData.append("mediaFile", files[0]);
             }
             var helper = new httpHelper({
-                url: basejs.requestDomain + "/user/uploadmedia",
+                url: basejs.requestDomain + "/essay/uploadmedia",
                 type: 'POST',
                 async: false,
                 data: formData,
                 contentType: false,
                 processData: false,
                 success: function (resultDto) {
-                  
+
                     if (resultDto.result) {
                         $("#btnAddPic", _this.data.scope).before("<img class='isay-info-buttom-medias-item' data-file-url='" + resultDto.data.fileUrl + "' data-file-extension='" + resultDto.data.fileExtension + "' src='" + basejs.requestDomain + "/" + resultDto.data.fileUrl + "_50x50" + resultDto.data.fileExtension + "'></img>");
                     }
@@ -168,7 +168,7 @@
             });
             alert($(".isay-info-category-span-checked", _this.data.scope).text());
             var helper = new httpHelper({
-                url: basejs.requestDomain + "/user/add",
+                url: basejs.requestDomain + "/essay/add",
                 type: 'POST',
                 data: {
                     essayEntity: {
@@ -199,8 +199,8 @@
 
 $(function () {
     //封面
-    userjs.userCover();
-    userjs.setPictures();
-    userjs.uploadImg();
-    userjs.saveIsay();
+    usercenterjs.userCover();
+    usercenterjs.setPictures();
+    usercenterjs.uploadImg();
+    usercenterjs.saveIsay();
 });
