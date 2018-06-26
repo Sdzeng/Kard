@@ -8,12 +8,13 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Kard.Web.Controllers
 {
     [AllowAnonymous]
     [Produces("application/json")]
-    [Route("api/home")]
+    [Route("home")]
     public class HomeController : BaseController
     {
         private readonly IDefaultRepository _defaultRepository;
@@ -93,27 +94,9 @@ namespace Kard.Web.Controllers
         }
 
 
-        /// <summary>
-        /// 获取单品图片
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("essay")]
-        public ResultDto GetEssay(long id)
-        {
-            //var sw = new System.Diagnostics.Stopwatch();
-            //sw.Start();
-            var essayEntity = _defaultRepository.GetEssay(id);
-            //sw.Stop();
-            //_logger.LogDebug($"GetEssay耗时：{sw.ElapsedMilliseconds}");
-            //sw.Restart();
-            //essayEntity= _defaultRepository.GetEssay2(id);
-            //sw.Stop();
-            //_logger.LogDebug($"GetEssay2耗时：{sw.ElapsedMilliseconds}");
-            var resultDto = new ResultDto();
-            resultDto.Result = essayEntity!=null;
-            resultDto.Data = essayEntity;
-            return resultDto;
-        }
+      
+
+ 
 
     }
 }

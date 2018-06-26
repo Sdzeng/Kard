@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Kard.Core.Entities
 {
-    public class CommentEntity: DeletionAuditedEntity
+    public class EssayCommentEntity: DeletionAuditedEntity
     {
         public long Id { get; set; }
 

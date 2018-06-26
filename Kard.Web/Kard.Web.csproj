@@ -33,6 +33,7 @@
   <ItemGroup>
     <Compile Remove="Controllers\ApiController.cs" />
     <Compile Remove="Controllers\ApiController2.cs" />
+    <Compile Remove="Controllers\CountController.cs" />
     <Compile Remove="Controllers\CoverController.cs" />
     <Compile Remove="Controllers\ErrorController.cs" />
     <Compile Remove="Controllers\ValuesController.cs" />

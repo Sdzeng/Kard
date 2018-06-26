@@ -10,7 +10,7 @@ using System.IO;
 
 namespace Kard.Web.Controllers
 {
-    public abstract class BaseController : Controller
+    public abstract class BaseController : ControllerBase
     {
         protected readonly ILogger _logger;
         protected readonly IMemoryCache _memoryCache;
@@ -41,6 +41,10 @@ namespace Kard.Web.Controllers
                 return htmlContent;
             }
         }
+
+
+
+ 
 
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Kard.Dapper.Mysql.Repositories
 {
@@ -56,7 +57,7 @@ namespace Kard.Dapper.Mysql.Repositories
 
 
 
-        public IEnumerable<TopMediaDto> GetHomeMediaPictureList( int count, string type)
+        public IEnumerable<TopMediaDto> GetHomeMediaPictureList(int count, string type)
         {
             string sql = string.Empty;
 
@@ -77,13 +78,13 @@ namespace Kard.Dapper.Mysql.Repositories
                 join kuser on essay.CreatorUserId=kuser.Id  
                 join tag on essay.Id=tag.EssayId and tag.Sort=1 
                 order by(essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum)  desc,essay.CreationTime desc";
-                    var creationTime= DateTime.Now.AddYears(-7);
-                    param = new { CreationTime= creationTime,Count = count };
+                    var creationTime = DateTime.Now.AddYears(-7);
+                    param = new { CreationTime = creationTime, Count = count };
                     break;
                 case "妆品":
                 case "潮拍":
                 case "创意":
-                //case "摘录":
+                    //case "摘录":
                     sql = @"select essay.Id,essay.Category,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,kuser.AvatarUrl,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaExtension,tag.*  from 
                 (
                 select t.EssayId,t.CdnPath,t.MediaExtension,count(media.Id) MediaCount
@@ -98,7 +99,7 @@ namespace Kard.Dapper.Mysql.Repositories
                 join tag on essay.Id=tag.EssayId and tag.Sort=1 
                 order by (essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum) desc,essay.CreationTime desc";
 
-                    param = new {  Count = count, Category=type };
+                    param = new { Count = count, Category = type };
                     break;
             }
 
@@ -129,20 +130,20 @@ namespace Kard.Dapper.Mysql.Repositories
 
             return ConnExecute(conn =>
             {
-                
-                var dtoList=conn.Query<TopMediaDto, TagEntity, TopMediaDto>(sql, (dto, tag) =>
-                {
-                    dto.TagList = new List<TagEntity>();
-                    dto.TagList.Add(tag);
-                    return dto;
-                },
+
+                var dtoList = conn.Query<TopMediaDto, TagEntity, TopMediaDto>(sql, (dto, tag) =>
+                  {
+                      dto.TagList = new List<TagEntity>();
+                      dto.TagList.Add(tag);
+                      return dto;
+                  },
                   param: param,
                   splitOn: "Id");
 
                 return dtoList;
             });
 
-       
+
         }
 
 
@@ -165,7 +166,7 @@ namespace Kard.Dapper.Mysql.Repositories
             });
         }
 
-   
+
 
         public bool IsExistUser(string name, string phone, string email)
         {
@@ -222,33 +223,34 @@ namespace Kard.Dapper.Mysql.Repositories
             return ConnExecute(conn =>
             {
                 var essayList = new List<EssayEntity>();
-                conn.Query<EssayEntity,KuserEntity, MediaEntity, TagEntity, bool>(sql, (essay,kuser, media, tag) =>
-                {
-                    var essayEntity = essayList.FirstOrDefault(e => e.Id == essay.Id);
-                    if (essayEntity == null)
-                    {
-                        essay.Kuser = kuser;
-                        essay.MediaList = new List<MediaEntity>();
-                        essay.TagList = new List<TagEntity>();
-                        essayList.Add(essay);
-                    }
-                    else {
-                        essay = essayEntity;
-                    }
+                conn.Query<EssayEntity, KuserEntity, MediaEntity, TagEntity, bool>(sql, (essay, kuser, media, tag) =>
+                 {
+                     var essayEntity = essayList.FirstOrDefault(e => e.Id == essay.Id);
+                     if (essayEntity == null)
+                     {
+                         essay.Kuser = kuser;
+                         essay.MediaList = new List<MediaEntity>();
+                         essay.TagList = new List<TagEntity>();
+                         essayList.Add(essay);
+                     }
+                     else
+                     {
+                         essay = essayEntity;
+                     }
 
-                  
-                    if (!essay.MediaList.Where(m => m.Id == media.Id).Any())
-                    {
-                        essay.MediaList.Add(media);
-                    }
 
-                    if (!essay.TagList.Where(t => t.Id == tag.Id).Any())
-                    {
-                        essay.TagList.Add(tag);
-                    }
+                     if (!essay.MediaList.Where(m => m.Id == media.Id).Any())
+                     {
+                         essay.MediaList.Add(media);
+                     }
 
-                    return true;
-                },
+                     if (!essay.TagList.Where(t => t.Id == tag.Id).Any())
+                     {
+                         essay.TagList.Add(tag);
+                     }
+
+                     return true;
+                 },
                   new { EssayId = id },
                   splitOn: "Id");
 
@@ -271,5 +273,95 @@ namespace Kard.Dapper.Mysql.Repositories
                 return essayEntity;
             });
         }
+
+
+        public bool AddEssay(EssayEntity essayEntity, IEnumerable<TagEntity> tagList,IEnumerable<MediaEntity> mediaList)
+        {
+
+            return base.TransExecute((conn, trans) =>
+            {
+                var resultDto = base.CreateAndGetId<EssayEntity, long>(essayEntity, conn, trans);
+                if (!resultDto.Result)
+                {
+                    return false;
+                }
+
+                tagList = tagList.Select(tag =>
+                {
+                    tag.EssayId = resultDto.Data;
+                    return tag;
+                });
+                if (!base.Create(tagList, conn, trans))
+                {
+                    return false;
+                }
+
+                mediaList = mediaList.Select(meida =>
+                {
+                    meida.EssayId = resultDto.Data;
+                    meida.MediaExtension = meida.MediaExtension.Replace(".", "");
+                    return meida;
+                });
+
+                return base.Create(mediaList, conn, trans);
+            });
+        }
+
+
+        //private ReaderWriterLockSlim _essayLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+        //public bool UpdateBrowseNum(int id)
+        //{
+        //多处改动使用事务级别隔离read committed
+        //string sql = @"set session transaction isolation level read committed;
+        //                           start transaction;
+        //                           update essay set  BrowseNum=(BrowseNum+1) where Id=@Id;
+        //                           commit;";
+        //单个改动使用update的排他（update\delete自动加上）行锁（使用索引）就行
+        //string sql = "update essay set  BrowseNum=(BrowseNum+1) where Id=@Id";
+
+        //_essayLock.EnterWriteLock();
+        //try
+        //{
+        //return TransExecute((conn, trans) =>
+        // {
+        //     var essayEntity = base.FirstOrDefault<EssayEntity, long>(id, conn, trans);
+        //     essayEntity.BrowseNum += essayEntity.BrowseNum;
+        //     return base.Update(essayEntity, conn, trans);
+        // });
+        //}
+        //finally {
+        //    _essayLock.ExitWriteLock();
+        //}
+        //}
+
+
+        //~DefaultRepository()
+        //{
+        //    if (_essayLock != null) _essayLock.Dispose();
+        //}
+
+
+        public bool UpdateBrowseNum(long id)
+        {
+            //单个改动使用update的排他（update\delete\insert InnoDB会自动给涉及数据集加上）行锁（使用索引）就行
+            string sql = "update essay set  BrowseNum=(BrowseNum+1) where Id=@Id";
+
+            var result = ConnExecute(conn => conn.Execute(sql, new { Id = id}));
+            return result > 0;
+        }
+
+        public bool AddEssayLike(EssayLikeEntity essayLikeEntity)
+        {
+            //多处改动使用事务时则用事务级别隔离read committed
+            string sql = @"set session transaction isolation level read committed;
+                                       start transaction;
+                                       insert essay_like(EssayId,CreatorUserId,CreationTime) values(@EssayId,@CreatorUserId,@CreationTime);
+                                       update essay set  LikeNum=(LikeNum+1) where Id=@EssayId;
+                                       commit;";
+
+            var result = ConnExecute(conn => conn.Execute(sql, essayLikeEntity));
+            return result > 0;
+        }
+
     }
 }

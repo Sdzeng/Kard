@@ -24,6 +24,12 @@ namespace Kard.Core.IRepositories
         EssayEntity GetEssay(long id);
 
         EssayEntity GetEssay2(long id);
+
+        bool AddEssay(EssayEntity essayEntity, IEnumerable<TagEntity> tagList, IEnumerable<MediaEntity> mediaList);
+
+        bool UpdateBrowseNum(long id);
+
+        bool AddEssayLike(EssayLikeEntity essayLikeEntity);
     }
 }
 

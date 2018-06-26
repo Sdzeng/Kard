@@ -26,7 +26,7 @@ namespace Kard.Web.Controllers
 {
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     [Produces("application/json")]
-    [Route("api/webuser")]
+    [Route("webuser")]
     public class WebUserController : BaseController
     {
 

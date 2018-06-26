@@ -20,3 +20,4 @@ builds
 node_modules
 /Kard.Web/wwwroot/user
 /Kard.Web/logs
+/Kard.Module
