@@ -98,7 +98,7 @@ namespace Kard.Web.Controllers
         [HttpGet("pictures")]
         public ResultDto<IEnumerable<TopMediaDto>> GetPicture()
         {  
-            return new ResultDto<IEnumerable<TopMediaDto>>() { Result = true, Data = _defaultRepository.GetUserMediaPictureList(4) }; 
+            return new ResultDto<IEnumerable<TopMediaDto>>() { Result = true, Data = _defaultRepository.GetUserMediaPictureList(_kardSession.UserId.Value,4) }; 
         }
 
 

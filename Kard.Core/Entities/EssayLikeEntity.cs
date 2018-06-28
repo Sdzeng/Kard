@@ -7,7 +7,7 @@ namespace Kard.Core.Entities
 {
     public class EssayLikeEntity : CreationAuditedEntity
     {
-        public long Id { get; set; }
+         
 
         public long EssayId { get; set; }
 

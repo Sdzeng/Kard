@@ -7,8 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading;
+using DapperExtensionsCore;
 
 namespace Kard.Dapper.Mysql.Repositories
 {
@@ -16,7 +18,7 @@ namespace Kard.Dapper.Mysql.Repositories
     {
 
 
-        public DefaultRepository(IKardSession session, IConfiguration configuration, ILogger<DefaultRepository> logger) : base(session, configuration, logger)
+        public DefaultRepository( IConfiguration configuration, ILogger<DefaultRepository> logger) : base( configuration, logger)
         {
         }
 
@@ -147,7 +149,7 @@ namespace Kard.Dapper.Mysql.Repositories
         }
 
 
-        public IEnumerable<TopMediaDto> GetUserMediaPictureList(int count)
+        public IEnumerable<TopMediaDto> GetUserMediaPictureList(long userId,int count)
         {
             return ConnExecute(conn =>
             {
@@ -160,7 +162,7 @@ namespace Kard.Dapper.Mysql.Repositories
                    join essay on media.EssayId=essay.Id 
                    join kuser on essay.CreatorUserId=kuser.Id   
                   order by EssayLikeNum desc,essay.CreationTime desc";
-                var topMediaDtoList = conn.Query<TopMediaDto>(sql, new { CreatorUserId = KardSession.UserId, Count = count });
+                var topMediaDtoList = conn.Query<TopMediaDto>(sql, new { CreatorUserId = userId, Count = count });
 
                 return topMediaDtoList;
             });
@@ -266,44 +268,46 @@ namespace Kard.Dapper.Mysql.Repositories
 
             return ConnExecute(conn =>
             {
-                var essayEntity = base.FirstOrDefault<EssayEntity, long>(id, conn);
-                essayEntity.Kuser = base.FirstOrDefault<KuserEntity, long>(essayEntity.CreatorUserId.Value, conn);
-                essayEntity.MediaList = base.GetList<MediaEntity>(new { EssayId = essayEntity.Id }, null, conn).ToList();
-                essayEntity.TagList = base.GetList<TagEntity>(new { EssayId = essayEntity.Id }, null, conn).ToList();
+                var essayEntity = conn.Get<EssayEntity>(id);
+                essayEntity.Kuser = conn.Get<KuserEntity>(essayEntity.CreatorUserId.Value);
+                essayEntity.MediaList = conn.GetList<MediaEntity>(new { EssayId = essayEntity.Id }).ToList();
+                essayEntity.TagList = conn.GetList<TagEntity>(new { EssayId = essayEntity.Id }).ToList();
                 return essayEntity;
             });
         }
 
 
-        public bool AddEssay(EssayEntity essayEntity, IEnumerable<TagEntity> tagList,IEnumerable<MediaEntity> mediaList)
+        public bool AddEssay(EssayEntity essayEntity, IEnumerable<TagEntity> tagList, IEnumerable<MediaEntity> mediaList)
         {
 
             return base.TransExecute((conn, trans) =>
             {
-                var resultDto = base.CreateAndGetId<EssayEntity, long>(essayEntity, conn, trans);
-                if (!resultDto.Result)
+                var insertAndGetIdResultDto = conn.CreateAndGetId<EssayEntity, long>(essayEntity, trans);
+                if (!insertAndGetIdResultDto.Result)
                 {
                     return false;
                 }
 
                 tagList = tagList.Select(tag =>
                 {
-                    tag.EssayId = resultDto.Data;
+                    tag.EssayId = insertAndGetIdResultDto.Data;
                     return tag;
                 });
-                if (!base.Create(tagList, conn, trans))
+
+                var insertListResultDto = conn.CreateList(tagList, trans);
+                if (!insertListResultDto.Result)
                 {
                     return false;
                 }
 
                 mediaList = mediaList.Select(meida =>
                 {
-                    meida.EssayId = resultDto.Data;
+                    meida.EssayId = insertAndGetIdResultDto.Data;
                     meida.MediaExtension = meida.MediaExtension.Replace(".", "");
                     return meida;
                 });
 
-                return base.Create(mediaList, conn, trans);
+                return conn.CreateList(mediaList, trans).Result;
             });
         }
 
@@ -346,21 +350,94 @@ namespace Kard.Dapper.Mysql.Repositories
             //单个改动使用update的排他（update\delete\insert InnoDB会自动给涉及数据集加上）行锁（使用索引）就行
             string sql = "update essay set  BrowseNum=(BrowseNum+1) where Id=@Id";
 
-            var result = ConnExecute(conn => conn.Execute(sql, new { Id = id}));
+            var result = ConnExecute(conn => conn.Execute(sql, new { Id = id }));
             return result > 0;
         }
 
-        public bool AddEssayLike(EssayLikeEntity essayLikeEntity)
+        public bool ChangeEssayLike(long userId,long essayId, bool isLike)
         {
             //多处改动使用事务时则用事务级别隔离read committed
-            string sql = @"set session transaction isolation level read committed;
-                                       start transaction;
-                                       insert essay_like(EssayId,CreatorUserId,CreationTime) values(@EssayId,@CreatorUserId,@CreationTime);
-                                       update essay set  LikeNum=(LikeNum+1) where Id=@EssayId;
-                                       commit;";
+            string sql = string.Empty;
 
+            if (isLike)
+            {
+                sql = @"set session transaction isolation level read committed;
+                                start transaction;
+                                insert essay_like(EssayId,CreatorUserId,CreationTime) values(@EssayId,@CreatorUserId,@CreationTime);
+                                update essay set  LikeNum=(LikeNum+1) where Id=@EssayId; 
+                                commit;";
+            }
+            else
+            {
+                sql = @"set session transaction isolation level read committed;
+                                start transaction;
+                                delete from essay_like where EssayId=@EssayId and CreatorUserId=@CreatorUserId;
+                                update essay set  LikeNum=(LikeNum-1) where Id=@EssayId; 
+                                commit;";
+            }
+
+            var essayLikeEntity = new EssayLikeEntity
+            {
+                EssayId = essayId,
+                CreatorUserId =  userId,
+                CreationTime = DateTime.Now
+            };
             var result = ConnExecute(conn => conn.Execute(sql, essayLikeEntity));
             return result > 0;
+        }
+
+        public ResultDto AddTask(LongTaskEntity entity) {
+            var taskDate = entity.StartDate;
+            var taskWeekDay = (int)taskDate.DayOfWeek;
+            var taskWeekList = entity.Week.Split(',').Select(w => Convert.ToInt32(w));
+
+            return TransExecute((conn, trans) =>
+            {
+                var createResult = new ResultDto();
+                var createLongResult = conn.CreateAndGetId<LongTaskEntity, long>(entity, trans);
+                if (!createLongResult.Result)
+                {
+                    _logger.LogError("添加长期目标失败，已撤销：" + createLongResult.Message);
+                    createResult.Result = false;
+                    createResult.Message = "添加长期目标失败";
+                    return createResult;
+                }
+
+                var taskEntityList = new List<TaskEntity>();
+                while (taskDate <= entity.EndDate)
+                {
+                    if (taskWeekList.Contains(taskWeekDay))
+                    {
+                        var taskEntity = new TaskEntity()
+                        {
+                            LongTaskId = createLongResult.Data,
+                            TaskDate = taskDate,
+                            StartTime = entity.StartTime,
+                            EndTime = entity.EndTime,
+                            Content = entity.Content,
+                            IsRemind = entity.IsRemind,
+                            IsDone = false
+                        };
+                        taskEntity.AuditCreation(entity.CreatorUserId.Value);
+                        taskEntityList.Add(taskEntity);
+                    }
+
+                    taskDate = taskDate.AddDays(1);
+                    taskWeekDay = (taskWeekDay + 1) % 7;
+                }
+
+
+                if (!conn.CreateList(taskEntityList, trans).Result)
+                {
+                    _logger.LogError("添加小目标失败，已撤销");
+                    createResult.Result = false;
+                    createResult.Message = "添加小目标失败";
+                    return createResult;
+                }
+
+                createResult.Result = true;
+                return createResult;
+            });
         }
 
     }

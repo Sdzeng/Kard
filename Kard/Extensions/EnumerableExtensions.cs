@@ -1,11 +1,39 @@
-﻿using System;
+﻿using Kard.Domain.Entities.Auditing;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Kard.Extensions
 {
-    public static class ListExtensions
+    public static class EnumerableExtensions
     {
+        public static void AuditCreation(this IEnumerable<CreationAuditedEntity> source,long userId)
+        {
+            foreach (var item in source)
+            {
+                  item.AuditCreation(userId);
+            }
+        }
+
+        public static void AuditLastModification(this IEnumerable<LastModificationAuditedEntity> source, long userId)
+        {
+            foreach (var item in source)
+            {
+                item.AuditLastModification(userId);
+            }
+        }
+
+
+        public static void AuditDeletion(this IEnumerable<DeletionAuditedEntity> source, long userId)
+        {
+            foreach (var item in source)
+            {
+                item.AuditDeletion(userId);
+            }
+        }
+
+
         /// <summary>
         /// Sort a list by a topological sorting, which consider their  dependencies
         /// </summary>
@@ -13,7 +41,7 @@ namespace Kard.Extensions
         /// <param name="source">A list of objects to sort</param>
         /// <param name="getDependencies">Function to resolve the dependencies</param>
         /// <returns></returns>
-        public static List<T> SortByDependencies<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> getDependencies)
+        public static IEnumerable<T> SortByDependencies<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> getDependencies)
         {
             /* See: http://www.codeproject.com/Articles/869059/Topological-sorting-in-Csharp
              *      http://en.wikipedia.org/wiki/Topological_sorting

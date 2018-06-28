@@ -10,7 +10,7 @@ namespace Kard.Dapper.Mysql.Repositories
 {
     public class TestRepository: Repository,ITestRepository
     {
-        public TestRepository(IKardSession session, IConfiguration configuration, ILogger<DefaultRepository> logger) : base(session, configuration, logger) { 
+        public TestRepository(IConfiguration configuration, ILogger<DefaultRepository> logger) : base(configuration, logger) { 
 
         }
 

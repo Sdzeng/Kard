@@ -104,6 +104,7 @@ namespace Kard.Web.Controllers
                     IsRemind = entity.IsRemind,
                     IsDone=false
                 };
+                taskEntity.AuditCreation(_kardSession.UserId.Value);
                 var createResult = _defaultRepository.CreateAndGetId<TaskEntity, long>(taskEntity);
                 result.Result = createResult.Result;
                 result.Message = createResult.Message;
@@ -111,55 +112,9 @@ namespace Kard.Web.Controllers
                 return result;
             }
 
-            var taskDate = entity.StartDate;
-            var taskWeekDay = (int)taskDate.DayOfWeek;
-            var taskWeekList = entity.Week.Split(',').Select(w => Convert.ToInt32(w));
 
-            result = _defaultRepository.TransExecute((conn, trans) =>
-            {
-                var createResult = new ResultDto();
-                var createLongResult = _defaultRepository.CreateAndGetId<LongTaskEntity, long>(entity, conn, trans);
-                if (!createLongResult.Result)
-                {
-                    _logger.LogError("添加长期目标失败，已撤销：" + createLongResult.Message);
-                    createResult.Result = false;
-                    createResult.Message = "添加长期目标失败";
-                    return createResult;
-                }
-
-                var taskEntityList = new List<TaskEntity>();
-                while (taskDate <=entity.EndDate)
-                {
-                    if (taskWeekList.Contains(taskWeekDay))
-                    {
-                        taskEntityList.Add(new TaskEntity()
-                        {
-                            LongTaskId = createLongResult.Data,
-                            TaskDate = taskDate,
-                            StartTime = entity.StartTime,
-                            EndTime = entity.EndTime,
-                            Content = entity.Content,
-                            IsRemind = entity.IsRemind,
-                            IsDone=false
-                        });
-                    }
-
-                    taskDate=taskDate.AddDays(1);
-                    taskWeekDay = (taskWeekDay + 1) % 7;
-                }
-
-
-                if (!_defaultRepository.Create(taskEntityList, conn, trans))
-                {
-                    _logger.LogError("添加小目标失败，已撤销");
-                    createResult.Result = false;
-                    createResult.Message = "添加小目标失败";
-                    return createResult;
-                }
-
-                createResult.Result = true;
-                return createResult;
-            });
+            entity.AuditCreation(_kardSession.UserId.Value);
+            result = _defaultRepository.AddTask(entity);
 
             return result;
         }
@@ -173,7 +128,7 @@ namespace Kard.Web.Controllers
         {
             var result = new ResultDto<IEnumerable<TaskEntity>>();
             result.Result =true;
-            result.Data = _defaultRepository.Query<TaskEntity>("select * from task where CreatorUserId=@CreatorUserId and TaskDate=@TaskDate and IsDeleted=0 order by IsDone,StartTime", new { CreatorUserId = _kardSession.UserId,TaskDate = DateTime.Now.Date });
+            result.Data = _defaultRepository.QueryList<TaskEntity>("select * from task where CreatorUserId=@CreatorUserId and TaskDate=@TaskDate and IsDeleted=0 order by IsDone,StartTime", new { CreatorUserId = _kardSession.UserId,TaskDate = DateTime.Now.Date });
             return result;
         }
     }

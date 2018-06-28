@@ -45,7 +45,7 @@ namespace Kard.Web.Middlewares.ImageHandle
                 return fileInfo;
             }
 
-            var newImagePath =  Path.Join(Root,subpath).Replace("//","/");
+            var newImagePath =  Path.Join(Root.Replace("\\", "/"), subpath).Replace("//","/");
 
             //_stopwatch.Start();
 

@@ -5,6 +5,7 @@ using Kard.Extensions;
 using Kard.Json;
 using Kard.Runtime.Security;
 using Kard.Runtime.Security.Authentication.WeChat;
+using Kard.Runtime.Session;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -19,11 +20,13 @@ namespace Kard.Core.AppServices.Default
 {
     public class LoginAppService : ILoginAppService
     {
+        private readonly IKardSession _kardSession;
         private readonly IPasswordHasher<KuserEntity> _passwordHasher;
         private readonly IDefaultRepository _defaultRepository;
 
-        public LoginAppService(IPasswordHasher<KuserEntity> passwordHasher, IDefaultRepository defaultRepository)
+        public LoginAppService(IKardSession kardSession, IPasswordHasher<KuserEntity> passwordHasher, IDefaultRepository defaultRepository)
         {
+            _kardSession = kardSession;
             _passwordHasher = passwordHasher;
             _defaultRepository = defaultRepository;
         }
@@ -49,7 +52,7 @@ namespace Kard.Core.AppServices.Default
         public ResultDto<ClaimsIdentity> WebLogin(string name, string password)
         {
             var result = new ResultDto<ClaimsIdentity>();
-            var userList = _defaultRepository.Query<KuserEntity>("select * from kuser where `Name`=@Name", new { Name = name });
+            var userList = _defaultRepository.QueryList<KuserEntity>("select * from kuser where `Name`=@Name", new { Name = name });
             if (userList?.Count() != 1)
             {
                 result.Result = false;
@@ -101,7 +104,9 @@ namespace Kard.Core.AppServices.Default
             if (user != null)
             {
                 user.WxSessionKey = wxAuthDto.session_key;
-                if (!_defaultRepository.Update(user))
+                user.AuditLastModification(_kardSession.UserId.Value);
+                var updateUserResultDto = _defaultRepository.Update(user);
+                if (!updateUserResultDto.Result)
                 {
                     result.Result = false;
                     result.Message = $"用户{user.NickName}被带晕";
@@ -115,6 +120,7 @@ namespace Kard.Core.AppServices.Default
                 user.WxSessionKey = wxAuthDto.session_key;
                 user.UserType = "WeChatApp";
                 user.KroleId = 1;
+                user.AuditCreation(_kardSession.UserId.Value);
                 var createResult = _defaultRepository.CreateAndGetId<KuserEntity, long>(user);
                 if (!createResult.Result)
                 {
@@ -151,9 +157,10 @@ namespace Kard.Core.AppServices.Default
             userEntity.NickName = user.NickName;
             userEntity.City = user.City;
             userEntity.Language = user.Language;
-            if (!_defaultRepository.Update(userEntity))
+            userEntity.AuditLastModification(_kardSession.UserId.Value);
+            result = _defaultRepository.Update(userEntity);
+            if (!result.Result)
             {
-                result.Result = false;
                 result.Message = $"用户{user.NickName}注册失败";
                 return result;
             }

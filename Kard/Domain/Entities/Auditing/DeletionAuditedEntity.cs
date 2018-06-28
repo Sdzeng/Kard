@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Kard.Domain.Entities.Auditing
 {
@@ -9,5 +7,13 @@ namespace Kard.Domain.Entities.Auditing
         public virtual long? DeleterUserId { get; set; }
         public virtual DateTime? DeletionTime { get; set; }
         public virtual bool IsDeleted { get; set; }
+
+        public void AuditDeletion(long userId)
+        {
+            this.DeleterUserId = userId;
+            this.DeletionTime = DateTime.Now;
+            this.IsDeleted = true;
+            
+        }
     }
 }

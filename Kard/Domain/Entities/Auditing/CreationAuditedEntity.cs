@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Kard.Domain.Entities.Auditing
 {
@@ -14,5 +12,13 @@ namespace Kard.Domain.Entities.Auditing
 
         //public virtual string CreatorUserName { get; set; }
 
+
+        public void AuditCreation(long userId) {
+            this.CreatorUserId = userId;
+            this.CreationTime = DateTime.Now;
+       
+        }
     }
+
+ 
 }

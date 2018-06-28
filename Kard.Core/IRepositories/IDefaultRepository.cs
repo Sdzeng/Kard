@@ -13,7 +13,7 @@ namespace Kard.Core.IRepositories
  
         IEnumerable<TopMediaDto> GetHomeMediaPictureList(int count, string type);
 
-        IEnumerable<TopMediaDto> GetUserMediaPictureList(int count);
+        IEnumerable<TopMediaDto> GetUserMediaPictureList(long userId, int count);
 
         bool IsExistUser(string name, string phone, string email);
 
@@ -29,7 +29,9 @@ namespace Kard.Core.IRepositories
 
         bool UpdateBrowseNum(long id);
 
-        bool AddEssayLike(EssayLikeEntity essayLikeEntity);
+        bool ChangeEssayLike(long userId, long essayId, bool isLike);
+
+        ResultDto AddTask(LongTaskEntity entity);
     }
 }
 

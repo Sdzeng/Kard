@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Kard.Core.Dtos;
 using Kard.Core.Entities;
 using Kard.Core.IRepositories;
+using Kard.Extensions;
 using Kard.Runtime.Security.Authentication.WeChat;
 using Kard.Runtime.Session;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -124,15 +125,19 @@ namespace Kard.Web.Controllers
                     var matchCollection = _regex.Matches(this.EssayContent);
                     return matchCollection.First()?.Value.Replace("#","");
                 }*/
+
+            var createUserId = _kardSession.UserId.Value;
             IEnumerable<TagEntity> tagList = new List<TagEntity>();
             if (essayEntity.Content.Contains('#'))
             {
                 var contentList = essayEntity.Content.Split('#');
                 int contentListLastIndex = contentList.Length - 1;
-                tagList = contentList.Where((item, index) => ((!string.IsNullOrEmpty(item)) && (index != contentListLastIndex))).Select((item, index) => new TagEntity { Sort = (index + 1), TagName = item });
+                tagList = contentList.Where((item, index) => ((!string.IsNullOrEmpty(item)) && (index != contentListLastIndex))).Select((item, index) => { var tagEntity = new TagEntity { Sort = (index + 1), TagName = item };  tagEntity.AuditCreation(createUserId);return tagEntity; });
                 essayEntity.Content = contentList.Last();
             }
-
+            essayEntity.Location = "广州";
+            essayEntity.AuditCreation(createUserId);
+            mediaList.AuditCreation(createUserId);
             var result = _defaultRepository.AddEssay(essayEntity, tagList, mediaList);
 
             if (result)
@@ -151,20 +156,14 @@ namespace Kard.Web.Controllers
         /// <summary>
         /// 添加喜欢
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="i"></param>
+        /// <param name="essayId"></param>
+        /// <param name="isLike"></param>
         /// <returns></returns>
         [HttpPost("like")]
-        public ResultDto Like(long id,long i)
+        public ResultDto Like(long essayId,bool isLike)
         {
             var resultDto= new ResultDto();
-            var essayLikeEntity = new EssayLikeEntity {
-                EssayId=id,
-                CreatorUserId = i,//_kardSession.UserId,
-                CreationTime=DateTime.Now
-            };
-
-            resultDto.Result= _defaultRepository.AddEssayLike(essayLikeEntity);
+            resultDto.Result= _defaultRepository.ChangeEssayLike(_kardSession.UserId.Value,essayId, isLike);
 
             return resultDto;
         }
@@ -174,35 +173,35 @@ namespace Kard.Web.Controllers
         /// </summary>
         /// <param name="connNum"></param>
         /// <returns></returns>
-        [HttpGet("test")]
-        public async Task<ResultDto<string>> TestAsync(long? connNum = 10)
-        {
-            var milliseconds = await RunTask(connNum);
-            _logger.LogDebug($"耗时：{milliseconds}ms");
-            return new ResultDto<string>() { Result = true, Data = $"耗时：{milliseconds}ms" };
-        }
+        //[HttpGet("test")]
+        //public async Task<ResultDto<string>> TestAsync(long? connNum = 10)
+        //{
+        //    var milliseconds = await RunTask(connNum);
+        //    _logger.LogDebug($"耗时：{milliseconds}ms");
+        //    return new ResultDto<string>() { Result = true, Data = $"耗时：{milliseconds}ms" };
+        //}
 
-        private async Task<long> RunTask(long? taskNum)
-        {
-            var taskList = new List<Task<long>>();
-            for (int i = 0; i < taskNum; i++)
-            {
-                taskList.Add(Task.Run(() =>
-                {
-                    Stopwatch sw = new Stopwatch();
-                    sw.Start();
-                    for (int j = 0; j < taskNum; j++)
-                    {
-                        Like(taskNum.Value,i*j);
-                    }
-                    sw.Stop();
-                    return sw.ElapsedMilliseconds;
-                }));
-            }
+        //private async Task<long> RunTask(long? taskNum)
+        //{
+        //    var taskList = new List<Task<long>>();
+        //    for (int i = 0; i < taskNum; i++)
+        //    {
+        //        taskList.Add(Task.Run(() =>
+        //        {
+        //            Stopwatch sw = new Stopwatch();
+        //            sw.Start();
+        //            for (int j = 0; j < taskNum; j++)
+        //            {
+        //                Like(taskNum.Value,i*j);
+        //            }
+        //            sw.Stop();
+        //            return sw.ElapsedMilliseconds;
+        //        }));
+        //    }
 
-            var result = await Task.WhenAll(taskList);
-            return (result.Sum() / (taskNum.Value * taskNum.Value));
-        }
+        //    var result = await Task.WhenAll(taskList);
+        //    return (result.Sum() / (taskNum.Value * taskNum.Value));
+        //}
         #endregion
 
     }

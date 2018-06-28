@@ -20,6 +20,9 @@ using System.Threading.Tasks;
 
 namespace Kard.Dapper.Mysql.Repositories
 {
+    /// <summary>
+    /// Web使用的CRUD
+    /// </summary>
     public abstract class Repository : IRepository
     {
         private static IDapperExtensionsConfiguration _dapperConfig;
@@ -28,8 +31,8 @@ namespace Kard.Dapper.Mysql.Repositories
         private static string _connectionString;
         protected readonly ILogger _logger;
         protected readonly EventId _eventId = new EventId(1, "Repository");
- 
- 
+
+
 
 
         static Repository()
@@ -55,9 +58,9 @@ namespace Kard.Dapper.Mysql.Repositories
 
 
 
-        public Repository(IKardSession session, IConfiguration configuration, ILogger<Repository> logger)
+        public Repository( IConfiguration configuration, ILogger<Repository> logger)
         {
-            KardSession = session;
+          
             Configuration = configuration;
             _logger = logger;
         }
@@ -79,10 +82,10 @@ namespace Kard.Dapper.Mysql.Repositories
 
 
 
-        protected IKardSession KardSession { get; set; }
+        //protected IKardSession KardSession { get; set; }
 
 
-        public IDatabase GetDb()
+        protected IDatabase GetDb()
         {
             var connection = GetConnection();
             var sqlGenerator = new SqlGeneratorImpl(_dapperConfig);
@@ -90,7 +93,7 @@ namespace Kard.Dapper.Mysql.Repositories
             return _db;
         }
 
-        public IDbConnection GetConnection()
+        protected IDbConnection GetConnection()
         {
             return new MySqlConnection(ConnectionString);
         }
@@ -146,9 +149,9 @@ namespace Kard.Dapper.Mysql.Repositories
 
         #region Execute
 
-        public TResult ConnExecute<TResult>(Func<IDbConnection, TResult> predicate)
+        protected TResult ConnExecute<TResult>(Func<IDbConnection, TResult> predicate)
         {
-            var result= default(TResult);
+            var result = default(TResult);
             try
             {
                 using (IDbConnection connection = GetConnection())
@@ -160,17 +163,17 @@ namespace Kard.Dapper.Mysql.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError(e,string.Empty, result);
-                result= default(TResult);
+                _logger.LogError(e, string.Empty, result);
+                result = default(TResult);
             }
 
 
             return result;
         }
 
- 
 
-        public TResult TransExecute<TResult>(Func<IDbConnection, IDbTransaction, TResult> predicate)
+
+        protected TResult TransExecute<TResult>(Func<IDbConnection, IDbTransaction, TResult> predicate, IsolationLevel? isolationLevel = null)
         {
             TResult result;
             try
@@ -178,7 +181,7 @@ namespace Kard.Dapper.Mysql.Repositories
                 using (IDbConnection connection = GetConnection())
                 {
                     connection.Open();
-                    using (IDbTransaction transaction = connection.BeginTransaction())
+                    using (IDbTransaction transaction = (isolationLevel.HasValue ? connection.BeginTransaction(isolationLevel.Value) : connection.BeginTransaction()))
                     {
                         try
                         {
@@ -223,7 +226,7 @@ namespace Kard.Dapper.Mysql.Repositories
             return result;
         }
 
-        public TResult DbExecute<TResult>(Func<IDatabase, TResult> predicate)
+        protected TResult DbExecute<TResult>(Func<IDatabase, TResult> predicate)
         {
             using (IDatabase db = GetDb())
             {
@@ -238,312 +241,245 @@ namespace Kard.Dapper.Mysql.Repositories
         #region CRUD
 
         #region Create
-        public ResultDto<TKey> CreateAndGetId<T, TKey>(T entity, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        public ResultDto<TKey> CreateAndGetId<T, TKey>(T entity, int? commandTimeout = null) where T : class
         {
-            var result = new ResultDto<TKey>();
+            //if (typeof(ICreationAuditedEntity).IsAssignableFrom(typeof(T)))
+            //{
+            //    var creationAuditedEntity = entity as ICreationAuditedEntity;
+            //    creationAuditedEntity.CreatorUserId = KardSession.UserId;
+            //    creationAuditedEntity.CreationTime = DateTime.Now;
+            //    entity = creationAuditedEntity as T;
+            //}
 
-            if (typeof(ICreationAuditedEntity).IsAssignableFrom(typeof(T)))
-            {
-                var creationAuditedEntity = entity as ICreationAuditedEntity;
-                creationAuditedEntity.CreatorUserId = KardSession.UserId;
-                creationAuditedEntity.CreationTime = DateTime.Now;
-                entity = creationAuditedEntity as T;
-            }
-
-            TKey id = default(TKey);
-
-            if (connection != null)
-            {
-                id = connection.Insert<T>(entity, transaction, commandTimeout);
-            }
-            else
-            {
-                id = ConnExecute(conn => conn.Insert(entity, null, commandTimeout));
-            }
-
-            result.Result = (!id.Equals(default(TKey)));
-            if (!result.Result)
-            {
-                result.Message = "新增失败";
-            }
-            else
-            {
-                result.Message = "新增成功";
-                result.Data = id;
-            }
-            return result;
+            return ConnExecute(conn => conn.CreateAndGetId<T, TKey>(entity,null, commandTimeout));
         }
 
-       
 
-        public Task<ResultDto<TKey>> CreateAndGetIdAsync<T, TKey>(T entity, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+
+        public Task<ResultDto<TKey>> CreateAndGetIdAsync<T, TKey>(T entity, int? commandTimeout = null) where T : class
         {
-            return Task.FromResult(CreateAndGetId<T, TKey>(entity, connection, transaction, commandTimeout));
+            return Task.FromResult(CreateAndGetId<T, TKey>(entity, commandTimeout));
         }
 
-        public bool Create<T>(IEnumerable<T> entities, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        public ResultDto CreateList<T>(IEnumerable<T> entities,  int? commandTimeout = null) where T : class
         {
-            if (entities == null || (!entities.Any()))
-            { return false; }
+           
+            //if (entities == null || (!entities.Any()))
+            //{
+            //    result.Result = false;
+            //    result.Message = "列表为空";
+            //    return result;
+            //}
 
-            if (typeof(ICreationAuditedEntity).IsAssignableFrom(typeof(T)))
-            {
-                entities = entities.Select(entity =>
-                {
-                    var creationAuditedEntity = entity as ICreationAuditedEntity;
-                    creationAuditedEntity.CreatorUserId = KardSession.UserId;
-                    creationAuditedEntity.CreationTime = DateTime.Now;
-                    return creationAuditedEntity as T;
-                });
-            }
+            //if (typeof(ICreationAuditedEntity).IsAssignableFrom(typeof(T)))
+            //{
+            //    entities = entities.Select(entity =>
+            //    {
+            //        var creationAuditedEntity = entity as ICreationAuditedEntity;
+            //        creationAuditedEntity.CreatorUserId = KardSession.UserId;
+            //        creationAuditedEntity.CreationTime = DateTime.Now;
+            //        return creationAuditedEntity as T;
+            //    });
+            //}
 
-            try
-            {
-                if (connection != null)
-                {
-                    connection.Insert(entities, transaction, commandTimeout);
-                }
-                else
-                {
-                    ConnExecute(conn => { conn.Insert(entities, null, commandTimeout); return true; });
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            return ConnExecute(conn => conn.CreateList(entities, null, commandTimeout));
+   
         }
         #endregion
 
         #region Retrieve
-        public IEnumerable<dynamic> Query(string sql, object parameters = null, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?))
+        public IEnumerable<dynamic> QueryList(string sql, object parameters = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?))
         {
-            if (connection != null)
-            {
-                return connection.Query(sql, parameters, transaction, true, commandTimeout, commandType);
-            }
-
-            return ConnExecute(conn => conn.Query(sql, parameters, null, true, commandTimeout, commandType));
+            return ConnExecute(conn => conn.QueryList(sql, parameters, null, commandTimeout, commandType));
         }
 
-        public IEnumerable<object> Query(Type type, string sql, object parameters = null, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?))
+        public IEnumerable<object> QueryList(Type type, string sql, object parameters = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?))
         {
-            if (connection != null)
-            {
-                return connection.Query(type, sql, parameters, transaction, true, commandTimeout, commandType);
-            }
-
-            return ConnExecute(conn => conn.Query(type, sql, parameters, null, true, commandTimeout, commandType));
+ 
+            return ConnExecute(conn => conn.QueryList(type, sql, parameters, null, commandTimeout, commandType));
         }
 
         //parameters  IDictionary<string, object>,new {}
-        public IEnumerable<T> Query<T>(string sql, object parameters = null, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?))
+        public IEnumerable<T> QueryList<T>(string sql, object parameters = null,int? commandTimeout = null, CommandType? commandType = default(CommandType?))
         {
 
-            if (connection != null)
-            {
-                return connection.Query<T>(sql, parameters, transaction, true, commandTimeout, commandType);
-            }
-
-            return ConnExecute(conn => conn.Query<T>(sql, parameters, null, true, commandTimeout, commandType));
+            return ConnExecute(conn => conn.QueryList<T>(sql, parameters, null, commandTimeout, commandType));
         }
 
-        public T FirstOrDefault<T, TKey>(TKey id, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        public IEnumerable<T> QueryList<T>(object predicate = null, IList<ISort> sort = null,  int? commandTimeout = null) where T : class
         {
-            if (connection != null)
-            {
-                return connection.Get<T>(id, transaction, commandTimeout);
-            }
-
-            return ConnExecute(conn => conn.Get<T>(id, null, commandTimeout));
+            return ConnExecute(conn => conn.QueryList<T>(predicate, sort, null, commandTimeout));
         }
 
-        public Task<T> FirstOrDefaultAsync<T, TKey>(TKey id, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        public Task<IEnumerable<T>> QueryListAsync<T>(object predicate = null, IList<ISort> sort = null,  int? commandTimeout = null) where T : class
         {
-            return Task.FromResult(FirstOrDefault<T, TKey>(id, connection, transaction, commandTimeout));
+            return Task.FromResult(QueryList<T>(predicate, sort, commandTimeout));
         }
 
-
-
-        public T FirstOrDefault<T>(object predicate, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        public T FirstOrDefault<T, TKey>(TKey id, int? commandTimeout = null) where T : class
         {
-            var entityList = GetList<T>(predicate, null, connection, transaction, commandTimeout);
-            if (entityList?.Count() != 1)
-            {
-                return default(T);
-            }
+            return ConnExecute(conn => conn.FirstOrDefault<T, TKey>(id, null, commandTimeout));
+        }
 
-            return entityList.First();
+        public Task<T> FirstOrDefaultAsync<T, TKey>(TKey id, int? commandTimeout = null) where T : class
+        {
+            return Task.FromResult(FirstOrDefault<T, TKey>(id, commandTimeout));
         }
 
 
-        public int Count(string sql, object parameters = null, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?))
-        {
-            if (connection != null)
-            {
-                return connection.ExecuteScalar<int>(sql, parameters, transaction, commandTimeout, commandType);
-            }
 
-            return ConnExecute(conn => conn.ExecuteScalar<int>(sql, parameters, null, commandTimeout, commandType));
+        public T FirstOrDefault<T>(object predicate,  int? commandTimeout = null) where T : class
+        {
+            return   ConnExecute(conn => conn.FirstOrDefault<T>(predicate, null, commandTimeout));
         }
 
-        public int Count<T>(object predicate, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = default(int?)) where T : class
+
+        public int Count(string sql, object parameters = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?))
         {
+            return ConnExecute(conn => conn.Count(sql, parameters, null, commandTimeout, commandType));
+        }
 
-            if (connection != null)
-            {
-                return connection.Count<T>(predicate, transaction, commandTimeout);
-            }
-
+        public int Count<T>(object predicate, int? commandTimeout = default(int?)) where T : class
+        {
             return ConnExecute(conn => conn.Count<T>(predicate, null, commandTimeout));
         }
 
-        public int Count(string tableName, IDictionary<string, object> parameters = null, bool serializeParameters = false, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null)
-        {
-            string sql = $"select count(1) TotalCount from {tableName}";
-            if (serializeParameters)
-            {
-                sql += SerializeParameters(parameters);
-            }
+        //public int Count(string tableName, IDictionary<string, object> parameters = null, bool serializeParameters = false,  IDbTransaction transaction = null, int? commandTimeout = null)
+        //{
+        //    string sql = $"select count(1) TotalCount from {tableName}";
+        //    if (serializeParameters)
+        //    {
+        //        sql += SerializeParameters(parameters);
+        //    }
 
-            if (connection != null)
-            {
-                return connection.ExecuteScalar<int>(sql, parameters, transaction, commandTimeout);
-            }
+        //    if (connection != null)
+        //    {
+        //        return connection.ExecuteScalar<int>(sql, parameters, transaction, commandTimeout);
+        //    }
 
-            return ConnExecute(conn => conn.ExecuteScalar<int>(sql, parameters, null, commandTimeout));
-        }
-
-
-        public IEnumerable<T> GetList<T>(object predicate = null, IList<ISort> sort = null, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
-        {
-            if (connection != null)
-            {
-                return connection.GetList<T>(predicate, sort, transaction, commandTimeout, true);
-            }
-
-            return ConnExecute(conn => conn.GetList<T>(predicate, sort, null, commandTimeout, true));
-        }
-
-        public Task<IEnumerable<T>> GetListAsync<T>(object predicate = null, IList<ISort> sort = null, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
-        {
-            return Task.FromResult(GetList<T>(predicate, sort, connection, transaction, commandTimeout));
-        }
-
-      
+        //    return ConnExecute(conn => conn.ExecuteScalar<int>(sql, parameters, null, commandTimeout));
+        //}
 
 
-        public string SerializeParameters(IDictionary<string, object> parameters = null)
-        {
-            StringBuilder sql = new StringBuilder();
-            if (parameters != null)
-            {
-                sql.Append(" where 1=1 ");
-                foreach (string key in parameters.Keys)
-                {
-                    sql.AppendFormat(" and {0}=@{1} ", key, key);
-                }
-            }
 
-            return sql.ToString();
-        }
+
+
+
+
+        //public string SerializeParameters(IDictionary<string, object> parameters = null)
+        //{
+        //    StringBuilder sql = new StringBuilder();
+        //    if (parameters != null)
+        //    {
+        //        sql.Append(" where 1=1 ");
+        //        foreach (string key in parameters.Keys)
+        //        {
+        //            sql.AppendFormat(" and {0}=@{1} ", key, key);
+        //        }
+        //    }
+
+        //    return sql.ToString();
+        //}
         #endregion
 
 
 
         #region Update
-        public bool Update<T>(T entity, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        public ResultDto Update<T>(T entity, int? commandTimeout = null) where T : class
         {
-            var isLoggedIn = KardSession.UserId != null;
+            var resultDto = new ResultDto();
+            //var isLoggedIn = KardSession.UserId != null;
 
-            if (isLoggedIn && typeof(ILastModificationAuditedEntity).IsAssignableFrom(typeof(T)))
-            {
-                var lastModificationAuditedEntity = entity as ILastModificationAuditedEntity;
-                lastModificationAuditedEntity.LastModifierUserId = KardSession.UserId;
-                lastModificationAuditedEntity.LastModificationTime = DateTime.Now;
-                entity = lastModificationAuditedEntity as T;
-            }
+            //if (isLoggedIn && typeof(ILastModificationAuditedEntity).IsAssignableFrom(typeof(T)))
+            //{
+            //    var lastModificationAuditedEntity = entity as ILastModificationAuditedEntity;
+            //    lastModificationAuditedEntity.LastModifierUserId = KardSession.UserId;
+            //    lastModificationAuditedEntity.LastModificationTime = DateTime.Now;
+            //    entity = lastModificationAuditedEntity as T;
+            //}
+         
 
-            if (connection != null)
-            {
-                return connection.Update(entity, transaction, commandTimeout);
-            }
 
-            return ConnExecute(conn => conn.Update(entity, null, commandTimeout));
+            resultDto.Result= ConnExecute(conn => conn.Update(entity, null, commandTimeout));
+            return resultDto;
         }
 
-        public Task<bool> UpdateAsync<T>(T entity, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        public Task<ResultDto> UpdateAsync<T>(T entity, int? commandTimeout = null) where T : class
         {
-            return Task.FromResult(Update(entity, connection, transaction, commandTimeout));
+            return Task.FromResult(Update(entity, commandTimeout));
+        }
+
+        public ResultDto UpdateList<T>(IEnumerable<T> entityList,int? commandTimeout = null) where T : class
+        {
+             return TransExecute((conn, trans) => conn.UpdateList(entityList, trans, commandTimeout));
         }
         #endregion
 
         #region Delete
-        public bool Delete<T>(T entity, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        public ResultDto Delete<T>(T entity, int? commandTimeout = null) where T : class
         {
-            var logicDeleteEntity = entity as IDeletionAuditedEntity;
-            if (logicDeleteEntity == null)
-            {
-                if (connection != null)
-                {
-                    return connection.Delete<T>(entity, transaction, commandTimeout);
-                }
+            //var resultDto = new ResultDto();
+            //var logicDeleteEntity = entity as IDeletionAuditedEntity;
+            //if (logicDeleteEntity == null)
+            //{
 
-                return ConnExecute(conn => conn.Delete<T>(entity, null, commandTimeout));
-            }
+            //    resultDto.Result= ConnExecute(conn => conn.Delete<T>(entity, transaction, commandTimeout));
+            //    return resultDto;
+            //}
 
-            logicDeleteEntity.IsDeleted = true;
-            logicDeleteEntity.DeleterUserId = KardSession.UserId;
-            logicDeleteEntity.DeletionTime = DateTime.Now;
-            if (connection != null)
-            {
-                return connection.Update(logicDeleteEntity, transaction, commandTimeout);
-            }
+            //logicDeleteEntity.IsDeleted = true;
+            //logicDeleteEntity.DeleterUserId = KardSession.UserId;
+            //logicDeleteEntity.DeletionTime = DateTime.Now;
 
-            return ConnExecute(conn => connection.Update(logicDeleteEntity, null, commandTimeout));
+
+            //resultDto.Result = ConnExecute(conn => conn.Update(logicDeleteEntity, transaction, commandTimeout));
+            //return resultDto;
+
+            var resultDto = new ResultDto();
+            resultDto.Result = ConnExecute(conn => conn.Delete<T>(entity, null, commandTimeout));
+            return resultDto;
         }
 
-        public Task<bool> DeleteAsync<T>(T entity, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        public Task<ResultDto> DeleteAsync<T>(T entity,  int? commandTimeout = null) where T : class
         {
-            return Task.FromResult(Delete(entity, connection, transaction, commandTimeout));
+            return Task.FromResult(Delete(entity, commandTimeout));
         }
 
-        public bool Delete<T>(object predicate, IDbConnection connection = null, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        public ResultDto DeleteList<T>(object predicate, int? commandTimeout = null) where T : class
         {
-            var isPhysicsDelete = !typeof(IDeletionAuditedEntity).IsAssignableFrom(typeof(T));
+            //var resultDto = new ResultDto();
+            //var isPhysicsDelete = !typeof(IDeletionAuditedEntity).IsAssignableFrom(typeof(T));
 
-            if (isPhysicsDelete)
-            {
-                if (connection != null)
-                {
-                    return connection.Delete<T>(predicate, transaction, commandTimeout);
-                }
-                return ConnExecute(conn => conn.Delete<T>(predicate, null, commandTimeout));
-            }
+            //if (isPhysicsDelete)
+            //{
 
-            Func<IDbConnection, IDbTransaction, bool> updateAction = delegate (IDbConnection conn, IDbTransaction trans)
-            {
-                var entityList = GetList<T>(predicate, null, conn, trans, commandTimeout);
-                foreach (var entity in entityList)
-                {
-                    var deleteAuditedEntity = entity as IDeletionAuditedEntity;
-                    deleteAuditedEntity.IsDeleted = true;
-                    deleteAuditedEntity.DeleterUserId = KardSession.UserId;
-                    deleteAuditedEntity.DeletionTime = DateTime.Now;
-                    if (!conn.Update(deleteAuditedEntity as T, trans, commandTimeout))
-                    { return false; }
-                }
-                return true;
-            };
+            //    resultDto.Result = ConnExecute(conn => conn.Delete<T>(predicate, transaction, commandTimeout));
+            //    return resultDto;
+            //}
+
+            //Func<IDbConnection, IDbTransaction, bool> updateAction = delegate (IDbConnection conn, IDbTransaction trans)
+            //{
+            //    var entityList = conn.GetList<T>(predicate, null, trans, commandTimeout);
+            //    foreach (var entity in entityList)
+            //    {
+            //        var deleteAuditedEntity = entity as IDeletionAuditedEntity;
+            //        deleteAuditedEntity.IsDeleted = true;
+            //        deleteAuditedEntity.DeleterUserId = KardSession.UserId;
+            //        deleteAuditedEntity.DeletionTime = DateTime.Now;
+            //        if (!conn.Update(deleteAuditedEntity as T, trans, commandTimeout))
+            //        { return false; }
+            //    }
+            //    return true;
+            //};
 
 
-            if (connection != null)
-            {
-                return updateAction(connection, transaction);
-            }
+            //resultDto.Result= TransExecute((conn, trans) => updateAction(conn, trans));
+            //return resultDto;
 
-            return TransExecute((conn, trans) => updateAction(conn, trans));
+
+            var resultDto = new ResultDto();
+            resultDto.Result = ConnExecute(conn => conn.Delete<T>(predicate, null, commandTimeout));
+            return resultDto;
         }
 
 
