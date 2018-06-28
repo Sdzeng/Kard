@@ -170,35 +170,35 @@ namespace Kard.Web.Controllers
         /// </summary>
         /// <param name="connNum"></param>
         /// <returns></returns>
-        //[HttpGet("test")]
-        //public async Task<ResultDto<string>> TestAsync(long? connNum = 10)
-        //{
-        //    var milliseconds = await RunTask(connNum);
-        //    _logger.LogDebug($"耗时：{milliseconds}ms");
-        //    return new ResultDto<string>() { Result = true, Data = $"耗时：{milliseconds}ms" };
-        //}
+        [HttpGet("test")]
+        public async Task<ResultDto<string>> TestAsync(long? connNum = 10)
+        {
+            var milliseconds = await RunTask(connNum);
+            _logger.LogDebug($"耗时：{milliseconds}ms");
+            return new ResultDto<string>() { Result = true, Data = $"耗时：{milliseconds}ms" };
+        }
 
-        //private async Task<long> RunTask(long? taskNum)
-        //{
-        //    var taskList = new List<Task<long>>();
-        //    for (int i = 0; i < taskNum; i++)
-        //    {
-        //        taskList.Add(Task.Run(() =>
-        //        {
-        //            Stopwatch sw = new Stopwatch();
-        //            sw.Start();
-        //            for (int j = 0; j < taskNum; j++)
-        //            {
-        //                Like(taskNum.Value,i*j);
-        //            }
-        //            sw.Stop();
-        //            return sw.ElapsedMilliseconds;
-        //        }));
-        //    }
+        private async Task<long> RunTask(long? taskNum)
+        {
+            var taskList = new List<Task<long>>();
+            for (int i = 0; i < taskNum; i++)
+            {
+                taskList.Add(Task.Run(() =>
+                {
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+                    for (int j = 0; j < taskNum; j++)
+                    {
+                        Like(taskNum.Value);
+                    }
+                    sw.Stop();
+                    return sw.ElapsedMilliseconds;
+                }));
+            }
 
-        //    var result = await Task.WhenAll(taskList);
-        //    return (result.Sum() / (taskNum.Value * taskNum.Value));
-        //}
+            var result = await Task.WhenAll(taskList);
+            return (result.Sum() / (taskNum.Value * taskNum.Value));
+        }
         #endregion
 
     }

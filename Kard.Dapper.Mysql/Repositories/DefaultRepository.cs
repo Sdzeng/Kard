@@ -361,17 +361,21 @@ namespace Kard.Dapper.Mysql.Repositories
         {
             var resultDto = new ResultDto();
 
-            //多处改动使用事务时则用事务级别隔离read committed
+            //多处改动使用事务时则用事务级别隔离read committed加行锁
             DynamicParameters pars = new DynamicParameters();
             pars.Add("@iuserId", userId);
             pars.Add("@iessayId", essayId);
             pars.Add("@icreationTime", DateTime.Now);
+            pars.Add("@olikeNum", 0, DbType.Int32, ParameterDirection.Output);
             pars.Add("@oisLike", null,DbType.Byte, ParameterDirection.Output);
-         
+        
+
             try
             {
-                var likeNum = ConnExecute(conn => conn.ExecuteScalar<int>("changeEssayLike", pars, commandType: CommandType.StoredProcedure));//res2.Count = 80
+                var ee=ConnExecute(conn => conn.Execute("changeEssayLike", pars, commandType: CommandType.StoredProcedure));//res2.Count = 80
+                var likeNum = pars.Get<int>("@olikeNum");
                 var isLike = pars.Get<byte>("@oisLike")==1;
+               
                 resultDto.Result = true;
                 resultDto.Data =new { LikeNum = likeNum, IsLike = isLike };
             }
