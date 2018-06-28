@@ -35,6 +35,8 @@ namespace Kard.Core.Entities
 
         public KuserEntity Kuser;
 
+        public EssayLikeEntity EssayLike;
+
         public List<MediaEntity> MediaList;
 
         public List<TagEntity> TagList;

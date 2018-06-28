@@ -49,7 +49,7 @@ namespace Kard.Web.Controllers
         public ResultDto GetInfo(long id)
         {
             //单品信息
-            var essayEntity = _defaultRepository.GetEssay(id);
+            var essayEntity = _defaultRepository.GetEssay(id,_kardSession.UserId);
             var resultDto = new ResultDto();
             resultDto.Result = essayEntity != null;
             resultDto.Data = essayEntity;
@@ -160,12 +160,9 @@ namespace Kard.Web.Controllers
         /// <param name="isLike"></param>
         /// <returns></returns>
         [HttpPost("like")]
-        public ResultDto Like(long essayId,bool isLike)
+        public ResultDto Like(long essayId)
         {
-            var resultDto= new ResultDto();
-            resultDto.Result= _defaultRepository.ChangeEssayLike(_kardSession.UserId.Value,essayId, isLike);
-
-            return resultDto;
+            return _defaultRepository.ChangeEssayLike(_kardSession.UserId.Value, essayId);
         }
 
         /// <summary>

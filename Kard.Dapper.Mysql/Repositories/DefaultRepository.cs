@@ -11,6 +11,7 @@ using System.Data;
 using System.Linq;
 using System.Threading;
 using DapperExtensionsCore;
+using MySql.Data.MySqlClient;
 
 namespace Kard.Dapper.Mysql.Repositories
 {
@@ -212,11 +213,12 @@ namespace Kard.Dapper.Mysql.Repositories
         }
 
 
-        public EssayEntity GetEssay(long id)
+        public EssayEntity GetEssay(long id,long? currentUserId)
         {
             string sql = @"select *,(select NickName from kuser where Id=essay.CreatorUserId) CreatorUserName 
                 from essay 
                 left join kuser on essay.CreatorUserId=kuser.Id 
+                left join essay_like on essay.Id=essay_like.EssayId and essay_like.CreatorUserId=@CurrentUserId 
                 left join media on essay.Id=media.EssayId 
                 left join tag on essay.Id=tag.EssayId 
                 where essay.id=@EssayId 
@@ -225,12 +227,13 @@ namespace Kard.Dapper.Mysql.Repositories
             return ConnExecute(conn =>
             {
                 var essayList = new List<EssayEntity>();
-                conn.Query<EssayEntity, KuserEntity, MediaEntity, TagEntity, bool>(sql, (essay, kuser, media, tag) =>
+                conn.Query<EssayEntity, KuserEntity, EssayLikeEntity, MediaEntity, TagEntity, bool>(sql, (essay, kuser, essayLike, media, tag) =>
                  {
                      var essayEntity = essayList.FirstOrDefault(e => e.Id == essay.Id);
                      if (essayEntity == null)
                      {
                          essay.Kuser = kuser;
+                         essay.EssayLike = essayLike;
                          essay.MediaList = new List<MediaEntity>();
                          essay.TagList = new List<TagEntity>();
                          essayList.Add(essay);
@@ -253,7 +256,7 @@ namespace Kard.Dapper.Mysql.Repositories
 
                      return true;
                  },
-                  new { EssayId = id },
+                  new { EssayId = id, CurrentUserId= currentUserId },
                   splitOn: "Id");
 
 
@@ -354,36 +357,29 @@ namespace Kard.Dapper.Mysql.Repositories
             return result > 0;
         }
 
-        public bool ChangeEssayLike(long userId,long essayId, bool isLike)
+        public ResultDto ChangeEssayLike(long userId,long essayId)
         {
+            var resultDto = new ResultDto();
+
             //多处改动使用事务时则用事务级别隔离read committed
-            string sql = string.Empty;
-
-            if (isLike)
+            DynamicParameters pars = new DynamicParameters();
+            pars.Add("@iuserId", userId);
+            pars.Add("@iessayId", essayId);
+            pars.Add("@icreationTime", DateTime.Now);
+            pars.Add("@oisLike", null,DbType.Byte, ParameterDirection.Output);
+         
+            try
             {
-                sql = @"set session transaction isolation level read committed;
-                                start transaction;
-                                insert essay_like(EssayId,CreatorUserId,CreationTime) values(@EssayId,@CreatorUserId,@CreationTime);
-                                update essay set  LikeNum=(LikeNum+1) where Id=@EssayId; 
-                                commit;";
+                var likeNum = ConnExecute(conn => conn.ExecuteScalar<int>("changeEssayLike", pars, commandType: CommandType.StoredProcedure));//res2.Count = 80
+                var isLike = pars.Get<byte>("@oisLike")==1;
+                resultDto.Result = true;
+                resultDto.Data =new { LikeNum = likeNum, IsLike = isLike };
             }
-            else
-            {
-                sql = @"set session transaction isolation level read committed;
-                                start transaction;
-                                delete from essay_like where EssayId=@EssayId and CreatorUserId=@CreatorUserId;
-                                update essay set  LikeNum=(LikeNum-1) where Id=@EssayId; 
-                                commit;";
+            catch (Exception ex) {
+                resultDto.Result = false;
+                resultDto.Message = ex.Message;
             }
-
-            var essayLikeEntity = new EssayLikeEntity
-            {
-                EssayId = essayId,
-                CreatorUserId =  userId,
-                CreationTime = DateTime.Now
-            };
-            var result = ConnExecute(conn => conn.Execute(sql, essayLikeEntity));
-            return result > 0;
+            return resultDto;
         }
 
         public ResultDto AddTask(LongTaskEntity entity) {

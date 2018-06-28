@@ -157,8 +157,8 @@ namespace Kard.Web
             Action<CookieAuthenticationOptions> cookieSettingAction = (o) =>
             {
                 o.Cookie.HttpOnly = true;//置为后台只读模式,前端无法通过JS来获取cookie值,可以有效的防止XXS攻击
-                o.LoginPath = "/api/user/notlogin";
-                o.AccessDeniedPath = "/api/user/notlogin";
+                o.LoginPath = "/user/notlogin";
+                o.AccessDeniedPath = "/user/notlogin";
                 o.SlidingExpiration = true;
                 o.ExpireTimeSpan = TimeSpan.FromDays(7);  //当HttpContext.SignInAsync的IsPersistent = true 时生效
                 //o.SessionStore = true;

@@ -21,7 +21,7 @@ namespace Kard.Core.IRepositories
 
         IEnumerable<EssayEntity> GetEssayList(DateTime creationTime);
 
-        EssayEntity GetEssay(long id);
+        EssayEntity GetEssay(long id, long? currentUserId);
 
         EssayEntity GetEssay2(long id);
 
@@ -29,7 +29,7 @@ namespace Kard.Core.IRepositories
 
         bool UpdateBrowseNum(long id);
 
-        bool ChangeEssayLike(long userId, long essayId, bool isLike);
+        ResultDto ChangeEssayLike(long userId, long essayId);
 
         ResultDto AddTask(LongTaskEntity entity);
     }

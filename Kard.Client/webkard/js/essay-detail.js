@@ -1,4 +1,6 @@
-﻿var essaydetailjs = {
+﻿ 
+
+var essaydetailjs = {
     data: { scope: $("#essayDetailPage") },
     init: function () {
         var _this = this;
@@ -29,7 +31,7 @@
         var queryString = basejs.getQueryString();
         //设置菜单封面
         var helper = new httpHelper({
-            url: basejs.requestDomain + "/essay/"+queryString.id,
+            url: basejs.requestDomain + "/essay/" + queryString.id,
             type: "GET",
             success: function (resultDto) {
                 var data = resultDto.data;
@@ -51,17 +53,36 @@
 
                 var imgs = "";
                 for (var i in data.mediaList) {
-                    var media = data.mediaList[i]; 
-                    imgs += " <img src='" + basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension+"' style=''>";
+                    var media = data.mediaList[i];
+                    imgs += " <img src='" + basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension + "' style=''>";
                 }
                 $('.essay-detail-content', _this.data.scope).html("<p>" + data.content + "</p><p>" + imgs + "</p>");
 
-                $('.essay-detail-like-share', _this.data.scope).html("<span>喜欢 " + data.likeNum + "</span><span>分享 " + data.shareNum +"</span><span>举报</span>");
+                var isLike = (data.essayLike != null);
+                $('.essay-detail-like-share', _this.data.scope).html("<span id='btnLike' data-islike='" + isLike + "'>" + (isLike ? "已喜欢 " :"喜欢 ") + data.likeNum + "</span><span>分享 " + data.shareNum + "</span><span>举报</span>");
 
-                $(".essay-author-avatar>img", _this.data.scope).attr("src", basejs.cdnDomain + "/" +data.kuser.avatarUrl);
+                $(".essay-author-avatar>img", _this.data.scope).attr("src", basejs.cdnDomain + "/" + data.kuser.avatarUrl);
                 $(".essay-author-txt-name>span:eq(0)", _this.data.scope).text(data.kuser.nickName);
                 $(".essay-author-txt-introduction", _this.data.scope).text(data.kuser.introduction)
-                
+
+                $("#btnLike", _this.data.scope).click(function () {
+                    var $btnLike = $(this);
+                    var isLikeChange = $btnLike != "true";
+                    (new httpHelper({
+                        url: basejs.requestDomain + "/essay/like",
+                        type: "POST",
+                        data: { essayId: queryString.id},
+                        success: function (resultDto) {
+                         
+                            if (resultDto.result) {
+                                var data = resultDto.data;
+                                $btnLike.attr("data-islike", data.isLike.toString());
+                                $btnLike.text((data.isLike ? "已喜欢 " : "喜欢 ") + data.likeNum.toString());
+                            }
+                        }
+                    })).send();
+                   
+                });
             }
         });
         helper.send();
