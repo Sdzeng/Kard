@@ -1,0 +1,97 @@
+.login-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 150px;
+    height: 500px;
+
+    .login-info {
+        width: 300px;
+
+        .login-form {
+            margin-top: 20px;
+            display: none;
+
+            &-active {
+                display: inline;
+            }
+
+            > div {
+                margin-bottom: 20px;
+                font-size: 14px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                line-height: 30px;
+
+                &:first-child {
+                    text-align: right;
+                    color: #bbb;
+                    cursor: pointer;
+                    margin-bottom: 0px;
+                    margin-top: 20px;
+                    justify-content: flex-end;
+
+                    &:hover {
+                        color: black;
+                    }
+                }
+
+
+
+
+                input[type="text"], input[type="password"] {
+                    width: 250px;
+                    border-radius: 3px;
+                    padding: 5px;
+                }
+
+
+
+                input[type="submit"] {
+                    margin-top: 50px;
+                    background-color: #49cc90;
+                    color: white;
+                    border: none;
+                    padding: 5px 10px;
+                    width: 80px;
+
+                    &:hover {
+                        background: #039993;
+                    }
+                }
+
+                input[name="verificationCode"] {
+                    width: 150px;
+                }
+
+
+                input[type="button"] {
+                    border: 0px;
+                }
+            }
+        }
+    }
+
+    .goto-register-info {
+        margin-left: 300px;
+
+        > div {
+            margin-bottom: 10px;
+            padding: 0px 10px;
+            border-left: 2px solid #eff5ef;
+
+            &:last-child {
+                border-left: 0px;
+                padding-top: 30px;
+
+                div {
+                    width: 200px;
+                    height: 200px;
+                    background-color: #f5f5f5;
+                }
+            }
+        }
+    }
+}
