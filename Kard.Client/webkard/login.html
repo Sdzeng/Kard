@@ -1,28 +1,84 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8">
-    <title>最IN</title>
+    <title>自然单品</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="icon" href="/image/logo-tab_16x16.ico" sizes="16x16">
-   
+    <link rel="stylesheet" href="/css/kard.css" type="text/css" media="screen">
+
+    <!--<link rel="stylesheet/less" href="/less/kard.less" type="text/css" media="screen">
+    <script type="text/javascript" src="/js/less.js?v=1.0.0"></script>-->
 </head>
 <body id="loginPage">
 
-    登陆页
-    <form id="loginform">
-        用户<input id="username" name="username" type="text" />
-        密码<input id="password" name="password" type="password" />
-        <input type="submit" value="提交" />
-    </form>
+    <nav id="navbar" class="navbar bg-layer navbar-bottom-shadow">
 
+        <div class="navbar-logo">
+            <a href="/"><span><img src="/image/logo-nav_30x30.png"></span><span>自然单品</span></a>
+        </div>
+        <div class="navbar-left">
+            <ul id="menuList" class="navbar-nav"></ul>
+        </div>
+        <div class="navbar-right">
+            <ul class="navbar-nav">
+                <li id="authBtns1"><a href="register.html" target="_self">注册</a></li>
+                <li><a id="btnTest">测试登陆状态</a></li>
+            </ul>
+        </div>
 
-   <script type="text/javascript" src="/js/jquery-3.1.1.min.js?v=1.0.0" ></script>
+    </nav>
+
+    <div class="section-style login-section">
+        <div class="login-info">
+            <h2>登陆自然单品</h2>
+            <form id="accountLogin" class="login-form login-form-active">
+                <div id="showPhoneLogin">手机验证码登陆</div>
+                <div><label for="username">用户</label><input id="username" name="username" class="unify-input" type="text" /></div>
+                <div><label for="password">密码</label><input id="password" name="password" class="unify-input" type="password" /></div>
+                <div><span><input name="remember" class="unify-input" type="checkbox" /><label for="rememberMe">记住我</label></span> <span><a href="">忘记密码了</a></span></div>
+                <div><input type="submit" value="登陆" /> </div>
+                <div><input name="loginType" value="accountLogin" type="hidden" />  </div>
+            </form>
+            <form id="phoneLogin" class="login-form">
+                <div id="showAccountLogin">账号密码登陆</div>
+                <div><label for="phone">手机号</label> <input id="phone" name="phone" class="unify-input" type="text" /></div>
+                <div><span>验证码 <input name="verificationCode" class="unify-input" type="text" /></span><input type="button" value="获取验证码" /></div>
+                <div><input type="submit" value="登陆" /> </div>
+                <div><input name="loginType" value="phoneLogin" type="hidden" />  </div>
+            </form>
+        </div>
+        <div class="goto-register-info">
+            <div>还没有自然单品帐号？<a href="register.html">立即注册</a></div>
+            <div>第三方登陆：微信、微博、QQ</div>
+            <div><div></div></div>
+        </div>
+    </div>
+    <footer class="min-footer">
+        <div>
+            <div>
+                <span>©Bit-版权所有</span>
+            </div>
+
+            <div>
+                <span><a target="_blank" href="">关于Bit</a></span>
+                <span><a target="_blank" href="">在Bit工作</a></span>
+                <span><a target="_blank" href="">联系我们</a></span>
+                <span><a target="_blank" href="">免责声明</a></span>
+                <span><a target="_blank" href="">帮助中心</a></span>
+                <span><a target="_blank" href="">Bit广告</a></span>
+            </div>
+        </div>
+    </footer>
+    <!-- 公共js -->
+    <script type="text/javascript" src="/js/jquery-3.1.1.min.js?v=1.0.0"></script>
     <script type="text/javascript" src="/js/storage.js?v=1.0.0"></script>
     <script type="text/javascript" src="/js/base.js?v=1.0.0"></script>
 
-    <script type="text/javascript" src="/js/login.js?v=1.0.0" ></script>
+    <script type="text/javascript" src="/js/login.js?v=1.0.0"></script>
+
+
 
 </body>
 </html>

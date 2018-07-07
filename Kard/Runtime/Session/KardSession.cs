@@ -150,20 +150,20 @@ namespace Kard.Runtime.Session
         /// <summary>
         /// 邮箱
         /// </summary>
-        public virtual string Email
-        {
-            get
-            {
+        //public virtual string Email
+        //{
+        //    get
+        //    {
 
-                var nameClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.Email);
-                if (string.IsNullOrEmpty(nameClaim?.Value))
-                {
-                    return null;
-                }
+        //        var nameClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.Email);
+        //        if (string.IsNullOrEmpty(nameClaim?.Value))
+        //        {
+        //            return null;
+        //        }
 
-                return nameClaim.Value;
-            }
-        }
+        //        return nameClaim.Value;
+        //    }
+        //}
 
  
     }

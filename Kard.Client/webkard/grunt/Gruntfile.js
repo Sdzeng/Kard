@@ -79,7 +79,7 @@ module.exports = function (grunt) {
                 collapseWhitespace: true,//无用空格
                 collapseBooleanAttributes: true,//失败的布尔属性
                 //removeAttributeQuotes: true,//移除属性引号      有些属性不可移走引号
-                removeRedundantAttributes: true,//移除多余的属性
+                removeRedundantAttributes: false,//移除多余的属性
                 useShortDoctype: true,//使用短的跟元素
                 removeEmptyAttributes: true//移除空的属性
                 //removeOptionalTags: true//移除可选附加标签

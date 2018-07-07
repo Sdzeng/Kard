@@ -1,7 +1,8 @@
-.footer {
+﻿.footer {
     color: #bbb;
-    margin-top:100px;
-    //background-color: #282828;
+    padding-top: 100px;
+    background-color: #f5f5f5;
+
     &-content {
         background-color: #555;
         display: flex;
@@ -15,7 +16,8 @@
 
             li {
                 line-height: 30px;
-                cursor:pointer;
+                cursor: pointer;
+
                 &:first-child {
                     line-height: 50px;
                     font-size: 120%;
@@ -34,6 +36,7 @@
         line-height: 50px;
         text-align: center;
 
+
         span {
             &:not(:first-child) {
                 &:before {
@@ -43,6 +46,48 @@
 
             a {
                 color: #bbb;
+            }
+        }
+    }
+}
+
+
+.min-footer {
+    margin-top: 200px;
+    height: 40px;
+    line-height: 40px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    > div {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 1010px;
+        border-top: 1px dashed #dcdcdc;
+        color: #999;
+        word-spacing: 3px;
+        letter-spacing: 1px;
+
+        @media (min-width: @screen-lg-min) {
+            width: 1150px;
+        }
+
+        span {
+            &:not(:first-child) {
+                &:before {
+                    content: " · ";
+                }
+            }
+
+            a {
+                color: #999;
+
+                &:hover {
+                    color:black;
+                }
             }
         }
     }

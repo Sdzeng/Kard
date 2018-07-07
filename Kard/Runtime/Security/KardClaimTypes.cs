@@ -44,7 +44,7 @@ namespace Kard.Runtime.Security
         /// <summary>
         /// 邮箱
         /// </summary>
-        public const string Email = ClaimTypes.Email;
+        //public const string Email = ClaimTypes.Email;
 
 
    

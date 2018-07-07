@@ -20,17 +20,38 @@ namespace Kard.Core.AppServices.Default
 {
     public class LoginAppService : ILoginAppService
     {
+        //private readonly UserManager<KuserEntity> _userManager;
         private readonly IKardSession _kardSession;
         private readonly IPasswordHasher<KuserEntity> _passwordHasher;
+        //private readonly IPasswordValidator<KuserEntity> _passwordValidator;
         private readonly IDefaultRepository _defaultRepository;
 
-        public LoginAppService(IKardSession kardSession, IPasswordHasher<KuserEntity> passwordHasher, IDefaultRepository defaultRepository)
+        //public LoginAppService(
+        //    UserManager<KuserEntity> userManager,
+        //    IKardSession kardSession,
+        //    IPasswordHasher<KuserEntity> passwordHasher, 
+        //    IPasswordValidator<KuserEntity> passwordValidator, 
+        //    IDefaultRepository defaultRepository)
+        //{
+        //    _userManager = userManager;
+        //    _kardSession = kardSession;
+        //    _passwordHasher = passwordHasher;
+        //    _passwordValidator = passwordValidator;
+        //    _defaultRepository = defaultRepository;
+        //}
+
+        public LoginAppService(
+             
+            IKardSession kardSession,
+            IPasswordHasher<KuserEntity> passwordHasher,
+            IDefaultRepository defaultRepository)
         {
+          
             _kardSession = kardSession;
             _passwordHasher = passwordHasher;
+
             _defaultRepository = defaultRepository;
         }
-
 
 
 
@@ -49,7 +70,7 @@ namespace Kard.Core.AppServices.Default
 
 
 
-        public ResultDto<ClaimsIdentity> WebLogin(string name, string password)
+        public ResultDto<ClaimsIdentity> AccountLogin(string name, string password)
         {
             var result = new ResultDto<ClaimsIdentity>();
             var userList = _defaultRepository.QueryList<KuserEntity>("select * from kuser where `Name`=@Name", new { Name = name });
@@ -80,6 +101,9 @@ namespace Kard.Core.AppServices.Default
 
             return result;
         }
+
+
+
 
         public ResultDto<ClaimsIdentity> WxLogin(string code)
         {
@@ -140,8 +164,54 @@ namespace Kard.Core.AppServices.Default
         }
 
 
+        public ResultDto Register(string registerType, KuserEntity user)
+        {
+            var resultDto = new ResultDto();
+            switch (registerType)
+            {
+                case "accountRegister": resultDto = AccountRegister(user); break;
+                case "wxRegister": resultDto = WxRegister(user); break;
+            }
+            return resultDto;
+        }
 
-        public ResultDto Register(KuserEntity user)
+        private ResultDto AccountRegister(KuserEntity user)
+        {
+            var resultDto = new ResultDto();
+            var existUserList = _defaultRepository.GetExistUser(user.Name, user.Phone, user.NickName);
+            var existName = existUserList.Where(u => u.Name == user.Name).Any();
+            var existPhone = existUserList.Where(u => u.Phone == user.Phone).Any();
+            var existNickName = existUserList.Where(u => u.NickName == user.NickName).Any();
+            if (existName || existPhone || existNickName)
+            {
+                resultDto.Result = false;
+                resultDto.Message = $"{(existName ? "邮箱 " : "")}{(existPhone ? "手机 " : "")}{(existNickName ? "昵称 " : "")}已被注册";
+                return resultDto;
+            }
+
+            //newEntity.AppId = _defaultRepository.FirstOrDefault<RetailerEntity, string>(newEntity.RetailerId)?.AppId;
+            //var result = _passwordValidator.ValidateAsync(_userManager, user, user.Password).Result;
+            //if (!result.Succeeded)
+            //{
+            //    resultDto.Result = false;
+            //    resultDto.Message = $"密码{ string.Join(";", result.Errors)}";
+            //    return resultDto;
+            //}
+
+            user.Password = _passwordHasher.HashPassword(user, user.Password);
+
+
+
+            //resultDto.Result = _defaultRepository.CreateAccountUser(user);
+            //resultDto.Message = resultDto.Result?"注册成功": "注册失败";
+            //return resultDto;
+            var createResultDto= _defaultRepository.CreateAndGetId<KuserEntity,long>(user);
+            resultDto.Result = createResultDto.Result;
+            resultDto.Message = createResultDto.Message;
+            return resultDto;
+
+        }
+        private ResultDto WxRegister(KuserEntity user)
         {
             var result = new ResultDto();
 
@@ -210,10 +280,10 @@ namespace Kard.Core.AppServices.Default
             }
 
 
-            if (!user.Email.IsNullOrEmpty())
-            {
-                caimsIdentity.AddClaim(new Claim(KardClaimTypes.Email, user.Email));
-            }
+            //if (!user.Email.IsNullOrEmpty())
+            //{
+            //    caimsIdentity.AddClaim(new Claim(KardClaimTypes.Email, user.Email));
+            //}
 
             return caimsIdentity;
         }

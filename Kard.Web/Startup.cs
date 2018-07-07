@@ -112,7 +112,30 @@ namespace Kard.Web
             //    //.AddDebug()
             //    //.AddConsole();
             //});
-       
+
+            #endregion
+
+            #region Identity设置
+            //services.Configure<IdentityOptions>(options =>
+            //{
+            //    // 密码配置
+            //    options.Password.RequireDigit = true;//是否需要数字(0-9).
+            //    options.Password.RequiredLength = 6;//设置密码长度最小为6
+            //    options.Password.RequireNonAlphanumeric = true;//是否包含非字母或数字字符。
+            //    options.Password.RequireUppercase = true;//是否需要大写字母(A-Z).
+            //    options.Password.RequireLowercase = true;//是否需要小写字母(a-z).
+            //    //options.Password.RequiredUniqueChars = 6;
+
+            //    // 锁定设置
+            //    //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);//账户锁定时长30分钟
+            //    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);//账号锁定3天
+            //    //options.Lockout.MaxFailedAccessAttempts = 3;//10次失败的尝试将账户锁定
+            //    //options.Lockout.AllowedForNewUsers = true;
+
+            //    // 用户设置
+            //    options.User.RequireUniqueEmail = false; //是否Email地址必须唯一
+
+            //});
             #endregion
 
             #region 未授权时使用的session cookie默认名称.AspNetCore.Session

@@ -38,9 +38,11 @@ namespace Kard.Web.Controllers
             string cacheKey = $"homeCover[{today.ToString("yyyyMMdd")}]";
             CoverEntity coverEntity = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
             {
+               
                 cacheEntry.SetAbsoluteExpiration(today.AddDays(1));
                 return _defaultRepository.GetDateCover(today);
             });
+          
             return new ResultDto<CoverEntity>() { Result = true, Data = coverEntity };
         }
 
@@ -78,9 +80,9 @@ namespace Kard.Web.Controllers
                 resultDto.Result = true;
                 resultDto.Data = new
                 {
-                    CosmeticsList = _defaultRepository.GetHomeMediaPictureList(12, "妆品"),
+                    CosmeticsList = _defaultRepository.GetHomeMediaPictureList(12, "衣妆"),
                     FashionSenseList = _defaultRepository.GetHomeMediaPictureList(12, "潮拍"),
-                    OriginalityList = _defaultRepository.GetHomeMediaPictureList(12, "创意")
+                    OriginalityList = _defaultRepository.GetHomeMediaPictureList(12, "户外")
                     //ExcerptList = _defaultRepository.GetHomeMediaPicture(12, "摘录")
                 };
                 //var aWeekAgo = DateTime.Now.Date.AddYears(-7);

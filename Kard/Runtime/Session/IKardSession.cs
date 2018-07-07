@@ -32,7 +32,7 @@
         /// <summary>
         /// 邮箱
         /// </summary>
-        string Email { get; }
+        //string Email { get; }
 
        
 

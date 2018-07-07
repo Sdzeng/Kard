@@ -79,7 +79,7 @@ namespace Kard.Web.Controllers
             }
             user.WxOpenId = _kardSession.WxOpenId;
 
-            var result = _loginAppService.Register(user);
+            var result = _loginAppService.Register("wxRegister", user);
             return result;
         }
 

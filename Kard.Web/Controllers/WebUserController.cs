@@ -42,7 +42,7 @@ namespace Kard.Web.Controllers
             _loginAppService = loginAppService;
         }
 
-     
+
 
         #region user
 
@@ -61,19 +61,32 @@ namespace Kard.Web.Controllers
         /// <summary>
         /// 登陆接口
         /// </summary>
+        /// <param name="loginType"></param>
         /// <param name="username"></param>
         /// <param name="password"></param>
+        /// <param name="remember"></param> 
         /// <param name="returnUrl"></param>
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ResultDto> Login(string username, [DataType(DataType.Password)] string password, string returnUrl)
+        public async Task<ResultDto> Login(string loginType, string username, [DataType(DataType.Password)] string password,string remember, string returnUrl)
         {
-            var result = _loginAppService.WebLogin(username, password);
+            var resultDto = new ResultDto();
+            switch (loginType) {
+                case "accountLogin":resultDto = await AccountLoginAsync(username, password, remember);break;
+                case "phoneLogin":break;
+            }
+            return resultDto;
+        }
+
+
+        private async Task<ResultDto> AccountLoginAsync(string username, [DataType(DataType.Password)] string password, string remember)
+        {
+            var result = _loginAppService.AccountLogin(username, password);
             if (result.Result)
             {
                 var identity = result.Data;
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), new AuthenticationProperties { IsPersistent = true });
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), new AuthenticationProperties { IsPersistent = (remember == "on") });
 
                 //if (returnUrl.IsNullOrEmpty())
                 //{
@@ -81,14 +94,29 @@ namespace Kard.Web.Controllers
                 //}
 
                 //return Redirect(returnUrl);
-                return new ResultDto() { Result = true, Message = "登录成功" }; 
+                return new ResultDto() { Result = true, Message = "登录成功" };
             }
             return new ResultDto() { Result = false, Message = "登录失败，用户名密码不正确" };
         }
 
- 
 
-
+        /// <summary>
+        /// 注册
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public ResultDto Register(KuserEntity user)
+        {
+            user.UserType = "WebAccount";
+            user.KroleId = 1;
+            user.City = "广州";
+            user.AvatarUrl = @"user\id\avatar.jpg";
+            user.CoverPath = "";
+            user.AuditCreation(1);
+            return _loginAppService.Register("accountRegister", user);
+        }
         /// <summary>
         /// 退出
         /// </summary>

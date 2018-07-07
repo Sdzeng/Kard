@@ -26,7 +26,7 @@ namespace Kard.Web.Controllers
     public class UserController : BaseController
     {
         private readonly IHostingEnvironment _env;
-       
+
         private readonly IDefaultRepository _defaultRepository;
         public UserController(IHostingEnvironment env,
             ILogger<UserController> logger,
@@ -41,9 +41,9 @@ namespace Kard.Web.Controllers
         }
 
         //[Authorize(Roles = "member", AuthenticationSchemes= "members")]
-      
 
- 
+
+
 
 
         #region user
@@ -82,12 +82,78 @@ namespace Kard.Web.Controllers
             KuserEntity kuserEntity = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
             {
                 cacheEntry.SetAbsoluteExpiration(DateTime.Now.Date.AddDays(60));
-             
-                return _defaultRepository.FirstOrDefault<KuserEntity,long>(_kardSession.UserId.Value);
+
+                return _defaultRepository.FirstOrDefault<KuserEntity, long>(_kardSession.UserId.Value);
             });
             return kuserEntity;
         }
 
+        /// <summary>
+        /// 上传头像
+        /// </summary>
+        /// <param name="avathorFlie"></param>
+        /// <returns></returns>
+        [HttpPost("uploadavathor")]
+        //[Consumes("multipart/form-data")]
+        //[RequestSizeLimit(100_000_000)]
+        public ResultDto UploadAvatar(IFormFile avathorFlie)
+        {
+            var result = new ResultDto();
+            if (avathorFlie == null && Request.Form.Files.Any())
+            {
+                avathorFlie = Request.Form.Files[0];
+            }
+            if (avathorFlie == null)
+            {
+                result.Result = true;
+                result.Message = "未选择文件";
+                return result;
+            }
+    
+            string newFolder = Path.Combine("user", _kardSession.UserId.ToString());
+            string newPath = Path.Combine(_env.WebRootPath, newFolder);
+            string fileName = "avatar";
+            string fileExtension = ".jpg"; // Path.GetExtension(ContentDispositionHeaderValue.Parse(mediaFlie.ContentDisposition).FileName.Trim('"'));
+            var directoryInfo = new DirectoryInfo(newPath);
+            if (directoryInfo.Exists)
+            {
+                var files = directoryInfo.GetFiles().Where(file=>file.Name.Contains(fileName));
+                foreach (var file in files)
+                {
+                    file.Delete();
+                }
+            }
+            else
+            {
+                directoryInfo.Create();
+            }
+
+            if (avathorFlie.Length<= 0)
+            {
+                result.Result = false;
+                result.Message = "上传失败";
+                return result;
+            }
+
+            string fullPath = Path.Combine(newPath, fileName + fileExtension);
+            using (var stream = new FileStream(fullPath, FileMode.Create))
+            {
+                avathorFlie.CopyTo(stream);
+            }
+
+            fileExtension = $"{fileExtension}?v={ DateTime.Now.ToString("ddHHmmssffff")}";
+            var kuser = _defaultRepository.FirstOrDefault<KuserEntity, long>(_kardSession.UserId.Value);
+            kuser.AvatarUrl = Path.Combine(newFolder, fileName+fileExtension);
+            kuser.AuditLastModification(_kardSession.UserId.Value);
+            result = _defaultRepository.Update(kuser);
+            if (result.Result)
+            {
+                result.Data = new { FileUrl = Path.Combine(newFolder, fileName), FileExtension = fileExtension };
+                _memoryCache.Remove($"user[{_kardSession.UserId.Value}]");
+            }
+            return result;
+
+        }
 
 
 
@@ -97,13 +163,13 @@ namespace Kard.Web.Controllers
         /// <returns></returns>
         [HttpGet("pictures")]
         public ResultDto<IEnumerable<TopMediaDto>> GetPicture()
-        {  
-            return new ResultDto<IEnumerable<TopMediaDto>>() { Result = true, Data = _defaultRepository.GetUserMediaPictureList(_kardSession.UserId.Value,4) }; 
+        {
+            return new ResultDto<IEnumerable<TopMediaDto>>() { Result = true, Data = _defaultRepository.GetUserMediaPictureList(_kardSession.UserId.Value, 4) };
         }
 
 
 
-      
+
 
         /// <summary>
         /// 上传图片

@@ -15,9 +15,9 @@ namespace Kard.Core.IRepositories
 
         IEnumerable<TopMediaDto> GetUserMediaPictureList(long userId, int count);
 
-        bool IsExistUser(string name, string phone, string email);
+        IEnumerable<KuserEntity> GetExistUser(string name, string phone, string nickName);
 
-        //KuserEntity GetUser(long id);
+        //bool CreateAccountUser(KuserEntity user);
 
         IEnumerable<EssayEntity> GetEssayList(DateTime creationTime);
 
@@ -30,6 +30,12 @@ namespace Kard.Core.IRepositories
         bool UpdateBrowseNum(long id);
 
         ResultDto ChangeEssayLike(long userId, long essayId);
+
+        IEnumerable<EssayLikeEntity> GetEssayLikeList(long id);
+
+        //IEnumerable<EssayCommentDto> GetRootEssayCommentList(long id);
+
+        IEnumerable<EssayCommentDto> GetEssayCommentList(long id);
 
         ResultDto AddTask(LongTaskEntity entity);
     }

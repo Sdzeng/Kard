@@ -27,12 +27,12 @@ namespace Kard.Core.Entities
 
         public string Introduction { get; set; }
 
-        public string Email { get; set; }
+        //public string Email { get; set; }
         public string Password { get; set; }
         public string NickName { get; set; }
 
         public string CoverPath { get; set; }
-        public int Gender { get; set; }
+        public int? Gender { get; set; }
 
         public string City { get; set; }
         public string Language { get; set; }
@@ -45,6 +45,14 @@ namespace Kard.Core.Entities
 
         public bool IsAuthenticated { get; set; }
 
+        //public static long AdminId => 1;
+
+        public KuserEntity ToSecurity() {
+            this.Password = "******";
+            this.WxSessionKey = "******";
+            this.WxOpenId = "******";
+            return this;
+        }
     }
 
 

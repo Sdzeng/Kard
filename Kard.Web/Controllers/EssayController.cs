@@ -49,7 +49,7 @@ namespace Kard.Web.Controllers
         public ResultDto GetInfo(long id)
         {
             //单品信息
-            var essayEntity = _defaultRepository.GetEssay(id,_kardSession.UserId);
+            var essayEntity = _defaultRepository.GetEssay(id, _kardSession.UserId);
             var resultDto = new ResultDto();
             resultDto.Result = essayEntity != null;
             resultDto.Data = essayEntity;
@@ -69,17 +69,25 @@ namespace Kard.Web.Controllers
         }
 
         /// <summary>
-        /// 上次文件
+        /// 上传文件
         /// </summary>
         /// <returns></returns>
-
         [HttpPost("uploadmedia")]
         //[Consumes("multipart/form-data")]
         //[RequestSizeLimit(100_000_000)]
         public ResultDto UploadMedia(IFormFile mediaFlie)
         {
             var result = new ResultDto();
-            if (mediaFlie == null) mediaFlie = Request.Form.Files[0];
+            if (mediaFlie == null && Request.Form.Files.Any())
+            {
+                mediaFlie = Request.Form.Files[0];
+            }
+            if (mediaFlie == null)
+            {
+                result.Result = true;
+                result.Message = "未选择文件";
+                return result;
+            }
 
             var now = DateTime.Now;
             string webRootPath = _env.WebRootPath;
@@ -132,7 +140,7 @@ namespace Kard.Web.Controllers
             {
                 var contentList = essayEntity.Content.Split('#');
                 int contentListLastIndex = contentList.Length - 1;
-                tagList = contentList.Where((item, index) => ((!string.IsNullOrEmpty(item)) && (index != contentListLastIndex))).Select((item, index) => { var tagEntity = new TagEntity { Sort = (index + 1), TagName = item };  tagEntity.AuditCreation(createUserId);return tagEntity; });
+                tagList = contentList.Where((item, index) => ((!string.IsNullOrEmpty(item)) && (index != contentListLastIndex))).Select((item, index) => { var tagEntity = new TagEntity { Sort = (index + 1), TagName = item }; tagEntity.AuditCreation(createUserId); return tagEntity; });
                 essayEntity.Content = contentList.Last();
             }
             essayEntity.Location = "广州";
@@ -157,12 +165,79 @@ namespace Kard.Web.Controllers
         /// 添加喜欢
         /// </summary>
         /// <param name="essayId"></param>
-        /// <param name="isLike"></param>
         /// <returns></returns>
         [HttpPost("like")]
         public ResultDto Like(long essayId)
         {
             return _defaultRepository.ChangeEssayLike(_kardSession.UserId.Value, essayId);
+        }
+
+        /// <summary>
+        /// 喜欢列表
+        /// </summary>
+        /// <param name="essayId"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet("likelist")]
+        public ResultDto<IEnumerable<EssayLikeEntity>> GetLikeList(long essayId)
+        {
+            var resultDto = new ResultDto<IEnumerable<EssayLikeEntity>>();
+            resultDto.Result = true;
+            resultDto.Data = _defaultRepository.GetEssayLikeList(essayId);
+            return resultDto;
+        }
+
+        /// <summary>
+        /// 添加评论
+        /// </summary>
+        /// <param name="essayId"></param>
+        /// <param name="content"></param>
+        /// <param name="parentId"></param>
+        /// <returns></returns>
+        [HttpPost("addcomment")]
+        public ResultDto AddComment( long essayId, string content, long? parentId)
+        {
+            var resultDto = new ResultDto();
+            var essayComment = new EssayCommentEntity {
+                EssayId=essayId,
+                Content=content,
+                ParentId=parentId
+            };
+
+            essayComment.AuditCreation(_kardSession.UserId.Value);
+            resultDto.Result = _defaultRepository.CreateAndGetId<EssayCommentEntity, long>(essayComment).Result;
+            return resultDto;
+        }
+
+        /// <summary>
+        /// 评论列表
+        /// </summary>
+        /// <param name="essayId"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet("commentlist")]
+        public ResultDto<IEnumerable<EssayCommentDto>> GetCommentList(long essayId)
+        {
+            var essayCommentList = _defaultRepository.GetEssayCommentList(essayId)??new List<EssayCommentDto>();
+            var pageCommentList = essayCommentList.Where((item,index)=>index<10);
+
+            var resultDto = new ResultDto<IEnumerable<EssayCommentDto>>();
+            resultDto.Result = true;
+            resultDto.Data = AppendChild(pageCommentList, essayCommentList);
+            return resultDto;
+        }
+
+        private IEnumerable<EssayCommentDto> AppendChild(IEnumerable<EssayCommentDto> childList, IEnumerable<EssayCommentDto> commentList)
+        {
+            foreach (var child in childList)
+            {
+                if (child.ParentId != null &&child.ParentId.HasValue)
+                {
+                    child.ParentCommentDtoList = commentList.Where(c => c.Id == child.ParentId);
+                    child.ParentCommentDtoList = AppendChild(child.ParentCommentDtoList, commentList);
+                }
+            }
+            return childList;
         }
 
         /// <summary>

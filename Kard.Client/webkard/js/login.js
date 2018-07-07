@@ -1,7 +1,36 @@
 var loginjs = {
     data: { scope: $("#loginPage") },
+    init: function () {
+        var _this = this;
+        _this.bindCover();
+        _this.login();
+    },
+    bindCover: function () {
+        var _this = this;
+
+        //设置首页封面
+        topCover.getHomeCover(function (resultDto) {
+            var data = resultDto.data;
+            //data = JSON.parse(data);
+            if (!data) {
+                return;
+            }
+            $(".bg-layer", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.media.cdnPath + "_2560x1200." + data.media.mediaExtension || "") + ")");
+        });
+    },
     login: function () {
-        $("#loginform", this.data.scope).submit(function (event) {
+        var _this = this;
+
+        $("#showPhoneLogin", _this.data.scope).click(function () {
+            $("#accountLogin", _this.data.scope).removeClass("login-form-active");
+            $("#phoneLogin", _this.data.scope).addClass("login-form-active");
+        });
+        $("#showAccountLogin", _this.data.scope).click(function () {
+            $("#phoneLogin", _this.data.scope).removeClass("login-form-active");
+            $("#accountLogin", _this.data.scope).addClass("login-form-active");
+        });
+
+        $(".login-form", _this.data.scope).submit(function (event) {
 
             // 阻止表单提交  
             event.preventDefault();
@@ -30,55 +59,13 @@ var loginjs = {
 
             helper.send();
         });
-    },
-    logout: function () {
-        var isLogin = storage.local.getItem("isLogin") == "true";
 
-        $("#authBtns1").css("display", isLogin ? "none" : "block");
-        $("#authBtns2").css("display", isLogin ? "block" : "none");
-
-
-        $("#btnLogout").click(function () {
-
-            var helper = new httpHelper({
-                url: basejs.requestDomain + "/webuser/logout",
-                type: "GET",
-                success: function (data) {
-                    if (data.result) {
-                        storage.local.setItem("isLogin", "false");
-                        window.location.href = "/home.html";
-                    }
-                    else {
-                        alert(data.message);
-                    }
-
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert("error:" + textStatus);
-                }
-            });
-            helper.send();
-
-        });
-
-    },
-    authTest: function () {
-
-        $("#btnTest").click(function () {
-            var helper = new httpHelper({
-                url: basejs.requestDomain + "/user/1",
-                type: "GET",
-                success: function (data) {
-                    alert("登陆状态");
-                }
-            });
-            helper.send();
-        });
     }
 };
 
 $(function () {
-    loginjs.login();
-    loginjs.logout();
-    loginjs.authTest();
+    //菜单
+    topMenu.bindMenu();
+
+    loginjs.init();
 });

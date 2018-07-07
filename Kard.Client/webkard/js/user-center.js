@@ -1,5 +1,13 @@
 ﻿var usercenterjs = {
     data: { scope: $("#userCenterPage") },
+    init: function () {
+        var _this = this;
+        _this.userCover();
+        _this.setPictures();
+        _this.uploadAvathor();
+        _this.uploadImg();
+        _this.saveIsay();
+    },
     userCover: function () {
 
         var _this = this;
@@ -21,8 +29,20 @@
 
                 $(".bg-layer").css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.coverPath || "") + ")").fadeIn("slow");
                 //$(".essay-content>blackquote>q").text("测试");
-                $(".user-center-author-txt-name>span:eq(0)", _this.data.scope).text( data.nickName || "");
-                $(".user-center-author-avatar>img", _this.data.scope).attr("src", basejs.cdnDomain + "/" + data.avatarUrl);;
+                $(".user-center-author-txt-name>span:eq(0)", _this.data.scope).text(data.nickName || "");
+
+                basejs.lazyInof('.user-center-author-avatar img.lazy');
+                var avatarArr = data.avatarUrl.split('.');
+                $(".user-center-author-avatar>img", _this.data.scope).attr("data-original", basejs.cdnDomain + "/" + avatarArr[0] + "_80x80." + avatarArr[1]);
+                var $userCenterAuthorTxt = $(".user-center-author-txt", _this.data.scope);
+                var $userCenterAuthorTxtName = $userCenterAuthorTxt.children(".user-center-author-txt-name");
+                $userCenterAuthorTxtName.children("span:eq(0)").text(data.nickName);
+                $userCenterAuthorTxtName.children("span:eq(1)").text(data.city);
+                $userCenterAuthorTxt.children(".user-center-author-txt-introduction").text(data.introduction);
+                var $userCenterAuthorTxtNum = $userCenterAuthorTxt.children(".user-center-author-txt-num");
+                $userCenterAuthorTxtNum.children("span:eq(0)").text("29关注");
+                $userCenterAuthorTxtNum.children("span:eq(1)").text("1200粉丝");
+                $userCenterAuthorTxtNum.children("span:eq(2)").text("获得18k个喜欢");
 
                 topCover.scroll();
 
@@ -74,7 +94,38 @@
         helper.send();
     },
 
+    uploadAvathor: function () {
+        var _this = this;
 
+        $(".user-center-author-avatar", _this.data.scope).click(function () {
+            $("#btnAddAvatarHide", _this.data.scope).trigger("click");
+        });
+
+        $("#btnAddAvatarHide", _this.data.scope).change(function () {
+            var formData = new FormData();
+            var files = $(this).get(0).files;
+            if (files.length != 0) {
+                formData.append("mediaFile", files[0]);
+            }
+            var helper = new httpHelper({
+                url: basejs.requestDomain + "/user/uploadavathor",
+                type: 'POST',
+                async: false,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (resultDto) {
+
+                    if (resultDto.result) {
+                        $(".user-center-author-avatar>img", _this.data.scope).attr("src", basejs.requestDomain + "/" + resultDto.data.fileUrl + "_80x80" + resultDto.data.fileExtension);
+                    }
+                }
+            });
+
+
+            helper.send();
+        });
+    },
     uploadImg: function () {
         var _this = this;
 
@@ -166,15 +217,23 @@
                     mediaExtension: $item.attr("data-file-extension")
                 });
             });
-            alert($(".isay-info-category-span-checked", _this.data.scope).text());
+
+            var title = $("#isayTitle", _this.data.scope).val();
+            var category = $(".isay-info-category-span-checked", _this.data.scope).text();
+            var content = $("#isayContent", _this.data.scope).val();
+            if (!title) { alert("请填写标题"); return;}
+            if (!category) { alert("请选择类型"); return; }
+            if (!content) { alert("请填写内容"); return; }
+            if (mediaArr.length<=0) { alert("请选择图片"); return; }
+
             var helper = new httpHelper({
                 url: basejs.requestDomain + "/essay/add",
                 type: 'POST',
                 data: {
                     essayEntity: {
-                        title: $("#isayTitle", _this.data.scope).val(),
-                        category: $(".isay-info-category-span-checked", _this.data.scope).text(),
-                        content: $("#isayContent", _this.data.scope).val()
+                        title: title,
+                        category: category,
+                        content: content
                     },
                     mediaList: mediaArr
                 },
@@ -183,7 +242,7 @@
                         $("#isayTitle", _this.data.scope).val("");
                         $("#isayContent", _this.data.scope).val("");
                         $(".isay-info-buttom-medias>img", _this.data.scope).remove();
-                        alert("成功成功");
+                        alert("发布成功~");
                     }
                 }
             });
@@ -198,9 +257,11 @@
 };
 
 $(function () {
-    //封面
-    usercenterjs.userCover();
-    usercenterjs.setPictures();
-    usercenterjs.uploadImg();
-    usercenterjs.saveIsay();
+    //菜单
+    topMenu.bindMenu();
+    topMenu.logout();
+    topMenu.authTest();
+
+    usercenterjs.init();
+
 });

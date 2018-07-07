@@ -1,6 +1,6 @@
 var basejs = {
-    requestDomain: "http://192.168.10.2:3703",//"http://api.localyc.com"window.location.protocol + "//"+window.location.host;// "http://localhost:3706";//"https://www.localyc.com";
-    cdnDomain: "http://192.168.10.2:3703",//"http://cdn.localyc.com",//"http://image.localyc.com";
+    requestDomain: "http://api.localyc.com",//"http://192.168.10.3:3703"
+    cdnDomain: "http://cdn.localyc.com",//"http://192.168.10.3:3703"
     defaults: {
         type: "POST",
         async: true,
@@ -8,7 +8,8 @@ var basejs = {
         traditional: false,
         processData: true,
         data: null,
-        loading: "off"
+        loading: "off",
+        avatarPath:"/image/default-avatar.jpg"
     },
     getPath: function () {
         var hash = window.location.hash, reg = /^#!/;
@@ -19,26 +20,28 @@ var basejs = {
             return hash;//storage.local.getItem('redirect') || '';
         }
     },
+   
     getQueryString: function () {
-            var queryString = {};
-            var name, value;
-            var str = location.href; //取得整个地址栏
-            var num = str.indexOf("?")
-            str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
+        var queryString = {};
+        var name, value;
+        var str = location.href; //取得整个地址栏
+        var num = str.indexOf("?")
+        str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
 
-            var arr = str.split("&"); //各个参数放到数组里
-            for (var i = 0; i < arr.length; i++) {
-                num = arr[i].indexOf("=");
-                if (num > 0) {
-                    name = arr[i].substring(0, num);
-                    value = arr[i].substr(num + 1);
-                    queryString[name] = value;
-                }
+        var arr = str.split("&"); //各个参数放到数组里
+        for (var i = 0; i < arr.length; i++) {
+            num = arr[i].indexOf("=");
+            if (num > 0) {
+                name = arr[i].substring(0, num);
+                value = arr[i].substr(num + 1);
+                queryString[name] = value;
             }
+        }
         return queryString;
     },
+  
     lazyInof: function (id) {
-        $(id).lazyload({ effect: "fadeIn", threshold: 50 });
+        $(id).lazyload({ effect: "fadeIn", threshold: 100 });
     },
     worksDefaultPicInfo: function () {
         return this.src = basejs.cdnDomain + "/image/default/default-picture_190x180.png";
@@ -79,17 +82,17 @@ var basejs = {
         return result;
     },
     getNumberDiff: function (number) {
- 
+
         if (number < 1000) {
             result = number;
         }
         else if (number < 10000) {
             result = (number / 1000).toFixed(1) + "k";
         }
-        else { 
+        else {
             result = (number / 10000).toFixed(1) + "w";
         }
-        
+
         return result;
     }
 };
@@ -128,50 +131,54 @@ $.extend(httpHelper.prototype, {
     send: function () {
         var _this = this;
         //return $.Deferred(function ($dfd) {
-            $.ajax({
-                url: _this.opts.url,
-                type: _this.opts.type,
-                xhrFields: {
-                    withCredentials: true //配置http跨域请求中携带cookie
-                },
-                crossDomain: true,
-                async: _this.opts.async,
-                data: _this.opts.data,
-                contentType: _this.opts.contentType,
-                traditional: _this.opts.traditional,
-                processData: _this.opts.processData,
-                success: function (resultDto, textStatus, jqXHR) {//success
-                    _this.opts.success && _this.opts.success.apply(this, arguments);
-                },
-                beforeSend: function () {
-                    // loading();
-                    //_this.opts.loading !== 'off' && dialog.loading();
-                    _this.opts.beforeSend && _this.opts.beforeSend.apply(this, arguments);
-                },
-                complete: function () {
-                    // _this.opts.loading !== 'off' && dialog.loading.fade();
-                    _this.opts.complete && _this.opts.complete.apply(this, arguments);
-                },
+        $.ajax({
+            url: _this.opts.url,
+            type: _this.opts.type,
+            xhrFields: {
+                withCredentials: true //配置http跨域请求中携带cookie
+            },
+            crossDomain: true,
+            async: _this.opts.async,
+            data: _this.opts.data,
+            contentType: _this.opts.contentType,
+            traditional: _this.opts.traditional,
+            processData: _this.opts.processData,
+            success: function (resultDto, textStatus, jqXHR) {//success
+                _this.opts.success && _this.opts.success.apply(this, arguments);
+            },
+            beforeSend: function () {
+                // loading();
+                //_this.opts.loading !== 'off' && dialog.loading();
+                _this.opts.beforeSend && _this.opts.beforeSend.apply(this, arguments);
+            },
+            complete: function () {
+                // _this.opts.loading !== 'off' && dialog.loading.fade();
+                _this.opts.complete && _this.opts.complete.apply(this, arguments);
+            },
 
-                error: function (jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
 
-                    console.error(errorThrown);
-                    //Unauthorized
-                    if (jqXHR.status == 401 || jqXHR.status == 403) {
-                        //Location=context.RedirectUri
-                        storage.local.setItem("isLogin", "false");
-                        _this.opts.error && _this.opts.error.apply(this, arguments);
-                        alert("您未登录不能查看该内容");
-                        //var redirectUri = jqXHR.getResponseHeader("Location");
-                        //redirectUri = redirectUri.substring(0, redirectUri.indexOf("?"));
-                        //window.location.href = redirectUri;
-                        window.location.href = "/home.html";
-
-
+                console.error(errorThrown);
+                //Unauthorized
+                if (jqXHR.status == 401 || jqXHR.status == 403) {
+                    //Location=context.RedirectUri
+                    storage.local.setItem("isLogin", "false");
+                    _this.opts.error && _this.opts.error.apply(this, arguments);
+                    var truthBeTold = window.confirm("请先登陆");
+                    if (truthBeTold) {
+                        window.location.href = "/login.html";
                     }
+                    
+                    //var redirectUri = jqXHR.getResponseHeader("Location");
+                    //redirectUri = redirectUri.substring(0, redirectUri.indexOf("?"));
+                    //window.location.href = redirectUri;
+           
+
+
                 }
-            });
-       // });
+            }
+        });
+        // });
 
 
     }
@@ -180,7 +187,7 @@ $.extend(httpHelper.prototype, {
 
 //菜单
 var topMenu = {
-    init: function (menuObj) {
+    bindMenu: function (menuObj) {
         var _this = this;
         _this.splashObj = $('#splash');
         _this.quoteObj = _this.splashObj.children('.quote');
@@ -267,12 +274,79 @@ var topMenu = {
             target.addClass("active");
 
         }
-    }
+    },
+    logout: function () {
+        var _this = this;
+        var isLogin = storage.local.getItem("isLogin") == "true";
 
+        $("#authBtns1").css("display", isLogin ? "none" : "block");
+        $("#authBtns2").css("display", isLogin ? "block" : "none");
+
+
+        $("#btnLogout").click(function () {
+
+            var helper = new httpHelper({
+                url: basejs.requestDomain + "/webuser/logout",
+                type: "GET",
+                success: function (data) {
+                    if (data.result) {
+                        storage.local.setItem("isLogin", "false");
+                        window.location.href = "/home.html";
+                    }
+                    else {
+                        alert(data.message);
+                    }
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("error:" + textStatus);
+                }
+            });
+            helper.send();
+
+        });
+
+    },
+    authTest: function () {
+        var _this = this;
+        $("#btnTest").click(function () {
+            var helper = new httpHelper({
+                url: basejs.requestDomain + "/user/1",
+                type: "GET",
+                success: function (data) {
+                    alert("登陆状态");
+                }
+            });
+            helper.send();
+        });
+    }
 }
 
 //封面
 var topCover = {
+    getHomeCover: function (callback) {
+        var _this = this;
+       
+        var resultDtoJson = storage.session.getItem("homeCover");
+        if (resultDtoJson) {
+            //设置首页封面
+            callback && callback(JSON.parse(resultDtoJson));
+        }
+        else {
+
+            var helper = new httpHelper({
+                url: basejs.requestDomain + "/home/cover",
+                type: "GET",
+                success: function (resultDto) {
+                    storage.session.setItem("homeCover", JSON.stringify(resultDto));
+                    //设置首页封面
+                    callback && callback(resultDto);
+                }
+            });
+            helper.send();
+        }
+
+    },
     scroll: function (opts) {
         var _this = this;
         _this.navbarObj = $('#navbar');
@@ -319,9 +393,6 @@ var topCover = {
 }
 
 
-$(function () {
-
-    topMenu.init();
-});
+ 
 
 
