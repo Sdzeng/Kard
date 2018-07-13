@@ -16,9 +16,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using NLog.Extensions.Logging;
 using NLog.Web;
+using Senparc.CO2NET;
+using Senparc.CO2NET.RegisterServices;
+using Senparc.Weixin;
+using Senparc.Weixin.Entities;
+using Senparc.Weixin.RegisterServices;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.IO;
@@ -101,7 +107,8 @@ namespace Kard.Web
             #region 内存缓存
             services.AddMemoryCache();
             //services.AddImageHandle();
-
+            services.AddSenparcGlobalServices(Configuration)//Senparc.CO2NET 全局注册
+          .AddSenparcWeixinServices(Configuration);//Senparc.Weixin 注册（如果使用Senparc.Weixin SDK则添加）
             #endregion
 
             #region 日志
@@ -237,7 +244,7 @@ namespace Kard.Web
         }
 
         // 请求管道会按顺序执行下列委托（中间件），返回顺序则相反；
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IOptions<SenparcSetting> senparcSetting, IOptions<SenparcWeixinSetting> senparcWeixinSetting)
         {
      
             var logger = loggerFactory.CreateLogger("Startup");
@@ -290,8 +297,13 @@ namespace Kard.Web
             //var provider = new FileExtensionContentTypeProvider();
             //provider.Mappings.Add(".less", "text/css");
 
+            IRegisterService register = RegisterService.Start(env, senparcSetting.Value).UseSenparcGlobal();// 启动 CO2NET 全局注册，必须！
 
-       
+            register.UseSenparcWeixin(senparcWeixinSetting.Value, senparcSetting.Value);//微信全局注册，必须！
+
+
+
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 //添加图片处理

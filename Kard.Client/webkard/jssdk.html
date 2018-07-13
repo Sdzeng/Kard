@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>i-TOP创意共享平台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+</head>
+<body>
+    <div id="divTest">测试</div>
+    <script type="text/javascript" src="../js/jweixin-1.2.0.js"></script>
+    <script type="text/javascript" src="../js/jquery-3.1.1.min.js?v=1.0.0"></script>
+    <script type="text/javascript">
+
+        
+            alert(location.href.split('#')[0]);
+
+
+            $.ajax({
+                url: 'http://api.localyc.com:443/essay/jssdk',
+                type: "POST",
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                data: { url: location.href.split('#')[0] },
+                success: function (resultDto) {
+                    if (!resultDto.result) {
+                        alert(result.code + result.message);
+                    }
+                    var data = resultDto.data;
+                 
+                    wx.config({
+                        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        appId: data.appId, // 必填，公众号的唯一标识
+                        timestamp: data.timestamp, // 必填，生成签名的时间戳
+                        nonceStr: data.nonceStr, // 必填，生成签名的随机串
+                        signature: data.signature,// 必填，签名
+                        jsApiList: ['onMenuShareAppMessage']// 必填，需要使用的JS接口列表
+                    });
+                    wx.error(function (res) {
+                        alert('wx.error: ' + JSON.stringify(res));
+                    });
+
+                    wx.ready(function () {
+                    
+                       
+
+                     
+                        // // 基础接口判断当前客户端版本是否支持指定JS接口
+                        wx.checkJsApi({
+                            jsApiList: [
+                                'onMenuShareAppMessage'
+                            ],
+                            success: function (res) {
+                                // alert(JSON.stringify(res));
+                                // alert(JSON.stringify(res.checkResult.getLocation));
+                                if (res.checkResult.getLocation == false) {
+                                    alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+                                    return;
+                                }
+                            }
+                        });
+                        //转发到朋友圈
+                        //wx.onMenuShareTimeline({
+                        //    title: 'JSSDK朋友圈转发测试',
+                        //    link: link,
+                        //    imgUrl: imgUrl,
+                        //    success: function () {
+                        //        alert('转发成功！');
+                        //    },
+                        //    cancel: function () {
+                        //        alert('转发失败！');
+                        //    }
+                        //});
+                        //转发给朋友
+                        wx.onMenuShareAppMessage({
+                            title: '转发测试',
+                            desc: '转发给朋友',
+                            link: "http://www.localyc.com/jssdk.html",
+                            imgUrl: "http://www.localyc.com/image/default-avatar.jpg",
+                            type: 'link',
+                            dataUrl: '',
+                            success: function () {
+                              
+                                alert('转发成功！');
+                            },
+                            cancel: function () {
+                          
+                                alert('转发失败！');
+                            }
+                        });
+                    });
+
+                },
+                error: function (res) {
+
+                    alert("报错：" + res);
+                    console.log(res);
+                    //layer.msg("网络异常，请稍后再试", { time: 1500 });
+                }
+            });
+
+ 
+
+
+
+    </script>
+
+
+</body>
+</html>

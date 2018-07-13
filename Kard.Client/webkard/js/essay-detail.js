@@ -14,10 +14,10 @@ var essaydetailjs = {
                     "</div>"+
                 "</div >"),
             parentComment: ("<div class='comment-info-content-txt-parent'>" +
-                    "#{commentParent}" +
-                    "<div><a> #{nickName}</a>#{content}</div> "+
+                "<div><a> #{nickName}</a>#{content}</div> " +
+                "#{commentParent}" +
                 "</div >"),
-            like: ("<div class='like-info'> <span class='like-info-avatar'><img  class='lazy' src='/image/default-avatar.jpg' data-original='#{avatarUrl}'>#{nickName} 收集了这件单品</span><span>#{creationTime}</span></div>")
+            like: ("<div class='like-info'> <span class='like-info-avatar'><img  class='lazy' src='/image/default-avatar.jpg' data-original='#{avatarUrl}'>#{nickName} 喜欢了这件单品</span><span>#{creationTime}</span></div>")
         }
     },
     init: function () {
@@ -76,7 +76,7 @@ var essaydetailjs = {
                 $('.essay-detail-content', _this.data.scope).html("<p>" + data.content + "</p><p>" + imgs + "</p>");
 
                 var isLike = (data.essayLike != null);
-                $('.essay-detail-like-share', _this.data.scope).html("<span id='btnLike' data-islike='" + isLike + "'>" + (isLike ? "已收集 " : "收集 ") + data.likeNum + "</span><span>分享 " + data.shareNum + "</span><span>举报</span>");
+                $('.essay-detail-like-share', _this.data.scope).html("<span id='btnLike' data-islike='" + isLike + "'>" + (isLike ? "已喜欢 " : "喜欢 ") + data.likeNum + "</span><span>分享 " + data.shareNum + "</span><span>举报</span>");
 
                 basejs.lazyInof('.essay-author-avatar img.lazy');
                 var avatarArr = data.kuser.avatarUrl.split('.');
@@ -96,7 +96,7 @@ var essaydetailjs = {
                             if (resultDto.result) {
                                 var data = resultDto.data;
                                 $btnLike.attr("data-islike", data.isLike.toString());
-                                $btnLike.text((data.isLike ? "已收集 " : "收集 ") + data.likeNum.toString());
+                                $btnLike.text((data.isLike ? "已喜欢 " : "喜欢 ") + data.likeNum.toString());
                                 _this.bindLikeList();
                             }
                         }
@@ -168,7 +168,7 @@ var essaydetailjs = {
                     var avatarCropPath = basejs.cdnDomain + "/" + avatarArr[0] + "_50x50." + avatarArr[1];
 
                     var parentCommentHtml = _this._getParentCommentHtml(dto.parentCommentDtoList);
-                    var content = parentCommentHtml == "" ? dto.content : (parentCommentHtml + "<div>" + dto.content + "</div>");
+                    var content = parentCommentHtml == "" ? dto.content : ("<div>" + dto.content + "</div>" + parentCommentHtml );
 
                     commentHtml+= _this.data.template.comment.format({
                         avatarUrl: avatarCropPath,
@@ -212,7 +212,7 @@ var essaydetailjs = {
     bindLikeList: function () {
         var _this = this;
 
-        //收集列表
+        //喜欢列表
         var helper = new httpHelper({
             url: basejs.requestDomain + "/essay/likelist",
             type: "GET",

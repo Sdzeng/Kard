@@ -21,3 +21,6 @@ node_modules
 /Kard.Web/wwwroot/user
 /Kard.Web/logs
 /Kard.Module
+/Kard.Client/zjx_vr-wx-develop-example-master
+/Kard.Client/weapp-calendar
+/Kard.Client/wx_calendar

@@ -1,0 +1,185 @@
+html {
+  font-family: "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+body {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.essay-detail-info {
+  padding: 15px 10px 50px 10px;
+  /*.essay-detail-tag {
+        margin-top: 5px;
+        color: white;
+
+        span {
+            padding: 2px 10px;
+            background-color: #f2f8f2;
+            color: #4f946e;
+            border: 1px solid #e3f1ed;
+            border-radius: 2px;
+            font-size: 13px;
+        }
+
+        span:not(:first-child) {
+            margin-left: 10px;
+        }
+    }*/
+}
+.essay-detail-info .essay-detail-title {
+  font-size: 130%;
+  line-height: 40px;
+}
+.essay-detail-info .essay-author {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.essay-detail-info .essay-author-left {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.essay-detail-info .essay-author-left .essay-author-avatar {
+  width: 30px;
+  margin: 3px 10px 0px 0px;
+}
+.essay-detail-info .essay-author-left .essay-author-avatar img {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+}
+.essay-detail-info .essay-author-left .essay-author-txt-name {
+  line-height: 20px;
+}
+.essay-detail-info .essay-author-left .essay-author-txt-introduction {
+  line-height: 20px;
+  color: #bbb;
+  font-size: 12px;
+}
+.essay-detail-info .essay-author-left .essay-author-txt-introduction span:not(:first-child) {
+  margin-left: 10px;
+}
+.essay-detail-info .essay-author-right {
+  height: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.essay-detail-info .essay-author-right span {
+  padding: 2px 10px;
+  background-color: #ffebee;
+  color: #e53935;
+  border: 1px solid #ffcdd2;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.essay-detail-info .essay-author-right span:hover {
+  border-color: #efabab;
+  background-color: #fce4ec;
+}
+.essay-detail-info .essay-detail-content {
+  margin-top: 10px;
+  color: #555;
+  line-height: 25px;
+}
+.essay-detail-info .essay-detail-content p {
+  margin: 0px;
+}
+.essay-detail-info .essay-detail-content p img {
+  width: 100%;
+  margin-top: 20px;
+}
+.essay-detail-info .essay-detail-like-share {
+  margin-top: 50px;
+  text-align: right;
+}
+.essay-detail-info .essay-detail-like-share span {
+  text-align: center;
+  color: #ca6445;
+  border: 1px solid #fad5b5;
+  background: #fbe9d9;
+  padding: 5px 10px;
+  height: 12px;
+  line-height: 1;
+  border-radius: 2px;
+  font-size: 13px;
+}
+.essay-detail-info .essay-detail-like-share span:not(:first-child) {
+  margin-left: 10px;
+}
+.essay-detail-info .essay-detail-like-share span:last-child {
+  color: #bbb;
+  border: 0;
+  background: white;
+}
+.essay-detail-info .comment-list {
+  margin-top: 20px;
+  padding: 10px;
+}
+.essay-detail-info .comment-list ul.comment-menu {
+  border-bottom: 1px solid #e3f1ed;
+  height: 30px;
+  list-style-type: none;
+  list-style-image: none;
+  padding: 0;
+  margin: 0;
+}
+.essay-detail-info .comment-list ul.comment-menu li {
+  float: left;
+  padding: 2px 10px;
+  color: #4f946e;
+}
+.essay-detail-info .comment-list .comment-info {
+  padding-top: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.essay-detail-info .comment-list .comment-info-avatar {
+  margin-top: 5px;
+}
+.essay-detail-info .comment-list .comment-info-avatar img {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+}
+.essay-detail-info .comment-list .comment-info-content {
+  margin-left: 15px;
+  width: 100%;
+}
+.essay-detail-info .comment-list .comment-info-content-user {
+  width: 100%;
+  padding: 5px 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.essay-detail-info .comment-list .comment-info-content-user span:not(:first-child) {
+  color: #bbb;
+  font-size: 13px;
+}
+.essay-detail-info .comment-list .comment-info-content-txt {
+  width: 100%;
+  min-height: 30px;
+  padding-top: 5px;
+  word-wrap: break-word;
+  overflow: hidden;
+  line-height: 30px;
+}
+.essay-detail-info .comment-list .comment-info-content-txt-parent {
+  color: #bbb;
+  margin-bottom: 10px;
+  padding-left: 5px;
+  border-left: 2px solid#f4f4f4;
+}
+.essay-detail-info .comment-list .comment-info-content-txt-parent a {
+  color: black;
+}
+.essay-detail-info .comment-list .comment-info-content-txt-parent a:after {
+  content: "  :  ";
+}

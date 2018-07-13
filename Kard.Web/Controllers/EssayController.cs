@@ -8,6 +8,8 @@ using Kard.Core.Dtos;
 using Kard.Core.Entities;
 using Kard.Core.IRepositories;
 using Kard.Extensions;
+using Kard.Json;
+using Kard.Runtime.Security;
 using Kard.Runtime.Security.Authentication.WeChat;
 using Kard.Runtime.Session;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -16,7 +18,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Senparc.Weixin.MP.Containers;
+using Senparc.Weixin.MP.Helpers;
 
 namespace Kard.Web.Controllers
 {
@@ -28,15 +33,18 @@ namespace Kard.Web.Controllers
     {
         private readonly IHostingEnvironment _env;
         private readonly IDefaultRepository _defaultRepository;
+        private readonly IConfiguration _configuration;
+
         public EssayController(IHostingEnvironment env,
             ILogger<EssayController> logger,
             IMemoryCache memoryCache,
             IDefaultRepository defaultRepository,
-            IKardSession kardSession) : base(logger, memoryCache, kardSession)
+            IKardSession kardSession,
+            IConfiguration configuration) : base(logger, memoryCache, kardSession)
         {
             _env = env;
             _defaultRepository = defaultRepository;
-
+            _configuration = configuration;
         }
 
         #region essay
@@ -195,13 +203,14 @@ namespace Kard.Web.Controllers
         /// <param name="parentId"></param>
         /// <returns></returns>
         [HttpPost("addcomment")]
-        public ResultDto AddComment( long essayId, string content, long? parentId)
+        public ResultDto AddComment(long essayId, string content, long? parentId)
         {
             var resultDto = new ResultDto();
-            var essayComment = new EssayCommentEntity {
-                EssayId=essayId,
-                Content=content,
-                ParentId=parentId
+            var essayComment = new EssayCommentEntity
+            {
+                EssayId = essayId,
+                Content = content,
+                ParentId = parentId
             };
 
             essayComment.AuditCreation(_kardSession.UserId.Value);
@@ -218,8 +227,8 @@ namespace Kard.Web.Controllers
         [HttpGet("commentlist")]
         public ResultDto<IEnumerable<EssayCommentDto>> GetCommentList(long essayId)
         {
-            var essayCommentList = _defaultRepository.GetEssayCommentList(essayId)??new List<EssayCommentDto>();
-            var pageCommentList = essayCommentList.Where((item,index)=>index<10);
+            var essayCommentList = _defaultRepository.GetEssayCommentList(essayId) ?? new List<EssayCommentDto>();
+            var pageCommentList = essayCommentList.Where((item, index) => index < 10);
 
             var resultDto = new ResultDto<IEnumerable<EssayCommentDto>>();
             resultDto.Result = true;
@@ -231,7 +240,7 @@ namespace Kard.Web.Controllers
         {
             foreach (var child in childList)
             {
-                if (child.ParentId != null &&child.ParentId.HasValue)
+                if (child.ParentId != null && child.ParentId.HasValue)
                 {
                     child.ParentCommentDtoList = commentList.Where(c => c.Id == child.ParentId);
                     child.ParentCommentDtoList = AppendChild(child.ParentCommentDtoList, commentList);
@@ -239,6 +248,47 @@ namespace Kard.Web.Controllers
             }
             return childList;
         }
+
+
+        /// <summary>
+        /// 微信转发
+        /// </summary>
+        [AllowAnonymous]
+        [HttpPost("jssdk")]
+        public async Task<ResultDto> JsSdkAsync(string url)
+        {
+            var configSection = _configuration.GetSection("WeChat:Web");
+            //获取时间戳
+            var timestamp = JSSDKHelper.GetTimestamp();
+            //获取随机码
+            var nonceStr = JSSDKHelper.GetNoncestr();
+            var appId = configSection.GetValue<string>("AppId");
+            var appSecret = configSection.GetValue<string>("AppSecret");
+            //获取票证
+
+            var jsTicket = await JsApiTicketContainer.TryGetJsApiTicketAsync(appId, appSecret);
+            //获取签名
+            //nonceStr = "Wm3WZYTPz0wzccnW";
+            //jsTicket = "sM4AOVdWfPE4DxkXGEs8VMCPGGVi4C3VM0P37wVUCFvkVAy_90u5h9nbSlYy3-Sl-HhTdfl2fzFy1AOcHKP7qg";
+            //timestamp = "1414587457";
+            //url = "http://mp.weixin.qq.com?params=value";
+            //url = url?? Request.GetAbsoluteUri();
+            var signature = JSSDKHelper.GetSignature(jsTicket, nonceStr, timestamp, url);
+
+            var resultDto = new ResultDto
+            {
+                Result = true,
+                Data = new { appId, timestamp, nonceStr, signature },
+                Message = "查询成功"
+            };
+
+            _logger.LogDebug(Serialize.ToJson(new { url, appId, jsTicket, timestamp, nonceStr, signature }));
+            return resultDto;
+        }
+
+
+
+
 
         /// <summary>
         /// 测试
@@ -274,7 +324,67 @@ namespace Kard.Web.Controllers
             var result = await Task.WhenAll(taskList);
             return (result.Sum() / (taskNum.Value * taskNum.Value));
         }
+
+
+        ///// <summary>
+        ///// 微信参数准备
+        ///// </summary>
+        //[HttpPost("jssdk")]
+        //public async Task<object> JsSdkAsync(string url)
+        //{
+        //    //获取时间戳
+        //    var timestamp =GetTimestamp();
+        //    //获取随机码
+        //    var nonceStr =  EncryptHelper.GetMD5(Guid.NewGuid().ToString(), "UTF-8");
+        //    var appId = "wx109fc14b4956fc70";
+        //    var appSecret = "a8e7f19d69cbde0272fd866fe7392874";
+        //    //获取票证
+
+        //    var jsTicket = await JsApiTicketContainer.TryGetJsApiTicketAsync(appId, appSecret);
+        //    //获取签名
+        //    //nonceStr = "Wm3WZYTPz0wzccnW";
+        //    //jsTicket = "sM4AOVdWfPE4DxkXGEs8VMCPGGVi4C3VM0P37wVUCFvkVAy_90u5h9nbSlYy3-Sl-HhTdfl2fzFy1AOcHKP7qg";
+        //    //timestamp = "1414587457";
+        //    //url = "http://mp.weixin.qq.com?params=value";
+        //    //url = url?? Request.GetAbsoluteUri();
+        //    var signature = JSSDKHelper.GetSignature(jsTicket, nonceStr, timestamp, url);
+
+
+        //    _logger.LogDebug(Serialize.ToJson(new { url, appId, jsTicket, timestamp, nonceStr, signature }));
+        //    return json.ToJsonResult();
+        //}
+
+
+        //#endregion
+
+
+        //public static async Task<AccessTokenResult> GetTokenAsync(string appid, string secret, string grant_type = "client_credential")
+        //{
+        //    //注意：此方法不能再使用ApiHandlerWapper.TryCommonApi()，否则会循环
+        //    var url = string.Format(Config.ApiMpHost + "/cgi-bin/token?grant_type={0}&appid={1}&secret={2}",
+        //                            grant_type.AsUrlData(), appid.AsUrlData(), secret.AsUrlData());
+
+        //    AccessTokenResult result = await Get.GetJsonAsync<AccessTokenResult>(url);
+        //    return result;
+        //}
+
+        //public readonly static DateTime BaseTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);//Unix起始时间
+
+        //public static string GetTimestamp()
+        //{
+        //    //var ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+        //    //return Convert.ToInt64(ts.TotalSeconds).ToString();
+        //    var ts = GetWeixinDateTime(DateTime.Now);
+        //    return ts.ToString();
+        //}
+
+        //public static long GetWeixinDateTime(DateTime dateTime)
+        //{
+        //    return (long)(dateTime.ToUniversalTime() - BaseTime).TotalSeconds;
+        //}
+
         #endregion
 
     }
+
 }

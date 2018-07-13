@@ -23,6 +23,7 @@ module.exports = function (grunt) {
                     // compilation.css  :  source.less
 
                     "../css/kard.css": "../less/kard.less",
+                    "../css/m-kard.css": "../less/m-kard.less",
 
 
                 }
@@ -90,7 +91,12 @@ module.exports = function (grunt) {
                     cwd: '../',
                     src: ['*.html'],
                     dest: '../builds'
-                }]
+                }, {
+                        expand: true,
+                        cwd: '../m/',
+                        src: ['*.html'],
+                        dest: '../builds/m'
+                    }]
             }
         },
         // Copy the js min files.

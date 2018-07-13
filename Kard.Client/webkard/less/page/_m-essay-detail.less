@@ -1,0 +1,227 @@
+
+.essay-detail-info {
+    padding: 15px 10px 50px 10px;
+
+    .essay-detail-title {
+        font-size: 130%;
+        line-height: 40px;
+    }
+
+    .essay-author {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        &-left {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+
+
+            .essay-author-avatar {
+                width: 30px;
+                margin: 3px 10px 0px 0px;
+
+                img {
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 15px;
+                }
+            }
+
+            .essay-author-txt {
+
+                &-name {
+                    line-height: 20px;
+                }
+
+                &-introduction {
+                    line-height: 20px;
+                    color: #bbb;
+                    font-size: 12px;
+
+                    span {
+                        &:not(:first-child) {
+                            margin-left: 10px;
+                        }
+                    }
+                }
+            }
+        }
+
+        &-right {
+            height: 35px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            span {
+                padding: 2px 10px;
+                background-color: #ffebee;
+                color: #e53935;
+                border: 1px solid #ffcdd2;
+                border-radius: 2px;
+                cursor: pointer;
+                font-size: 13px;
+
+                &:hover {
+                    border-color: #efabab;
+                    background-color: #fce4ec;
+                }
+            }
+        }
+    }
+
+    .essay-detail-content {
+        margin-top: 10px;
+        color: #555;
+        line-height: 25px;
+
+        p {
+            margin: 0px;
+
+            img {
+                width: 100%;
+                margin-top: 20px;
+            }
+        }
+    }
+
+    /*.essay-detail-tag {
+        margin-top: 5px;
+        color: white;
+
+        span {
+            padding: 2px 10px;
+            background-color: #f2f8f2;
+            color: #4f946e;
+            border: 1px solid #e3f1ed;
+            border-radius: 2px;
+            font-size: 13px;
+        }
+
+        span:not(:first-child) {
+            margin-left: 10px;
+        }
+    }*/
+
+    .essay-detail-like-share {
+        margin-top: 50px;
+        text-align: right;
+
+        span {
+            text-align: center;
+            color: #ca6445;
+            border: 1px solid #fad5b5;
+            background: #fbe9d9;
+            padding: 5px 10px;
+            height: 12px;
+            line-height: 1;
+            border-radius: 2px;
+            font-size:13px;
+
+
+            &:not(:first-child) {
+                margin-left: 10px;
+            }
+
+            &:last-child {
+                color: #bbb;
+                border: 0;
+                background: white;
+            }
+        }
+    }
+
+    .comment-list {
+        margin-top: 20px;
+        padding: 10px;
+
+
+        ul.comment-menu {
+            border-bottom: 1px solid #e3f1ed; //1px solid #f6f7f9;
+            height: 30px;
+            list-style-type: none;
+            list-style-image: none;
+            padding: 0;
+            margin: 0;
+
+
+            li {
+                float: left;
+                padding: 2px 10px;
+                color: #4f946e;
+            }
+        }
+
+
+        .comment-info {
+            padding-top: 15px;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: flex-start;
+
+
+
+            &-avatar {
+                margin-top: 5px;
+
+                img {
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 15px;
+                }
+            }
+
+            &-content {
+                margin-left: 15px;
+                width: 100%;
+
+
+                &-user {
+                    width: 100%;
+                    padding: 5px 0px;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+
+                    span {
+
+                        &:not(:first-child) {
+                            color: #bbb;
+                            font-size: 13px;
+                        }
+                    }
+                }
+
+                &-txt {
+                    width: 100%;
+                    min-height: 30px;
+                    padding-top: 5px;
+                    word-wrap: break-word;
+                    overflow: hidden;
+                    line-height: 30px;
+
+                    &-parent {
+                        color: #bbb;
+                        margin-bottom: 10px;
+                        padding-left: 5px;
+                        border-left: 2px solid#f4f4f4;
+
+
+                        a {
+                            color: black;
+
+                            &:after {
+                                content: "  :  "
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
