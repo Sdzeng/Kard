@@ -54,7 +54,7 @@ var essaydetailjs = {
                 var imgs = "";
                 for (var i in data.mediaList) {
                     var media = data.mediaList[i];
-                    imgs += " <img src='" + basejs.cdnDomain + "/" + media.cdnPath + "_400x300." + media.mediaExtension + "' style=''>";
+                    imgs += " <img src='" + basejs.cdnDomain + "/" + media.cdnPath + "_600x400." + media.mediaExtension + "' style=''>";
                 }
                 $('.essay-detail-content', _this.data.scope).html("<p>" + data.content + "</p><p>" + imgs + "</p>");
 
@@ -85,26 +85,26 @@ var essaydetailjs = {
                             timestamp: data2.timestamp, // 必填，生成签名的时间戳
                             nonceStr: data2.nonceStr, // 必填，生成签名的随机串
                             signature: data2.signature,// 必填，签名
-                            jsApiList: ['onMenuShareAppMessage']// 必填，需要使用的JS接口列表
+                            jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage']// 必填，需要使用的JS接口列表
                         });
                         wx.error(function (res) {
                             alert('wx.error: ' + JSON.stringify(res));
                         });
 
                         wx.ready(function () {
-                          
+                            var link = location.href.split('#')[0];
                             //转发到朋友圈
-                            //wx.onMenuShareTimeline({
-                            //    title: 'JSSDK朋友圈转发测试',
-                            //    link: link,
-                            //    imgUrl: imgUrl,
-                            //    success: function () {
-                            //        alert('转发成功！');
-                            //    },
-                            //    cancel: function () {
-                            //        alert('转发失败！');
-                            //    }
-                            //});
+                            wx.onMenuShareTimeline({
+                                title: data.title,
+                                link: link,
+                                imgUrl: avatarUrl,
+                                success: function () {
+                                    //alert('转发成功！');
+                                },
+                                cancel: function () {
+                                    //alert('转发失败！');
+                                }
+                            });
                             //转发给朋友
                             //alert(((data.content || "").length > 20 ? data.content.substr(0, 20) : data.content));
                             //var imgUrl = basejs.cdnDomain + "/" + avatarArr[0] + "_60x60." + avatarArr[1];
@@ -113,7 +113,7 @@ var essaydetailjs = {
                             wx.onMenuShareAppMessage({
                                 title: data.title,
                                 desc: ((data.content || "").length > 20 ? data.content.substr(0, 20)+"..." : data.content),
-                                link: location.href.split('#')[0],
+                                link: link,
                                 imgUrl: avatarUrl,
                                 type: 'link',
                                 dataUrl: '',
