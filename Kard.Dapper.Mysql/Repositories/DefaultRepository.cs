@@ -37,7 +37,7 @@ namespace Kard.Dapper.Mysql.Repositories
 		                        left join media on cover.mediaid = media.id   
 		                        left join essay on media.essayid = essay.id 
                                 left join kuser on essay.creatoruserid=kuser.id 
-                                where essay.isdeleted=0 and media.mediatype='picture'  ";
+                                where essay.isdeleted=0  ";
                 var entityList = conn.Query<CoverEntity, MediaEntity, EssayEntity, KuserEntity, CoverEntity>(sql, (cover, media, essay, kuser) =>
                   {
                       media.Essay = essay;
@@ -68,14 +68,14 @@ namespace Kard.Dapper.Mysql.Repositories
             switch (type)
             {
                 case "热门单品":
-                    sql = @"select essay.Id,essay.Category,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,kuser.AvatarUrl,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaExtension,tag.*  from 
+                    sql = @"select essay.Id,essay.Category,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,kuser.AvatarUrl,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaType,t2.MediaExtension,tag.*  from 
                 (
-                select t.EssayId,t.CdnPath,t.MediaExtension,count(media.Id) MediaCount
+                select t.EssayId,t.CdnPath,t.MediaType,t.MediaExtension,count(media.Id) MediaCount
                 from (
-                select media.EssayId,media.CdnPath,media.MediaExtension from media join essay on media.EssayId=essay.Id  
-               where   media.Sort=1 and media.MediaType='picture' and media.CreationTime>=@CreationTime order by (essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum) desc,essay.CreationTime desc limit @Count
+                select media.EssayId,media.CdnPath,media.MediaType,media.MediaExtension from media join essay on media.EssayId=essay.Id  
+               where   media.Sort=1 and media.CreationTime>=@CreationTime order by (essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum) desc,essay.CreationTime desc limit @Count
                 ) t join media on t.EssayId=media.EssayId
-                group by t.EssayId,t.CdnPath,t.MediaExtension
+                group by t.EssayId,t.CdnPath,t.MediaType,t.MediaExtension
                 ) t2 
                 join essay on t2.EssayId=essay.Id 
                 join kuser on essay.CreatorUserId=kuser.Id  
@@ -88,14 +88,14 @@ namespace Kard.Dapper.Mysql.Repositories
                 case "潮拍":
                 case "户外":
                     //case "摘录":
-                    sql = @"select essay.Id,essay.Category,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,kuser.AvatarUrl,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaExtension,tag.*  from 
+                    sql = @"select essay.Id,essay.Category,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,kuser.AvatarUrl,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaType,t2.MediaExtension,tag.*  from 
                 (
-                select t.EssayId,t.CdnPath,t.MediaExtension,count(media.Id) MediaCount
+                select t.EssayId,t.CdnPath,t.MediaType,t.MediaExtension,count(media.Id) MediaCount
                 from (
-                select EssayId,CdnPath,MediaExtension from media  join essay on media.EssayId=essay.Id 
-                where   media.Sort=1 and media.MediaType='picture' and essay.Category=@Category order by essay.CreationTime desc limit @Count
+                select EssayId,CdnPath,MediaType,MediaExtension from media  join essay on media.EssayId=essay.Id 
+                where   media.Sort=1  and essay.Category=@Category order by essay.CreationTime desc limit @Count
                 ) t join media on t.EssayId=media.EssayId
-                group by t.EssayId,t.CdnPath,t.MediaExtension
+                group by t.EssayId,t.CdnPath,t.MediaType,t.MediaExtension
                 ) t2 
                 join essay on t2.EssayId=essay.Id 
                 join kuser on essay.CreatorUserId=kuser.Id  
@@ -324,7 +324,7 @@ namespace Kard.Dapper.Mysql.Repositories
                 mediaList = mediaList.Select(meida =>
                 {
                     meida.EssayId = insertAndGetIdResultDto.Data;
-                    meida.MediaExtension = meida.MediaExtension.Replace(".", "");
+                    //meida.MediaExtension = meida.MediaExtension.Replace(".", "");
                     return meida;
                 });
 

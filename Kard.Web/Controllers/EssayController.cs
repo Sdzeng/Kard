@@ -117,7 +117,7 @@ namespace Kard.Web.Controllers
                     mediaFlie.CopyTo(stream);
                 }
                 result.Result = true;
-                result.Data = new { FileUrl = Path.Combine(newFolder, fileName).Replace("\\", "/"), FileExtension = fileExtension };
+                result.Data = new { FileUrl = Path.Combine(newFolder, fileName).Replace("\\", "/"), FileExtension = fileExtension.Replace(".","") };
                 return result;
             }
 

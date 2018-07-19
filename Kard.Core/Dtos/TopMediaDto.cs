@@ -38,6 +38,8 @@ namespace Kard.Core.Dtos
 
         public string CdnPath { get; set; }
 
+        public string MediaType { get; set; }
+
         public string MediaExtension { get; set; }
 
 
