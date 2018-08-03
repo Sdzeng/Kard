@@ -1,40 +1,86 @@
 
 .splash {
     min-width: @page-min-width;
+
+    height: 350px;
 }
 
 
-.quote {
+
+.splash-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: absolute;
+    left: 0;
+    top: 0;
     line-height: 1.8;
+    width: 100%;
+    height: 350px;
 
-    > div {
-        position: absolute;
-        width: 100%;
 
-        > blackquote {
-            position: relative;
-            display: inline-block;
-            overflow: hidden;
-            text-align: center;
+    > blackquote {
+        position: relative;
+        display: inline-block;
+        overflow: hidden;
+        text-align: center;
+        min-width: 150px;
+    }
+
+    .splash-txt {
+        //top:250px;
+        //.transition(all 50ms linear);
+        color: #fff;
+        max-width: 550px;
+        //max-height:(@splash-img-height - 250px - 50px);
+        font-size: 17px;
+        font-family: "arkitalic","Georgia Italic","Georgia-Italic","Georgia",STKaiti,"AR PL UKai","AR PL KaitiM GB",KaiTi,KaiTi_GB2312,"TW-Kai",cursive;
+        top: 180px;
+        max-height: 100px;
+    }
+
+    .splash-author {
+        color: white;
+        top: 280px;
+        right: 55px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 25px;
+        background-color: rgba(0, 0, 0, 0.4);
+        padding: 6px;
+        height: 42px;
+
+        img {
+            height: 30px;
+            width: 30px;
+            border-radius: 15px;
+            margin-right: 5px;
+        }
+
+        a {
+            color: white;
         }
     }
 }
 
-.splash-content {
-    text-align: center;
+.splash-bg {
+    width: 100%;
+    height: 350px;
+    overflow: hidden;
+    position: static;
+    z-index: -10;
 
-    blackquote {
-        //top:250px;
-        //.transition(all 50ms linear);
-        color: #fff;
-        max-width: 520px;
-        //max-height:(@splash-img-height - 250px - 50px);
-        font-size: 17px;
-        font-family: "arkitalic","Georgia Italic","Georgia-Italic","Georgia",STKaiti,"AR PL UKai","AR PL KaitiM GB",KaiTi,KaiTi_GB2312,"TW-Kai",cursive;
+    .bg-video {
+        width: 100%;
+        position: relative;
+        top: -300px;
+        z-index: -10;
     }
 }
+ 
 
-.splash-other {
+
+
+/*.splash-other {
     text-align: right;
     .splash-other-home-author {
         color: white;
@@ -58,4 +104,6 @@
     }
 
  
-}
+}*/
+
+

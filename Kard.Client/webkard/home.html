@@ -13,7 +13,7 @@
 </head>
 <body id="homePage">
     <!--公共导航栏 -->
-    <nav id="navbar" class="navbar bg-layer">
+    <nav id="navbar" class="navbar">
 
         <div class="navbar-logo">
             <a href="/"><span><img src="/image/logo-nav_30x30.png"></span><span>自然单品</span></a>
@@ -32,7 +32,7 @@
     </nav>
 
     <!--封面-->
-    <div id="splash" class="splash bg-layer" style="height:350px;">
+    <!--<div id="splash" class="splash bg-layer" style="height:350px;">
         <div class="quote">
             <div class="splash-content">
                 <blackquote style=" top:200px;max-height:100px;">
@@ -53,9 +53,32 @@
             </div>
 
         </div>
+    </div>-->
+    <div id="splash" class="splash">
+
+        <div class="splash-content">
+            <blackquote></blackquote>
+            <blackquote class="splash-txt">
+                <q>
+
+                    In photography there is a reality so subtle that it becomes more real than reality.
+
+                </q>
+            </blackquote>
+            <blackquote class="splash-author">
+
+                <img class='lazy' src='/image/default-avatar.jpg' data-original=''><a href="javascript:;">作者</a> · <span>广州</span> · <span>刚刚</span>
+
+            </blackquote>
+        </div>
+
+        <div class="splash-bg  bg-default">
+            <!--<video class="bg-video" autoplay="" loop="" poster="http://api.localyc.com/user/1/media/20180714/141514524640.jpg" id="bgvideo">
+
+                <source src="http://api.localyc.com/user/1/media/20180714/141514524640.mp4" type="video/mp4">
+            </video>-->
+        </div>
     </div>
-
-
 
 
 
@@ -66,21 +89,31 @@
     <div id="hostInfo" class="section-style ">
         <header id="hostTitle" class="section-style-title">
             <!--<h2>热门<img style="border-radius:50px;margin-bottom:20px;" class="lazy" src="http://192.168.10.2:3703/user/1/media/20180603/031928154571_100x100.jpg" data-original="http://192.168.10.2:3703/user/1/media/20180603/031928154571_180x180.jpg">单品</h2>-->
-            <h2>热门单品</h2>
-
-            <h6></h6>
+            <div class="section-style-title-big"><span class="section-style-title-big-active">优选</span>\<span>物件</span>\<span>潮拍</span>\<span>笔记</span></div>
+            <div class="section-style-title-little"></div>
         </header>
         <div id="hostBody" class="section-style-body"><div class="section-style-body-block"></div></div>
     </div>
 
-    <div id="cosmeticsInfo" class="section-style">
+    <div class="go-to-top" style="display: block;">
+        <a href="javascript:;" class="lnk-back-top"><span>返回页顶</span></a>
+    </div>
+
+    <!--<div id="cosmeticsInfo" class="section-style">
         <header id="cosmeticsTitle" class="section-style-title">
-            <h2>衣妆</h2>
+            <h2>物件</h2>
             <h6></h6>
         </header>
         <div id="cosmeticsBody" class="section-style-body"><div class="section-style-body-block"></div></div>
     </div>
 
+    <div id="originalityInfo" class="section-style">
+        <header id="originalityTitle" class="section-style-title">
+            <h2>设计</h2>
+            <h6></h6>
+        </header>
+        <div id="originalityBody" class="section-style-body"><div class="section-style-body-block"></div></div>
+    </div>
 
     <div id="fashionSenseInfo" class="section-style">
         <header id="fashionSenseTitle" class="section-style-title">
@@ -88,17 +121,7 @@
             <h6></h6>
         </header>
         <div id="fashionSenseBody" class="section-style-body"><div class="section-style-body-block"></div></div>
-    </div>
-
-    <div id="originalityInfo" class="section-style">
-        <header id="originalityTitle" class="section-style-title">
-            <h2>户外</h2>
-            <h6></h6>
-        </header>
-        <div id="originalityBody" class="section-style-body"><div class="section-style-body-block"></div></div>
-    </div>
-
-
+    </div>-->
     <!--<div id="excerptInfo" class="section-style">
         <header id="excerptTitle" class="section-style-title">
             <h2>摘录</h2>
@@ -106,7 +129,6 @@
         </header>
         <div id="excerptBody" class="section-style-body"><div class="section-style-body-block"></div></div>
     </div>-->
-
     <!-- 以下是公共页脚 -->
     <footer class="footer">
         <div class="footer-content">
@@ -161,7 +183,7 @@
     <script type="text/javascript" src="/js/util.js?v=1.0.0"></script>
     <script type="text/javascript" src="/js/base.js?v=1.0.0"></script>
 
- 
+
     <script type="text/javascript" src="/js/home.js?v=1.0.0"></script>
 
 

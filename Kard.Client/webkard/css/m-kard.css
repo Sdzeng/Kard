@@ -30,45 +30,58 @@ body {
   font-size: 130%;
   line-height: 40px;
 }
-.essay-detail-info .essay-author {
-  margin-top: 10px;
+.essay-detail-info .essay-min-author {
+  margin-top: 13px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
-.essay-detail-info .essay-author-left {
+.essay-detail-info .essay-min-author-left {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
 }
-.essay-detail-info .essay-author-left .essay-author-avatar {
+.essay-detail-info .essay-min-author-left .essay-min-author-avatar {
   width: 30px;
   margin: 3px 10px 0px 0px;
 }
-.essay-detail-info .essay-author-left .essay-author-avatar img {
+.essay-detail-info .essay-min-author-left .essay-min-author-avatar img {
   width: 30px;
   height: 30px;
   border-radius: 15px;
 }
-.essay-detail-info .essay-author-left .essay-author-txt-name {
+.essay-detail-info .essay-min-author-left .essay-min-author-txt-name {
   line-height: 20px;
+  /*span {
+                        &:last-child {
+                            margin-left: 10px;
+                            padding: 3px 10px;
+                            color: #9aabb8;
+                            background-color: #dfe5e9;
+                            border-radius: 3px;
+                            font-size:12px;
+                        }
+                    }*/
 }
-.essay-detail-info .essay-author-left .essay-author-txt-introduction {
+.essay-detail-info .essay-min-author-left .essay-min-author-txt-introduction {
   line-height: 20px;
   color: #bbb;
   font-size: 12px;
 }
-.essay-detail-info .essay-author-left .essay-author-txt-introduction span:not(:first-child) {
+.essay-detail-info .essay-min-author-left .essay-min-author-txt-introduction span:not(:first-child) {
   margin-left: 10px;
 }
-.essay-detail-info .essay-author-right {
+.essay-detail-info .essay-min-author-left .essay-min-author-txt-introduction span:last-child {
+  color: #e09015;
+}
+.essay-detail-info .essay-min-author-right {
   height: 35px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-.essay-detail-info .essay-author-right span {
+.essay-detail-info .essay-min-author-right span {
   padding: 2px 10px;
   background-color: #ffebee;
   color: #e53935;
@@ -77,25 +90,27 @@ body {
   cursor: pointer;
   font-size: 13px;
 }
-.essay-detail-info .essay-author-right span:hover {
+.essay-detail-info .essay-min-author-right span:hover {
   border-color: #efabab;
   background-color: #fce4ec;
 }
 .essay-detail-info .essay-detail-content {
-  margin-top: 10px;
+  margin-top: 13px;
   color: #555;
   line-height: 25px;
 }
 .essay-detail-info .essay-detail-content p {
   margin: 0px;
 }
-.essay-detail-info .essay-detail-content p img {
+.essay-detail-info .essay-detail-content p img,
+.essay-detail-info .essay-detail-content p video {
   width: 100%;
   margin-top: 10px;
 }
 .essay-detail-info .essay-detail-like-share {
   margin-top: 50px;
   text-align: right;
+  height: 30px;
 }
 .essay-detail-info .essay-detail-like-share span {
   text-align: center;
@@ -116,6 +131,61 @@ body {
   border: 0;
   background: white;
 }
+.essay-detail-info .essay-author {
+  padding: 10px;
+  margin: 40px 0px;
+  background-color: #fff6ed;
+}
+.essay-detail-info .essay-author-avatar {
+  width: 50px;
+  float: left;
+  margin-right: 10px;
+}
+.essay-detail-info .essay-author-avatar img {
+  height: 50px;
+  width: 50px;
+  border-radius: 25px;
+}
+.essay-detail-info .essay-author-txt-name {
+  padding: 4px 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.essay-detail-info .essay-author-txt-name span:first-child {
+  font-size: 16px;
+  margin-right: 10px;
+}
+.essay-detail-info .essay-author-txt-name span:last-child {
+  padding: 2px 10px;
+  background-color: #ffebee;
+  color: #e53935;
+  border: 1px solid #ffcdd2;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.essay-detail-info .essay-author-txt-name span:last-child:hover {
+  border-color: #efabab;
+  background-color: #fce4ec;
+}
+.essay-detail-info .essay-author-txt-introduction {
+  color: #bbb;
+  font-size: 13px;
+  /*overflow: hidden;
+                    text-overflow: ellipsis;
+                    -o-text-overflow: ellipsis;
+                    white-space: nowrap;
+                    display: block;
+                   
+                    width: 160px;
+
+
+
+                    @media (min-width: @screen-lg-min) {
+                        width: 260px;
+                    }*/
+}
 .essay-detail-info .comment-list {
   margin-top: 20px;
   padding: 10px;
@@ -132,6 +202,11 @@ body {
   float: left;
   padding: 2px 10px;
   color: #4f946e;
+}
+.essay-detail-info .comment-list .comment-empty {
+  padding: 30px;
+  color: #bbb;
+  text-align: center;
 }
 .essay-detail-info .comment-list .comment-info {
   padding-top: 15px;

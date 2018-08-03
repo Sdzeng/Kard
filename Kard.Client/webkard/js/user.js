@@ -19,9 +19,9 @@
                 //data.media.hasOwnProperty("path")&&
 
 
-                $(".bg-layer").css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.coverPath || "") + ")").fadeIn("slow");
+                $(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.coverPath || "") + ")").fadeIn("slow");
                 //$(".essay-content>blackquote>q").text("测试");
-                $(".author").text("@" + data.nickName || "");
+                $(".author", _this.data.scope).text("@" + data.nickName || "");
 
 
                 topCover.scroll();

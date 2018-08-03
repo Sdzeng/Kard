@@ -6,34 +6,104 @@
     align-items: center;
     width: 100%;
     min-width: @page-min-width;
-    padding-top: 30px;
+    padding-top: 20px;
 
     @media (min-width: @screen-lg-min) {
-        padding-top: 50px;
+        padding-top:40px;
     }
 
-
     &-title {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
         width: 100%;
-        padding: 25px 0px;
-        line-height: 1.1;
-        text-align: center;
+        padding:10px 0px;
 
-        & h2 {
-            word-spacing: 6px;
-            letter-spacing: 3px;
-        }
 
-        & h6 {
-            letter-spacing: 1px;
-            margin-top: 15px;
 
-            &:before {
-                content: "~ ";
+        &-big {
+            font-size: 16px;
+            //transform: scale(1.1,1);
+            position: relative;
+            letter-spacing:3px;
+            color:#c6c7c8;
+            /*&:before {
+                content: "";
+                positi content: "";
+                position: absolute;
+                width: .65em;
+                height: .65em;
+                border-top: 1px solid #f66;
+                border-left: 1px solid #f66;
+                top: 0px;
+                left: 0px
             }
 
             &:after {
-                content: " ~";
+                content: "";
+                position: absolute;
+                width: .65em;
+                height: .65em;
+                border-bottom: 1px solid #f66;
+                border-left: 1px solid #f66;
+                bottom: 0px;
+                left: 0px;
+            }*/
+            /*ul {*/
+            /*&:before {
+                    content: "";
+                    position: absolute;
+                    width: .65em;
+                    height: .65em;
+                    border-top: 1px solid #f66;
+                    border-right: 1px solid #f66;
+                    top: 0px;
+                    right: 0px;
+                }
+
+                &:after {
+                    content: "";
+                    position: absolute;
+                    width: .65em;
+                    height: .65em;
+                    border-bottom: 1px solid #f66;
+                    border-right: 1px solid #f66;
+                    bottom: 0px;
+                    right: 0px;
+                }*/
+            span {
+                color:black;
+                padding: 10px 0px;
+                margin: 0px 40px;
+                cursor: pointer;
+                border-bottom: 2px solid transparent;
+
+                &.section-style-title-big-active {
+                    border-bottom: 2px solid #ee6e73;
+                }
+            }
+        }
+
+        &-little {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: row;
+
+
+
+            &:before {
+                content: "~";
+            }
+
+            &:after {
+                content: "~";
+            }
+
+            span {
+                padding: 0px 5px;
+                cursor: pointer;
+                letter-spacing: 1px;
             }
         }
     }
@@ -75,11 +145,3 @@
         }
     }
 }
-
-
-
-
-
-
-
-

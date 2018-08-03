@@ -27,7 +27,7 @@
                 //data.media.hasOwnProperty("path")&&
 
 
-                $(".bg-layer").css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.coverPath || "") + ")").fadeIn("slow");
+                $(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),url(" + basejs.cdnDomain + "/" + (data.coverPath || "") + ")");
                 //$(".essay-content>blackquote>q").text("测试");
                 $(".user-center-author-txt-name>span:eq(0)", _this.data.scope).text(data.nickName || "");
 
@@ -44,7 +44,7 @@
                 $userCenterAuthorTxtNum.children("span:eq(1)").text("1200粉丝");
                 $userCenterAuthorTxtNum.children("span:eq(2)").text("获得18k个喜欢");
 
-                topCover.scroll();
+                topCover.scroll({ page: "user-center" });
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -188,7 +188,7 @@
                 success: function (resultDto) {
 
                     if (resultDto.result) {
-                        $("#btnAddPic", _this.data.scope).before("<img class='isay-info-buttom-medias-item' data-file-url='" + resultDto.data.fileUrl + "' data-file-extension='" + resultDto.data.fileExtension + "' src='" + basejs.requestDomain + "/" + resultDto.data.fileUrl + "_50x50" + resultDto.data.fileExtension + "'></img>");
+                        $("#btnAddPic", _this.data.scope).before("<img class='isay-info-buttom-medias-item' data-file-url='" + resultDto.data.fileUrl + "' data-file-extension='" + resultDto.data.fileExtension + "' src='" + basejs.requestDomain + "/" + resultDto.data.fileUrl + "_50x50." + resultDto.data.fileExtension + "'></img>");
                     }
                 }
             });
@@ -210,15 +210,23 @@
             var mediaArr = [];
             $(".isay-info-buttom-medias>img", _this.data.scope).each(function (index, item) {
                 var $item = $(item);
+                var mediaExtension = $item.attr("data-file-extension");
+                var mediaType = "";
+                switch (mediaExtension) {
+                    case "mp4": mediaType = "video"; break;
+                    default: mediaType = "picture"; break;
+                }
+             
                 mediaArr.push({
                     sort: index + 1,
-                    mediaType: "picture",
+                    mediaType: mediaType,
                     cdnPath: $item.attr("data-file-url"),
-                    mediaExtension: $item.attr("data-file-extension")
+                    mediaExtension: mediaExtension
                 });
             });
 
             var title = $("#isayTitle", _this.data.scope).val();
+            var isOriginal = $("#isOriginal", _this.data.scope).prop('checked');
             var category = $(".isay-info-category-span-checked", _this.data.scope).text();
             var content = $("#isayContent", _this.data.scope).val();
             if (!title) { alert("请填写标题"); return;}
@@ -232,6 +240,7 @@
                 data: {
                     essayEntity: {
                         title: title,
+                        isOriginal: isOriginal,
                         category: category,
                         content: content
                     },

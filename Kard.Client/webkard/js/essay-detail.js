@@ -5,19 +5,27 @@ var essaydetailjs = {
         scope: $("#essayDetailPage"),
         queryString: basejs.getQueryString(),
         template: {
-            comment: ("<div class='comment-info'>"+
-                "<a class='comment-info-avatar' > <img class='lazy' src='/image/default-avatar.jpg' data-original='#{avatarUrl}'></a>"+
+            comment: ("<div class='comment-info' data-id='#{id}'>"+
+                    "<div class='comment-info-auth' >" +
+                        "<div  class='comment-info-auth-avatar'><img class='lazy' src='/image/default-avatar.jpg' data-original='#{avatarUrl}'></div>" +
+                        //"<div class='comment-info-auth-like'><div>222</div><div>喜欢</div></div>" +
+                    "</div>" +
                     "<div class='comment-info-content'>"+
-                        "<div class='comment-info-content-user'><a>#{nickName}</a><span>#{creationTime}</span></div>"+
+                        "<div class='comment-info-content-user'><div><a>#{nickName}</a>#{introduction}</div><div><span>#{creationTime}</span><span class='comment-info-user-reply'>回复</span></div></div>"+
                         "<div class='comment-info-content-txt'>#{content}</div>"+
-                        "<div class='comment-info-content-btns' data-id='#{id}'><span>赞#{likeNum}</span><span class='comment-info-content-btns-reply'>回复</span></div>"+
+                        //"<div class='comment-info-content-btns' ><span>赞#{likeNum}</span><span class='comment-info-content-btns-reply'>回复</span></div>"+
                     "</div>"+
                 "</div >"),
             parentComment: ("<div class='comment-info-content-txt-parent'>" +
                 "<div><a> #{nickName}</a>#{content}</div> " +
                 "#{commentParent}" +
                 "</div >"),
-            like: ("<div class='like-info'> <span class='like-info-avatar'><img  class='lazy' src='/image/default-avatar.jpg' data-original='#{avatarUrl}'>#{nickName} 喜欢了这件单品</span><span>#{creationTime}</span></div>")
+            like: ("<div class='like-info'> <span class='like-info-avatar'><img  class='lazy' src='/image/default-avatar.jpg' data-original='#{avatarUrl}'>#{nickName} 喜欢了这件单品</span><span>#{creationTime}</span></div>"),
+            video: (
+                "<video class='bg-video' autoplay='autoplay' loop='loop' poster='#{videoCoverPath}' id='bgvideo'>" +
+                "<source src='#{videoPath}' type='video/#{videoExtension}' >" +
+                "</video >"
+            )
         }
     },
     init: function () {
@@ -26,6 +34,8 @@ var essaydetailjs = {
       
         _this.bindCover();
         _this.bindEssay();
+        _this.bindSimilar();
+        _this.bindOther();
         _this.bindEvent();
         _this.bindCommentList();
         _this.bindLikeList();
@@ -40,7 +50,8 @@ var essaydetailjs = {
             if (!data) {
                 return;
             }
-            $(".bg-layer", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.media.cdnPath + "_2560x1200." + data.media.mediaExtension || "") + ")");
+
+            $(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + data.media.cdnPath + (data.media.mediaType =="picture"?"_2560x1200." + data.media.mediaExtension:".jpg") + ")");
         });
     },
     bindEssay: function () {
@@ -56,8 +67,17 @@ var essaydetailjs = {
                 if (!data) {
                     return;
                 }
-                $("#category", _this.data.scope).text(data.category);
+                $(".category", _this.data.scope).append(data.category);
                 $(".essay-detail-title", _this.data.scope).text(data.title);
+
+
+              
+                var avatarArr = data.kuser.avatarUrl.split('.');
+
+                $('.essay-detail-remark', _this.data.scope).html("<span>" + (data.isOriginal ? "原创" : "分享") + "</span>"+
+                   "<span><img  class='lazy' src='/image/default-avatar.jpg' data-original='" + basejs.cdnDomain + "/" + avatarArr[0] + "_30x30." + avatarArr[1] + "' >" + data.kuser.nickName + "</span>" +
+                    "<span>" + data.location + "</span><span>" + basejs.getDateDiff(basejs.getDateTimeStamp(data.creationTime)) + "发布</span><span>" + data.browseNum + "阅读</span>");
+
 
                 var tagSpan = "";
                 for (var i in data.tagList) {
@@ -65,24 +85,40 @@ var essaydetailjs = {
                     tagSpan += "<span data-tagid='" + tag.id + "'>" + tag.tagName + "</span>";
                 }
                 $(".essay-detail-tag", _this.data.scope).html(tagSpan);
-                $('.essay-detail-remark', _this.data.scope).html("<span>" + basejs.getDateDiff(basejs.getDateTimeStamp(data.creationTime)) + "发布</span> <span>" + data.location + "</span><span>" + data.browseNum + "阅读</span>");
 
+            
 
                 var imgs = "";
                 for (var i in data.mediaList) {
                     var media = data.mediaList[i];
-                    imgs += " <img src='" + basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension + "' style=''>";
+                    switch (media.mediaType) {
+                        case "picture": imgs += " <img src='" + basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension + "' style=''>"; break;
+                        case "video":
+                            imgs += _this.data.template.video.format({
+                                videoCoverPath: basejs.cdnDomain + "/" + media.cdnPath + ".jpg",
+                                videoPath: basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension,
+                                videoExtension: media.mediaExtension
+                            });
+                            break;
+                    }
+                  
                 }
                 $('.essay-detail-content', _this.data.scope).html("<p>" + data.content + "</p><p>" + imgs + "</p>");
 
                 var isLike = (data.essayLike != null);
                 $('.essay-detail-like-share', _this.data.scope).html("<span id='btnLike' data-islike='" + isLike + "'>" + (isLike ? "已喜欢 " : "喜欢 ") + data.likeNum + "</span><span>分享 " + data.shareNum + "</span><span>举报</span>");
 
-                basejs.lazyInof('.essay-author-avatar img.lazy');
-                var avatarArr = data.kuser.avatarUrl.split('.');
-                $(".essay-author-avatar>img", _this.data.scope).attr("data-original", basejs.cdnDomain + "/" + avatarArr[0] + "_60x60." + avatarArr[1]);
+           
+                $(".essay-author-avatar>img", _this.data.scope).attr("data-original", basejs.cdnDomain + "/" + avatarArr[0] + "_80x80." + avatarArr[1]);
                 $(".essay-author-txt-name>span:eq(0)", _this.data.scope).text(data.kuser.nickName);
-                $(".essay-author-txt-introduction", _this.data.scope).text(data.kuser.introduction)
+                $(".essay-author-txt-introduction", _this.data.scope).text(data.kuser.introduction);
+
+
+                $(".essay-score-num", _this.data.scope).text(data.score);
+
+                $(".big-star", _this.data.scope).addClass(basejs.getStarClass("bigstar",data.score));
+
+                basejs.lazyInof('.essay-detail-info-left img.lazy');
 
                 $("#btnLike", _this.data.scope).click(function () {
                     var $btnLike = $(this);
@@ -103,6 +139,62 @@ var essaydetailjs = {
                     })).send();
 
                 });
+            }
+        });
+        helper.send();
+    },
+    bindSimilar: function () {
+        var _this = this;
+
+        //设置相似列表
+        var helper = new httpHelper({
+            url: basejs.requestDomain + "/essay/similarlist",
+            type: "GET",
+            data: { essayId: _this.data.queryString.id },
+            success: function (resultDto) {
+                var data = resultDto.data;
+                //data = JSON.parse(data);
+                if (!data) {
+                    return;
+                }
+
+                var essayAHtml ="";
+                for (var index in data) {
+                    var essay = data[index];
+                    essayAHtml += "<a href='essay-detail.html?id=" + essay.id + "'><div>《" + essay.title + " 》" + essay.content +"</div><div>" + basejs.getNumberDiff(essay.likeNum) + "人喜欢</div></a>";
+                }
+                if (essayAHtml == "") {
+                    essayAHtml = "<div class='div-empty'>空空如也</div>";
+                }
+                $(".essay-similar-a", _this.data.scope).html(essayAHtml);
+            }
+        });
+        helper.send();
+    },
+    bindOther: function () {
+        var _this = this;
+
+        //设置其他列表
+        var helper = new httpHelper({
+            url: basejs.requestDomain + "/essay/otherlist",
+            type: "GET",
+            data: { essayId: _this.data.queryString.id },
+            success: function (resultDto) {
+                var data = resultDto.data;
+                //data = JSON.parse(data);
+                if (!data) {
+                    return;
+                }
+
+                var essayAHtml = "";
+                for (var index in data) {
+                    var essay = data[index];
+                    essayAHtml += "<a href='essay-detail.html?id=" + essay.id + "'><div>《" + essay.title + " 》" + essay.content +"</div><div>" + basejs.getNumberDiff(essay.likeNum) + "人喜欢</div></a>";
+                }
+                if (essayAHtml == "") {
+                    essayAHtml = "<div class='div-empty'>空空如也</div>";
+                }
+                $(".essay-other-a", _this.data.scope).html(essayAHtml);
             }
         });
         helper.send();
@@ -145,6 +237,8 @@ var essaydetailjs = {
             });
             helper.send();
         });
+
+        $('.go-to-top', _this.data.scope).goToTop();
     },
     bindCommentList: function () {
         var _this = this;
@@ -180,6 +274,9 @@ var essaydetailjs = {
                     });
                 }
 
+                if (commentHtml == "") {
+                    commentHtml = "<div class='div-empty'>空空如也</div>";
+                }
       
                 $(".comment-info-list", _this.data.scope).html(commentHtml);
                 basejs.lazyInof('.comment-info-list img.lazy');
@@ -188,10 +285,10 @@ var essaydetailjs = {
                     var $btnCommentLike = $(this);
                 });
 
-                $(".comment-info-content-btns-reply", _this.data.scope).click(function () {
+                $(".comment-info-user-reply", _this.data.scope).click(function () {
                     var $btnCommentReply = $(this);
-                    var parentId = $btnCommentReply.parent().attr("data-id");
-                    var replyUserName = $btnCommentReply.parent().parent().children(".comment-info-content-user").children("a").text();
+                    var parentId = $btnCommentReply.parent().parent().parent().parent().attr("data-id");
+                    var replyUserName = $btnCommentReply.parent().parent().find("a").text();
                     $newComment.attr("data-parent-id", parentId).attr("placeholder", "回复：" + replyUserName).focus();
                 });
             }
@@ -234,6 +331,10 @@ var essaydetailjs = {
                                 nickName: entity.kuser.nickName,
                                 creationTime: basejs.getDateDiff(basejs.getDateTimeStamp(entity.creationTime)),
                             });
+                        }
+
+                        if (likeHtml == "") {
+                            likeHtml = "<div class='div-empty'>空空如也</div>";
                         }
 
                         $(".like-list", _this.data.scope).html(likeHtml);

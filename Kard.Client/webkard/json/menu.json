@@ -10,39 +10,26 @@
         {
           "id": "2",
           "name": "BS",
-          "namech": "衣妆",
-          "url": "index.html"
+          "namech": "发现",
+          "url": "discover.html"
         },
         {
           "id": "3",
           "name": "BS",
-          "namech": "潮拍",
-          "url": "index.html"
+          "namech": "活动",
+          "url": "activity.html"
         },
         {
           "id": "4",
           "name": "BS",
-          "namech": "户外",
-          "url": "index.html"
-        },
-
-        {
-          "id": "6",
-          "name": "something",
-          "namech": "活动",
-          "url": "index.html"
-        },
-        {
-          "id": "7",
-          "name": "BS",
           "namech": "下载",
-          "url": "index.html"
+          "url": "download.html"
         },
         {
-          "id": "8",
+          "id": "5",
           "name": "CS",
           "namech": "关于我们",
-          "url": "index.html"
+          "url": "about.html"
 
         }
       ]

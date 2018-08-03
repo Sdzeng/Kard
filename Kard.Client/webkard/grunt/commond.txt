@@ -1,0 +1,7 @@
+1.安装Node.js，网址https://nodejs.org/en/
+
+2 安装Grunt前端构建工具，打开cmd执行（-g为全局安装）：npm install -g grunt-cli
+
+3 移动到package.json所在的目录grunt执行命令：npm install
+
+4 全部的前端资源编译任务已集成到Gruntfile.js中，移动到Gruntfile.js所在的目录grunt执行编译资源命令：grunt 

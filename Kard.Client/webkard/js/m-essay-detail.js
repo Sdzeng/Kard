@@ -15,7 +15,12 @@ var essaydetailjs = {
             parentComment: ("<div class='comment-info-content-txt-parent'>" +
                 "<div><a> #{nickName}</a>#{content}</div> " +
                 "#{commentParent}" +
-                "</div >")
+                "</div >"),
+            video: (
+                "<video class='bg-video' autoplay='autoplay' loop='loop' poster='#{videoCoverPath}' id='bgvideo'>" +
+                "<source src='#{videoPath}' type='video/#{videoExtension}' >" +
+                "</video >"
+            )
       
         }
     },
@@ -42,19 +47,35 @@ var essaydetailjs = {
                 }
                 $(".essay-detail-title", _this.data.scope).text(data.title);
 
-                basejs.lazyInof('.essay-author-avatar img.lazy');
+               
                 var avatarArr = data.kuser.avatarUrl.split('.');
                 var avatarUrl = basejs.cdnDomain + "/" + avatarArr[0] + "_60x60." + avatarArr[1];
                 avatarUrl = avatarUrl.replace(/\\/g, "/");
-                $(".essay-author-avatar>img", _this.data.scope).attr("data-original", avatarUrl);
-                $('.essay-author-txt-name', _this.data.scope).text(data.kuser.nickName);
-                $('.essay-author-txt-introduction', _this.data.scope).html("<span>" + basejs.getDateDiff(basejs.getDateTimeStamp(data.creationTime)) + "发布</span> <span>" + data.browseNum + " 阅读</span>");
+                $(".essay-min-author-avatar>img", _this.data.scope).attr("data-original", avatarUrl);
+                $('.essay-min-author-txt-name', _this.data.scope).text(data.kuser.nickName);
+                $('.essay-min-author-txt-introduction', _this.data.scope).html("<span>" + (data.isOriginal ? "原创" : "分享") + "</span><span>" + basejs.getDateDiff(basejs.getDateTimeStamp(data.creationTime)) + "</span><span>" + data.browseNum + " 阅读</span><span>" + data.score + " 分</span>");
 
 
                 var imgs = "";
+                var wxImgUrl = "";
                 for (var i in data.mediaList) {
                     var media = data.mediaList[i];
-                    imgs += " <img src='" + basejs.cdnDomain + "/" + media.cdnPath + "_600x400." + media.mediaExtension + "' style=''>";
+                    switch (media.mediaType) {
+                        case "picture":
+                            imgs += " <img src='" + basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension + "'>";
+                            if (i == 0) {
+                                wxImgUrl = basejs.cdnDomain + "/" + media.cdnPath + "_60x60." + media.mediaExtension;
+                                wxImgUrl = wxImgUrl.replace(/\\/g, "/");
+                            }
+                            break;
+                        case "video":
+                            imgs += _this.data.template.video.format({
+                                videoCoverPath: basejs.cdnDomain + "/" + media.cdnPath + ".jpg",
+                                videoPath: basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension,
+                                videoExtension: media.mediaExtension
+                            });
+                            break;
+                    }
                 }
                 $('.essay-detail-content', _this.data.scope).html("<p>" + data.content + "</p><p>" + imgs + "</p>");
 
@@ -68,6 +89,15 @@ var essaydetailjs = {
 
                 var isLike = (data.essayLike != null);
                 $('.essay-detail-like-share', _this.data.scope).html("<span id='btnLike' data-islike='" + isLike + "'>" + (isLike ? "已喜欢 " : "喜欢 ") + data.likeNum + "</span><span>分享 " + data.shareNum + "</span><span>举报</span>");
+
+                //avatarUrl = basejs.cdnDomain + "/" + avatarArr[0] + "_80x80." + avatarArr[1];
+                //avatarUrl = avatarUrl.replace(/\\/g, "/");
+                $(".essay-author-avatar>img", _this.data.scope).attr("data-original", avatarUrl);
+                $('.essay-author-txt-name>span:eq(0)', _this.data.scope).text(data.kuser.nickName);
+                $(".essay-author-txt-introduction", _this.data.scope).text(data.kuser.introduction);
+
+                basejs.lazyInof('.essay-detail-info img.lazy');
+
 
                 var jssdkHelper = new httpHelper({
                     url: basejs.requestDomain + '/essay/jssdk',
@@ -97,7 +127,7 @@ var essaydetailjs = {
                             wx.onMenuShareTimeline({
                                 title: data.title,
                                 link: link,
-                                imgUrl: avatarUrl,
+                                imgUrl: wxImgUrl,
                                 success: function () {
                                     //alert('转发成功！');
                                 },
@@ -112,9 +142,9 @@ var essaydetailjs = {
                             //alert(imgUrl);
                             wx.onMenuShareAppMessage({
                                 title: data.title,
-                                desc: ((data.content || "").length > 20 ? data.content.substr(0, 20)+"..." : data.content),
+                                desc: ((data.content || "").length > 30 ? data.content.substr(0, 30)+"..." : data.content),
                                 link: link,
-                                imgUrl: avatarUrl,
+                                imgUrl: wxImgUrl,
                                 type: 'link',
                                 dataUrl: '',
                                 success: function () {
@@ -158,22 +188,27 @@ var essaydetailjs = {
                 }
                 var commentHtml = "";
 
-                for (var index in resultDto.data) {
-                    var dto = resultDto.data[index];
-                    var avatarArr = dto.kuser.avatarUrl.split('.');
-                    var avatarCropPath = basejs.cdnDomain + "/" + avatarArr[0] + "_50x50." + avatarArr[1];
+                if (resultDto.data.length == 0) {
+                    commentHtml = "<div class='comment-empty'>空空如也~</div>";
+                }
+                else {
+                    for (var index in resultDto.data) {
+                        var dto = resultDto.data[index];
+                        var avatarArr = dto.kuser.avatarUrl.split('.');
+                        var avatarCropPath = basejs.cdnDomain + "/" + avatarArr[0] + "_50x50." + avatarArr[1];
 
-                    var parentCommentHtml = _this._getParentCommentHtml(dto.parentCommentDtoList);
-                    var content = parentCommentHtml == "" ? dto.content : ("<div>" + dto.content + "</div>" + parentCommentHtml );
+                        var parentCommentHtml = _this._getParentCommentHtml(dto.parentCommentDtoList);
+                        var content = parentCommentHtml == "" ? dto.content : ("<div>" + dto.content + "</div>" + parentCommentHtml);
 
-                    commentHtml += _this.data.template.comment.format({
-                        avatarUrl: avatarCropPath,
-                        nickName: dto.kuser.nickName,
-                        creationTime: basejs.getDateDiff(basejs.getDateTimeStamp(dto.creationTime)),
-                        content: content,
-                        id: dto.id,
-                        likeNum: dto.likeNum
-                    });
+                        commentHtml += _this.data.template.comment.format({
+                            avatarUrl: avatarCropPath,
+                            nickName: dto.kuser.nickName,
+                            creationTime: basejs.getDateDiff(basejs.getDateTimeStamp(dto.creationTime)),
+                            content: content,
+                            id: dto.id,
+                            likeNum: dto.likeNum
+                        });
+                    }
                 }
 
 

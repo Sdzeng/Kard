@@ -1,6 +1,6 @@
 var basejs = {
-    requestDomain: "http://api.localyc.com",//"http://192.168.10.3:3703"
-    cdnDomain: "http://cdn.localyc.com",//"http://192.168.10.3:3703"
+    requestDomain: "http://192.168.10.2:3703"
+    cdnDomain: "http://192.168.10.2:3703"
     defaults: {
         type: "POST",
         async: true,
@@ -9,7 +9,7 @@ var basejs = {
         processData: true,
         data: null,
         loading: "off",
-        avatarPath:"/image/default-avatar.jpg"
+        avatarPath: "/image/default-avatar.jpg"
     },
     getPath: function () {
         var hash = window.location.hash, reg = /^#!/;
@@ -20,7 +20,7 @@ var basejs = {
             return hash;//storage.local.getItem('redirect') || '';
         }
     },
-   
+
     getQueryString: function () {
         var queryString = {};
         var name, value;
@@ -39,7 +39,7 @@ var basejs = {
         }
         return queryString;
     },
-  
+
     lazyInof: function (id) {
         $(id).lazyload({ effect: "fadeIn", threshold: 100 });
     },
@@ -93,6 +93,59 @@ var basejs = {
             result = (number / 10000).toFixed(1) + "w";
         }
 
+        return result;
+    },
+    getStarClass: function (prefix, score) {
+        var star = "";
+        if (score > 9) {
+            star = "50";
+        }
+        else if (score > 8) {
+            star = "45";
+        }
+        else if (score > 7) {
+            star = "40";
+        }
+        else if (score > 6) {
+            star = "35";
+        }
+        else if (score > 5) {
+            star = "30";
+        }
+        else if (score > 4) {
+            star = "25";
+        }
+        else if (score > 3) {
+            star = "20";
+        }
+        else if (score > 2) {
+            star = "15";
+        }
+        else if (score > 1) {
+            star = "10";
+        }
+        else if (score > 0.5) {
+            star = "05";
+        }
+        else {
+            star = "00";
+        }
+
+
+        return (prefix + star);
+
+    },
+    arrDistinct: function (arr) {
+            var i,
+            obj = {},
+            result = [],
+            len = arr.length;
+        for (i = 0; i < arr.length; i++) {
+            if (!obj[arr[i]]) { //如果能查找到，证明数组元素重复了
+                obj[arr[i]] = 1;
+                result.push(arr[i]);
+            }
+        }
         return result;
     }
 };
@@ -168,11 +221,11 @@ $.extend(httpHelper.prototype, {
                     if (truthBeTold) {
                         window.location.href = "/login.html";
                     }
-                    
+
                     //var redirectUri = jqXHR.getResponseHeader("Location");
                     //redirectUri = redirectUri.substring(0, redirectUri.indexOf("?"));
                     //window.location.href = redirectUri;
-           
+
 
 
                 }
@@ -326,7 +379,7 @@ var topMenu = {
 var topCover = {
     getHomeCover: function (callback) {
         var _this = this;
-       
+
         var resultDtoJson = storage.session.getItem("homeCover");
         if (resultDtoJson) {
             //设置首页封面
@@ -351,9 +404,9 @@ var topCover = {
         var _this = this;
         _this.navbarObj = $('#navbar');
         _this.splashObj = $('#splash');
-        _this.quoteObj = _this.splashObj.children('.quote');
-        _this.contentBlackquoteObj = _this.quoteObj.children('.splash-content').children("blackquote");
-        //_this.otherBlackquoteObj=_this.quoteObj.children('.essay-other').children("blackquote");
+        _this.splashContentObj = _this.splashObj.children('.splash-content');
+        _this.splashTxtObj = _this.splashContentObj.children(".splash-txt");
+        //_this.otherBlackquoteObj=_this.splashContentObj.children('.essay-other').children("blackquote");
 
         //设置首页滚动样式
         $(window).scroll(function () {
@@ -362,37 +415,61 @@ var topCover = {
             var splashHeight = _this.splashObj.outerHeight();
             var splashNoNavbarHeight = (splashHeight - navbarHeight);
 
-            var contentBlackquoteTop = 200;//parseInt(_this.contentBlackquoteObj.css("top"));
-            var contentBlackquoteHeight = _this.contentBlackquoteObj.outerHeight();
-            var contentBlackquoteTopRange = (splashHeight - contentBlackquoteTop - contentBlackquoteHeight);
-            var coeff = (scrollTop / (splashNoNavbarHeight - contentBlackquoteHeight));
+            var splashTxtTop = 180;//parseInt(_this.splashTxtObj.css("top"));
+            var splashTxtHeight = _this.splashTxtObj.outerHeight();
+            var splashTxtTopRange = (splashHeight - splashTxtTop - splashTxtHeight);
+            var coeff = (scrollTop / (splashNoNavbarHeight - splashTxtHeight));
 
 
             // 导航条
+
 
             if (scrollTop < navbarHeight) {
                 _this.navbarObj.removeClass('navbar-min');
 
             } else if (scrollTop < splashNoNavbarHeight) {
+                if (opts.page == "home") {
+                    _this.getHomeCover(function (resultDto) {
+                        var data = resultDto.data;
+                        //data = JSON.parse(data);
+                        if (data) {
+                            switch (data.media.mediaType) {
+                                case "video": _this.navbarObj.removeClass('bg-default').css("background-image", ""); break;
+                            }
+                        }
+                    });
+                }
                 _this.navbarObj.removeClass('navbar-bottom-shadow').addClass('navbar-min');
 
             } else {
+                if (opts.page == "home") {
+                    _this.getHomeCover(function (resultDto) {
+                        var data = resultDto.data;
+                        //data = JSON.parse(data);
+                        if (data) {
+                            switch (data.media.mediaType) {
+                                case "video": _this.navbarObj.addClass('bg-default').css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + data.media.cdnPath + ".jpg" + ")"); break;
+                            }
+                        }
+                    });
+                }
                 _this.navbarObj.removeClass('navbar-min').addClass('navbar-bottom-shadow');
             }
             //文字
-            if (scrollTop < (splashNoNavbarHeight - contentBlackquoteHeight)) {
-                _this.quoteObj.css('opacity', 1);
+            if (scrollTop < (splashNoNavbarHeight - splashTxtHeight)) {
+                _this.splashContentObj.children("blackquote").css('opacity', 1);
             }
             else {
-                _this.quoteObj.css('opacity', 0);
+                _this.splashContentObj.children("blackquote").css('opacity', 0);
             }
-            _this.contentBlackquoteObj.css({ 'top': (contentBlackquoteTop + contentBlackquoteTopRange * coeff) });
+            _this.splashTxtObj.css({ 'top': (splashTxtTop + splashTxtTopRange * coeff) });
+
 
         });
     }
 }
 
 
- 
+
 
 

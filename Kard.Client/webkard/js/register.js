@@ -15,7 +15,7 @@ var registerjs = {
             if (!data) {
                 return;
             }
-            $(".bg-layer", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.media.cdnPath + "_2560x1200." + data.media.mediaExtension || "") + ")");
+            $(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),url(" + basejs.cdnDomain + "/" + data.media.cdnPath + (data.media.mediaType == "picture" ? "_2560x1200." + data.media.mediaExtension : ".jpg") + ")");
         });
     },
     login: function () {

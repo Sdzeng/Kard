@@ -13,7 +13,7 @@
 </head>
 <body id="essayDetailPage">
 
-    <nav id="navbar" class="navbar bg-layer navbar-bottom-shadow">
+    <nav id="navbar" class="navbar bg-default navbar-bottom-shadow">
 
         <div class="navbar-logo">
             <a href="/"><span><img src="/image/logo-nav_30x30.png"></span><span>自然单品</span></a>
@@ -31,7 +31,7 @@
 
     </nav>
 
-    <div class="navigation"><div class="navigation-link"><a href="/">首页</a>\<a id="category">妆品</a></div></div>
+    <div class="navigation"><div class="navigation-link"><a href="/">首页</a>\<a class="category"></a></div></div>
     <div class="essay-detail-info">
 
         <div class="essay-detail-info-left">
@@ -50,42 +50,56 @@
 
             <div class="essay-detail-content">
                 <!--<p>
-                   端午的节氛慢慢起来了，
+               端午的节氛慢慢起来了，
 
-                    昨日去县城，
+                昨日去县城，
 
-                    菜市上卖大束捆好的菖蒲与艾草，
+                菜市上卖大束捆好的菖蒲与艾草，
 
-                    买了的人家，
+                买了的人家，
 
-                    提前就把菖蒲艾草摆在门口。
+                提前就把菖蒲艾草摆在门口。
 
-                    也有卖粽叶的人。
+                也有卖粽叶的人。
 
-                    妈妈包了第二次粽子，
+                妈妈包了第二次粽子，
 
-                    今年她喜欢包这种矮矮胖胖的粽子，
+                今年她喜欢包这种矮矮胖胖的粽子，
 
-                    说裹得紧一些，
+                说裹得紧一些，
 
-                    好吃一些。
+                好吃一些。
 
-                    塘埂上桃子又被小动物们挑最好的吃去了两个，
+                塘埂上桃子又被小动物们挑最好的吃去了两个，
 
-                    索性全摘回来了。
+                索性全摘回来了。
 
-                    绿豆糕浸满了油，
+                绿豆糕浸满了油，
 
-                    觉得很好吃。
-                </p>
-                <p>
-                    <img class="lazy" src="http://192.168.10.2:3703/user/1/media/20180603/031929049104.png" style="">
-                    <img class="lazy" src="http://192.168.10.2:3703/user/1/media/20180602/021236132275.jpg" style="">
-                    <img class="lazy"  src="http://192.168.10.2:3703/user/1/media/20180603/031412238550.jpg" style="">
-                </p>-->
+                觉得很好吃。
+            </p>
+            <p>
+                <img class="lazy" src="http://192.168.10.2:3703/user/1/media/20180603/031929049104.png" style="">
+                <img class="lazy" src="http://192.168.10.2:3703/user/1/media/20180602/021236132275.jpg" style="">
+                <img class="lazy"  src="http://192.168.10.2:3703/user/1/media/20180603/031412238550.jpg" style="">
+            </p>-->
             </div>
 
             <div class="essay-detail-like-share"></div>
+
+            <div class="essay-author">
+                <div class="essay-author-avatar">
+                    <img class='lazy' src='/image/default-avatar.jpg' data-original=''>
+                </div>
+                <div class="essay-author-txt">
+                    <div class="essay-author-txt-name">
+                        <span>作者</span>  <span>关注</span>
+                    </div>
+                    <div class="essay-author-txt-introduction">
+                    </div>
+                </div>
+            </div>
+
 
             <div class="essay-detail-comment-like">
 
@@ -101,37 +115,37 @@
                         </div>
                         <div class="comment-info-list">
                             <!--<div class="comment-info">
-                                <a class="comment-info-avatar"><img src="http://192.168.10.3:3703/user\1\avatar_50x50.jpg"></a>
-                                <div class="comment-info-content">
-                                    <div class="comment-info-content-user"><a>老真</a><span>3小时前</span></div>
-                                    <div class="comment-info-content-txt">
-                                        <div class="comment-info-content-txt-parent">
-                                                 <div class="comment-info-content-txt-parent"><div><a>森林</a>德邦物流，走过好几次了。他们送货要收费的，可以选择自提。</div></div>
-                                                <div><a>李素麗不漂亮 </a>德邦有官网，你可以自己算一下是走快递划算还是物流划算。德邦的快递包含取货送货，每斤贵一点；物流上门取货和送货是收费的。</div>
-                                            </div>
-                                        <div>我用的中铁快运，一斤1.2元，三天时间，上门取货和送货都要收费，费用不等</div>
-                                    </div>
-                                    <div class="comment-info-content-btns" data-id="1"><span class="comment-info-content-btns-like">赞1566</span><span class="comment-info-content-btns-reply">回复</span></div>
+                            <a class="comment-info-avatar"><img src="http://192.168.10.3:3703/user\1\avatar_50x50.jpg"></a>
+                            <div class="comment-info-content">
+                                <div class="comment-info-content-user"><a>老真</a><span>3小时前</span></div>
+                                <div class="comment-info-content-txt">
+                                    <div class="comment-info-content-txt-parent">
+                                             <div class="comment-info-content-txt-parent"><div><a>森林</a>德邦物流，走过好几次了。他们送货要收费的，可以选择自提。</div></div>
+                                            <div><a>李素麗不漂亮 </a>德邦有官网，你可以自己算一下是走快递划算还是物流划算。德邦的快递包含取货送货，每斤贵一点；物流上门取货和送货是收费的。</div>
+                                        </div>
+                                    <div>我用的中铁快运，一斤1.2元，三天时间，上门取货和送货都要收费，费用不等</div>
                                 </div>
+                                <div class="comment-info-content-btns" data-id="1"><span class="comment-info-content-btns-like">赞1566</span><span class="comment-info-content-btns-reply">回复</span></div>
                             </div>
+                        </div>
 
-                            <div class="comment-info">
-                                <a class="comment-info-avatar"><img src="http://192.168.10.3:3703/user\1\avatar_60x60.jpg"></a>
-                                <div class="comment-info-content">
-                                    <div class="comment-info-content-user"><a>风吹落、星如雨</a><span>2天前</span></div>
-                                    <div class="comment-info-content-txt">500斤的图书 物流用过</div>
-                                    <div class="comment-info-content-btns" data-id="2"><span>赞1566</span><span class="comment-info-content-btns-reply">回复</span></div>
-                                </div>
+                        <div class="comment-info">
+                            <a class="comment-info-avatar"><img src="http://192.168.10.3:3703/user\1\avatar_60x60.jpg"></a>
+                            <div class="comment-info-content">
+                                <div class="comment-info-content-user"><a>风吹落、星如雨</a><span>2天前</span></div>
+                                <div class="comment-info-content-txt">500斤的图书 物流用过</div>
+                                <div class="comment-info-content-btns" data-id="2"><span>赞1566</span><span class="comment-info-content-btns-reply">回复</span></div>
                             </div>
+                        </div>
 
-                            <div class="comment-info">
-                                <a class="comment-info-avatar"><img src="http://192.168.10.3:3703/user\1\avatar_60x60.jpg"></a>
-                                <div class="comment-info-content">
-                                    <div class="comment-info-content-user"><a>嘤嘤嘤嘤嘤嘤嘤 </a><span>一周前</span></div>
-                                    <div class="comment-info-content-txt">之前用过一次，德邦一个编织袋收我二十，坑爹。其他费用五十公斤共花160多，收到后品相大减</div>
-                                    <div class="comment-info-content-btns" data-id="3"><span>赞1566</span><span class="comment-info-content-btns-reply">回复</span></div>
-                                </div>
-                            </div>-->
+                        <div class="comment-info">
+                            <a class="comment-info-avatar"><img src="http://192.168.10.3:3703/user\1\avatar_60x60.jpg"></a>
+                            <div class="comment-info-content">
+                                <div class="comment-info-content-user"><a>嘤嘤嘤嘤嘤嘤嘤 </a><span>一周前</span></div>
+                                <div class="comment-info-content-txt">之前用过一次，德邦一个编织袋收我二十，坑爹。其他费用五十公斤共花160多，收到后品相大减</div>
+                                <div class="comment-info-content-btns" data-id="3"><span>赞1566</span><span class="comment-info-content-btns-reply">回复</span></div>
+                            </div>
+                        </div>-->
 
 
                         </div>
@@ -147,47 +161,55 @@
 
         <div class="essay-detail-info-right">
 
-            <div class="essay-author">
-                <div class="essay-author-avatar">
-                    <img class='lazy' src='/image/default-avatar.jpg' data-original=''  >
-                </div>
-                <div class="essay-author-txt">
-                    <div class="essay-author-txt-name">
-                        <span>作者</span>  <span>关注</span>
-                    </div>
-                    <div class="essay-author-txt-introduction">
+            <div class="essay-score">
+                <div>
+                    <div class="essay-score-num">0</div>
+                    <div class="essay-score-start">
+                        <div class="big-star"></div>
+                        <div class="people-grade">******人评分</div>
                     </div>
                 </div>
             </div>
 
-            <div class="essay-directory-similar">
-                <h4>包含该单品的收藏夹</h4>
-                <ul>
-                    <li>汤之味  (258人喜欢)</li>
-                    <li>山的芍药  (138人喜欢)</li>
-                    <li>楝花、金银花、小笋与蓬蘽  (275人喜欢)</li>
-                    <li>中一日  (443人喜欢)</li>
-                    <li>四季|耕田  (406人喜欢)</li>
-                    <li>哪种粽子最好吃？</li>
-                </ul>
+
+            <!--<div class="essay-author">
+            <div class="essay-author-avatar">
+                <img class='lazy' src='/image/default-avatar.jpg' data-original=''>
+            </div>
+            <div class="essay-author-txt">
+                <div class="essay-author-txt-name">
+                    <span>作者</span>  <span>关注</span>
+                </div>
+                <div class="essay-author-txt-introduction">
+                </div>
+            </div>
+        </div>-->
+
+            <div class="essay-similar">
+                <h4 class="category">相似</h4>
+                <div class="essay-similar-a">
+                </div>
 
             </div>
-            <div class="essay-directory-activity">
-                <h4>热门活动</h4>
-                <ul>
-                    <li>汤之味  (258人喜欢)</li>
-                    <li>山的芍药  (138人喜欢)</li>
-                    <li>楝花、金银花、小笋与蓬蘽  (275人喜欢)</li>
-                    <li>中一日  (443人喜欢)</li>
-                    <li>四季|耕田  (406人喜欢)</li>
-                    <li>哪种粽子最好吃？</li>
-                </ul>
+            <div class="essay-other">
+                <h4>作者其他单品</h4>
+                <div class="essay-other-a">
+                    <!--<li>汤之味  (258人喜欢)</li>
+                <li>山的芍药  (138人喜欢)</li>
+                <li>楝花、金银花、小笋与蓬蘽  (275人喜欢)</li>
+                <li>中一日  (443人喜欢)</li>
+                <li>四季|耕田  (406人喜欢)</li>
+                <li>哪种粽子最好吃？</li>-->
+                </div>
 
             </div>
 
 
         </div>
 
+        <div class="go-to-top" style="display: block;">
+            <a href="javascript:;" class="lnk-back-top"><span>返回页顶</span></a>
+        </div>
 
     </div>
 
@@ -215,7 +237,7 @@
     <script type="text/javascript" src="/js/util.js?v=1.0.0"></script>
     <script type="text/javascript" src="/js/base.js?v=1.0.0"></script>
 
- 
+
     <script type="text/javascript" src="/js/essay-detail.js?v=1.0.0"></script>
 
 
