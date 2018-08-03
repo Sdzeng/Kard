@@ -117,7 +117,7 @@ namespace Kard.Web.Controllers
                     mediaFlie.CopyTo(stream);
                 }
                 result.Result = true;
-                result.Data = new { FileUrl = Path.Combine(newFolder, fileName).Replace("\\", "/"), FileExtension = fileExtension.Replace(".","") };
+                result.Data = new { FileUrl = Path.Combine(newFolder, fileName).Replace("\\", "/"), FileExtension = fileExtension.Replace(".", "") };
                 return result;
             }
 
@@ -164,6 +164,34 @@ namespace Kard.Web.Controllers
             return new ResultDto { Result = result };
         }
 
+        /// <summary>
+        /// 相似列表
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet("similarlist")]
+        public ResultDto<IEnumerable<EssayEntity>> GetEssaySimilarList(long essayId)
+        {
+            var resultDto = new ResultDto<IEnumerable<EssayEntity>>();
+            resultDto.Result = true;
+            resultDto.Data = _defaultRepository.GetEssaySimilarList(essayId);
+            return resultDto;
+        }
+
+
+        /// <summary>
+        /// 其他列表
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet("otherlist")]
+        public ResultDto<IEnumerable<EssayEntity>> GetEssayOtherList(long essayId)
+        {
+            var resultDto = new ResultDto<IEnumerable<EssayEntity>>();
+            resultDto.Result = true;
+            resultDto.Data = _defaultRepository.GetEssayOtherList(essayId);
+            return resultDto;
+        }
 
         #endregion
 

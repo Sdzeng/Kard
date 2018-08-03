@@ -48,52 +48,69 @@ namespace Kard.Web.Controllers
 
 
         /// <summary>
-        /// 获取单品图片
+        /// 获取单品列表
         /// </summary>
         /// <returns></returns>
-        [HttpGet("hostpictures")]
-        public ResultDto<IEnumerable<TopMediaDto>> GetHostPictures()
+        [HttpGet("essays")]
+        public ResultDto<IEnumerable<TopMediaDto>> GetEssays(string category,int count=12)
         {
             var resultDto = new ResultDto<IEnumerable<TopMediaDto>>();
 
-
             resultDto.Result = true;
-            resultDto.Data = _defaultRepository.GetHomeMediaPictureList(12, "热门单品");
+            resultDto.Data = _defaultRepository.GetHomeMediaPictureList(count, category);
 
             //var aWeekAgo = DateTime.Now.Date.AddYears(-7);
             return resultDto;
         }
 
+        ///// <summary>
+        ///// 获取单品图片
+        ///// </summary>
+        ///// <returns></returns>
+        //[HttpGet("hostpictures")]
+        //public ResultDto<IEnumerable<TopMediaDto>> GetHostPictures()
+        //{
+        //    var resultDto = new ResultDto<IEnumerable<TopMediaDto>>();
 
-        /// <summary>
-        /// 获取单品图片
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("categorypictures")]
-        public ResultDto GetCategoryPictures()
-        {
-            var resultDto = new ResultDto();
-            var sw = new System.Diagnostics.Stopwatch();
-            sw.Start();
-            try
-            {
-                resultDto.Result = true;
-                resultDto.Data = new
-                {
-                    CosmeticsList = _defaultRepository.GetHomeMediaPictureList(12, "衣妆"),
-                    FashionSenseList = _defaultRepository.GetHomeMediaPictureList(12, "潮拍"),
-                    OriginalityList = _defaultRepository.GetHomeMediaPictureList(12, "户外")
-                    //ExcerptList = _defaultRepository.GetHomeMediaPicture(12, "摘录")
-                };
-                //var aWeekAgo = DateTime.Now.Date.AddYears(-7);
-                return resultDto;
-            }
-            finally
-            {
-                sw.Stop();
-                _logger.LogDebug($"GetPicture耗时：{sw.ElapsedMilliseconds}");
-            }
-        }
+
+        //    resultDto.Result = true;
+        //    resultDto.Data = _defaultRepository.GetHomeMediaPictureList(12, "热门单品");
+
+        //    //var aWeekAgo = DateTime.Now.Date.AddYears(-7);
+        //    return resultDto;
+        //}
+
+
+        ///// <summary>
+        ///// 获取单品图片
+        ///// </summary>
+        ///// <returns></returns>
+        //[HttpGet("categorypictures")]
+        //public ResultDto GetCategoryPictures()
+        //{
+        //    var resultDto = new ResultDto();
+        //    var sw = new System.Diagnostics.Stopwatch();
+        //    sw.Start();
+        //    try
+        //    {
+        //        resultDto.Result = true;
+        //        resultDto.Data = new
+        //        {
+        //            CosmeticsList = _defaultRepository.GetHomeMediaPictureList(12, "物件"),
+        //            OriginalityList = _defaultRepository.GetHomeMediaPictureList(12, "设计"),
+        //            FashionSenseList = _defaultRepository.GetHomeMediaPictureList(12, "潮拍")
+                 
+        //            //ExcerptList = _defaultRepository.GetHomeMediaPicture(12, "摘录")
+        //        };
+        //        //var aWeekAgo = DateTime.Now.Date.AddYears(-7);
+        //        return resultDto;
+        //    }
+        //    finally
+        //    {
+        //        sw.Stop();
+        //        _logger.LogDebug($"GetPicture耗时：{sw.ElapsedMilliseconds}");
+        //    }
+        //}
 
 
       

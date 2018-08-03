@@ -26,6 +26,8 @@ namespace Kard.Core.Entities
 
         public string Category { get; set; }
 
+        public bool IsOriginal { get; set; }
+        public decimal Score { get; set; }
         public int ShareNum { get; set; }
         public int BrowseNum { get; set; }
         public int CommentNum { get; set; }

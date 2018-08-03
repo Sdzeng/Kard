@@ -67,8 +67,10 @@ namespace Kard.Dapper.Mysql.Repositories
             var param = new object();
             switch (type)
             {
-                case "热门单品":
-                    sql = @"select essay.Id,essay.Category,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,kuser.AvatarUrl,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaType,t2.MediaExtension,tag.*  from 
+                case "优选":
+                    sql = @"select essay.Id,essay.Category,essay.IsOriginal,essay.Score,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,
+                               kuser.AvatarUrl,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaType,t2.MediaExtension,tag.*  
+                from 
                 (
                 select t.EssayId,t.CdnPath,t.MediaType,t.MediaExtension,count(media.Id) MediaCount
                 from (
@@ -84,11 +86,12 @@ namespace Kard.Dapper.Mysql.Repositories
                     var creationTime = DateTime.Now.AddYears(-7);
                     param = new { CreationTime = creationTime, Count = count };
                     break;
-                case "衣妆":
-                case "潮拍":
-                case "户外":
-                    //case "摘录":
-                    sql = @"select essay.Id,essay.Category,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,kuser.AvatarUrl,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaType,t2.MediaExtension,tag.*  from 
+                //case "物件":
+                //case "设计":
+                //case "潮拍":
+                //case "笔记":
+                default:
+                    sql = @"select essay.Id,essay.Category,essay.IsOriginal,essay.Score,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,kuser.AvatarUrl,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaType,t2.MediaExtension,tag.*  from 
                 (
                 select t.EssayId,t.CdnPath,t.MediaType,t.MediaExtension,count(media.Id) MediaCount
                 from (
@@ -416,6 +419,25 @@ namespace Kard.Dapper.Mysql.Repositories
             return ConnExecute(conn => conn.Query<EssayLikeEntity, KuserEntity, EssayLikeEntity>(sql, (essayLike, kuser) => {essayLike.Kuser = kuser.ToSecurity();return essayLike;},
                                                                                                                                                                           new { EssayId = id },
                                                                                                                                                                           splitOn: "Id"));
+        }
+
+
+        public IEnumerable<EssayEntity> GetEssaySimilarList(long id)
+        {
+            string sql = @"select distinct b.Id,b.Title,b.Content,b.LikeNum,b.CreationTime from 
+            (select essay.Category,tag.TagName from essay join tag on essay.Id=@EssayId and essay.IsDeleted=0 and essay.Id=tag.EssayId ) a
+             join (select essay.*,tag.TagName  from essay join tag on  essay.Id<>@EssayId and essay.IsDeleted=0 and essay.Id=tag.EssayId )  b on a.Category=b.Category and a.TagName=b.TagName 
+            order by b.LikeNum desc,b.CreationTime desc limit 10";
+
+            return ConnExecute(conn => conn.QueryList<EssayEntity>(sql,new { EssayId = id }));
+        }
+
+
+        public IEnumerable<EssayEntity> GetEssayOtherList(long id)
+        {
+            string sql = @"select * from essay where IsDeleted=0 and  Id<>@EssayId and CreatorUserId=(select CreatorUserId from essay where Id=@EssayId) order by LikeNum desc,CreationTime desc limit 10";
+
+            return ConnExecute(conn => conn.QueryList<EssayEntity>(sql, new { EssayId = id }));
         }
 
 

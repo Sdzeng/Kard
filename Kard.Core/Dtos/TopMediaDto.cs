@@ -14,6 +14,10 @@ namespace Kard.Core.Dtos
 
         public string Category { get; set; }
 
+        public bool IsOriginal { get; set; }
+
+        public decimal Score { get; set; }
+
         public int ShareNum { get; set; }
 
         public int LikeNum { get; set; }

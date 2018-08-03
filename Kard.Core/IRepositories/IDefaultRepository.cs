@@ -33,6 +33,10 @@ namespace Kard.Core.IRepositories
 
         IEnumerable<EssayLikeEntity> GetEssayLikeList(long id);
 
+        IEnumerable<EssayEntity> GetEssaySimilarList(long id);
+
+        IEnumerable<EssayEntity> GetEssayOtherList(long id);
+
         //IEnumerable<EssayCommentDto> GetRootEssayCommentList(long id);
 
         IEnumerable<EssayCommentDto> GetEssayCommentList(long id);
