@@ -12,9 +12,9 @@ namespace Kard.Core.Entities
 
         public int Id { get; set; }
         public DateTime ShowDate { get; set; }
-        public long MediaId { get; set; }
+        public long EssayId { get; set; }
 
-        public MediaEntity Media{ get; set; }
+        public EssayEntity Essay{get; set; }
     }
 
 }

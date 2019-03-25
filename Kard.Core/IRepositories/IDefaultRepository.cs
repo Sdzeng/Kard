@@ -11,7 +11,7 @@ namespace Kard.Core.IRepositories
         CoverEntity GetDateCover(DateTime showDate);
 
  
-        IEnumerable<TopMediaDto> GetHomeMediaPictureList(int count, string type);
+        IEnumerable<TopMediaDto> GetHomeMediaPictureList(string type,int pageIndex,int pageSize);
 
         IEnumerable<TopMediaDto> GetUserMediaPictureList(long userId, int count);
 
@@ -25,7 +25,7 @@ namespace Kard.Core.IRepositories
 
         EssayEntity GetEssay2(long id);
 
-        bool AddEssay(EssayEntity essayEntity, IEnumerable<TagEntity> tagList, IEnumerable<MediaEntity> mediaList);
+        bool AddEssay(EssayEntity essayEntity,IEnumerable<TagEntity> tagList);
 
         bool UpdateBrowseNum(long id);
 

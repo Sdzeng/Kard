@@ -34,15 +34,13 @@ namespace Kard.Dapper.Mysql.Repositories
 		                        kuser.*   
 		                        from 
 		                        (select * from cover where showdate <= @ShowDate order by showdate desc limit 1 ) cover
-		                        left join media on cover.mediaid = media.id   
-		                        left join essay on media.essayid = essay.id 
+		                        left join essay on cover.essayid= essay.id 
                                 left join kuser on essay.creatoruserid=kuser.id 
                                 where essay.isdeleted=0  ";
-                var entityList = conn.Query<CoverEntity, MediaEntity, EssayEntity, KuserEntity, CoverEntity>(sql, (cover, media, essay, kuser) =>
+                var entityList = conn.Query<CoverEntity, EssayEntity, KuserEntity, CoverEntity>(sql, (cover, essay, kuser) =>
                   {
-                      media.Essay = essay;
-                      media.Kuser = kuser.ToSecurity();
-                      cover.Media = media;
+                      essay.Kuser = kuser.ToSecurity();
+                      cover.Essay = essay;
                       return cover;
                   },
                   new { ShowDate = showDate },
@@ -60,12 +58,14 @@ namespace Kard.Dapper.Mysql.Repositories
 
 
 
-        public IEnumerable<TopMediaDto> GetHomeMediaPictureList(int count, string type)
+        public IEnumerable<TopMediaDto> GetHomeMediaPictureList(string category,int pageIndex,int pageSize)
         {
             string sql = string.Empty;
+            int pageStart = ((pageIndex - 1) * pageSize);
+            pageStart = pageStart > 0 ? (pageStart - 1) : pageStart;
 
             var param = new object();
-            switch (type)
+            switch (category)
             {
                 case "优选":
                     sql = @"select essay.Id,essay.Category,essay.IsOriginal,essay.Score,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,
@@ -74,17 +74,17 @@ namespace Kard.Dapper.Mysql.Repositories
                 (
                 select t.EssayId,t.CdnPath,t.MediaType,t.MediaExtension,count(media.Id) MediaCount
                 from (
-                select media.EssayId,media.CdnPath,media.MediaType,media.MediaExtension from media join essay on media.EssayId=essay.Id  
-               where   media.Sort=1 and media.CreationTime>=@CreationTime order by (essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum) desc,essay.CreationTime desc limit @Count
-                ) t join media on t.EssayId=media.EssayId
+               select media.EssayId,media.CdnPath,media.MediaType,media.MediaExtension from media join essay on media.EssayId=essay.Id  
+              where   media.Sort=1 and media.CreationTime>=@CreationTime order by (essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum) desc,essay.CreationTime desc limit @PageStart,@PageSize
+                ) t join  media on t.EssayId=media.EssayId 
                 group by t.EssayId,t.CdnPath,t.MediaType,t.MediaExtension
                 ) t2 
                 join essay on t2.EssayId=essay.Id 
                 join kuser on essay.CreatorUserId=kuser.Id  
                 left join tag on essay.Id=tag.EssayId and tag.Sort=1 
-                order by(essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum)  desc,essay.CreationTime desc";
+                order by(essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum)  desc,essay.Id desc";
                     var creationTime = DateTime.Now.AddYears(-7);
-                    param = new { CreationTime = creationTime, Count = count };
+                    param = new { CreationTime = creationTime, PageStart = pageStart, PageSize = pageSize };
                     break;
                 //case "物件":
                 //case "设计":
@@ -96,16 +96,16 @@ namespace Kard.Dapper.Mysql.Repositories
                 select t.EssayId,t.CdnPath,t.MediaType,t.MediaExtension,count(media.Id) MediaCount
                 from (
                 select EssayId,CdnPath,MediaType,MediaExtension from media  join essay on media.EssayId=essay.Id 
-                where   media.Sort=1  and essay.Category=@Category order by essay.CreationTime desc limit @Count
+                where   media.Sort=1  and essay.Category=@Category order by essay.CreationTime desc limit @PageStart,@PageSize
                 ) t join media on t.EssayId=media.EssayId
                 group by t.EssayId,t.CdnPath,t.MediaType,t.MediaExtension
                 ) t2 
                 join essay on t2.EssayId=essay.Id 
                 join kuser on essay.CreatorUserId=kuser.Id  
                 left join tag on essay.Id=tag.EssayId and tag.Sort=1 
-                order by (essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum) desc,essay.CreationTime desc";
+                order by (essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum) desc,essay.Id desc";
 
-                    param = new { Count = count, Category = type };
+                    param = new { Category = category, PageStart = pageStart, PageSize = pageSize };
                     break;
             }
 
@@ -206,14 +206,10 @@ namespace Kard.Dapper.Mysql.Repositories
                 left join media on essay.Id=media.EssayId 
                 left join tag on essay.Id=tag.EssayId 
                 order by essay.LikeNum desc,media.Sort ";
-                var essayList = conn.Query<EssayEntity, MediaEntity, TagEntity, EssayEntity>(sql, (essay, media, tag) =>
+                var essayList = conn.Query<EssayEntity, TagEntity, EssayEntity>(sql, (essay, tag) =>
                 {
-                    essay.MediaList = essay.MediaList ?? new List<MediaEntity>();
+                   
                     essay.TagList = essay.TagList ?? new List<TagEntity>();
-                    if (!essay.MediaList.Where(m => m.Id == media.Id).Any())
-                    {
-                        essay.MediaList.Add(media);
-                    }
 
                     if (!essay.TagList.Where(t => t.Id == tag.Id).Any())
                     {
@@ -245,14 +241,14 @@ namespace Kard.Dapper.Mysql.Repositories
             return ConnExecute(conn =>
             {
                 var essayList = new List<EssayEntity>();
-                conn.Query<EssayEntity, KuserEntity, EssayLikeEntity, MediaEntity, TagEntity, bool>(sql, (essay, kuser, essayLike, media, tag) =>
+                conn.Query<EssayEntity, KuserEntity, EssayLikeEntity, TagEntity, bool>(sql, (essay, kuser, essayLike, tag) =>
                  {
                      var essayEntity = essayList.FirstOrDefault(e => e.Id == essay.Id);
                      if (essayEntity == null)
                      {
                          essay.Kuser = kuser.ToSecurity();
                          essay.EssayLike = essayLike;
-                         essay.MediaList = new List<MediaEntity>();
+                  
                          essay.TagList = new List<TagEntity>();
                          essayList.Add(essay);
                      }
@@ -262,10 +258,7 @@ namespace Kard.Dapper.Mysql.Repositories
                      }
 
 
-                     if (!essay.MediaList.Where(m => m.Id == media.Id).Any())
-                     {
-                         essay.MediaList.Add(media);
-                     }
+               
 
                      if (tag!=null&&(!essay.TagList.Where(t => t.Id == tag.Id).Any()))
                      {
@@ -291,18 +284,19 @@ namespace Kard.Dapper.Mysql.Repositories
             {
                 var essayEntity = conn.Get<EssayEntity>(id);
                 essayEntity.Kuser = conn.Get<KuserEntity>(essayEntity.CreatorUserId.Value).ToSecurity();
-                essayEntity.MediaList = conn.GetList<MediaEntity>(new { EssayId = essayEntity.Id }).ToList();
+                //essayEntity.MediaList = conn.GetList<EssayCoverEntity>(new { EssayId = essayEntity.Id }).ToList();
                 essayEntity.TagList = conn.GetList<TagEntity>(new { EssayId = essayEntity.Id }).ToList();
                 return essayEntity;
             });
         }
 
 
-        public bool AddEssay(EssayEntity essayEntity, IEnumerable<TagEntity> tagList, IEnumerable<MediaEntity> mediaList)
+        public bool AddEssay(EssayEntity essayEntity,  IEnumerable<TagEntity> tagList)
         {
 
             return base.TransExecute((conn, trans) =>
             {
+                
                 var insertAndGetIdResultDto = conn.CreateAndGetId<EssayEntity, long>(essayEntity, trans);
                 if (!insertAndGetIdResultDto.Result)
                 {
@@ -324,14 +318,7 @@ namespace Kard.Dapper.Mysql.Repositories
                     }
                 }
 
-                mediaList = mediaList.Select(meida =>
-                {
-                    meida.EssayId = insertAndGetIdResultDto.Data;
-                    //meida.MediaExtension = meida.MediaExtension.Replace(".", "");
-                    return meida;
-                });
-
-                return conn.CreateList(mediaList, trans).Result;
+                return true;
             });
         }
 

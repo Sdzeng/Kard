@@ -9,16 +9,23 @@
     word-wrap: break-word;
 
     .div-empty {
+        margin-top: 10px;
         padding: 50px 0px;
         color: #bbb;
         width: 100%;
         text-align: center;
+        background-color: #f9fafa;
+
+        div:last-child {
+            margin-top: 10px;
+        }
     }
 
     .go-to-top {
-        margin-left: 530px;
+        margin-left: 520px;
+
         @media (min-width: @screen-lg-min) {
-            margin-left: 630px;
+            margin-left: 590px;
         }
     }
 
@@ -241,34 +248,37 @@
 
             .comment-list {
                 display: none;
-                padding: 5px 0px;
+                padding: 10px 0px;
 
+                .comment-textarea-info {
+                 
 
-                textarea.comment-new-textarea {
-                    width: 100%;
-                }
-
-                .comment-new-btns {
-                    text-align: right;
-                    height: 30px;
-                    line-height: 30px;
-
-                    .comment-new-overnum {
-                        color: #bbb;
-                        margin-right: 10px;
+                    textarea.comment-new-textarea {
+                        width: 100%;
                     }
 
-                    .comment-new-submit {
-                        font-size: 14px;
-                        width: 80px;
+                    .comment-new-btns {
+                        text-align: right;
                         height: 30px;
-                        padding: 5px 10px;
-                        text-align: center;
-                        background-color: #49cc90;
-                        color: #fff;
+                        line-height: 30px;
 
-                        &:hover {
-                            background: #039993;
+                        .comment-new-overnum {
+                            color: #bbb;
+                            margin-right: 10px;
+                        }
+
+                        .comment-new-submit {
+                            font-size: 14px;
+                            width: 80px;
+                            height: 30px;
+                            padding: 5px 10px;
+                            text-align: center;
+                            background-color: #49cc90;
+                            color: #fff;
+
+                            &:hover {
+                                background: #039993;
+                            }
                         }
                     }
                 }

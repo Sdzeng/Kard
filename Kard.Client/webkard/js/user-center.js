@@ -3,7 +3,7 @@
     init: function () {
         var _this = this;
         _this.userCover();
-        _this.setPictures();
+        //_this.setPictures();
         _this.uploadAvathor();
         _this.uploadImg();
         _this.saveIsay();
@@ -44,7 +44,7 @@
                 $userCenterAuthorTxtNum.children("span:eq(1)").text("1200粉丝");
                 $userCenterAuthorTxtNum.children("span:eq(2)").text("获得18k个喜欢");
 
-                topCover.scroll({ page: "user-center" });
+                //topCover.scroll({ page: "user-center" });
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -55,44 +55,44 @@
 
 
     },
-    setPictures: function () {
-        var _this = this;
+    //setPictures: function () {
+    //    var _this = this;
 
-        //设置host
-        var helper = new httpHelper({
-            url: basejs.requestDomain + "/user/pictures",
-            type: "GET",
-            success: function (resultDto) {
-                var data = resultDto.data;
-                //data = JSON.parse(data);
-                if (!data) {
-                    return;
-                }
-                var topMediaPictureHtml = "";
-                //data.media.hasOwnProperty("path")&&
+    //    //设置host
+    //    var helper = new httpHelper({
+    //        url: basejs.requestDomain + "/user/pictures",
+    //        type: "GET",
+    //        success: function (resultDto) {
+    //            var data = resultDto.data;
+    //            //data = JSON.parse(data);
+    //            if (!data) {
+    //                return;
+    //            }
+    //            var topMediaPictureHtml = "";
+    //            //data.media.hasOwnProperty("path")&&
 
-                for (var index in data) {
-                    var media = data[index];
-                    var picturePath = basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension;
-                    var pictureCropPath = basejs.cdnDomain + "/" + media.cdnPath + "_170x150." + media.mediaExtension;
-                    topMediaPictureHtml += "<div class='picture-warp'>" +
-                        "<a href= '" + picturePath + "' >" +
-                        "<img src='" + pictureCropPath + "' data-origin='" + picturePath + "' alt='' />" +
-                        "</a >" +
-                        "<div class='picture-desc'>" +
-                        "<span class='picture-name'><a href='" + picturePath + "'>" + (media.firstTagName || media.creatorNickName).substring(0, 6) + "</a></span>" +
-                        "<span class='picture-num'>" + media.essayMediaCount + "张</span>" +
-                        "<a class='href-label picture-like'>" + media.essayLikeNum + "人喜欢</a>" +
-                        "</div>" +
-                        "</div >";
-                }
+    //            for (var index in data) {
+    //                var media = data[index];
+    //                var picturePath = basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension;
+    //                var pictureCropPath = basejs.cdnDomain + "/" + media.cdnPath + "_170x150." + media.mediaExtension;
+    //                topMediaPictureHtml += "<div class='picture-warp'>" +
+    //                    "<a href= '" + picturePath + "' >" +
+    //                    "<img src='" + pictureCropPath + "' data-origin='" + picturePath + "' alt='' />" +
+    //                    "</a >" +
+    //                    "<div class='picture-desc'>" +
+    //                    "<span class='picture-name'><a href='" + picturePath + "'>" + (media.firstTagName || media.creatorNickName).substring(0, 6) + "</a></span>" +
+    //                    "<span class='picture-num'>" + media.essayMediaCount + "张</span>" +
+    //                    "<a class='href-label picture-like'>" + media.essayLikeNum + "人喜欢</a>" +
+    //                    "</div>" +
+    //                    "</div >";
+    //            }
 
-                $(".section-userinfo-left", _this.data.scope).append(topMediaPictureHtml);
+    //            $(".section-userinfo-left", _this.data.scope).append(topMediaPictureHtml);
 
-            }
-        });
-        helper.send();
-    },
+    //        }
+    //    });
+    //    helper.send();
+    //},
 
     uploadAvathor: function () {
         var _this = this;
@@ -186,9 +186,12 @@
                 contentType: false,
                 processData: false,
                 success: function (resultDto) {
-
+                
                     if (resultDto.result) {
-                        $("#btnAddPic", _this.data.scope).before("<img class='isay-info-buttom-medias-item' data-file-url='" + resultDto.data.fileUrl + "' data-file-extension='" + resultDto.data.fileExtension + "' src='" + basejs.requestDomain + "/" + resultDto.data.fileUrl + "_50x50." + resultDto.data.fileExtension + "'></img>");
+                        $("#btnAddPic", _this.data.scope)
+                            .css("background-image", "url('" + basejs.requestDomain + "/" + resultDto.data.fileUrl + "_100x100." + resultDto.data.fileExtension + "')")
+                            .attr("data-file-url", resultDto.data.fileUrl )
+                            .attr("data-file-extension", resultDto.data.fileExtension  );
                     }
                 }
             });
@@ -206,60 +209,136 @@
             $(this).addClass("isay-info-category-span-checked");
         });
 
-        $(".isay-info-submit", _this.data.scope).click(function () {
-            var mediaArr = [];
-            $(".isay-info-buttom-medias>img", _this.data.scope).each(function (index, item) {
-                var $item = $(item);
-                var mediaExtension = $item.attr("data-file-extension");
-                var mediaType = "";
-                switch (mediaExtension) {
-                    case "mp4": mediaType = "video"; break;
-                    default: mediaType = "picture"; break;
-                }
-             
-                mediaArr.push({
-                    sort: index + 1,
-                    mediaType: mediaType,
-                    cdnPath: $item.attr("data-file-url"),
-                    mediaExtension: mediaExtension
-                });
-            });
+        //$(".isay-info-submit", _this.data.scope).click(function () {
 
-            var title = $("#isayTitle", _this.data.scope).val();
-            var isOriginal = $("#isOriginal", _this.data.scope).prop('checked');
-            var category = $(".isay-info-category-span-checked", _this.data.scope).text();
-            var content = $("#isayContent", _this.data.scope).val();
-            if (!title) { alert("请填写标题"); return;}
-            if (!category) { alert("请选择类型"); return; }
-            if (!content) { alert("请填写内容"); return; }
-            if (mediaArr.length<=0) { alert("请选择图片"); return; }
+        //});
 
-            var helper = new httpHelper({
-                url: basejs.requestDomain + "/essay/add",
-                type: 'POST',
-                data: {
-                    essayEntity: {
-                        title: title,
-                        isOriginal: isOriginal,
-                        category: category,
-                        content: content
+
+
+        $.FroalaEditor.DefineIcon('saveSelection', { NAME: 'upload' });
+        $.FroalaEditor.RegisterCommand('saveSelection', {
+            title: '发布',
+            focus: true,
+            undo: false,
+            refreshAfterCallback: false,
+            callback: function () {
+               
+                //var mediaArr = [];
+                //$(".isay-info-buttom-medias>img", _this.data.scope).each(function (index, item) {
+                //    var $item = $(item);
+                //    var mediaExtension = $item.attr("data-file-extension");
+                //    var mediaType = "";
+                //    switch (mediaExtension) {
+                //        case "mp4": mediaType = "video"; break;
+                //        default: mediaType = "picture"; break;
+                //    }
+
+                //    mediaArr.push({
+                //        sort: index + 1,
+                //        mediaType: mediaType,
+                //        cdnPath: $item.attr("data-file-url"),
+                //        mediaExtension: mediaExtension
+                //    });
+                //});
+           
+ 
+
+                var category = $(".isay-info-category-span-checked", _this.data.scope).text();
+                var isOriginal = $("#isOriginal", _this.data.scope).prop('checked');
+           
+           
+                var tag = $("#isayTag", _this.data.scope).val();
+                var title = $("#isayTitle", _this.data.scope).val();
+
+                var content = this.html.get();
+                if (!category) { alert("请选择类型"); return; }
+                if (!tag) { alert("请填写标签"); return; }
+                if (!title) { alert("请填写标题"); return; }
+                if (!content) { alert("请填写内容"); return; }
+               
+
+                var helper = new httpHelper({
+                    url: basejs.requestDomain + "/essay/add",
+                    type: 'POST',
+                    data: {
+                        essayEntity: {
+                            title: title,
+                            mediaType:"text",
+                            coverFile: $("#btnAddPic", _this.data.scope).attr("data-file-url"),
+                            coverExtension: $("#btnAddPic", _this.data.scope).attr("data-file-extension"),
+                            isOriginal: isOriginal,
+                            category: category,
+                            content: content
+                        },
+                        tagList: [{
+                            sort: 1,
+                            tagName: tag
+                        }]
                     },
-                    mediaList: mediaArr
-                },
-                success: function (resultDto) {
-                    if (resultDto.result) {
-                        $("#isayTitle", _this.data.scope).val("");
-                        $("#isayContent", _this.data.scope).val("");
-                        $(".isay-info-buttom-medias>img", _this.data.scope).remove();
-                        alert("发布成功~");
+                    success: function (resultDto) {
+                        if (resultDto.result) {
+                            $("#isayTitle", _this.data.scope).val("");
+                            $("#isayContent", _this.data.scope).val("");
+                            $(".isay-info-buttom-medias>img", _this.data.scope).remove();
+                            alert("发布成功~");
+                        }
                     }
-                }
-            });
+                });
 
 
-            helper.send();
+                helper.send();
+
+                alert('selection saved');
+            }
         });
 
+ 
+
+        //超大屏幕
+        var toolbarButtons = ['saveSelection', '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'];
+        ////大屏幕
+        //var toolbarButtonsMD = ['fullscreen', 'bold', 'italic', 'underline', 'fontFamily', 'fontSize', 'color', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'undo', 'redo', 'clearFormatting'];
+        ////小屏幕
+        //var toolbarButtonsSM = ['fullscreen', 'bold', 'italic', 'underline', 'fontFamily', 'fontSize', 'insertLink', 'insertImage', 'insertTable', 'undo', 'redo'];
+        ////手机
+        //var toolbarButtonsXS = ['bold', 'italic', 'fontFamily', 'fontSize', 'undo', 'redo'];
+
+
+        $('#isayContent', _this.data.scope)
+            .on('froalaEditor.initialized', function (e, editor) {
+                $('#isayContent').parents('form').on('submit', function () {
+                    console.log($('#isayContent').val());
+                    return false;
+                })
+            })
+            .froalaEditor({
+                charCounterCount: true,//默认
+                charCounterMax: 3000,//默认-1
+                enter: $.FroalaEditor.ENTER_P,
+                placeholderText: '#标签#我的推荐理由...',
+                language: 'zh_cn',
+                saveInterval: 0,//不自动保存，默认10000
+                theme: "red",
+                heightMin: "350px",
+                toolbarBottom: false,//默认
+                toolbarButtons: toolbarButtons,
+                //toolbarButtonsMD: toolbarButtonsMD,
+                //toolbarButtonsSM: toolbarButtonsSM,
+                //toolbarButtonsXS: toolbarButtonsXS,
+                toolbarInline: false,//true选中设置样式,默认false
+                requestWithCORS: true,//默认true
+                requestWithCredentials: true,
+                imageUploadMethod: 'POST',
+                imageUploadURL: basejs.requestDomain + "/essay/froalaupload",
+                fullPage: true
+                //imageUploadParam         : 'upImg',
+                //imageUploadParams: { id: "edit" }
+
+
+
+            })
+
+      
 
     }
 

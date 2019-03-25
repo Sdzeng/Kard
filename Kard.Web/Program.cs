@@ -23,7 +23,7 @@ namespace Kard.Web
 
             return WebHost.CreateDefaultBuilder(args)
                 .UseNLog()
-                .UseConfiguration(config)
+                //.UseConfiguration(config)
                 .UseStartup<Startup>()
                 // .UseIISIntegration()
                 .Build();

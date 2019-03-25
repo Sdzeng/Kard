@@ -115,6 +115,7 @@ namespace Kard.Web.Middlewares.ImageHandle
                 case "png": imageFormat = FREE_IMAGE_FORMAT.FIF_PNG; break;
                 case "gif": imageFormat = FREE_IMAGE_FORMAT.FIF_GIF; break;
                 case "ico": imageFormat = FREE_IMAGE_FORMAT.FIF_ICO; break;
+       
                 default: imageFormat = FREE_IMAGE_FORMAT.FIF_UNKNOWN; break;
             }
 

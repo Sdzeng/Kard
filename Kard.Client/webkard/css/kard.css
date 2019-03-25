@@ -264,7 +264,7 @@ ol {
 }
 .bg-default {
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
-  background-position: 0px -300px;
+  background-position: 0px -200px;
   background-size: cover;
   background-attachment: fixed;
 }
@@ -294,7 +294,7 @@ ol {
   display: block;
   position: fixed;
   left: 50%;
-  margin-left: 610px;
+  margin-left: 575px;
   bottom: 80px;
 }
 @media (min-width: 1400px) {
@@ -352,29 +352,26 @@ ol {
 }
 .picture-warp {
   background-color: white;
-  margin: 10px 5px;
-  width: 190px;
+  margin-top: 20px;
+  width: 210px;
   /* transition: all .35s; */
   /*.transition(all .35s ease);*/
   /*float: left;*/
   /*border-radius: 5px;*/
 }
+.picture-warp:not(:first-child) {
+  margin-left: 20px;
+}
 @media (min-width: 1400px) {
   .picture-warp {
-    margin: 15px 10px;
-    width: 210px;
+    width: 260px;
   }
 }
 .picture-warp:hover {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.16), 0 4px 10px 0 rgba(0, 0, 0, 0.12);
 }
 .picture-warp a img {
-  width: 190px;
-}
-@media (min-width: 1400px) {
-  .picture-warp a img {
-    width: 210px;
-  }
+  width: 100%;
 }
 .picture-warp .picture-info {
   color: #666;
@@ -387,12 +384,12 @@ ol {
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   white-space: nowrap;
-  width: 190px;
+  width: 210px;
   display: block;
 }
 @media (min-width: 1400px) {
   .picture-warp .picture-info .picture-header {
-    width: 210px;
+    width: 260px;
   }
 }
 .picture-warp .picture-info .picture-header span:first-child {
@@ -400,7 +397,7 @@ ol {
   padding: 1px 5px;
   margin-right: 5px;
   color: white;
-  background: #ee6e73;
+  background-color: #ee6e73;
   border-radius: 2px;
 }
 .picture-warp .picture-info .picture-body {
@@ -479,12 +476,12 @@ ol {
   flex-direction: row;
   justify-content: space-between;
   border-top: 1px solid #f6f7f9;
-  line-height: 50px;
+  line-height: 45px;
   padding: 0px 10px;
   font-size: 12px;
 }
 .picture-warp .picture-info .picture-footer-author {
-  width: 70px;
+  width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
@@ -492,7 +489,7 @@ ol {
 }
 @media (min-width: 1400px) {
   .picture-warp .picture-info .picture-footer-author {
-    width: 90px;
+    width: 140px;
   }
 }
 .picture-warp .picture-info .picture-footer-author .essay-avatar {
@@ -598,6 +595,18 @@ ol {
 .bigstar00 {
   background-position: 0 -150px;
 }
+.load-more {
+  padding-top: 100px;
+  width: 100%;
+  display: block;
+  text-align: center;
+  background-color: #f5f5f5;
+}
+.load-more span {
+  background-color: white;
+  color: #bbb;
+  padding: 5px 20px;
+}
 .navbar {
   position: fixed;
   right: 0;
@@ -638,7 +647,6 @@ ol {
   display: inline;
 }
 .navbar .navbar-logo a span img {
-  width: 30px;
   height: 30px;
 }
 .navbar .navbar-logo a span:last-child {
@@ -823,7 +831,7 @@ ol {
   align-items: center;
   width: 100%;
   min-width: 1240px;
-  padding-top: 20px;
+  padding-top: 25px;
 }
 @media (min-width: 1400px) {
   .section-style {
@@ -836,7 +844,7 @@ ol {
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  padding: 10px 0px;
+  padding: 20px 0px;
 }
 .section-style-title-big {
   font-size: 16px;
@@ -917,19 +925,15 @@ ol {
 .section-style-body {
   width: 100%;
   background-color: #f5f5f5;
-  min-height: 300px;
   display: flex;
   flex-direction: row;
   justify-content: center;
-}
-.section-style-body-block {
-  padding: 15px;
 }
 .section-style-body-row {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  min-width: 1200px;
+  min-width: 1130px;
 }
 @media (min-width: 1400px) {
   .section-style-body-row {
@@ -955,17 +959,22 @@ ol {
   word-wrap: break-word;
 }
 .essay-detail-info .div-empty {
+  margin-top: 10px;
   padding: 50px 0px;
   color: #bbb;
   width: 100%;
   text-align: center;
+  background-color: #f9fafa;
+}
+.essay-detail-info .div-empty div:last-child {
+  margin-top: 10px;
 }
 .essay-detail-info .go-to-top {
-  margin-left: 530px;
+  margin-left: 520px;
 }
 @media (min-width: 1400px) {
   .essay-detail-info .go-to-top {
-    margin-left: 630px;
+    margin-left: 590px;
   }
 }
 .essay-detail-info-left {
@@ -1144,21 +1153,21 @@ ol {
 }
 .essay-detail-info-left .essay-detail-comment-like .comment-list {
   display: none;
-  padding: 5px 0px;
+  padding: 10px 0px;
 }
-.essay-detail-info-left .essay-detail-comment-like .comment-list textarea.comment-new-textarea {
+.essay-detail-info-left .essay-detail-comment-like .comment-list .comment-textarea-info textarea.comment-new-textarea {
   width: 100%;
 }
-.essay-detail-info-left .essay-detail-comment-like .comment-list .comment-new-btns {
+.essay-detail-info-left .essay-detail-comment-like .comment-list .comment-textarea-info .comment-new-btns {
   text-align: right;
   height: 30px;
   line-height: 30px;
 }
-.essay-detail-info-left .essay-detail-comment-like .comment-list .comment-new-btns .comment-new-overnum {
+.essay-detail-info-left .essay-detail-comment-like .comment-list .comment-textarea-info .comment-new-btns .comment-new-overnum {
   color: #bbb;
   margin-right: 10px;
 }
-.essay-detail-info-left .essay-detail-comment-like .comment-list .comment-new-btns .comment-new-submit {
+.essay-detail-info-left .essay-detail-comment-like .comment-list .comment-textarea-info .comment-new-btns .comment-new-submit {
   font-size: 14px;
   width: 80px;
   height: 30px;
@@ -1167,7 +1176,7 @@ ol {
   background-color: #49cc90;
   color: #fff;
 }
-.essay-detail-info-left .essay-detail-comment-like .comment-list .comment-new-btns .comment-new-submit:hover {
+.essay-detail-info-left .essay-detail-comment-like .comment-list .comment-textarea-info .comment-new-btns .comment-new-submit:hover {
   background: #039993;
 }
 .essay-detail-info-left .essay-detail-comment-like .comment-list .comment-info {

@@ -135,107 +135,86 @@
 
     &-middle {
         display: inline-block;
-        width: 600px;
+        width: 820px;
 
         .isay-info {
             width: 100%;
-            border: 1px solid #e3f1ed;
-            border-radius: 5px;
-            padding: 10px 8px;
             margin-bottom: 50px;
 
 
 
+            &-category {
+                line-height: 25px;
+                margin-bottom: 6px;
 
-            &-head {
-                width: 100%;
 
-                .isay-info-title {
-                    line-height: 25px;
-                    margin-bottom: 6px;
-                    width: 60%;
-                    display: inline;
-                }
+                &-span {
+                    font-size: 14px;
+                    min-width: 80px;
+                    padding: 6px 15px;
+                    text-align: center;
+                    border-radius: 3px;
+                    background: #49cc90;
+                    text-shadow: 0 1px 0 rgba(0,0,0,.1);
+                    color: #fff;
+                    cursor: pointer;
 
-                .isay-info-isOriginal {
-                    line-height: 25px;
-                    margin-bottom: 6px;
-                    width: 10%;
-                    display: inline;
-                }
+                    &:hover {
+                        background: #039993;
+                    }
 
-                .isay-info-category {
-                    line-height: 25px;
-                    margin-bottom: 6px;
-                    width: 30%;
-                    display: inline;
-
-                    &-span {
-                        padding: 5px 12px;
-                        cursor: pointer;
-                        border: 1px solid white;
-                        border-radius: 5px;
-                        background-color: #49cc90;
-                        color: white;
-                        margin-left: 5px;
-
-                        &:hover {
-                            background-color: #039993;
-                        }
-
-                        &-checked {
-                            background-color: #039993;
-                        }
+                    &-checked {
+                        background-color: #039993;
                     }
                 }
             }
+
+
+            &-cover {
+                line-height: 25px;
+                margin-bottom: 6px;
+
+                &-btn {
+                    border: 1px dashed #e3f1ed;
+                    line-height: 100px;
+                    height: 100px;
+                    width: 100px;
+                    text-align: center;
+                    font-size: 200%;
+                    font-weight: 200;
+                    background-color: white;
+                }
+            }
+
+            &-isOriginal {
+                line-height: 25px;
+                margin-bottom: 6px;
+            }
+
+
+            &-tag {
+                line-height: 25px;
+                margin-bottom: 6px;
+
+                span {
+                    border: 1px solid black;
+                }
+            }
+
+
+            &-title {
+                line-height: 25px;
+                margin-bottom: 6px;
+ 
+            }
+
 
             &-body {
                 width: 100%;
 
                 textarea {
+                    min-height: 300px;
                     width: 100%;
-                }
-            }
-
-            &-buttom {
-                width: 100%;
-                height: 50px;
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-
-
-
-                &-medias {
-                    &-item {
-                        width: 50px;
-                        height: 50px;
-                        border-radius: 3px;
-                        float: left;
-                        margin-right: 10px;
-                        cursor: pointer;
-                    }
-                }
-
-                &-btns {
-                    height: 50px;
-                    line-height: 50px;
-
-                    .isay-info-submit {
-                        font-size: 14px;
-                        min-width: 80px;
-                        padding: 6px 15px;
-                        text-align: center;
-                        border-radius: 3px;
-                        background: #49cc90;
-                        text-shadow: 0 1px 0 rgba(0,0,0,.1);
-                        color: #fff;
-
-                        &:hover {
-                            background: #039993;
-                        }
-                    }
                 }
             }
         }
@@ -269,8 +248,7 @@
             }
         }
     }
-
-    &-right {
+    /*&-right {
         display: inline-block;
         width: 220px;
 
@@ -312,5 +290,5 @@
                 }
             }
         }
-    }
+    }*/
 }

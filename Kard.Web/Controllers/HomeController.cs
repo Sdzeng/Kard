@@ -8,6 +8,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Kard.Web.Controllers
@@ -52,12 +53,17 @@ namespace Kard.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("essays")]
-        public ResultDto<IEnumerable<TopMediaDto>> GetEssays(string category,int count=12)
+        public ResultDto GetEssays(string category,int pageIndex=1,int pageSize=20)
         {
-            var resultDto = new ResultDto<IEnumerable<TopMediaDto>>();
-
+            var essayList = _defaultRepository.GetHomeMediaPictureList(category, pageIndex, pageSize+1);
+            var hasNextPage = essayList.Count() > pageSize;
+            var resultDto = new ResultDto();
             resultDto.Result = true;
-            resultDto.Data = _defaultRepository.GetHomeMediaPictureList(count, category);
+            resultDto.Data = new
+            {
+                hasNextPage,
+                essayList = hasNextPage? essayList.SkipLast(1): essayList
+            };
 
             //var aWeekAgo = DateTime.Now.Date.AddYears(-7);
             return resultDto;

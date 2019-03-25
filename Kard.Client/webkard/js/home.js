@@ -1,11 +1,22 @@
 ﻿var homejs = {
-    data: { scope: $("#homePage") },
+    data: {
+        scope: $("#homePage"),
+        loadMorePars: {
+            //设置essays加载更多
+            offOn: false,
+            page: 1,
+            isChangeCategory: false
+        }
+    },
     init: function () {
         var _this = this;
         _this.bindCover();
         _this.hostSection.init();
 
-        $('.go-to-top',_this.data.scope).goToTop();
+        $('.go-to-top', _this.data.scope).goToTop();
+
+
+    
     },
     template: {
         bgVideo: (
@@ -39,10 +50,10 @@
             }
             //data.media.hasOwnProperty("path")&&
 
-            switch (data.media.mediaType) {
+            switch (data.essayCover.mediaType) {
                 case "picture":
                     //_2560x1200
-                    var backgroundImage = "linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),url(" + basejs.cdnDomain + "/" + data.media.cdnPath + "." + data.media.mediaExtension + ")";
+                    var backgroundImage = "linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),url(" + basejs.cdnDomain + "/" + data.essayCover.cdnPath + "." + data.essayCover.mediaExtension + ")";
                     $(".navbar", _this.data.scope).addClass("bg-default");
                     $(".bg-default", _this.data.scope).css("background-image", backgroundImage);
                     break;
@@ -51,9 +62,9 @@
                     //$(".bg-default", _this.data.scope).removeClass("bg-default");
 
                     var bgVedioHtml = homejs.template.bgVideo.format({
-                        videoCoverPath: basejs.cdnDomain + "/" + data.media.cdnPath + ".jpg",
-                        videoPath: basejs.cdnDomain + "/" + data.media.cdnPath + "." + data.media.mediaExtension,
-                        videoExtension: data.media.mediaExtension
+                        videoCoverPath: basejs.cdnDomain + "/" + data.essayCover.cdnPath + ".jpg",
+                        videoPath: basejs.cdnDomain + "/" + data.essayCover.cdnPath + "." + data.essayCover.mediaExtension,
+                        videoExtension: data.essayCover.mediaExtension
                     });
 
                     $(".splash-bg", _this.data.scope).html(bgVedioHtml);
@@ -62,20 +73,20 @@
 
 
 
-            //$(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.media.cdnPath + "_2560x1200.gif") + ")");
+            //$(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.essayCover.cdnPath + "_2560x1200.gif") + ")");
 
 
 
 
-            $("blackquote.splash-txt>q", _this.data.scope).text(data.media.essay.content || data.media.essay.title);
+            $("blackquote.splash-txt>q", _this.data.scope).text(data.essayCover.essay.content || data.essayCover.essay.title);
             //图片懒加载
             basejs.lazyInof('blackquote.splash-author>img.lazy');
-            var avatarArr = data.media.kuser.avatarUrl.split('.');
+            var avatarArr = data.essayCover.kuser.avatarUrl.split('.');
             var avatarCropPath = basejs.cdnDomain + "/" + avatarArr[0] + "_30x30." + avatarArr[1];
             $("blackquote.splash-author>img", _this.data.scope).attr("data-original", avatarCropPath);
-            $("blackquote.splash-author>a", _this.data.scope).text(data.media.kuser.nickName || "");
-            $("blackquote.splash-author>span:first", _this.data.scope).text((data.media.essay.location || ""));
-            $("blackquote.splash-author>span:last", _this.data.scope).text(basejs.getDateDiff(basejs.getDateTimeStamp(data.media.essay.creationTime)));
+            $("blackquote.splash-author>a", _this.data.scope).text(data.essayCover.kuser.nickName || "");
+            $("blackquote.splash-author>span:first", _this.data.scope).text((data.essayCover.essay.location || ""));
+            $("blackquote.splash-author>span:last", _this.data.scope).text(basejs.getDateDiff(basejs.getDateTimeStamp(data.essayCover.essay.creationTime)));
 
             topCover.scroll({ page: "home" });
         });
@@ -104,60 +115,73 @@
         setPicture: function () {
             var _this = this;
 
-            ////设置host
-            //var hostHelper = new httpHelper({
-            //    url: basejs.requestDomain + "/home/hostpictures",
-            //    type: "GET",
-            //    success: function (resultDto) {
-            //        _this.showPicture(_this.hostTitleObj, _this.hostBodyObj, resultDto.data);
-            //        //图片懒加载
-            //        basejs.lazyInof('.section-style-body-block:first img.lazy');
-            //    }
-            //});
-            //hostHelper.send();
+            var $loadMore=$(".load-more>span", homejs.data.scope);
+            $loadMore.text("加载中...");
 
-            //var categoryHelper = new httpHelper({
-            //    url: basejs.requestDomain + "/home/categorypictures",
-            //    type: "GET",
-            //    success: function (resultDto) {
-
-            //        _this.showPicture(_this.cosmeticsTitleObj, _this.cosmeticsBodyObj, resultDto.data.cosmeticsList);
-            //        _this.showPicture(_this.fashionSenseTitleObj, _this.fashionSenseBodyObj, resultDto.data.fashionSenseList);
-            //        _this.showPicture(_this.originalityTitleObj, _this.originalityBodyObj, resultDto.data.originalityList);
-            //        //_this.showPicture(_this.excerptTitleObj, _this.excerptBodyObj, resultDto.data.excerptList);
-
-            //        //图片懒加载
-            //        basejs.lazyInof('.section-style-body-block:not(:first) img.lazy');
-            //    }
-            //});
-            //categoryHelper.send();
-
-            //设置essays
-            var pars = {
+            var httpPars = {
                 url: basejs.requestDomain + "/home/essays",
                 type: "GET",
-                data: { category: "优选", count: 18 },
+                data: { category: "优选",pageIndex:1, pageSize: 15 },
                 success: function (resultDto) {
-                    _this.showPicture(_this.hostTitleObj, _this.hostBodyObj, resultDto.data);
+                    //设置essays加载更多
+                    if (!resultDto.result) {
+                        return;
+                    }
+                    if (resultDto.data.hasNextPage) {
+                        homejs.data.loadMorePars.offOn = true;
+                        homejs.data.loadMorePars.page++;
+                        $loadMore.text("加载更多");
+                    }
+                    else {
+                        homejs.data.loadMorePars.offOn = false;
+                        $loadMore.text("已经是底部");
+                    }
+                    _this.showPicture(homejs.data.loadMorePars.isChangeCategory,_this.hostTitleObj, _this.hostBodyObj, resultDto.data.essayList);
                     //图片懒加载
-                    basejs.lazyInof('.section-style-body-block:first img.lazy');
+                    $imageLazy = $(".section-style-body-block img.lazy", homejs.data.scope);
+                    basejs.lazyInof($imageLazy);
+                    $imageLazy.removeClass("lazy");
+                },
+                error: function () {
+                    homejs.data.loadMorePars.offOn = true;
+                    $(".section-style-title-little", _this.hostTitleObj).empty();
+                    $(".section-style-body-block", _this.hostBodyObj).empty();
                 }
             };
 
-            var essaysHttpHelper = new httpHelper(pars);
+            var essaysHttpHelper = new httpHelper(httpPars);
             essaysHttpHelper.send();
 
             $(".section-style-title-big>span", homejs.data.scope).click(function () {
                 $(".section-style-title-big-active", homejs.data.scope).removeClass("section-style-title-big-active");
                 $(this).addClass("section-style-title-big-active");
-                pars.data.category = $(this).text();
-                essaysHttpHelper = new httpHelper(pars);
+                homejs.data.loadMorePars.offOn = false;
+                homejs.data.loadMorePars.page = 1;
+                homejs.data.loadMorePars.isChangeCategory = true;
+                httpPars.data.category = $(this).text();
+                httpPars.data.pageIndex = homejs.data.loadMorePars.page;
+                $loadMore.text("加载中...");
+                essaysHttpHelper = new httpHelper(httpPars);
                 essaysHttpHelper.send();
             });
 
-        
+     
+            $loadMore.loadMore(50, function () {
+                //这里用 [ off_on ] 来控制是否加载 （这样就解决了 当上页的条件满足时，一下子加载多次的问题啦）
+                if (homejs.data.loadMorePars.offOn) {
+                    homejs.data.loadMorePars.offOn = false;
+                    homejs.data.loadMorePars.isChangeCategory = false;
+                    httpPars.data.category = $(".section-style-title-big-active", homejs.data.scope).text();
+                    httpPars.data.pageIndex = homejs.data.loadMorePars.page;
+                    $loadMore.text("加载中...");
+                    essaysHttpHelper = new httpHelper(httpPars);
+                    essaysHttpHelper.send();
+                }
+            });
+
+
         },
-        showPicture: function ($title, $body, data) {
+        showPicture: function (isChangeCategory,$title, $body, data) {
 
             var _this = this;
             var titleTagArr = [];
@@ -170,11 +194,11 @@
                     var current = parseInt(index) + 1;
                     var topMediaDto = data[index];
                     var essayDetailPage = "/essay-detail.html?id=" + topMediaDto.id;
-                    var defaultPicturePath = "/image/default-picture_210x180.jpg";
+                    var defaultPicturePath = "/image/default-picture_260x195.jpg";
                     var pictureCropPath = "";
                     switch (topMediaDto.mediaType) {
-                        case "picture": pictureCropPath = basejs.cdnDomain + "/" + topMediaDto.cdnPath + "_210x180." + topMediaDto.mediaExtension; break;
-                        case "video": pictureCropPath = basejs.cdnDomain + "/" + topMediaDto.cdnPath + "_210x180.jpg"; break;
+                        case "picture": pictureCropPath = basejs.cdnDomain + "/" + topMediaDto.cdnPath + "_260x195." + topMediaDto.mediaExtension; break;
+                        case "video": pictureCropPath = basejs.cdnDomain + "/" + topMediaDto.cdnPath + "_260x195.jpg"; break;
                     }
 
 
@@ -219,7 +243,7 @@
                         //likeNum: basejs.getNumberDiff(topMediaDto.likeNum),
                         //shareNum: basejs.getNumberDiff(topMediaDto.shareNum),
                         browseNum: basejs.getNumberDiff(topMediaDto.browseNum),
-                        tagSpan: "<span>" + (topMediaDto.isOriginal ? "原创" : "分享") + "</span>"+tagSpan,
+                        tagSpan: "<span>" + (topMediaDto.isOriginal ? "原创" : "分享") + "</span>" + tagSpan,
                         defaultAvatarPath: basejs.defaults.avatarPath,
                         avatarCropPath: avatarCropPath,
                         //location: topMediaDto.location,
@@ -228,7 +252,7 @@
                     });
 
 
-                    if ((current % 6 == 0) || current == data.length) {
+                    if ((current % 5 == 0) || current == data.length) {
                         pictureHtml += "<div class='section-style-body-row'>" + pictureRowHtml + "</div>";
                         pictureRowHtml = "";
                     }
@@ -238,8 +262,14 @@
                 //    topMediaPictureHtml += topMediaPictureHtml;
                 //}
             }
-            $(".section-style-title-little", $title).html("<span>" + basejs.arrDistinct(titleTagArr).join("</span><span>") +"</span>");
-            $(".section-style-body-block", $body).html(pictureHtml);
+            if (isChangeCategory) {
+                $(".section-style-title-little", $title).html("<span>" + basejs.arrDistinct(titleTagArr).join("</span><span>") + "</span>");
+                $(".section-style-body-block", $body).html(pictureHtml);
+            }
+            else {
+                $(".section-style-title-little", $title).append("<span>" + basejs.arrDistinct(titleTagArr).join("</span><span>") + "</span>");
+                $(".section-style-body-block", $body).append(pictureHtml);
+            }
 
         }
 

@@ -46,3 +46,18 @@ if (!jQuery.fn.goToTop) {
         });
     };
 }
+
+if (!jQuery.fn.loadMore) {
+    jQuery.fn.loadMore = function (bottom,loadingDataFn) {
+        var _this = this;
+        $(window).scroll(function () {
+            //当时滚动条离底部350px时开始加载下一页的内容
+            //$(window).scrollTop()滚动偏移量
+            // $(window).height() 代表了当前可见区域的大小，
+            // $(document).height() 代表了整个html文档的高度
+            if ($(this).scrollTop() + $(this).height() > $(document).height() - bottom ) {
+                loadingDataFn && loadingDataFn();
+            }
+        });
+    };
+}

@@ -1,6 +1,8 @@
 var basejs = {
-    requestDomain: "http://192.168.10.2:3703"
-    cdnDomain: "http://192.168.10.2:3703"
+    requestDomain: "http://192.168.10.2:3703",
+    cdnDomain: "http://192.168.10.2:3703",
+    //requestDomain: "http://api.localyc.com",
+    //cdnDomain:"http://cdn.localyc.com",
     defaults: {
         type: "POST",
         async: true,
@@ -433,7 +435,7 @@ var topCover = {
                         var data = resultDto.data;
                         //data = JSON.parse(data);
                         if (data) {
-                            switch (data.media.mediaType) {
+                            switch (data.essay.mediaType) {
                                 case "video": _this.navbarObj.removeClass('bg-default').css("background-image", ""); break;
                             }
                         }

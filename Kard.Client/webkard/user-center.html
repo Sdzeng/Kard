@@ -6,14 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="icon" href="/image/logo-tab_16x16.ico" sizes="16x16">
-    <link rel="stylesheet" href="/css/kard.css" type="text/css" media="screen">
+    <!--<link rel="stylesheet" href="/css/kard.css" type="text/css" media="screen">-->
+    <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/froala_editor.min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/froala_style.min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/plugins/code_view.css">
+    <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/plugins/char_counter.css">
+    <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/plugins/image_manager.css">
+    <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/plugins/image.css">
+    <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/plugins/table.css">
+    <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/plugins/video.css">
+    <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/codemirror.min.css">
 
-    <!--<link rel="stylesheet/less" href="/less/kard.less" type="text/css" media="screen">
-    <script type="text/javascript" src="/js/less.js?v=1.0.0"></script>-->
+    <link rel="stylesheet/less" href="/less/kard.less" type="text/css" media="screen">
+    <script type="text/javascript" src="/js/less.js?v=1.0.0"></script>
+
+
 </head>
 <body id="userCenterPage">
     <!--公共导航栏 -->
-    <nav id="navbar" class="navbar bg-default">
+    <nav id="navbar" class="navbar  bg-default navbar-bottom-shadow">
 
         <div class="navbar-logo">
             <a href="/"><span><img src="/image/logo-nav_30x30.png"></span><span>自然单品</span></a>
@@ -32,7 +44,7 @@
     </nav>
 
     <!--封面-->
-    <div id="splash" class="splash">
+    <!--<div id="splash" class="splash">
 
         <div class="splash-content">
             <blackquote></blackquote>
@@ -45,29 +57,29 @@
             </blackquote>
             <blackquote></blackquote>
         </div>
-        <!--<div class="splash-other">
+        <div class="splash-other">
 
-        <blackquote class="splash-other-usercenter-author">
+            <blackquote class="splash-other-usercenter-author">
 
-            <div class="splash-other-usercenter-author-avatar">
-                <img src="http://192.168.10.2:3703/user\1\avatar_80x80.jpg">
-            </div>
-            <div class="splash-other-usercenter-author-txt">
-                <div class="splash-other-usercenter-author-txt-name">
-                       作者
+                <div class="splash-other-usercenter-author-avatar">
+                    <img src="http://192.168.10.2:3703/user\1\avatar_80x80.jpg">
                 </div>
-                <div class="splash-other-usercenter-author-txt-introduction">
-                    独立设计师 | 热量工作室 | 做点酷的事
+                <div class="splash-other-usercenter-author-txt">
+                    <div class="splash-other-usercenter-author-txt-name">
+                           作者
+                    </div>
+                    <div class="splash-other-usercenter-author-txt-introduction">
+                        独立设计师 | 热量工作室 | 做点酷的事
+                    </div>
                 </div>
-            </div>
 
-        </blackquote>
-    </div>-->
+            </blackquote>
+        </div> 
         <div class="splash-bg  bg-default">
- 
+
         </div>
 
-    </div>
+    </div>-->
 
 
 
@@ -104,14 +116,44 @@
                 </div>
 
                 <div class="user-center-self-black">
-                    <h4>我的热门单品</h4>
+
                     <ul>
-                        <li>汤之味  (258人喜欢)</li>
-                        <li>山的芍药  (138人喜欢)</li>
-                        <li>楝花、金银花、小笋与蓬蘽  (275人喜欢)</li>
-                        <li>中一日  (443人喜欢)</li>
-                        <li>四季|耕田  (406人喜欢)</li>
-                        <li>哪种粽子最好吃？</li>
+                        <li>首页</li>
+                        <li>发布</li>
+                        <li>消息</li>
+                        <li>
+                            <h4>我的单品</h4>
+                            <ul>
+                                <li>汤之味  (258人喜欢)</li>
+                                <li>山的芍药  (138人喜欢)</li>
+                                <li>楝花、金银花、小笋与蓬蘽  (275人喜欢)</li>
+                                <li>中一日  (443人喜欢)</li>
+                                <li>四季|耕田  (406人喜欢)</li>
+                                <li>哪种粽子最好吃？</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <h4>我的喜爱</h4>
+                            <ul>
+                                <li>汤之味  (258人喜欢)</li>
+                                <li>山的芍药  (138人喜欢)</li>
+                                <li>楝花、金银花、小笋与蓬蘽  (275人喜欢)</li>
+                                <li>中一日  (443人喜欢)</li>
+                                <li>四季|耕田  (406人喜欢)</li>
+                                <li>哪种粽子最好吃？</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <h4>我的喜爱</h4>
+                            <ul>
+                                <li>汤之味  (258人喜欢)</li>
+                                <li>山的芍药  (138人喜欢)</li>
+                                <li>楝花、金银花、小笋与蓬蘽  (275人喜欢)</li>
+                                <li>中一日  (443人喜欢)</li>
+                                <li>四季|耕田  (406人喜欢)</li>
+                                <li>哪种粽子最好吃？</li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
 
@@ -142,85 +184,99 @@
             <div class="user-center-info-middle">
 
                 <div class="isay-info">
-                    <div class="isay-info-head">
-                        <input class="unify-input isay-info-title" id="isayTitle" rows="5" placeholder="主题" />
-                        <div class="isay-info-isOriginal"><input name="isOriginal" class="unify-input" type="checkbox" /><label for="isOriginal">原创</label></div>
-                        <div class="isay-info-category">
-                            <span class="isay-info-category-span">物件</span>
-                            <span class="isay-info-category-span">潮拍</span>
-                            <span class="isay-info-category-span">笔记</span>
-                            <!--<span><input name="isayCategory" id="isayCategory4" type="radio" value="潮拍"><label for="isayCategory4">潮拍</label></span>-->
-                            <!--<span class="isay-info-category-span">摘录</span>-->
+                    <!--<div class="isay-info-head">
+        <input class="unify-input isay-info-title" id="isayTitle" rows="5" placeholder="主题" />
+
+
+
+    </div>-->
+
+                    <div class="isay-info-category">
+                        类型：
+                        <span class="isay-info-category-span">物件</span>
+                        <span class="isay-info-category-span">潮拍</span>
+                        <span class="isay-info-category-span">笔记</span>
+                    </div>
+
+
+                    <div class="isay-info-cover">
+                        封面：<div id="btnAddPic" class="isay-info-cover-btn">+</div>
+                        <input type="file" id="btnAddPicHide" name="btnAddPicHide" style="display:none;" />
+                    </div>
+
+                    <div class="isay-info-isOriginal">
+                        原创： <input id="isOriginal" class="unify-input" type="checkbox" />
+                    </div>
+                    <div class="isay-info-tag">
+                        标签： <input id="isayTag" type="text" class="unify-input" /><span>+</span>
+
+                    </div>
+                    <div class="isay-info-title">
+                        标题： <input id="isayTitle" type="text" class="unify-input" /> 
+
+                    </div>
+                    <div class="isay-info-body">
+                        <div id="isayContent">
+                         
+                            <p>#标签#我的推荐理由...</p>
+
+                            <p></p>
 
                         </div>
                     </div>
-                    <div class="isay-info-body"> <textarea class="unify-input" id="isayContent" rows="5" placeholder="#标签#我的推荐理由..."></textarea>  </div>
-                    <div class="isay-info-buttom">
-                        <div class="isay-info-buttom-medias">
 
-                            <div id="btnAddPic" class="isay-info-buttom-medias-item" style="border:1px  dashed #e3f1ed;line-height:50px;text-align:center;font-size:200%;font-weight:200;background-color:white;">+</div>
-                            <input type="file" id="btnAddPicHide" name="btnAddPicHide" style="display:none;" />
-                        </div>
-                        <div class="isay-info-buttom-btns">
 
-                            <span class="overnum">140</span>
-                            <a class="isay-info-submit">发布</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="essay-info" style="margin-bottom: 20px;">
+                        <div class="essay-info-left" style="position: relative; width: 50px; float: left;"><img src="http://localhost:3703/user/1/photo_50x50.jpg" style="border-radius: 3px;" /></div>
+
+                        <div class="essay-info-right" style="margin-left: 60px; width:538px;">
+
+                            <div class="essay-info-right-user-name" style="font-size:15px;margin: 0 0 3px;"><a class="href-label">金鱼</a></div>
+                            <div class="essay-info-right-date" style="font-size: 12px; margin: 0 0 10px; color: #b6b6b6;"> 2016年08月15日 06:45 </div>
+                            <div class="essay-info-right-content" style="margin: 0 0 10px;"><p>现在画的是《寻找前世之旅》单行本颜色。软件是PS和CSP，请勿截屏截图，直播群：451396771。重复： 现在画的是《寻找前世之旅》单行本颜色。软件是PS和CSP，请勿截屏截图，直播群：451396771。</p></div>
+                            <div class="essay-info-right-media" style=" margin: 0 0 10px; ">
+                                <a href="http://localhost:3703/user/1/media/20170901/2371088718.jpg">
+                                    <img src="http://localhost:3703/user/1/media/20170901/2371088718_538x300.jpg" data-origin="http://localhost:3703/user/1/media/20170901/2371088718.jpg" alt="">
+                                </a>
+                            </div>
+
+                            <div class="essay-info-right-buttom">
+                                <ul>
+                                    <li class="essay-info-right-buttom-tags">
+                                        标签: <a href="https://www.douban.com/tag/动漫/" target="_blank">动漫</a> <a href="https://www.douban.com/tag/趣味/" target="_blank">趣味</a> <a href="https://www.douban.com/tag/人文/" target="_blank">人文</a> <a href="https://www.douban.com/tag/姚瑶/" target="_blank">姚瑶</a> <a href="https://www.douban.com/tag/日常/" target="_blank">日常</a>
+                                    </li>
+                                    <li class="essay-info-right-buttom-nums">
+                                        <a class="view">16820</a>
+                                        <a class="like">7</a>
+                                        <a class="comments">0</a>
+                                    </li>
+                                </ul>
+                            </div>
 
                         </div>
                     </div>
+
 
                 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <div class="essay-info" style="margin-bottom: 20px;">
-                    <div class="essay-info-left" style="position: relative; width: 50px; float: left;"><img src="http://localhost:3703/user/1/photo_50x50.jpg" style="border-radius: 3px;" /></div>
-
-                    <div class="essay-info-right" style="margin-left: 60px; width:538px;">
-
-                        <div class="essay-info-right-user-name" style="font-size:15px;margin: 0 0 3px;"><a class="href-label">金鱼</a></div>
-                        <div class="essay-info-right-date" style="font-size: 12px; margin: 0 0 10px; color: #b6b6b6;"> 2016年08月15日 06:45 </div>
-                        <div class="essay-info-right-content" style="margin: 0 0 10px;"><p>现在画的是《寻找前世之旅》单行本颜色。软件是PS和CSP，请勿截屏截图，直播群：451396771。重复： 现在画的是《寻找前世之旅》单行本颜色。软件是PS和CSP，请勿截屏截图，直播群：451396771。</p></div>
-                        <div class="essay-info-right-media" style=" margin: 0 0 10px; ">
-                            <a href="http://localhost:3703/user/1/media/20170901/2371088718.jpg">
-                                <img src="http://localhost:3703/user/1/media/20170901/2371088718_538x300.jpg" data-origin="http://localhost:3703/user/1/media/20170901/2371088718.jpg" alt="">
-                            </a>
-                        </div>
-
-                        <div class="essay-info-right-buttom">
-                            <ul>
-                                <li class="essay-info-right-buttom-tags">
-                                    标签: <a href="https://www.douban.com/tag/动漫/" target="_blank">动漫</a> <a href="https://www.douban.com/tag/趣味/" target="_blank">趣味</a> <a href="https://www.douban.com/tag/人文/" target="_blank">人文</a> <a href="https://www.douban.com/tag/姚瑶/" target="_blank">姚瑶</a> <a href="https://www.douban.com/tag/日常/" target="_blank">日常</a>
-                                </li>
-                                <li class="essay-info-right-buttom-nums">
-                                    <a class="view">16820</a>
-                                    <a class="like">7</a>
-                                    <a class="comments">0</a>
-                                </li>
-                            </ul>
-                        </div>
-
-                    </div>
-                </div>
-
-
-            </div>
-            <div class="user-center-info-right">
+                <!--<div class="user-center-info-right">
 
                 <ul>
                     <li>
@@ -356,11 +412,11 @@
 
 
 
-            </div>
+            </div>-->
 
+            </div>
         </div>
     </div>
-
     <div style="min-height: 1000px;">123</div>
 
 
@@ -376,9 +432,30 @@
     <script type="text/javascript" src="/js/storage.js?v=1.0.0"></script>
     <script type="text/javascript" src="/js/base.js?v=1.0.0"></script>
 
- 
-    <script type="text/javascript" src="/js/user-center.js?v=1.0.0"></script>
 
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/codemirror.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/xml.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/froala_editor.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/fullscreen.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/save.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/align.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/char_counter.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/code_beautifier.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/code_view.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/draggable.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/image.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/image_manager.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/link.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/lists.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/paragraph_format.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/paragraph_style.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/table.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/video.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/url.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/entities.min.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/languages/zh_cn.js"></script>
+
+    <script type="text/javascript" src="/js/user-center.js?v=1.0.0"></script>
 
 </body>
 </html>

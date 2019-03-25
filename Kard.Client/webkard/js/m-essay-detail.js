@@ -53,7 +53,7 @@ var essaydetailjs = {
                 avatarUrl = avatarUrl.replace(/\\/g, "/");
                 $(".essay-min-author-avatar>img", _this.data.scope).attr("data-original", avatarUrl);
                 $('.essay-min-author-txt-name', _this.data.scope).text(data.kuser.nickName);
-                $('.essay-min-author-txt-introduction', _this.data.scope).html("<span>" + (data.isOriginal ? "原创" : "分享") + "</span><span>" + basejs.getDateDiff(basejs.getDateTimeStamp(data.creationTime)) + "</span><span>" + data.browseNum + " 阅读</span><span>" + data.score + " 分</span>");
+                $('.essay-min-author-txt-introduction', _this.data.scope).html("<span>" + (data.isOriginal ? "获得授权" : "分享") + "</span><span>" + basejs.getDateDiff(basejs.getDateTimeStamp(data.creationTime)) + "</span><span>" + data.browseNum + " 阅读</span><span>" + data.score + " 分</span>");
 
 
                 var imgs = "";

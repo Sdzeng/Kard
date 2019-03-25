@@ -310,7 +310,7 @@ ul, ol {
 .bg-default {
     //background-image:linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),linear-gradient(45deg, #FECDD3, #4A29EE);//url(/images/indexbg.jpg),
     background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%); //#c6c7c8;
-    background-position: 0px -300px;
+    background-position: 0px -200px;
     background-size: cover;
     background-attachment: fixed;
 }
@@ -343,11 +343,11 @@ ul, ol {
     display: block;
     position: fixed;
     left: 50%;
-    margin-left: 610px;
+    margin-left: 575px;
     bottom: 80px;
 
     @media (min-width: @screen-lg-min) {
-        margin-left: 700px;
+        margin-left:700px;
     }
 
     .lnk-back-top {
@@ -411,15 +411,18 @@ ul, ol {
 
 .picture-warp {
     background-color: white;
-    margin: 10px 5px;
-    width: 190px;
+    margin-top:20px;
+    &:not(:first-child){
+        margin-left: 20px;
+
+    }
+    width: 210px;
     /* transition: all .35s; */
     /*.transition(all .35s ease);*/
     /*float: left;*/
     /*border-radius: 5px;*/
     @media (min-width: @screen-lg-min) {
-        margin: 15px 10px;
-        width: 210px;
+        width: 260px;
     }
 
 
@@ -429,11 +432,7 @@ ul, ol {
 
     a {
         img {
-            width: 190px;
-
-            @media (min-width: @screen-lg-min) {
-                width: 210px;
-            }
+            width: 100%;
         }
     }
 
@@ -448,21 +447,20 @@ ul, ol {
             text-overflow: ellipsis;
             -o-text-overflow: ellipsis;
             white-space: nowrap;
-            width: 190px;
+            width: 210px;
             display: block;
 
             @media (min-width: @screen-lg-min) {
-                width: 210px;
+                width: 260px;
             }
 
             span:first-child {
-               
                 font-size: 12px;
                 margin-right: 5px;
                 padding: 1px 5px;
                 margin-right: 5px;
                 color: white;
-                background: #ee6e73;
+                background-color: #ee6e73;
                 border-radius: 2px;
             }
         }
@@ -547,19 +545,19 @@ ul, ol {
             flex-direction: row;
             justify-content: space-between;
             border-top: 1px solid #f6f7f9;
-            line-height: 50px;
+            line-height: 45px;
             padding: 0px 10px;
             font-size: 12px;
 
             &-author {
-                width: 70px;
+                width: 100px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 -o-text-overflow: ellipsis;
                 white-space: nowrap;
 
                 @media (min-width: @screen-lg-min) {
-                    width: 90px;
+                    width: 140px;
                 }
 
                 .essay-avatar {
@@ -704,4 +702,20 @@ ul, ol {
 
 .bigstar00 {
     background-position: 0 -150px;
+}
+
+
+.load-more {
+    padding-top: 100px;
+    width: 100%;
+    display: block;
+    text-align: center;
+    background-color: #f5f5f5;
+
+    span {
+        background-color: white;
+        
+        color: #bbb;
+        padding: 5px 20px;
+    }
 }

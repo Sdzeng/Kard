@@ -20,6 +20,13 @@ namespace Kard.Core.Entities
 
         public string Title { get; set; }
 
+        public string MediaType { get; set; }
+
+        public string CoverFile { get; set; }
+
+
+        public string CoverExtension { get; set; }
+
         public string Content { get; set; }
 
         public string Location { get; set; }
@@ -35,11 +42,11 @@ namespace Kard.Core.Entities
 
         public long? ParentEssayId { get; set; }
 
+       
+
         public KuserEntity Kuser;
 
         public EssayLikeEntity EssayLike;
-
-        public List<MediaEntity> MediaList;
 
         public List<TagEntity> TagList;
 

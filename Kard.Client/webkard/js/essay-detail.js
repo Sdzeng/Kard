@@ -74,7 +74,7 @@ var essaydetailjs = {
               
                 var avatarArr = data.kuser.avatarUrl.split('.');
 
-                $('.essay-detail-remark', _this.data.scope).html("<span>" + (data.isOriginal ? "原创" : "分享") + "</span>"+
+                $('.essay-detail-remark', _this.data.scope).html("<span>" + (data.isOriginal ? "获得授权" : "分享") + "</span>"+
                    "<span><img  class='lazy' src='/image/default-avatar.jpg' data-original='" + basejs.cdnDomain + "/" + avatarArr[0] + "_30x30." + avatarArr[1] + "' >" + data.kuser.nickName + "</span>" +
                     "<span>" + data.location + "</span><span>" + basejs.getDateDiff(basejs.getDateTimeStamp(data.creationTime)) + "发布</span><span>" + data.browseNum + "阅读</span>");
 
@@ -164,7 +164,7 @@ var essaydetailjs = {
                     essayAHtml += "<a href='essay-detail.html?id=" + essay.id + "'><div>《" + essay.title + " 》" + essay.content +"</div><div>" + basejs.getNumberDiff(essay.likeNum) + "人喜欢</div></a>";
                 }
                 if (essayAHtml == "") {
-                    essayAHtml = "<div class='div-empty'>空空如也</div>";
+                    essayAHtml = "<div class='div-empty'><div><img src='/image/empty.gif'></div><div>空空如也</div></div>";
                 }
                 $(".essay-similar-a", _this.data.scope).html(essayAHtml);
             }
@@ -192,7 +192,7 @@ var essaydetailjs = {
                     essayAHtml += "<a href='essay-detail.html?id=" + essay.id + "'><div>《" + essay.title + " 》" + essay.content +"</div><div>" + basejs.getNumberDiff(essay.likeNum) + "人喜欢</div></a>";
                 }
                 if (essayAHtml == "") {
-                    essayAHtml = "<div class='div-empty'>空空如也</div>";
+                    essayAHtml = "<div class='div-empty'><div><img src='/image/empty.gif'></div><div>空空如也</div></div>";
                 }
                 $(".essay-other-a", _this.data.scope).html(essayAHtml);
             }
@@ -275,7 +275,7 @@ var essaydetailjs = {
                 }
 
                 if (commentHtml == "") {
-                    commentHtml = "<div class='div-empty'>空空如也</div>";
+                    commentHtml =  "<div class='div-empty'><div><img src='/image/empty.gif'></div><div>空空如也</div></div>";
                 }
       
                 $(".comment-info-list", _this.data.scope).html(commentHtml);
@@ -334,7 +334,7 @@ var essaydetailjs = {
                         }
 
                         if (likeHtml == "") {
-                            likeHtml = "<div class='div-empty'>空空如也</div>";
+                            likeHtml = "<div class='div-empty'><div><img src='/image/empty.gif'></div><div>空空如也</div></div>";
                         }
 
                         $(".like-list", _this.data.scope).html(likeHtml);

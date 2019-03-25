@@ -77,6 +77,56 @@ namespace Kard.Web.Controllers
         }
 
         /// <summary>
+        /// froala上传文件
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("froalaupload")]
+        //[Consumes("multipart/form-data")]
+        //[RequestSizeLimit(100_000_000)]
+        public object FroalaUpload(IFormFile mediaFlie)
+        {
+            var result = new ResultDto();
+            if (mediaFlie == null && Request.Form.Files.Any())
+            {
+                mediaFlie = Request.Form.Files[0];
+            }
+            if (mediaFlie == null)
+            {
+                result.Result = true;
+                result.Message = "未选择文件";
+                return result;
+            }
+
+            var now = DateTime.Now;
+            string webRootPath = _env.WebRootPath;
+
+            string newFolder = Path.Combine("user", _kardSession.UserId.ToString(), "media", now.ToString("yyyyMMdd"));
+            string newPath = Path.Combine(webRootPath, newFolder);
+            if (!Directory.Exists(newPath))
+            {
+                Directory.CreateDirectory(newPath);
+            }
+
+            if (mediaFlie.Length > 0)
+            {
+                string fileName = now.ToString("ddHHmmssffff");
+                string fileExtension = Path.GetExtension(mediaFlie.FileName.Trim('"')).ToLower(); // Path.GetExtension(ContentDispositionHeaderValue.Parse(mediaFlie.ContentDisposition).FileName.Trim('"'));
+                string fullPath = Path.Combine(newPath, fileName + fileExtension);
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    mediaFlie.CopyTo(stream);
+                }
+
+                return new { Link = Path.Combine("http://192.168.10.2:3703", newFolder, fileName+fileExtension).Replace("\\", "/") };
+            }
+
+
+            result.Result = false;
+            result.Message = "上传失败";
+            return result;
+        }
+
+        /// <summary>
         /// 上传文件
         /// </summary>
         /// <returns></returns>
@@ -126,14 +176,13 @@ namespace Kard.Web.Controllers
             return result;
         }
 
-
         /// <summary>
         /// 添加纪录
         /// </summary>
         /// <param name="essayEntity"></param>
-        /// <param name="mediaList"></param>
+        /// <param name="tagList"></param>
         [HttpPost("add")]
-        public ResultDto AddEssay(EssayEntity essayEntity, IEnumerable<MediaEntity> mediaList)
+        public ResultDto AddEssay(EssayEntity essayEntity,IEnumerable<TagEntity> tagList)
         {
             /*private static readonly Regex _regex = new Regex(@"(?'group1'#)([^#]+?)(?'-group1'#)");
              if ((!this.EssayContent.IsNullOrEmpty()) && _regex.IsMatch(this.EssayContent))
@@ -143,18 +192,19 @@ namespace Kard.Web.Controllers
                 }*/
 
             var createUserId = _kardSession.UserId.Value;
-            IEnumerable<TagEntity> tagList = new List<TagEntity>();
-            if (essayEntity.Content.Contains('#'))
-            {
-                var contentList = essayEntity.Content.Split('#');
-                int contentListLastIndex = contentList.Length - 1;
-                tagList = contentList.Where((item, index) => ((!string.IsNullOrEmpty(item)) && (index != contentListLastIndex))).Select((item, index) => { var tagEntity = new TagEntity { Sort = (index + 1), TagName = item }; tagEntity.AuditCreation(createUserId); return tagEntity; });
-                essayEntity.Content = contentList.Last();
-            }
+            //IEnumerable<TagEntity> tagList = new List<TagEntity>();
+            //if (essayEntity.Content.Contains('#'))
+            //{
+            //    var contentList = essayEntity.Content.Split('#');
+            //    int contentListLastIndex = contentList.Length - 1;
+            //    tagList = contentList.Where((item, index) => ((!string.IsNullOrEmpty(item)) && (index != contentListLastIndex))).Select((item, index) => { var tagEntity = new TagEntity { Sort = (index + 1), TagName = item }; tagEntity.AuditCreation(createUserId); return tagEntity; });
+            //    essayEntity.Content = contentList.Last();
+            //}
             essayEntity.Location = "广州";
             essayEntity.AuditCreation(createUserId);
-            mediaList.AuditCreation(createUserId);
-            var result = _defaultRepository.AddEssay(essayEntity, tagList, mediaList);
+          
+            tagList.AuditCreation(createUserId);
+            var result = _defaultRepository.AddEssay(essayEntity,tagList);
 
             if (result)
             {
