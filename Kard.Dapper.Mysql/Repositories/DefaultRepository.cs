@@ -19,7 +19,7 @@ namespace Kard.Dapper.Mysql.Repositories
     {
 
 
-        public DefaultRepository( IConfiguration configuration, ILogger<DefaultRepository> logger) : base( configuration, logger)
+        public DefaultRepository(IConfiguration configuration, ILogger<DefaultRepository> logger) : base(configuration, logger)
         {
         }
 
@@ -29,7 +29,6 @@ namespace Kard.Dapper.Mysql.Repositories
             {
                 string sql = @"select 
                                 cover.*,
-	                            media.*,
                                 essay.*,
 		                        kuser.*   
 		                        from 
@@ -58,56 +57,24 @@ namespace Kard.Dapper.Mysql.Repositories
 
 
 
-        public IEnumerable<TopMediaDto> GetHomeMediaPictureList(string category,int pageIndex,int pageSize)
-        {
-            string sql = string.Empty;
+        public IEnumerable<TopMediaDto> GetHomeMediaPictureList(string category, int pageIndex, int pageSize)
+        {   
             int pageStart = ((pageIndex - 1) * pageSize);
             pageStart = pageStart > 0 ? (pageStart - 1) : pageStart;
 
-            var param = new object();
-            switch (category)
-            {
-                case "优选":
-                    sql = @"select essay.Id,essay.Category,essay.IsOriginal,essay.Score,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,
-                               kuser.AvatarUrl,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaType,t2.MediaExtension,tag.*  
+            var sql = $@"select essay.Id,essay.Category,essay.IsOriginal,essay.Score,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,essay.CoverPath,essay.CoverMediaType,essay.CoverExtension,
+                               kuser.AvatarUrl,kuser.NickName CreatorNickName,tag.*  
                 from 
-                (
-                select t.EssayId,t.CdnPath,t.MediaType,t.MediaExtension,count(media.Id) MediaCount
-                from (
-               select media.EssayId,media.CdnPath,media.MediaType,media.MediaExtension from media join essay on media.EssayId=essay.Id  
-              where   media.Sort=1 and media.CreationTime>=@CreationTime order by (essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum) desc,essay.CreationTime desc limit @PageStart,@PageSize
-                ) t join  media on t.EssayId=media.EssayId 
-                group by t.EssayId,t.CdnPath,t.MediaType,t.MediaExtension
-                ) t2 
-                join essay on t2.EssayId=essay.Id 
+                essay  
                 join kuser on essay.CreatorUserId=kuser.Id  
                 left join tag on essay.Id=tag.EssayId and tag.Sort=1 
-                order by(essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum)  desc,essay.Id desc";
-                    var creationTime = DateTime.Now.AddYears(-7);
-                    param = new { CreationTime = creationTime, PageStart = pageStart, PageSize = pageSize };
-                    break;
-                //case "物件":
-                //case "设计":
-                //case "潮拍":
-                //case "笔记":
-                default:
-                    sql = @"select essay.Id,essay.Category,essay.IsOriginal,essay.Score,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,kuser.AvatarUrl,kuser.NickName CreatorNickName,t2.MediaCount,t2.CdnPath,t2.MediaType,t2.MediaExtension,tag.*  from 
-                (
-                select t.EssayId,t.CdnPath,t.MediaType,t.MediaExtension,count(media.Id) MediaCount
-                from (
-                select EssayId,CdnPath,MediaType,MediaExtension from media  join essay on media.EssayId=essay.Id 
-                where   media.Sort=1  and essay.Category=@Category order by essay.CreationTime desc limit @PageStart,@PageSize
-                ) t join media on t.EssayId=media.EssayId
-                group by t.EssayId,t.CdnPath,t.MediaType,t.MediaExtension
-                ) t2 
-                join essay on t2.EssayId=essay.Id 
-                join kuser on essay.CreatorUserId=kuser.Id  
-                left join tag on essay.Id=tag.EssayId and tag.Sort=1 
-                order by (essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum) desc,essay.Id desc";
+                where 1=1 {(category != "精选" ? " and essay.Category=@Category " : "")} 
+                order by (essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum) desc,essay.Score desc,essay.Id desc limit @PageStart,@PageSize
+                ";
 
-                    param = new { Category = category, PageStart = pageStart, PageSize = pageSize };
-                    break;
-            }
+            var param = new { Category = category, PageStart = pageStart, PageSize = pageSize };
+
+
 
             //return ConnExecute(conn =>
             //{
@@ -156,7 +123,7 @@ namespace Kard.Dapper.Mysql.Repositories
         }
 
 
-        public IEnumerable<TopMediaDto> GetUserMediaPictureList(long userId,int count)
+        public IEnumerable<TopMediaDto> GetUserMediaPictureList(long userId, int count)
         {
             return ConnExecute(conn =>
             {
@@ -177,10 +144,10 @@ namespace Kard.Dapper.Mysql.Repositories
 
 
 
-        public IEnumerable<KuserEntity> GetExistUser(string name, string phone,string nickName)
+        public IEnumerable<KuserEntity> GetExistUser(string name, string phone, string nickName)
         {
             string sql = "select *  from kuser where `Name`=@Name or Phone=@Phone or NickName=@NickName";
-            return base.QueryList<KuserEntity>(sql, new { Name = name, Phone = phone, NickName= nickName });
+            return base.QueryList<KuserEntity>(sql, new { Name = name, Phone = phone, NickName = nickName });
         }
 
         //public bool CreateAccountUser(KuserEntity user)
@@ -208,7 +175,7 @@ namespace Kard.Dapper.Mysql.Repositories
                 order by essay.LikeNum desc,media.Sort ";
                 var essayList = conn.Query<EssayEntity, TagEntity, EssayEntity>(sql, (essay, tag) =>
                 {
-                   
+
                     essay.TagList = essay.TagList ?? new List<TagEntity>();
 
                     if (!essay.TagList.Where(t => t.Id == tag.Id).Any())
@@ -227,16 +194,15 @@ namespace Kard.Dapper.Mysql.Repositories
         }
 
 
-        public EssayEntity GetEssay(long id,long? currentUserId)
+        public EssayEntity GetEssay(long id, long? currentUserId)
         {
             string sql = @"select *,(select NickName from kuser where Id=essay.CreatorUserId) CreatorUserName 
                 from essay 
                 left join kuser on essay.CreatorUserId=kuser.Id 
                 left join essay_like on essay.Id=essay_like.EssayId and essay_like.CreatorUserId=@CurrentUserId 
-                left join media on essay.Id=media.EssayId 
                 left join tag on essay.Id=tag.EssayId 
                 where essay.id=@EssayId 
-               order by media.Sort,tag.Sort";
+               order by  tag.Sort";
 
             return ConnExecute(conn =>
             {
@@ -248,7 +214,7 @@ namespace Kard.Dapper.Mysql.Repositories
                      {
                          essay.Kuser = kuser.ToSecurity();
                          essay.EssayLike = essayLike;
-                  
+
                          essay.TagList = new List<TagEntity>();
                          essayList.Add(essay);
                      }
@@ -258,16 +224,16 @@ namespace Kard.Dapper.Mysql.Repositories
                      }
 
 
-               
 
-                     if (tag!=null&&(!essay.TagList.Where(t => t.Id == tag.Id).Any()))
+
+                     if (tag != null && (!essay.TagList.Where(t => t.Id == tag.Id).Any()))
                      {
                          essay.TagList.Add(tag);
                      }
 
                      return true;
                  },
-                  new { EssayId = id, CurrentUserId= currentUserId },
+                  new { EssayId = id, CurrentUserId = currentUserId },
                   splitOn: "Id");
 
 
@@ -291,12 +257,12 @@ namespace Kard.Dapper.Mysql.Repositories
         }
 
 
-        public bool AddEssay(EssayEntity essayEntity,  IEnumerable<TagEntity> tagList)
+        public bool AddEssay(EssayEntity essayEntity, IEnumerable<TagEntity> tagList)
         {
 
             return base.TransExecute((conn, trans) =>
             {
-                
+
                 var insertAndGetIdResultDto = conn.CreateAndGetId<EssayEntity, long>(essayEntity, trans);
                 if (!insertAndGetIdResultDto.Result)
                 {
@@ -365,7 +331,7 @@ namespace Kard.Dapper.Mysql.Repositories
             return result > 0;
         }
 
-        public ResultDto ChangeEssayLike(long userId,long essayId)
+        public ResultDto ChangeEssayLike(long userId, long essayId)
         {
             var resultDto = new ResultDto();
 
@@ -375,19 +341,20 @@ namespace Kard.Dapper.Mysql.Repositories
             pars.Add("@iessayId", essayId);
             pars.Add("@icreationTime", DateTime.Now);
             pars.Add("@olikeNum", 0, DbType.Int32, ParameterDirection.Output);
-            pars.Add("@oisLike", null,DbType.Byte, ParameterDirection.Output);
-        
+            pars.Add("@oisLike", null, DbType.Byte, ParameterDirection.Output);
+
 
             try
             {
-                var ee=ConnExecute(conn => conn.Execute("changeEssayLike", pars, commandType: CommandType.StoredProcedure));//res2.Count = 80
+                var ee = ConnExecute(conn => conn.Execute("changeEssayLike", pars, commandType: CommandType.StoredProcedure));//res2.Count = 80
                 var likeNum = pars.Get<int>("@olikeNum");
-                var isLike = pars.Get<byte>("@oisLike")==1;
-               
+                var isLike = pars.Get<byte>("@oisLike") == 1;
+
                 resultDto.Result = true;
-                resultDto.Data =new { LikeNum = likeNum, IsLike = isLike };
+                resultDto.Data = new { LikeNum = likeNum, IsLike = isLike };
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 resultDto.Result = false;
                 resultDto.Message = ex.Message;
             }
@@ -403,7 +370,7 @@ namespace Kard.Dapper.Mysql.Repositories
                 where essay_like.EssayId=@EssayId 
                order by essay_like.CreationTime desc";
 
-            return ConnExecute(conn => conn.Query<EssayLikeEntity, KuserEntity, EssayLikeEntity>(sql, (essayLike, kuser) => {essayLike.Kuser = kuser.ToSecurity();return essayLike;},
+            return ConnExecute(conn => conn.Query<EssayLikeEntity, KuserEntity, EssayLikeEntity>(sql, (essayLike, kuser) => { essayLike.Kuser = kuser.ToSecurity(); return essayLike; },
                                                                                                                                                                           new { EssayId = id },
                                                                                                                                                                           splitOn: "Id"));
         }
@@ -416,7 +383,7 @@ namespace Kard.Dapper.Mysql.Repositories
              join (select essay.*,tag.TagName  from essay join tag on  essay.Id<>@EssayId and essay.IsDeleted=0 and essay.Id=tag.EssayId )  b on a.Category=b.Category and a.TagName=b.TagName 
             order by b.LikeNum desc,b.CreationTime desc limit 10";
 
-            return ConnExecute(conn => conn.QueryList<EssayEntity>(sql,new { EssayId = id }));
+            return ConnExecute(conn => conn.QueryList<EssayEntity>(sql, new { EssayId = id }));
         }
 
 
@@ -455,7 +422,8 @@ namespace Kard.Dapper.Mysql.Repositories
                                                                                                                                                                           splitOn: "Id"));
         }
 
-        public ResultDto AddTask(LongTaskEntity entity) {
+        public ResultDto AddTask(LongTaskEntity entity)
+        {
             var taskDate = entity.StartDate;
             var taskWeekDay = (int)taskDate.DayOfWeek;
             var taskWeekList = entity.Week.Split(',').Select(w => Convert.ToInt32(w));

@@ -50,10 +50,10 @@
             }
             //data.media.hasOwnProperty("path")&&
 
-            switch (data.essayCover.mediaType) {
+            switch (data.essay.coverMediaType) {
                 case "picture":
                     //_2560x1200
-                    var backgroundImage = "linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),url(" + basejs.cdnDomain + "/" + data.essayCover.cdnPath + "." + data.essayCover.mediaExtension + ")";
+                    var backgroundImage = "linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),url(" + basejs.cdnDomain + "/" + data.essay.coverPath + "." + data.essay.coverExtension + ")";
                     $(".navbar", _this.data.scope).addClass("bg-default");
                     $(".bg-default", _this.data.scope).css("background-image", backgroundImage);
                     break;
@@ -62,9 +62,9 @@
                     //$(".bg-default", _this.data.scope).removeClass("bg-default");
 
                     var bgVedioHtml = homejs.template.bgVideo.format({
-                        videoCoverPath: basejs.cdnDomain + "/" + data.essayCover.cdnPath + ".jpg",
-                        videoPath: basejs.cdnDomain + "/" + data.essayCover.cdnPath + "." + data.essayCover.mediaExtension,
-                        videoExtension: data.essayCover.mediaExtension
+                        videoCoverPath: basejs.cdnDomain + "/" + data.essay.coverPath + ".jpg",
+                        videoPath: basejs.cdnDomain + "/" + data.essay.coverPath + "." + data.essay.coverExtension,
+                        videoExtension: data.essay.coverExtension
                     });
 
                     $(".splash-bg", _this.data.scope).html(bgVedioHtml);
@@ -78,15 +78,15 @@
 
 
 
-            $("blackquote.splash-txt>q", _this.data.scope).text(data.essayCover.essay.content || data.essayCover.essay.title);
+            $("blackquote.splash-txt>q", _this.data.scope).text(data.essay.content || data.essay.title);
             //图片懒加载
             basejs.lazyInof('blackquote.splash-author>img.lazy');
-            var avatarArr = data.essayCover.kuser.avatarUrl.split('.');
+            var avatarArr = data.essay.kuser.avatarUrl.split('.');
             var avatarCropPath = basejs.cdnDomain + "/" + avatarArr[0] + "_30x30." + avatarArr[1];
             $("blackquote.splash-author>img", _this.data.scope).attr("data-original", avatarCropPath);
-            $("blackquote.splash-author>a", _this.data.scope).text(data.essayCover.kuser.nickName || "");
-            $("blackquote.splash-author>span:first", _this.data.scope).text((data.essayCover.essay.location || ""));
-            $("blackquote.splash-author>span:last", _this.data.scope).text(basejs.getDateDiff(basejs.getDateTimeStamp(data.essayCover.essay.creationTime)));
+            $("blackquote.splash-author>a", _this.data.scope).text(data.essay.kuser.nickName || "");
+            $("blackquote.splash-author>span:first", _this.data.scope).text((data.essay.location || ""));
+            $("blackquote.splash-author>span:last", _this.data.scope).text(basejs.getDateDiff(basejs.getDateTimeStamp(data.essay.creationTime)));
 
             topCover.scroll({ page: "home" });
         });
@@ -121,7 +121,7 @@
             var httpPars = {
                 url: basejs.requestDomain + "/home/essays",
                 type: "GET",
-                data: { category: "优选",pageIndex:1, pageSize: 15 },
+                data: { category: "精选",pageIndex:1, pageSize: 15 },
                 success: function (resultDto) {
                     //设置essays加载更多
                     if (!resultDto.result) {
@@ -196,9 +196,9 @@
                     var essayDetailPage = "/essay-detail.html?id=" + topMediaDto.id;
                     var defaultPicturePath = "/image/default-picture_260x195.jpg";
                     var pictureCropPath = "";
-                    switch (topMediaDto.mediaType) {
-                        case "picture": pictureCropPath = basejs.cdnDomain + "/" + topMediaDto.cdnPath + "_260x195." + topMediaDto.mediaExtension; break;
-                        case "video": pictureCropPath = basejs.cdnDomain + "/" + topMediaDto.cdnPath + "_260x195.jpg"; break;
+                    switch (topMediaDto.coverMediaType) {
+                        case "picture": pictureCropPath = basejs.cdnDomain + "/" + topMediaDto.coverPath + "_260x195." + topMediaDto.coverExtension; break;
+                        case "video": pictureCropPath = basejs.cdnDomain + "/" + topMediaDto.coverPath + "_260x195.jpg"; break;
                     }
 
 

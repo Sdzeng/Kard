@@ -20,10 +20,9 @@ namespace Kard.Core.Entities
 
         public string Title { get; set; }
 
-        public string MediaType { get; set; }
+        public string CoverMediaType { get; set; }
 
-        public string CoverFile { get; set; }
-
+        public string CoverPath { get; set; }
 
         public string CoverExtension { get; set; }
 

@@ -7,29 +7,25 @@
           "namech": "首页",
           "url": "/"
         },
+        
         {
           "id": "2",
-          "name": "BS",
-          "namech": "发现",
-          "url": "discover.html"
-        },
-        {
-          "id": "3",
-          "name": "BS",
-          "namech": "活动",
-          "url": "activity.html"
-        },
-        {
-          "id": "4",
           "name": "BS",
           "namech": "下载",
           "url": "download.html"
         },
         {
-          "id": "5",
+          "id": "3",
           "name": "CS",
           "namech": "关于我们",
           "url": "about.html"
+
+        },
+        {
+          "id": "4",
+          "name": "CS",
+          "namech": "搜索",
+          "url": "search.html"
 
         }
       ]

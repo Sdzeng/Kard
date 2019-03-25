@@ -36,15 +36,18 @@ namespace Kard.Web.Controllers
         public ResultDto<CoverEntity> GetCover()
         {
             var today = DateTime.Now.Date;
-            string cacheKey = $"homeCover[{today.ToString("yyyyMMdd")}]";
-            CoverEntity coverEntity = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
-            {
-               
-                cacheEntry.SetAbsoluteExpiration(today.AddDays(1));
-                return _defaultRepository.GetDateCover(today);
-            });
-          
-            return new ResultDto<CoverEntity>() { Result = true, Data = coverEntity };
+            //string cacheKey = $"homeCover[{today.ToString("yyyyMMdd")}]";
+            //CoverEntity coverEntity = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
+            //{
+
+            //    cacheEntry.SetAbsoluteExpiration(today.AddDays(1));
+            //    return _defaultRepository.GetDateCover(today);
+            //});
+
+            //return new ResultDto<CoverEntity>() { Result = true, Data = coverEntity };
+
+            return new ResultDto<CoverEntity>() { Result = true, Data = _defaultRepository.GetDateCover(today) };
+
         }
 
 

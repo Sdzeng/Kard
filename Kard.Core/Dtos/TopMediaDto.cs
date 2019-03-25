@@ -38,13 +38,13 @@ namespace Kard.Core.Dtos
 
         public string CreatorNickName { get; set; }
 
-        public int MediaCount { get; set; }
+       
 
-        public string CdnPath { get; set; }
+        public string CoverPath { get; set; }
 
-        public string MediaType { get; set; }
+        public string CoverMediaType { get; set; }
 
-        public string MediaExtension { get; set; }
+        public string CoverExtension { get; set; }
 
 
 

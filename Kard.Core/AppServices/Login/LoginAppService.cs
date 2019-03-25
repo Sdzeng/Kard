@@ -92,6 +92,17 @@ namespace Kard.Core.AppServices.Default
                 result.Result = true;
                 result.Data = AddSessionData(user);
             }
+            else if (loginResult == PasswordVerificationResult.SuccessRehashNeeded)
+            {
+                var passwordHash = _passwordHasher.HashPassword(user, password);
+                user.Password = passwordHash;
+                var updateUserResult = _defaultRepository.Update(user);
+                result.Result = updateUserResult.Result;
+                if (result.Result)
+                {
+                    result.Data = AddSessionData(user);
+                }
+            }
             else
             {
                 result.Result = false;
