@@ -1,4 +1,4 @@
-## Share the international cutting-edge technology core.
+## Share the international cutting-edge technology.
 
 
 
