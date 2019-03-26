@@ -63,7 +63,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kard.Core\Kard.Core.csproj" />
-    <ProjectReference Include="..\Kard.Dapper.Mysql\Kard.Dapper.Mysql.csproj" />
     <ProjectReference Include="..\Kard\Kard.csproj" />
   </ItemGroup>
 

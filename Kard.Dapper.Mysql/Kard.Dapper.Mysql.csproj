@@ -13,11 +13,11 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.5" />
+    <PackageReference Include="DapperExtensions.NetCore" Version="2.0.6" />
     <PackageReference Include="MySql.Data" Version="8.0.12" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DapperExtensionsCore\DapperExtensionsCore.csproj" />
     <ProjectReference Include="..\Kard.Core\Kard.Core.csproj" />
     <ProjectReference Include="..\Kard\Kard.csproj" />
   </ItemGroup>

@@ -1,8 +1,5 @@
-﻿using DapperExtensionsCore.Mapper;
-using Kard.Domain.Entities.Auditing;
+﻿using Kard.Domain.Entities.Auditing;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Kard.Core.Entities
 {
@@ -22,15 +19,5 @@ namespace Kard.Core.Entities
 
     }
 
-    public class LongTaskMapper : ClassMapper<LongTaskEntity>
-    {
 
-        public LongTaskMapper()
-        {
-            Table("long_task");
-            Map(e => e.IsLongTerm).Ignore();
-            Map(e => e.TaskDate).Ignore();
-            AutoMap();
-        }
-    }
 }

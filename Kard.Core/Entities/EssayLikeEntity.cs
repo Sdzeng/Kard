@@ -1,8 +1,4 @@
-﻿using DapperExtensionsCore.Mapper;
-using Kard.Domain.Entities.Auditing;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Kard.Domain.Entities.Auditing;
 
 namespace Kard.Core.Entities
 {
@@ -15,14 +11,5 @@ namespace Kard.Core.Entities
         public KuserEntity Kuser;
     }
 
-    //public class EssayLikeMapper : ClassMapper<EssayLikeEntity>
-    //{
-
-    //    public EssayLikeMapper()
-    //    {
-    //        Table("essay_like");
-    //        Map(e => e.Kuser).Ignore();
-    //        AutoMap();
-    //    }
-    //}
+ 
 }

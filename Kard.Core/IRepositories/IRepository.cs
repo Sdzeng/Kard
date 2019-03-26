@@ -1,11 +1,7 @@
-﻿using DapperExtensionsCore;
-using Kard.Core.Dtos;
-using Kard.DI;
+﻿using Kard.DI;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Threading.Tasks;
 
 namespace Kard.Core.IRepositories
 {

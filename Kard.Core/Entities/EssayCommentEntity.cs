@@ -1,8 +1,4 @@
-﻿using DapperExtensionsCore.Mapper;
-using Kard.Domain.Entities.Auditing;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Kard.Domain.Entities.Auditing;
 
 namespace Kard.Core.Entities
 {
@@ -23,15 +19,5 @@ namespace Kard.Core.Entities
         //public IEnumerable<EssayCommentEntity> EssayCommentEntityList { get; set; }
     }
 
-    public class EssayCommentMapper : ClassMapper<EssayCommentEntity>
-    {
 
-        public EssayCommentMapper()
-        {
-            Table("essay_comment");
-            //Map(e => e.Kuser).Ignore();
-            //Map(e => e.EssayCommentEntityList).Ignore();
-            AutoMap();
-        }
-    }
 }

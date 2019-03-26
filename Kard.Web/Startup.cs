@@ -236,7 +236,7 @@ namespace Kard.Web
             #endregion
 
             #region IOC
-            services.AddModule();
+            services.AddModuleStartsWith("Kard");
 
             services.TryAddScoped<IPasswordHasher<KuserEntity>, PasswordHasher<KuserEntity>>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

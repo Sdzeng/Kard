@@ -1,6 +1,6 @@
-﻿using DapperExtensionsCore.Mapper;
+﻿using DapperExtensions.Mapper;
 
-namespace Kard.Core.Mappers
+namespace Kard.Dapper.Mysql.Mapper
 {
     public class CustomPluralizedAutoClassMapper<T> : AutoClassMapper<T> where T : class
     {

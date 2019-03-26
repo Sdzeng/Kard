@@ -1,11 +1,10 @@
-﻿using DapperExtensionsCore;
+﻿using DapperExtensions;
 using Kard.Core.Dtos;
 using Kard.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using static Dapper.SqlMapper;
 
 namespace Kard.Dapper.Mysql

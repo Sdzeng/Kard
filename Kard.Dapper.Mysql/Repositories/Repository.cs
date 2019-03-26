@@ -1,10 +1,10 @@
 ﻿using Dapper;
-using DapperExtensionsCore;
-using DE=DapperExtensionsCore;
-using DapperExtensionsCore.Sql;
+using DapperExtensions;
+using DE= DapperExtensions;
+using DapperExtensions.Sql;
 using Kard.Core.Dtos;
 using Kard.Core.IRepositories;
-using Kard.Core.Mappers;
+using Kard.Dapper.Mysql.Mapper;
 using Kard.Domain.Entities.Auditing;
 using Kard.Extensions;
 using Kard.Runtime.Session;

@@ -46,7 +46,7 @@ namespace Kard.Extensions
 
 
 #if DEBUG
-            string rootPtah = Path.Combine(Environment.CurrentDirectory, "bin/Debug/netcoreapp2.0");
+            string rootPtah = Path.Combine(Environment.CurrentDirectory, "bin/Debug/netcoreapp2.1");
 #else
 
             string rootPtah = Environment.CurrentDirectory;
