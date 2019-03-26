@@ -20,6 +20,7 @@ builds
 node_modules
 /Kard.Web/wwwroot/user
 /Kard.Web/logs
+/Kard.DB
 /Kard.Module
 /Kard.Client/zjx_vr-wx-develop-example-master
 /Kard.Client/weapp-calendar

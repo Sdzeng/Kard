@@ -114,7 +114,7 @@ namespace Kard.Web.Controllers
 
 
             entity.AuditCreation(_kardSession.UserId.Value);
-            result = _defaultRepository.AddTask(entity);
+            result = _defaultRepository.LongTask.AddTask(entity);
 
             return result;
         }
@@ -128,7 +128,7 @@ namespace Kard.Web.Controllers
         {
             var result = new ResultDto<IEnumerable<TaskEntity>>();
             result.Result =true;
-            result.Data = _defaultRepository.QueryList<TaskEntity>("select * from task where CreatorUserId=@CreatorUserId and TaskDate=@TaskDate and IsDeleted=0 order by IsDone,StartTime", new { CreatorUserId = _kardSession.UserId,TaskDate = DateTime.Now.Date });
+            result.Data = _defaultRepository.Query<TaskEntity>("select * from task where CreatorUserId=@CreatorUserId and TaskDate=@TaskDate and IsDeleted=0 order by IsDone,StartTime", new { CreatorUserId = _kardSession.UserId,TaskDate = DateTime.Now.Date });
             return result;
         }
     }

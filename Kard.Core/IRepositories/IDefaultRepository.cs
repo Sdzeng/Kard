@@ -2,46 +2,83 @@
 using Kard.Core.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Kard.Core.IRepositories
 {
     public interface IDefaultRepository: IRepository
     {
-        CoverDto GetDateCover(DateTime showDate);
+        #region CRUD
+
+        #region Create
+        ResultDto<TKey> CreateAndGetId<T, TKey>(T entity, int? commandTimeout = null) where T : class;
+
+        Task<ResultDto<TKey>> CreateAndGetIdAsync<T, TKey>(T entity, int? commandTimeout = null) where T : class;
+
+        //ResultDto<TKey> CreateAndGetId<T, TKey>(T entity, int? commandTimeout = null) where T : class, ICreationAuditedEntity;
+
+        ResultDto CreateList<T>(IEnumerable<T> entities, int? commandTimeout = null) where T : class;
+        #endregion
+
+        #region Retrieve
+        IEnumerable<dynamic> Query(string sql, object parameters = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?));
+
+        IEnumerable<object> Query(Type type, string sql, object parameters = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?));
+
+        IEnumerable<T> Query<T>(string sql, object parameters = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?));
+
+
+        T FirstOrDefault<T>(object id, int? commandTimeout = null) where T : class;
+
+        Task<T> FirstOrDefaultAsync<T>(object id, int? commandTimeout = null) where T : class;
+
+        //T UniquenessOrDefault<T>(string sql, IDictionary<string, object> parameters = null, bool serializeParameters = false, IDbConnection connection = null, int? commandTimeout = null);
+
+        T FirstOrDefaultByPredicate<T>(object predicate, int? commandTimeout = null) where T : class;
+
+        int Count(string sql, object parameters = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?));
+
+        int Count<T>(object predicate, int? commandTimeout = default(int?)) where T : class;
+
+        //int Count(string tableName, IDictionary<string, object> parameters = null, bool serializeParameters = false, int? commandTimeout = null);
+
+
+
+        #endregion
+
+        #region Update
+        ResultDto Update<T>(T entity, int? commandTimeout = null) where T : class;
+
+        Task<ResultDto> UpdateAsync<T>(T entity, int? commandTimeout = null) where T : class;
+        #endregion
+
+        #region Delete
+        ResultDto Delete<T>(T entity, int? commandTimeout = null) where T : class;
+
+        Task<ResultDto> DeleteAsync<T>(T entity, int? commandTimeout = null) where T : class;
+
+        ResultDto DeleteList<T>(object predicate, int? commandTimeout = null) where T : class;
+
+        #endregion
 
  
-        IEnumerable<TopMediaDto> GetHomeMediaPictureList(string type,int pageIndex,int pageSize);
+        #endregion
 
-        IEnumerable<TopMediaDto> GetUserMediaPictureList(long userId, int count);
+        ICoverRepository Cover { get; }
 
-        IEnumerable<KuserEntity> GetExistUser(string name, string phone, string nickName);
+        IEssayCommentRepository EssayComment { get; }
 
-        //bool CreateAccountUser(KuserEntity user);
+        IEssayLikeRepository EssayLike { get; }
 
-        IEnumerable<EssayDto> GetEssayList(DateTime creationTime);
+        IEssayRepository Essay { get; }
 
-        EssayDto GetEssayDto(long id, long? currentUserId);
 
-        //EssayEntity GetEssay2(long id);
+        IKuserRepository Kuser { get; }
 
-        bool AddEssay(EssayEntity essayEntity,IEnumerable<TagEntity> tagList);
+        ILongTaskRepository LongTask { get; }
 
-        bool UpdateBrowseNum(long id);
-
-        ResultDto ChangeEssayLike(long userId, long essayId);
-
-        IEnumerable<EssayLikeEntity> GetEssayLikeList(long id);
-
-        IEnumerable<EssayEntity> GetEssaySimilarList(long id);
-
-        IEnumerable<EssayEntity> GetEssayOtherList(long id);
-
-        //IEnumerable<EssayCommentDto> GetRootEssayCommentList(long id);
-
-        IEnumerable<EssayCommentDto> GetEssayCommentList(long id);
-
-        ResultDto AddTask(LongTaskEntity entity);
     }
 }
 

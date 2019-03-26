@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Compile Remove="CoreModule.cs" />
+    <Compile Remove="IRepositories\ITestRepository.cs" />
   </ItemGroup>
 
   <ItemGroup>

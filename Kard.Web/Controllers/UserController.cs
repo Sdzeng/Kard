@@ -83,7 +83,7 @@ namespace Kard.Web.Controllers
             {
                 cacheEntry.SetAbsoluteExpiration(DateTime.Now.Date.AddDays(60));
 
-                return _defaultRepository.FirstOrDefault<KuserEntity, long>(_kardSession.UserId.Value);
+                return _defaultRepository.FirstOrDefault<KuserEntity>(_kardSession.UserId.Value);
             });
             return kuserEntity;
         }
@@ -142,7 +142,7 @@ namespace Kard.Web.Controllers
             }
 
             fileExtension = $"{fileExtension}?v={ DateTime.Now.ToString("ddHHmmssffff")}";
-            var kuser = _defaultRepository.FirstOrDefault<KuserEntity, long>(_kardSession.UserId.Value);
+            var kuser = _defaultRepository.FirstOrDefault<KuserEntity>(_kardSession.UserId.Value);
             kuser.AvatarUrl = Path.Combine(newFolder, fileName+fileExtension);
             kuser.AuditLastModification(_kardSession.UserId.Value);
             result = _defaultRepository.Update(kuser);
@@ -164,7 +164,7 @@ namespace Kard.Web.Controllers
         [HttpGet("pictures")]
         public ResultDto<IEnumerable<TopMediaDto>> GetPicture()
         {
-            return new ResultDto<IEnumerable<TopMediaDto>>() { Result = true, Data = _defaultRepository.GetUserMediaPictureList(_kardSession.UserId.Value, 4) };
+            return new ResultDto<IEnumerable<TopMediaDto>>() { Result = true, Data = _defaultRepository.Essay.GetUserMediaPictureList(_kardSession.UserId.Value, 4) };
         }
 
 

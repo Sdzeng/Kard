@@ -41,12 +41,12 @@ namespace Kard.Web.Controllers
             //{
 
             //    cacheEntry.SetAbsoluteExpiration(today.AddDays(1));
-            //    return _defaultRepository.GetDateCover(today);
+            //    return _defaultRepository.Cover.GetDateCover(today);
             //});
 
             //return new ResultDto<CoverEntity>() { Result = true, Data = coverEntity };
 
-            return new ResultDto<CoverDto>() { Result = true, Data = _defaultRepository.GetDateCover(today) };
+            return new ResultDto<CoverDto>() { Result = true, Data = _defaultRepository.Cover.GetDateCover(today) };
 
         }
 
@@ -58,7 +58,7 @@ namespace Kard.Web.Controllers
         [HttpGet("essays")]
         public ResultDto GetEssays(string category,int pageIndex=1,int pageSize=20)
         {
-            var essayList = _defaultRepository.GetHomeMediaPictureList(category, pageIndex, pageSize+1);
+            var essayList = _defaultRepository.Essay.GetHomeMediaPictureList(category, pageIndex, pageSize+1);
             var hasNextPage = essayList.Count() > pageSize;
             var resultDto = new ResultDto();
             resultDto.Result = true;

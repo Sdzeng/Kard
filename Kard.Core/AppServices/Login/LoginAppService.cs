@@ -8,6 +8,7 @@ using Kard.Runtime.Security.Authentication.WeChat;
 using Kard.Runtime.Session;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,22 +27,9 @@ namespace Kard.Core.AppServices.Default
         //private readonly IPasswordValidator<KuserEntity> _passwordValidator;
         private readonly IDefaultRepository _defaultRepository;
 
-        //public LoginAppService(
-        //    UserManager<KuserEntity> userManager,
-        //    IKardSession kardSession,
-        //    IPasswordHasher<KuserEntity> passwordHasher, 
-        //    IPasswordValidator<KuserEntity> passwordValidator, 
-        //    IDefaultRepository defaultRepository)
-        //{
-        //    _userManager = userManager;
-        //    _kardSession = kardSession;
-        //    _passwordHasher = passwordHasher;
-        //    _passwordValidator = passwordValidator;
-        //    _defaultRepository = defaultRepository;
-        //}
-
+ 
         public LoginAppService(
-             
+             IServiceProvider serviceProvider,
             IKardSession kardSession,
             IPasswordHasher<KuserEntity> passwordHasher,
             IDefaultRepository defaultRepository)
@@ -51,6 +39,19 @@ namespace Kard.Core.AppServices.Default
             _passwordHasher = passwordHasher;
 
             _defaultRepository = defaultRepository;
+
+
+            //测试
+            //scope.Dispose()-->childProvider.Dispose()删除对Service实例的引用
+            using (var scope = serviceProvider.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var childProvider = scope.ServiceProvider;
+
+                var r1 = serviceProvider.GetService<IKuserRepository>();
+                var r2 = childProvider.GetService<IKuserRepository>();
+                bool result = (r1.GetHashCode().Equals(r2.GetHashCode()));
+                string ee = result.ToString();
+            }
         }
 
 
@@ -73,7 +74,7 @@ namespace Kard.Core.AppServices.Default
         public ResultDto<ClaimsIdentity> AccountLogin(string name, string password)
         {
             var result = new ResultDto<ClaimsIdentity>();
-            var userList = _defaultRepository.QueryList<KuserEntity>("select * from kuser where `Name`=@Name", new { Name = name });
+            var userList = _defaultRepository.Query<KuserEntity>("select * from kuser where `Name`=@Name", new { Name = name });
             if (userList?.Count() != 1)
             {
                 result.Result = false;
@@ -135,7 +136,7 @@ namespace Kard.Core.AppServices.Default
 
 
 
-            var user = _defaultRepository.FirstOrDefault<KuserEntity>(new { WxOpenId = wxAuthDto.openid });
+            var user = _defaultRepository.FirstOrDefaultByPredicate<KuserEntity>(new { WxOpenId = wxAuthDto.openid });
             if (user != null)
             {
                 user.WxSessionKey = wxAuthDto.session_key;
@@ -189,7 +190,7 @@ namespace Kard.Core.AppServices.Default
         private ResultDto AccountRegister(KuserEntity user)
         {
             var resultDto = new ResultDto();
-            var existUserList = _defaultRepository.GetExistUser(user.Name, user.Phone, user.NickName);
+            var existUserList = _defaultRepository.Kuser.GetExistUser(user.Name, user.Phone, user.NickName);
             var existName = existUserList.Where(u => u.Name == user.Name).Any();
             var existPhone = existUserList.Where(u => u.Phone == user.Phone).Any();
             var existNickName = existUserList.Where(u => u.NickName == user.NickName).Any();
@@ -226,7 +227,7 @@ namespace Kard.Core.AppServices.Default
         {
             var result = new ResultDto();
 
-            var userEntity = _defaultRepository.FirstOrDefault<KuserEntity>(new { WxOpenId = user.WxOpenId });
+            var userEntity = _defaultRepository.FirstOrDefaultByPredicate<KuserEntity>(new { WxOpenId = user.WxOpenId });
             if (userEntity == null)
             {
                 result.Result = false;

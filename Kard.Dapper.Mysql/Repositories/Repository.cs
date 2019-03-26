@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using DapperExtensionsCore;
+using DE=DapperExtensionsCore;
 using DapperExtensionsCore.Sql;
 using Kard.Core.Dtos;
 using Kard.Core.IRepositories;
@@ -17,6 +18,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+ 
 
 namespace Kard.Dapper.Mysql.Repositories
 {
@@ -25,9 +27,9 @@ namespace Kard.Dapper.Mysql.Repositories
     /// </summary>
     public abstract class Repository : IRepository
     {
-        private static IDapperExtensionsConfiguration _dapperConfig;
-        private static IDapperImplementor _dapperInstance;
-        private static IDapperAsyncImplementor _dapperAsyncInstance;
+        private static DE.IDapperExtensionsConfiguration _dapperConfig;
+        private static DE.IDapperImplementor _dapperInstance;
+        private static DE.IDapperAsyncImplementor _dapperAsyncInstance;
         private static string _connectionString;
         protected readonly ILogger _logger;
         protected readonly EventId _eventId = new EventId(1, "Repository");
@@ -45,13 +47,13 @@ namespace Kard.Dapper.Mysql.Repositories
             //    new List<Assembly>(),
             //    new MySqlDialect());
 
-            _dapperConfig = new DapperExtensionsConfiguration(typeof(CustomPluralizedAutoClassMapper<>), new List<Assembly>(), new MySqlDialect());
+            _dapperConfig = new DE.DapperExtensionsConfiguration(typeof(CustomPluralizedAutoClassMapper<>), new List<Assembly>(), new MySqlDialect());
             //使用connection
-            DapperExtensionsCore.DapperExtensions.Configure(_dapperConfig);
-            DapperExtensionsCore.DapperAsyncExtensions.Configure(_dapperConfig);
+            DE.DapperExtensions.Configure(_dapperConfig);
+            DE.DapperAsyncExtensions.Configure(_dapperConfig);
             //使用instance
-            _dapperInstance = DapperExtensionsCore.DapperExtensions.InstanceFactory.Invoke(_dapperConfig);
-            _dapperAsyncInstance = DapperExtensionsCore.DapperAsyncExtensions.InstanceFactory.Invoke(_dapperConfig);
+            _dapperInstance = DE.DapperExtensions.InstanceFactory.Invoke(_dapperConfig);
+            _dapperAsyncInstance = DE.DapperAsyncExtensions.InstanceFactory.Invoke(_dapperConfig);
         }
 
 
@@ -65,9 +67,8 @@ namespace Kard.Dapper.Mysql.Repositories
             _logger = logger;
         }
 
-        protected IConfiguration Configuration { get; }
 
-        protected string ConnectionString
+        public string ConnectionString
         {
             get
             {
@@ -81,21 +82,32 @@ namespace Kard.Dapper.Mysql.Repositories
         }
 
 
+        public IConfiguration Configuration { get; }
+
+
+
+
 
         //protected IKardSession KardSession { get; set; }
 
 
-        protected IDatabase GetDb()
+        internal DE.IDatabase Database
         {
-            var connection = GetConnection();
-            var sqlGenerator = new SqlGeneratorImpl(_dapperConfig);
-            IDatabase _db = new Database(connection, sqlGenerator);
-            return _db;
+            get
+            {
+                var connection = DbConnection;
+                var sqlGenerator = new SqlGeneratorImpl(_dapperConfig);
+                DE.IDatabase _db = new DE.Database(connection, sqlGenerator);
+                return _db;
+            }
         }
 
-        protected IDbConnection GetConnection()
+        public IDbConnection DbConnection
         {
-            return new MySqlConnection(ConnectionString);
+            get
+            {
+                return new MySqlConnection(ConnectionString);
+            }
         }
 
 
@@ -149,12 +161,12 @@ namespace Kard.Dapper.Mysql.Repositories
 
         #region Execute
 
-        protected TResult ConnExecute<TResult>(Func<IDbConnection, TResult> predicate)
+        public TResult ConnExecute<TResult>(Func<IDbConnection, TResult> predicate)
         {
             var result = default(TResult);
             try
             {
-                using (IDbConnection connection = GetConnection())
+                using (IDbConnection connection = DbConnection)
                 {
                     connection.Open();
                     result = predicate.Invoke(connection);
@@ -173,12 +185,12 @@ namespace Kard.Dapper.Mysql.Repositories
 
 
 
-        protected TResult TransExecute<TResult>(Func<IDbConnection, IDbTransaction, TResult> predicate, IsolationLevel? isolationLevel = null)
+        public TResult TransExecute<TResult>(Func<IDbConnection, IDbTransaction, TResult> predicate, IsolationLevel? isolationLevel = null)
         {
             TResult result;
             try
             {
-                using (IDbConnection connection = GetConnection())
+                using (IDbConnection connection = DbConnection)
                 {
                     connection.Open();
                     using (IDbTransaction transaction = (isolationLevel.HasValue ? connection.BeginTransaction(isolationLevel.Value) : connection.BeginTransaction()))
@@ -226,9 +238,9 @@ namespace Kard.Dapper.Mysql.Repositories
             return result;
         }
 
-        protected TResult DbExecute<TResult>(Func<IDatabase, TResult> predicate)
+        protected TResult DbExecute<TResult>(Func<DE.IDatabase, TResult> predicate)
         {
-            using (IDatabase db = GetDb())
+            using (DE.IDatabase db = Database)
             {
                 var result = predicate.Invoke(db);
                 return result;
@@ -251,7 +263,7 @@ namespace Kard.Dapper.Mysql.Repositories
             //    entity = creationAuditedEntity as T;
             //}
 
-            return ConnExecute(conn => conn.CreateAndGetId<T, TKey>(entity,null, commandTimeout));
+            return ConnExecute(conn => conn.CreateAndGetId<T, TKey>(entity, null, commandTimeout));
         }
 
 
@@ -261,9 +273,9 @@ namespace Kard.Dapper.Mysql.Repositories
             return Task.FromResult(CreateAndGetId<T, TKey>(entity, commandTimeout));
         }
 
-        public ResultDto CreateList<T>(IEnumerable<T> entities,  int? commandTimeout = null) where T : class
+        public ResultDto CreateList<T>(IEnumerable<T> entities, int? commandTimeout = null) where T : class
         {
-           
+
             //if (entities == null || (!entities.Any()))
             //{
             //    result.Result = false;
@@ -283,60 +295,60 @@ namespace Kard.Dapper.Mysql.Repositories
             //}
 
             return ConnExecute(conn => conn.CreateList(entities, null, commandTimeout));
-   
+
         }
         #endregion
 
         #region Retrieve
-        public IEnumerable<dynamic> QueryList(string sql, object parameters = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?))
+        public IEnumerable<dynamic> Query(string sql, object parameters = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?))
         {
-            return ConnExecute(conn => conn.QueryList(sql, parameters, null, commandTimeout, commandType));
+            return ConnExecute(conn => conn.Query(sql, parameters, null, true, commandTimeout, commandType));
         }
 
-        public IEnumerable<object> QueryList(Type type, string sql, object parameters = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?))
+        public IEnumerable<object> Query(Type type, string sql, object parameters = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?))
         {
- 
-            return ConnExecute(conn => conn.QueryList(type, sql, parameters, null, commandTimeout, commandType));
+
+            return ConnExecute(conn => conn.Query(type, sql, parameters, null, true, commandTimeout, commandType));
         }
 
         //parameters  IDictionary<string, object>,new {}
-        public IEnumerable<T> QueryList<T>(string sql, object parameters = null,int? commandTimeout = null, CommandType? commandType = default(CommandType?))
+        public IEnumerable<T> Query<T>(string sql, object parameters = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?))
         {
 
-            return ConnExecute(conn => conn.QueryList<T>(sql, parameters, null, commandTimeout, commandType));
+            return ConnExecute(conn => conn.Query<T>(sql, parameters, null, true, commandTimeout, commandType));
         }
 
-        public IEnumerable<T> QueryList<T>(object predicate = null, IList<ISort> sort = null,  int? commandTimeout = null) where T : class
+        public IEnumerable<T> Query<T>(object predicate = null, IList<DE.ISort> sort = null, int? commandTimeout = null) where T : class
         {
-            return ConnExecute(conn => conn.QueryList<T>(predicate, sort, null, commandTimeout));
+            return ConnExecute(conn => conn.GetList<T>(predicate, sort, null, commandTimeout,true ));
         }
 
-        public Task<IEnumerable<T>> QueryListAsync<T>(object predicate = null, IList<ISort> sort = null,  int? commandTimeout = null) where T : class
+        public Task<IEnumerable<T>> QueryAsync<T>(object predicate = null, IList<DE.ISort> sort = null, int? commandTimeout = null) where T : class
         {
-            return Task.FromResult(QueryList<T>(predicate, sort, commandTimeout));
+            return Task.FromResult(Query<T>(predicate, sort, commandTimeout));
         }
 
-        public T FirstOrDefault<T, TKey>(TKey id, int? commandTimeout = null) where T : class
+        public T FirstOrDefault<T>(object id, int? commandTimeout = null) where T : class
         {
-            return ConnExecute(conn => conn.FirstOrDefault<T, TKey>(id, null, commandTimeout));
+            return ConnExecute(conn => conn.Get<T>(id, null, commandTimeout));
         }
 
-        public Task<T> FirstOrDefaultAsync<T, TKey>(TKey id, int? commandTimeout = null) where T : class
+        public Task<T> FirstOrDefaultAsync<T>(dynamic id, int? commandTimeout = null) where T : class
         {
-            return Task.FromResult(FirstOrDefault<T, TKey>(id, commandTimeout));
+            return Task.FromResult(FirstOrDefault<T>(id, commandTimeout));
         }
 
 
 
-        public T FirstOrDefault<T>(object predicate,  int? commandTimeout = null) where T : class
+        public T FirstOrDefaultByPredicate<T>(object predicate, int? commandTimeout = null) where T : class
         {
-            return   ConnExecute(conn => conn.FirstOrDefault<T>(predicate, null, commandTimeout));
+            return ConnExecute(conn => conn.FirstOrDefaultByPredicate<T>(predicate, null, commandTimeout));
         }
 
 
         public int Count(string sql, object parameters = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?))
         {
-            return ConnExecute(conn => conn.Count(sql, parameters, null, commandTimeout, commandType));
+            return ConnExecute(conn => conn.ExecuteScalar<int>(sql, parameters, null, commandTimeout, commandType));
         }
 
         public int Count<T>(object predicate, int? commandTimeout = default(int?)) where T : class
@@ -397,10 +409,10 @@ namespace Kard.Dapper.Mysql.Repositories
             //    lastModificationAuditedEntity.LastModificationTime = DateTime.Now;
             //    entity = lastModificationAuditedEntity as T;
             //}
-         
 
 
-            resultDto.Result= ConnExecute(conn => conn.Update(entity, null, commandTimeout));
+
+            resultDto.Result = ConnExecute(conn => conn.Update(entity, null, commandTimeout));
             return resultDto;
         }
 
@@ -409,9 +421,9 @@ namespace Kard.Dapper.Mysql.Repositories
             return Task.FromResult(Update(entity, commandTimeout));
         }
 
-        public ResultDto UpdateList<T>(IEnumerable<T> entityList,int? commandTimeout = null) where T : class
+        public ResultDto UpdateList<T>(IEnumerable<T> entityList, int? commandTimeout = null) where T : class
         {
-             return TransExecute((conn, trans) => conn.UpdateList(entityList, trans, commandTimeout));
+            return TransExecute((conn, trans) => conn.UpdateList(entityList, trans, commandTimeout));
         }
         #endregion
 
@@ -440,7 +452,7 @@ namespace Kard.Dapper.Mysql.Repositories
             return resultDto;
         }
 
-        public Task<ResultDto> DeleteAsync<T>(T entity,  int? commandTimeout = null) where T : class
+        public Task<ResultDto> DeleteAsync<T>(T entity, int? commandTimeout = null) where T : class
         {
             return Task.FromResult(Delete(entity, commandTimeout));
         }

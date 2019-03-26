@@ -57,7 +57,7 @@ namespace Kard.Web.Controllers
         public ResultDto GetInfo(long id)
         {
             //单品信息
-            var essayEntity = _defaultRepository.GetEssayDto(id, _kardSession.UserId);
+            var essayEntity = _defaultRepository.Essay.GetEssayDto(id, _kardSession.UserId);
             var resultDto = new ResultDto();
             resultDto.Result = essayEntity != null;
             resultDto.Data = essayEntity;
@@ -66,7 +66,7 @@ namespace Kard.Web.Controllers
             //增加阅读数
             Task.Run(() =>
             {
-                var result = _defaultRepository.UpdateBrowseNum(id);
+                var result = _defaultRepository.Essay.UpdateBrowseNum(id);
                 if (!result)
                 {
                     _logger.LogError($"统计：单品{id}增加阅读数失败");
@@ -204,7 +204,7 @@ namespace Kard.Web.Controllers
             essayEntity.AuditCreation(createUserId);
           
             tagList.AuditCreation(createUserId);
-            var result = _defaultRepository.AddEssay(essayEntity,tagList);
+            var result = _defaultRepository.Essay.AddEssay(essayEntity,tagList);
 
             if (result)
             {
@@ -224,7 +224,7 @@ namespace Kard.Web.Controllers
         {
             var resultDto = new ResultDto<IEnumerable<EssayEntity>>();
             resultDto.Result = true;
-            resultDto.Data = _defaultRepository.GetEssaySimilarList(essayId);
+            resultDto.Data = _defaultRepository.Essay.GetEssaySimilarList(essayId);
             return resultDto;
         }
 
@@ -239,7 +239,7 @@ namespace Kard.Web.Controllers
         {
             var resultDto = new ResultDto<IEnumerable<EssayEntity>>();
             resultDto.Result = true;
-            resultDto.Data = _defaultRepository.GetEssayOtherList(essayId);
+            resultDto.Data = _defaultRepository.Essay.GetEssayOtherList(essayId);
             return resultDto;
         }
 
@@ -255,7 +255,7 @@ namespace Kard.Web.Controllers
         [HttpPost("like")]
         public ResultDto Like(long essayId)
         {
-            return _defaultRepository.ChangeEssayLike(_kardSession.UserId.Value, essayId);
+            return _defaultRepository.EssayLike.ChangeEssayLike(_kardSession.UserId.Value, essayId);
         }
 
         /// <summary>
@@ -269,7 +269,7 @@ namespace Kard.Web.Controllers
         {
             var resultDto = new ResultDto<IEnumerable<EssayLikeEntity>>();
             resultDto.Result = true;
-            resultDto.Data = _defaultRepository.GetEssayLikeList(essayId);
+            resultDto.Data = _defaultRepository.EssayLike.GetEssayLikeList(essayId);
             return resultDto;
         }
 
@@ -305,7 +305,7 @@ namespace Kard.Web.Controllers
         [HttpGet("commentlist")]
         public ResultDto<IEnumerable<EssayCommentDto>> GetCommentList(long essayId)
         {
-            var essayCommentList = _defaultRepository.GetEssayCommentList(essayId) ?? new List<EssayCommentDto>();
+            var essayCommentList = _defaultRepository.EssayComment.GetEssayCommentList(essayId) ?? new List<EssayCommentDto>();
             var pageCommentList = essayCommentList.Where((item, index) => index < 10);
 
             var resultDto = new ResultDto<IEnumerable<EssayCommentDto>>();
