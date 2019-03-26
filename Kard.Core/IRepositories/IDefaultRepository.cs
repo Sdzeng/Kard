@@ -8,7 +8,7 @@ namespace Kard.Core.IRepositories
 {
     public interface IDefaultRepository: IRepository
     {
-        CoverEntity GetDateCover(DateTime showDate);
+        CoverDto GetDateCover(DateTime showDate);
 
  
         IEnumerable<TopMediaDto> GetHomeMediaPictureList(string type,int pageIndex,int pageSize);
@@ -19,11 +19,11 @@ namespace Kard.Core.IRepositories
 
         //bool CreateAccountUser(KuserEntity user);
 
-        IEnumerable<EssayEntity> GetEssayList(DateTime creationTime);
+        IEnumerable<EssayDto> GetEssayList(DateTime creationTime);
 
-        EssayEntity GetEssay(long id, long? currentUserId);
+        EssayDto GetEssayDto(long id, long? currentUserId);
 
-        EssayEntity GetEssay2(long id);
+        //EssayEntity GetEssay2(long id);
 
         bool AddEssay(EssayEntity essayEntity,IEnumerable<TagEntity> tagList);
 

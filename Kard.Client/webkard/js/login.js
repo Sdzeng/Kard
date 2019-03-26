@@ -15,7 +15,7 @@ var loginjs = {
             if (!data) {
                 return;
             }
-            $(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),url(" + basejs.cdnDomain + "/" + data.essayCover.cdnPath + (data.essayCover.mediaType == "picture" ? "_2560x1200." + data.essayCover.mediaExtension : ".jpg") + ")");
+            $(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),url(" + basejs.cdnDomain + "/" + data.essayCoverPath + (data.essayCoverMediaType == "picture" ? "_2560x1200." + data.essayCoverExtension : ".jpg") + ")");
         });
     },
     login: function () {

@@ -57,7 +57,7 @@ namespace Kard.Web.Controllers
         public ResultDto GetInfo(long id)
         {
             //单品信息
-            var essayEntity = _defaultRepository.GetEssay(id, _kardSession.UserId);
+            var essayEntity = _defaultRepository.GetEssayDto(id, _kardSession.UserId);
             var resultDto = new ResultDto();
             resultDto.Result = essayEntity != null;
             resultDto.Data = essayEntity;

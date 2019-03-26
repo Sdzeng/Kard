@@ -33,7 +33,7 @@ namespace Kard.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("cover")]
-        public ResultDto<CoverEntity> GetCover()
+        public ResultDto<CoverDto> GetCover()
         {
             var today = DateTime.Now.Date;
             //string cacheKey = $"homeCover[{today.ToString("yyyyMMdd")}]";
@@ -46,7 +46,7 @@ namespace Kard.Web.Controllers
 
             //return new ResultDto<CoverEntity>() { Result = true, Data = coverEntity };
 
-            return new ResultDto<CoverEntity>() { Result = true, Data = _defaultRepository.GetDateCover(today) };
+            return new ResultDto<CoverDto>() { Result = true, Data = _defaultRepository.GetDateCover(today) };
 
         }
 

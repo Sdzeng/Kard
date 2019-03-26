@@ -435,7 +435,7 @@ var topCover = {
                         var data = resultDto.data;
                         //data = JSON.parse(data);
                         if (data) {
-                            switch (data.essay.coverMediaType) {
+                            switch (data.essayCoverMediaType) {
                                 case "video": _this.navbarObj.removeClass('bg-default').css("background-image", ""); break;
                             }
                         }
@@ -449,8 +449,8 @@ var topCover = {
                         var data = resultDto.data;
                         //data = JSON.parse(data);
                         if (data) {
-                            switch (data.essay.coverMediaType) {
-                                case "video": _this.navbarObj.addClass('bg-default').css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + data.essay.coverPath + ".jpg" + ")"); break;
+                            switch (data.essayCoverMediaType) {
+                                case "video": _this.navbarObj.addClass('bg-default').css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + data.essayCoverPath + ".jpg" + ")"); break;
                             }
                         }
                     });

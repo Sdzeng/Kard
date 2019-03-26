@@ -51,7 +51,7 @@ var essaydetailjs = {
                 return;
             }
 
-            $(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + data.essay.coverPath + (data.essay.coverMediaType =="picture"?"_2560x1200." + data.essay.coverExtension:".jpg") + ")");
+            $(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + data.essayCoverPath + (data.essayCoverMediaType =="picture"?"_2560x1200." + data.essayCoverExtension:".jpg") + ")");
         });
     },
     bindEssay: function () {
@@ -72,10 +72,10 @@ var essaydetailjs = {
 
 
               
-                var avatarArr = data.kuser.avatarUrl.split('.');
+                var avatarArr = data.kuserAvatarUrl.split('.');
 
                 $('.essay-detail-remark', _this.data.scope).html("<span>" + (data.isOriginal ? "获得授权" : "分享") + "</span>"+
-                   "<span><img  class='lazy' src='/image/default-avatar.jpg' data-original='" + basejs.cdnDomain + "/" + avatarArr[0] + "_30x30." + avatarArr[1] + "' >" + data.kuser.nickName + "</span>" +
+                   "<span><img  class='lazy' src='/image/default-avatar.jpg' data-original='" + basejs.cdnDomain + "/" + avatarArr[0] + "_30x30." + avatarArr[1] + "' >" + data.kuserNickName + "</span>" +
                     "<span>" + data.location + "</span><span>" + basejs.getDateDiff(basejs.getDateTimeStamp(data.creationTime)) + "发布</span><span>" + data.browseNum + "阅读</span>");
 
 
@@ -107,16 +107,18 @@ var essaydetailjs = {
 
                 $('.essay-detail-content', _this.data.scope).html($(data.content).text());
 
-                var isLike = (data.essayLike != null);
-                $('.essay-detail-like-share', _this.data.scope).html("<span id='btnLike' data-islike='" + isLike + "'>" + (isLike ? "已喜欢 " : "喜欢 ") + data.likeNum + "</span><span>分享 " + data.shareNum + "</span><span>举报</span>");
+
+                $('.essay-detail-like-share', _this.data.scope).html("<span id='btnLike' data-islike='" + data.isLike + "'>" + (data.isLike ? "已喜欢 " : "喜欢 ") + data.likeNum + "</span><span>分享 " + data.shareNum + "</span><span>举报</span>");
 
            
                 $(".essay-author-avatar>img", _this.data.scope).attr("data-original", basejs.cdnDomain + "/" + avatarArr[0] + "_80x80." + avatarArr[1]);
-                $(".essay-author-txt-name>span:eq(0)", _this.data.scope).text(data.kuser.nickName);
-                $(".essay-author-txt-introduction", _this.data.scope).text(data.kuser.introduction);
+                $(".essay-author-txt-name>span:eq(0)", _this.data.scope).text(data.kuserNickName);
+                $(".essay-author-txt-introduction", _this.data.scope).text(data.kuserIntroduction);
 
 
                 $(".essay-score-num", _this.data.scope).text(data.score);
+                $(".people-grade", _this.data.scope).text(data.scoreHeadCount);
+
 
                 $(".big-star", _this.data.scope).addClass(basejs.getStarClass("bigstar",data.score));
 

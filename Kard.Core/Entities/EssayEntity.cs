@@ -8,7 +8,7 @@ namespace Kard.Core.Entities
     //Table:essay
     public class EssayEntity : DeletionAuditedEntity, IDeletionAuditedEntity
     {
-        private static readonly Regex _regex = new Regex(@"(?'group1'#)([^#]+?)(?'-group1'#)");
+        //private static readonly Regex _regex = new Regex(@"(?'group1'#)([^#]+?)(?'-group1'#)");
 
         public EssayEntity()
         {
@@ -34,20 +34,23 @@ namespace Kard.Core.Entities
 
         public bool IsOriginal { get; set; }
         public decimal Score { get; set; }
+
+        public long ScoreHeadCount { get; set; }
+
         public int ShareNum { get; set; }
         public int BrowseNum { get; set; }
         public int CommentNum { get; set; }
         public int LikeNum { get; set; }
 
-        public long? ParentEssayId { get; set; }
+        
 
        
 
-        public KuserEntity Kuser;
+        //public KuserEntity Kuser;
 
-        public EssayLikeEntity EssayLike;
+        //public EssayLikeEntity EssayLike;
 
-        public List<TagEntity> TagList;
+        //public List<TagEntity> TagList;
 
     }
 

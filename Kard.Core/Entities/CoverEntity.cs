@@ -14,7 +14,7 @@ namespace Kard.Core.Entities
         public DateTime ShowDate { get; set; }
         public long EssayId { get; set; }
 
-        public EssayEntity Essay{get; set; }
+        //public EssayEntity Essay{get; set; }
     }
 
 }

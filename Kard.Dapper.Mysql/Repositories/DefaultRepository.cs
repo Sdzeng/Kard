@@ -23,34 +23,28 @@ namespace Kard.Dapper.Mysql.Repositories
         {
         }
 
-        public CoverEntity GetDateCover(DateTime showDate)
+        public CoverDto GetDateCover(DateTime showDate)
         {
-            return ConnExecute(conn =>
-            {
-                string sql = @"select 
+            string sql = @"select 
                                 cover.*,
-                                essay.*,
-		                        kuser.*   
+                                essay.CoverMediaType  EssayCoverMediaType,
+                                essay.CoverPath EssayCoverPath,
+                                essay.CoverExtension EssayCoverExtension,
+                                essay.Title  EssayTitle,
+                                essay.Content  EssayContent,
+                                essay.Location  EssayLocation,
+                                essay.CreationTime  EssayCreationTime,
+                                kuser.NickName KuserNickName,
+                                kuser.Introduction KuserIntroduction, 
+                                kuser.AvatarUrl KuserAvatarUrl 
 		                        from 
 		                        (select * from cover where showdate <= @ShowDate order by showdate desc limit 1 ) cover
 		                        left join essay on cover.essayid= essay.id 
                                 left join kuser on essay.creatoruserid=kuser.id 
-                                where essay.isdeleted=0  ";
-                var entityList = conn.Query<CoverEntity, EssayEntity, KuserEntity, CoverEntity>(sql, (cover, essay, kuser) =>
-                  {
-                      essay.Kuser = kuser.ToSecurity();
-                      cover.Essay = essay;
-                      return cover;
-                  },
-                  new { ShowDate = showDate },
-                  splitOn: "Id");
-
-                if (entityList != null && entityList.Any())
-                {
-                    return entityList.First();
-                }
-
-                return null;
+                                where essay.isdeleted=0 ";
+            return ConnExecute(conn =>
+            {
+                return conn.QueryFirstOrDefault<CoverDto>(sql,   new { ShowDate = showDate } );
             });
         }
 
@@ -163,17 +157,18 @@ namespace Kard.Dapper.Mysql.Repositories
         //    });
         //}
 
-        public IEnumerable<EssayEntity> GetEssayList(DateTime creationTime)
+        public IEnumerable<EssayDto> GetEssayList(DateTime creationTime)
         {
+            string sql = @"select essay.*,kuser.NickName KuserNickName,tag.* 
+                from essay 
+                left join kuser on essay.CreatorUserId=kuser.Id 
+                left join tag on essay.Id=tag.EssayId 
+                order by essay.LikeNum desc,media.Sort ";
+
             return ConnExecute(conn =>
             {
 
-                string sql = @"select *,(select NickName from kuser where Id=essay.CreatorUserId) CreatorUserName 
-                from essay 
-                left join media on essay.Id=media.EssayId 
-                left join tag on essay.Id=tag.EssayId 
-                order by essay.LikeNum desc,media.Sort ";
-                var essayList = conn.Query<EssayEntity, TagEntity, EssayEntity>(sql, (essay, tag) =>
+                var essayList = conn.Query<EssayDto, TagEntity, EssayDto>(sql, (essay, tag) =>
                 {
 
                     essay.TagList = essay.TagList ?? new List<TagEntity>();
@@ -187,74 +182,41 @@ namespace Kard.Dapper.Mysql.Repositories
                 },
                   splitOn: "Id");
 
-
-
                 return essayList;
             });
         }
 
 
-        public EssayEntity GetEssay(long id, long? currentUserId)
+        public EssayDto GetEssayDto(long id, long? currentUserId)
         {
-            string sql = @"select *,(select NickName from kuser where Id=essay.CreatorUserId) CreatorUserName 
+            string sql = @"select essay.*,kuser.NickName KuserNickName,kuser.Introduction KuserIntroduction,kuser.AvatarUrl KuserAvatarUrl,(essay_like.id!=null)   IsLike
                 from essay 
                 left join kuser on essay.CreatorUserId=kuser.Id 
                 left join essay_like on essay.Id=essay_like.EssayId and essay_like.CreatorUserId=@CurrentUserId 
-                left join tag on essay.Id=tag.EssayId 
                 where essay.id=@EssayId 
                order by  tag.Sort";
 
             return ConnExecute(conn =>
             {
-                var essayList = new List<EssayEntity>();
-                conn.Query<EssayEntity, KuserEntity, EssayLikeEntity, TagEntity, bool>(sql, (essay, kuser, essayLike, tag) =>
-                 {
-                     var essayEntity = essayList.FirstOrDefault(e => e.Id == essay.Id);
-                     if (essayEntity == null)
-                     {
-                         essay.Kuser = kuser.ToSecurity();
-                         essay.EssayLike = essayLike;
-
-                         essay.TagList = new List<TagEntity>();
-                         essayList.Add(essay);
-                     }
-                     else
-                     {
-                         essay = essayEntity;
-                     }
-
-
-
-
-                     if (tag != null && (!essay.TagList.Where(t => t.Id == tag.Id).Any()))
-                     {
-                         essay.TagList.Add(tag);
-                     }
-
-                     return true;
-                 },
-                  new { EssayId = id, CurrentUserId = currentUserId },
-                  splitOn: "Id");
-
-
-
-                return essayList.FirstOrDefault();
+                var essayDto=conn.QueryFirstOrDefault<EssayDto>(sql,  new { EssayId = id, CurrentUserId = currentUserId });
+                essayDto.TagList = conn.Query<TagEntity>("select * from tag where EssayId=@EssayId", new { EssayId = id, })?.ToList();
+                return essayDto;
             });
         }
 
 
-        public EssayEntity GetEssay2(long id)
-        {
+        //public EssayEntity GetEssay2(long id)
+        //{
 
-            return ConnExecute(conn =>
-            {
-                var essayEntity = conn.Get<EssayEntity>(id);
-                essayEntity.Kuser = conn.Get<KuserEntity>(essayEntity.CreatorUserId.Value).ToSecurity();
-                //essayEntity.MediaList = conn.GetList<EssayCoverEntity>(new { EssayId = essayEntity.Id }).ToList();
-                essayEntity.TagList = conn.GetList<TagEntity>(new { EssayId = essayEntity.Id }).ToList();
-                return essayEntity;
-            });
-        }
+        //    return ConnExecute(conn =>
+        //    {
+        //        var essayEntity = conn.Get<EssayEntity>(id);
+        //        essayEntity.Kuser = conn.Get<KuserEntity>(essayEntity.CreatorUserId.Value).ToSecurity();
+        //        //essayEntity.MediaList = conn.GetList<EssayCoverEntity>(new { EssayId = essayEntity.Id }).ToList();
+        //        essayEntity.TagList = conn.GetList<TagEntity>(new { EssayId = essayEntity.Id }).ToList();
+        //        return essayEntity;
+        //    });
+        //}
 
 
         public bool AddEssay(EssayEntity essayEntity, IEnumerable<TagEntity> tagList)

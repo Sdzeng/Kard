@@ -50,10 +50,10 @@
             }
             //data.media.hasOwnProperty("path")&&
 
-            switch (data.essay.coverMediaType) {
+            switch (data.essayCoverMediaType) {
                 case "picture":
                     //_2560x1200
-                    var backgroundImage = "linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),url(" + basejs.cdnDomain + "/" + data.essay.coverPath + "." + data.essay.coverExtension + ")";
+                    var backgroundImage = "linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),url(" + basejs.cdnDomain + "/" + data.essayCoverPath + "." + data.essayCoverExtension + ")";
                     $(".navbar", _this.data.scope).addClass("bg-default");
                     $(".bg-default", _this.data.scope).css("background-image", backgroundImage);
                     break;
@@ -62,9 +62,9 @@
                     //$(".bg-default", _this.data.scope).removeClass("bg-default");
 
                     var bgVedioHtml = homejs.template.bgVideo.format({
-                        videoCoverPath: basejs.cdnDomain + "/" + data.essay.coverPath + ".jpg",
-                        videoPath: basejs.cdnDomain + "/" + data.essay.coverPath + "." + data.essay.coverExtension,
-                        videoExtension: data.essay.coverExtension
+                        videoCoverPath: basejs.cdnDomain + "/" + data.essayCoverPath + ".jpg",
+                        videoPath: basejs.cdnDomain + "/" + data.essayCoverPath + "." + data.essayCoverExtension,
+                        videoExtension: data.essayCoverExtension
                     });
 
                     $(".splash-bg", _this.data.scope).html(bgVedioHtml);
@@ -78,15 +78,15 @@
 
 
 
-            $("blackquote.splash-txt>q", _this.data.scope).text(data.essay.content || data.essay.title);
+            $("blackquote.splash-txt>q", _this.data.scope).text(data.essayContent || data.essayTitle);
             //图片懒加载
             basejs.lazyInof('blackquote.splash-author>img.lazy');
-            var avatarArr = data.essay.kuser.avatarUrl.split('.');
+            var avatarArr = data.kuserAvatarUrl.split('.');
             var avatarCropPath = basejs.cdnDomain + "/" + avatarArr[0] + "_30x30." + avatarArr[1];
             $("blackquote.splash-author>img", _this.data.scope).attr("data-original", avatarCropPath);
-            $("blackquote.splash-author>a", _this.data.scope).text(data.essay.kuser.nickName || "");
-            $("blackquote.splash-author>span:first", _this.data.scope).text((data.essay.location || ""));
-            $("blackquote.splash-author>span:last", _this.data.scope).text(basejs.getDateDiff(basejs.getDateTimeStamp(data.essay.creationTime)));
+            $("blackquote.splash-author>a", _this.data.scope).text(data.kuserNickName || "");
+            $("blackquote.splash-author>span:first", _this.data.scope).text((data.essayLocation || ""));
+            $("blackquote.splash-author>span:last", _this.data.scope).text(basejs.getDateDiff(basejs.getDateTimeStamp(data.essayCreationTime)));
 
             topCover.scroll({ page: "home" });
         });
