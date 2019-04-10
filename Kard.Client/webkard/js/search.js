@@ -1,9 +1,9 @@
-var downloadjs = {
-    data: { scope: $("#downloadPage") },
+var searchjs = {
+    data: { scope: $("#searchPage") },
     init: function () {
         var _this = this;
         _this.bindCover();
-
+ 
     },
     bindCover: function () {
         var _this = this;
@@ -18,7 +18,7 @@ var downloadjs = {
             $(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),url(" + basejs.cdnDomain + "/" + data.essayCoverPath + (data.essayCoverMediaType == "picture" ? "." + data.essayCoverExtension : ".jpg") + ")");
         });
     },
-
+ 
 };
 
 $(function () {
@@ -27,5 +27,5 @@ $(function () {
     topMenu.logout();
     topMenu.authTest();
 
-    downloadjs.init();
+    searchjs.init();
 });

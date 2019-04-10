@@ -188,7 +188,7 @@ namespace Kard.Web
             {
                 o.Cookie.HttpOnly = true;//置为后台只读模式,前端无法通过JS来获取cookie值,可以有效的防止XXS攻击
                 o.LoginPath = "/user/notlogin";
-                o.AccessDeniedPath = "/user/notlogin";
+                //o.AccessDeniedPath = "/user/notlogin";
                 o.SlidingExpiration = true;
                 o.ExpireTimeSpan = TimeSpan.FromDays(7);  //当HttpContext.SignInAsync的IsPersistent = true 时生效
                 //o.SessionStore = true;
@@ -236,7 +236,7 @@ namespace Kard.Web
             #endregion
 
             #region IOC
-            services.AddModuleStartsWith("Kard");
+            services.AddModule();
 
             services.TryAddScoped<IPasswordHasher<KuserEntity>, PasswordHasher<KuserEntity>>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

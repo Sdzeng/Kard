@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 namespace Kard.Core.Entities
 {
     //Table:essay
-    public class EssayEntity : DeletionAuditedEntity, IDeletionAuditedEntity
+    public class EssayEntity : FullAuditedEntity, IFullAuditedEntity
     {
         //private static readonly Regex _regex = new Regex(@"(?'group1'#)([^#]+?)(?'-group1'#)");
 
@@ -32,7 +32,7 @@ namespace Kard.Core.Entities
 
         public string Category { get; set; }
 
-        public bool IsOriginal { get; set; }
+
         public decimal Score { get; set; }
 
         public long ScoreHeadCount { get; set; }

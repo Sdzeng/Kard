@@ -48,36 +48,36 @@ var essaydetailjs = {
                 $(".essay-detail-title", _this.data.scope).text(data.title);
 
                
-                var avatarArr = data.kuser.avatarUrl.split('.');
+                var avatarArr = data.kuserAvatarUrl.split('.');
                 var avatarUrl = basejs.cdnDomain + "/" + avatarArr[0] + "_60x60." + avatarArr[1];
                 avatarUrl = avatarUrl.replace(/\\/g, "/");
                 $(".essay-min-author-avatar>img", _this.data.scope).attr("data-original", avatarUrl);
-                $('.essay-min-author-txt-name', _this.data.scope).text(data.kuser.nickName);
-                $('.essay-min-author-txt-introduction', _this.data.scope).html("<span>" + (data.isOriginal ? "获得授权" : "分享") + "</span><span>" + basejs.getDateDiff(basejs.getDateTimeStamp(data.creationTime)) + "</span><span>" + data.browseNum + " 阅读</span><span>" + data.score + " 分</span>");
+                $('.essay-min-author-txt-name', _this.data.scope).text(data.kuserNickName);
+                $('.essay-min-author-txt-introduction', _this.data.scope).html("<span>" + basejs.getDateDiff(basejs.getDateTimeStamp(data.creationTime)) + "</span><span>" + data.browseNum + " 阅读</span><span>" + data.score + " 分</span>");
 
 
-                var imgs = "";
-                var wxImgUrl = "";
-                for (var i in data.mediaList) {
-                    var media = data.mediaList[i];
-                    switch (media.mediaType) {
-                        case "picture":
-                            imgs += " <img src='" + basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension + "'>";
-                            if (i == 0) {
-                                wxImgUrl = basejs.cdnDomain + "/" + media.cdnPath + "_60x60." + media.mediaExtension;
-                                wxImgUrl = wxImgUrl.replace(/\\/g, "/");
-                            }
-                            break;
-                        case "video":
-                            imgs += _this.data.template.video.format({
-                                videoCoverPath: basejs.cdnDomain + "/" + media.cdnPath + ".jpg",
-                                videoPath: basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension,
-                                videoExtension: media.mediaExtension
-                            });
-                            break;
-                    }
-                }
-                $('.essay-detail-content', _this.data.scope).html("<p>" + data.content + "</p><p>" + imgs + "</p>");
+                //var imgs = "";
+                //var wxImgUrl = "";
+                //for (var i in data.mediaList) {
+                //    var media = data.mediaList[i];
+                //    switch (media.mediaType) {
+                //        case "picture":
+                //            imgs += " <img src='" + basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension + "'>";
+                //            if (i == 0) {
+                //                wxImgUrl = basejs.cdnDomain + "/" + media.cdnPath + "_60x60." + media.mediaExtension;
+                //                wxImgUrl = wxImgUrl.replace(/\\/g, "/");
+                //            }
+                //            break;
+                //        case "video":
+                //            imgs += _this.data.template.video.format({
+                //                videoCoverPath: basejs.cdnDomain + "/" + media.cdnPath + ".jpg",
+                //                videoPath: basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension,
+                //                videoExtension: media.mediaExtension
+                //            });
+                //            break;
+                //    }
+                //}
+                $('.essay-detail-content', _this.data.scope).html( data.content);
 
                 //var tagSpan = "";
                 //for (var i in data.tagList) {
@@ -93,8 +93,8 @@ var essaydetailjs = {
                 //avatarUrl = basejs.cdnDomain + "/" + avatarArr[0] + "_80x80." + avatarArr[1];
                 //avatarUrl = avatarUrl.replace(/\\/g, "/");
                 $(".essay-author-avatar>img", _this.data.scope).attr("data-original", avatarUrl);
-                $('.essay-author-txt-name>span:eq(0)', _this.data.scope).text(data.kuser.nickName);
-                $(".essay-author-txt-introduction", _this.data.scope).text(data.kuser.introduction);
+                $('.essay-author-txt-name>span:eq(0)', _this.data.scope).text(data.kuserNickName);
+                $(".essay-author-txt-introduction", _this.data.scope).text(data.kuserIntroduction);
 
                 basejs.lazyInof('.essay-detail-info img.lazy');
 
@@ -194,7 +194,7 @@ var essaydetailjs = {
                 else {
                     for (var index in resultDto.data) {
                         var dto = resultDto.data[index];
-                        var avatarArr = dto.kuser.avatarUrl.split('.');
+                        var avatarArr = dto.kuserAvatarUrl.split('.');
                         var avatarCropPath = basejs.cdnDomain + "/" + avatarArr[0] + "_50x50." + avatarArr[1];
 
                         var parentCommentHtml = _this._getParentCommentHtml(dto.parentCommentDtoList);

@@ -23,7 +23,7 @@ namespace Kard.Web.Controllers
 {
     [Authorize(AuthenticationSchemes = WeChatAppDefaults.AuthenticationScheme)]
     [Produces("application/json")]
-    [Route("[controller]")]
+    [Route("wx")]
     public class WxController : BaseController
     {
         private readonly ILoginAppService _loginAppService;

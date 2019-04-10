@@ -15,7 +15,8 @@
 @navbar-font-size:                 15px;
 @navbar-logo-font-size:            22px;
 @navbar-line-height:               ((@navbar-font-size * @line-height-base));
-@navbar-logo-line-height:          ((@navbar-logo-font-size * @line-height-base));
+@navbar-logo-line-height:        46px;
+@navbar-logo-min-line-height: 40px;
 @navbar-padding-vertical-avg:      ceil((@navbar-height - @navbar-line-height ) / 2);
 @navbar-logo-padding-vertical-avg: ceil((@navbar-height - @navbar-logo-line-height) / 2);
  
@@ -23,9 +24,9 @@
 
 @navbar-transition-time:           400ms;
 
-@navbar-min-height:                52px;
+@navbar-min-height:                45px;
 @navbar-min-padding-vertical-avg:      ceil((@navbar-min-height - @navbar-line-height ) / 2);
-@navbar-min-logo-padding-vertical-avg: ceil((@navbar-min-height - @navbar-logo-line-height) / 2);
+@navbar-min-logo-padding-vertical-avg: ceil((@navbar-min-height - @navbar-logo-min-line-height) / 2);
 
 
  

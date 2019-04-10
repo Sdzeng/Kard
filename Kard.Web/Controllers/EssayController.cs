@@ -76,105 +76,123 @@ namespace Kard.Web.Controllers
             return resultDto;
         }
 
-        /// <summary>
-        /// froala上传文件
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost("froalaupload")]
-        //[Consumes("multipart/form-data")]
-        //[RequestSizeLimit(100_000_000)]
-        public object FroalaUpload(IFormFile mediaFlie)
-        {
-            var result = new ResultDto();
-            if (mediaFlie == null && Request.Form.Files.Any())
-            {
-                mediaFlie = Request.Form.Files[0];
-            }
-            if (mediaFlie == null)
-            {
-                result.Result = true;
-                result.Message = "未选择文件";
-                return result;
-            }
-
-            var now = DateTime.Now;
-            string webRootPath = _env.WebRootPath;
-
-            string newFolder = Path.Combine("user", _kardSession.UserId.ToString(), "media", now.ToString("yyyyMMdd"));
-            string newPath = Path.Combine(webRootPath, newFolder);
-            if (!Directory.Exists(newPath))
-            {
-                Directory.CreateDirectory(newPath);
-            }
-
-            if (mediaFlie.Length > 0)
-            {
-                string fileName = now.ToString("ddHHmmssffff");
-                string fileExtension = Path.GetExtension(mediaFlie.FileName.Trim('"')).ToLower(); // Path.GetExtension(ContentDispositionHeaderValue.Parse(mediaFlie.ContentDisposition).FileName.Trim('"'));
-                string fullPath = Path.Combine(newPath, fileName + fileExtension);
-                using (var stream = new FileStream(fullPath, FileMode.Create))
-                {
-                    mediaFlie.CopyTo(stream);
-                }
-
-                return new { Link = Path.Combine("http://192.168.10.2:3703", newFolder, fileName+fileExtension).Replace("\\", "/") };
-            }
-
-
-            result.Result = false;
-            result.Message = "上传失败";
-            return result;
-        }
 
         /// <summary>
-        /// 上传文件
+        /// 获取单品信息
         /// </summary>
         /// <returns></returns>
-        [HttpPost("uploadmedia")]
-        //[Consumes("multipart/form-data")]
-        //[RequestSizeLimit(100_000_000)]
-        public ResultDto UploadMedia(IFormFile mediaFlie)
+        [HttpGet("updateinfo")]
+        public ResultDto GeUpdateInfo(long id)
         {
-            var result = new ResultDto();
-            if (mediaFlie == null && Request.Form.Files.Any())
-            {
-                mediaFlie = Request.Form.Files[0];
-            }
-            if (mediaFlie == null)
-            {
-                result.Result = true;
-                result.Message = "未选择文件";
-                return result;
-            }
+            //单品信息
+            var essayEntity = _defaultRepository.Essay.GetEssayDto(id, _kardSession.UserId);
+            var resultDto = new ResultDto();
+            resultDto.Result = essayEntity != null;
+            resultDto.Data = essayEntity;
 
-            var now = DateTime.Now;
-            string webRootPath = _env.WebRootPath;
-
-            string newFolder = Path.Combine("user", _kardSession.UserId.ToString(), "media", now.ToString("yyyyMMdd"));
-            string newPath = Path.Combine(webRootPath, newFolder);
-            if (!Directory.Exists(newPath))
-            {
-                Directory.CreateDirectory(newPath);
-            }
-
-            if (mediaFlie.Length > 0)
-            {
-                string fileName = now.ToString("ddHHmmssffff");
-                string fileExtension = Path.GetExtension(mediaFlie.FileName.Trim('"')).ToLower(); // Path.GetExtension(ContentDispositionHeaderValue.Parse(mediaFlie.ContentDisposition).FileName.Trim('"'));
-                string fullPath = Path.Combine(newPath, fileName + fileExtension);
-                using (var stream = new FileStream(fullPath, FileMode.Create))
-                {
-                    mediaFlie.CopyTo(stream);
-                }
-                result.Result = true;
-                result.Data = new { FileUrl = Path.Combine(newFolder, fileName).Replace("\\", "/"), FileExtension = fileExtension.Replace(".", "") };
-                return result;
-            }
-
-            result.Result = false;
-            result.Message = "上传失败";
-            return result;
+            return resultDto;
         }
+
+        ///// <summary>
+        ///// froala上传文件
+        ///// </summary>
+        ///// <returns></returns>
+        //[HttpPost("froalaupload")]
+        //[AllowAnonymous]
+        ////[Consumes("multipart/form-data")]
+        ////[RequestSizeLimit(100_000_000)]
+        //public object FroalaUpload(IFormFile mediaFlie)
+        //{
+        //    var result = new ResultDto();
+        //    if (mediaFlie == null && Request.Form.Files.Any())
+        //    {
+        //        mediaFlie = Request.Form.Files[0];
+        //    }
+        //    if (mediaFlie == null)
+        //    {
+        //        result.Result = true;
+        //        result.Message = "未选择文件";
+        //        return result;
+        //    }
+
+        //    var now = DateTime.Now;
+        //    string webRootPath = _env.WebRootPath;
+
+        //    string newFolder = Path.Combine("user", _kardSession.UserId.ToString(), "media", now.ToString("yyyyMMdd"));
+        //    string newPath = Path.Combine(webRootPath, newFolder);
+        //    if (!Directory.Exists(newPath))
+        //    {
+        //        Directory.CreateDirectory(newPath);
+        //    }
+
+        //    if (mediaFlie.Length > 0)
+        //    {
+        //        string fileName = now.ToString("ddHHmmssffff");
+        //        string fileExtension = Path.GetExtension(mediaFlie.FileName.Trim('"')).ToLower(); // Path.GetExtension(ContentDispositionHeaderValue.Parse(mediaFlie.ContentDisposition).FileName.Trim('"'));
+        //        string fullPath = Path.Combine(newPath, fileName + fileExtension);
+        //        using (var stream = new FileStream(fullPath, FileMode.Create))
+        //        {
+        //            mediaFlie.CopyTo(stream);
+        //        }
+
+        //        return new { Link = Path.Combine(_defaultRepository.Configuration.GetValue<string>("AppSetting:ApiDomain"), newFolder, fileName+fileExtension).Replace("\\", "/") };
+        //    }
+
+
+        //    result.Result = false;
+        //    result.Message = "上传失败";
+        //    return result;
+        //}
+
+        ///// <summary>
+        ///// 上传文件
+        ///// </summary>
+        ///// <returns></returns>
+        //[HttpPost("uploadmedia")]
+        ////[Consumes("multipart/form-data")]
+        ////[RequestSizeLimit(100_000_000)]
+        //public ResultDto UploadMedia(IFormFile mediaFlie)
+        //{
+        //    var result = new ResultDto();
+        //    if (mediaFlie == null && Request.Form.Files.Any())
+        //    {
+        //        mediaFlie = Request.Form.Files[0];
+        //    }
+        //    if (mediaFlie == null)
+        //    {
+        //        result.Result = true;
+        //        result.Message = "未选择文件";
+        //        return result;
+        //    }
+
+        //    var now = DateTime.Now;
+        //    string webRootPath = _env.WebRootPath;
+
+        //    string newFolder = Path.Combine("user", _kardSession.UserId.ToString(), "media", now.ToString("yyyyMMdd"));
+        //    string newPath = Path.Combine(webRootPath, newFolder);
+        //    if (!Directory.Exists(newPath))
+        //    {
+        //        Directory.CreateDirectory(newPath);
+        //    }
+
+        //    if (mediaFlie.Length > 0)
+        //    {
+        //        string fileName = now.ToString("ddHHmmssffff");
+        //        string fileExtension = Path.GetExtension(mediaFlie.FileName.Trim('"')).ToLower(); // Path.GetExtension(ContentDispositionHeaderValue.Parse(mediaFlie.ContentDisposition).FileName.Trim('"'));
+        //        string fullPath = Path.Combine(newPath, fileName + fileExtension);
+        //        using (var stream = new FileStream(fullPath, FileMode.Create))
+        //        {
+        //            mediaFlie.CopyTo(stream);
+        //        }
+        //        result.Result = true;
+        //        result.Data = new { FileUrl = Path.Combine(newFolder, fileName).Replace("\\", "/"), FileExtension = fileExtension.Replace(".", "") };
+        //        return result;
+        //    }
+
+        //    result.Result = false;
+        //    result.Message = "上传失败";
+        //    return result;
+        //}
 
         /// <summary>
         /// 添加纪录
@@ -182,36 +200,84 @@ namespace Kard.Web.Controllers
         /// <param name="essayEntity"></param>
         /// <param name="tagList"></param>
         [HttpPost("add")]
-        public ResultDto AddEssay(EssayEntity essayEntity,IEnumerable<TagEntity> tagList)
+        public ResultDto<long> Add(EssayEntity essayEntity, IEnumerable<TagEntity> tagList)
         {
-            /*private static readonly Regex _regex = new Regex(@"(?'group1'#)([^#]+?)(?'-group1'#)");
-             if ((!this.EssayContent.IsNullOrEmpty()) && _regex.IsMatch(this.EssayContent))
-                {
-                    var matchCollection = _regex.Matches(this.EssayContent);
-                    return matchCollection.First()?.Value.Replace("#","");
-                }*/
+            var userId = _kardSession.UserId.Value;
+            essayEntity.Location = Utils.GetCity(HttpContext,_memoryCache);
+            essayEntity.AuditCreation(userId);
+            tagList.AuditCreation(userId);
+            var resultDto = _defaultRepository.Essay.AddEssay(essayEntity, tagList);
 
-            var createUserId = _kardSession.UserId.Value;
-            //IEnumerable<TagEntity> tagList = new List<TagEntity>();
-            //if (essayEntity.Content.Contains('#'))
-            //{
-            //    var contentList = essayEntity.Content.Split('#');
-            //    int contentListLastIndex = contentList.Length - 1;
-            //    tagList = contentList.Where((item, index) => ((!string.IsNullOrEmpty(item)) && (index != contentListLastIndex))).Select((item, index) => { var tagEntity = new TagEntity { Sort = (index + 1), TagName = item }; tagEntity.AuditCreation(createUserId); return tagEntity; });
-            //    essayEntity.Content = contentList.Last();
-            //}
-            essayEntity.Location = "广州";
-            essayEntity.AuditCreation(createUserId);
-          
-            tagList.AuditCreation(createUserId);
-            var result = _defaultRepository.Essay.AddEssay(essayEntity,tagList);
-
-            if (result)
+            if (resultDto.Result)
             {
                 string cacheKey = $"homeCover[{DateTime.Now.ToString("yyyyMMdd")}]";
                 _memoryCache.Remove(cacheKey);
             }
-            return new ResultDto { Result = result };
+            return resultDto;
+        }
+
+
+        
+
+        /// <summary>
+        /// 修改纪录
+        /// </summary>
+        /// <param name="essayEntity"></param>
+        /// <param name="tagList"></param>
+        [HttpPost("update")]
+        public ResultDto Update(EssayEntity essayEntity, IEnumerable<TagEntity> tagList)
+        {
+            var resultDto = new ResultDto();
+            var userId = _kardSession.UserId.Value;
+
+            if (essayEntity.Id <= 0)
+            {
+                resultDto.Result = false;
+                resultDto.Message = "修改失败，Id为空";
+                return resultDto;
+            }
+
+            var entity = _defaultRepository.FirstOrDefault<EssayEntity>(essayEntity.Id);
+            if (entity == null)
+            {
+                resultDto.Result = false;
+                resultDto.Message = "修改失败，未找到文章";
+                return resultDto;
+            }
+
+            if (entity.CreatorUserId != userId)
+            {
+                resultDto.Result = false;
+                resultDto.Message = "修改失败，这不是您的文章";
+                return resultDto;
+            }
+
+            entity.Title = essayEntity.Title;
+            entity.CoverMediaType = essayEntity.CoverMediaType;
+            entity.CoverPath = essayEntity.CoverPath;
+            entity.CoverExtension = essayEntity.CoverExtension;
+            entity.Category = essayEntity.Category;
+            entity.Content = essayEntity.Content;
+            essayEntity.Location = Utils.GetCity(HttpContext, _memoryCache);
+
+            entity.AuditLastModification(userId);
+            tagList.AuditCreation(userId);
+
+            var result = _defaultRepository.Essay.UpdateEssay(entity, tagList);
+
+            if (result)
+            {
+                resultDto.Result = true;
+                resultDto.Message = "修改成功";
+                string cacheKey = $"homeCover[{DateTime.Now.ToString("yyyyMMdd")}]";
+                _memoryCache.Remove(cacheKey);
+            }
+            else
+            {
+                resultDto.Result = false;
+                resultDto.Message = "修改失败";
+            }
+            return resultDto;
         }
 
         /// <summary>

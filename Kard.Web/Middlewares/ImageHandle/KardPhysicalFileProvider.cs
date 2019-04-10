@@ -45,7 +45,7 @@ namespace Kard.Web.Middlewares.ImageHandle
                 return fileInfo;
             }
 
-            var newImagePath =  Path.Join(Root.Replace("\\", "/"), subpath).Replace("//","/");
+            var newImagePath = Path.Join(Root.Replace("\\", "/"), subpath).Replace("//", "/");
 
             //_stopwatch.Start();
 
@@ -115,7 +115,7 @@ namespace Kard.Web.Middlewares.ImageHandle
                 case "png": imageFormat = FREE_IMAGE_FORMAT.FIF_PNG; break;
                 case "gif": imageFormat = FREE_IMAGE_FORMAT.FIF_GIF; break;
                 case "ico": imageFormat = FREE_IMAGE_FORMAT.FIF_ICO; break;
-       
+
                 default: imageFormat = FREE_IMAGE_FORMAT.FIF_UNKNOWN; break;
             }
 
@@ -123,52 +123,34 @@ namespace Kard.Web.Middlewares.ImageHandle
 
             using (var original = FreeImageBitmap.FromFile(fileInfo.PhysicalPath))
             {
+                int x = 0;
+                int y = 0;
+                int width = original.Width;
+                int height = original.Height;
 
-                var size = original.Width / (double)imageHandleDto.ImageWidth;
-                if ((imageHandleDto.ImageHeight * size) > original.Height)
+                if ((double)original.Width / (double)original.Height > (double)imageHandleDto.ImageWidth / (double)imageHandleDto.ImageHeight)
                 {
-                    size = original.Height / (double)imageHandleDto.ImageHeight;
+                    height = original.Height;
+                    width = original.Height * imageHandleDto.ImageWidth / imageHandleDto.ImageHeight;
+                    y = 0;
+                    x = (original.Width - width) / 2;
+                }
+                else
+                {
+                    width = original.Width;
+                    height = original.Width * imageHandleDto.ImageHeight / imageHandleDto.ImageWidth;
+                    x = 0;
+                    y = (original.Height - height) / 2;
                 }
 
-                var width = original.Width / size;
-                var height = original.Height / size;
-                width = width > original.Width ? original.Width : width;
-                height = height > original.Height ? original.Height : height;
+                int left=x, top=y+height, right=x+width, bottom = y;
 
-                using (var resized = original.GetScaledInstance((int)width, (int)height, FREE_IMAGE_FILTER.FILTER_BICUBIC))
+                using (var crop = original.Copy(left, top, right, bottom))
                 {
-                    double left, top, right, bottom;
-
-
-                    var halfWidth = Math.Floor(Convert.ToDouble(imageHandleDto.ImageWidth / 2));
-                    var halfHeight = Math.Floor(Convert.ToDouble(imageHandleDto.ImageHeight / 2));
-                    var centerX = Math.Round(width / 2);
-                    var centerY = Math.Round(height / 2);
-
-                    if (resized.Width > imageHandleDto.ImageWidth)
-                    {
-                        left = centerX - halfWidth;
-                        right = centerX + halfWidth;
-                    }
-                    else {
-                        left = 0;
-                        right = resized.Width;
-                    }
-
-                    if (resized.Height > imageHandleDto.ImageHeight)
-                    {
-                        bottom = centerY - halfHeight;
-                        top = centerY + halfHeight;
-                    }
-                    else {
-                        bottom = 0;
-                        top = resized.Height;
-                    }
-                 
-                    using (var crop = resized.Copy((int)left, (int)top, (int)right, (int)bottom))
+                    using (var resized = crop.GetScaledInstance(imageHandleDto.ImageWidth, imageHandleDto.ImageHeight, FREE_IMAGE_FILTER.FILTER_BICUBIC))
                     {
                         //, FREE_IMAGE_FORMAT.FIF_JPEG, FREE_IMAGE_SAVE_FLAGS.JPEG_QUALITYGOOD | FREE_IMAGE_SAVE_FLAGS.JPEG_BASELINE
-                        crop.Save(newImagePath, imageFormat, FREE_IMAGE_SAVE_FLAGS.DEFAULT);
+                        resized.Save(newImagePath, imageFormat, FREE_IMAGE_SAVE_FLAGS.DEFAULT);
                     }
                 }
             }

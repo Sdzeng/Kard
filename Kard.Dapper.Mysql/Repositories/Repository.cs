@@ -74,7 +74,7 @@ namespace Kard.Dapper.Mysql.Repositories
             {
                 if (_connectionString.IsNullOrEmpty())
                 {
-                    _connectionString = Configuration.GetValue<string>("Db:ConnectionString");
+                    _connectionString = Configuration.GetValue<string>("AppSetting:Db:ConnectionString");
                 }
 
                 return _connectionString;

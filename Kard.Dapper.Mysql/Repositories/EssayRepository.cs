@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DapperExtensions;
 using Kard.Core.Dtos;
 using Kard.Core.Entities;
 using Kard.Core.IRepositories;
@@ -23,7 +24,7 @@ namespace Kard.Dapper.Mysql.Repositories
             int pageStart = ((pageIndex - 1) * pageSize);
             pageStart = pageStart > 0 ? (pageStart - 1) : pageStart;
 
-            var sql = $@"select essay.Id,essay.Category,essay.IsOriginal,essay.Score,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,essay.CoverPath,essay.CoverMediaType,essay.CoverExtension,
+            var sql = $@"select essay.Id,essay.Category,essay.Score,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,essay.CoverPath,essay.CoverMediaType,essay.CoverExtension,
                                kuser.AvatarUrl,kuser.NickName CreatorNickName,tag.*  
                 from 
                 essay  
@@ -151,10 +152,10 @@ namespace Kard.Dapper.Mysql.Repositories
             });
         }
 
-        public bool AddEssay(EssayEntity essayEntity, IEnumerable<TagEntity> tagList)
+        public ResultDto<long> AddEssay(EssayEntity essayEntity, IEnumerable<TagEntity> tagList)
         {
-
-            return base.TransExecute((conn, trans) =>
+            var resultDto = new ResultDto<long>();
+            resultDto.Result= base.TransExecute((conn, trans) =>
             {
 
                 var insertAndGetIdResultDto = conn.CreateAndGetId<EssayEntity, long>(essayEntity, trans);
@@ -163,6 +164,7 @@ namespace Kard.Dapper.Mysql.Repositories
                     return false;
                 }
 
+                resultDto.Data = insertAndGetIdResultDto.Data;
                 if (tagList != null && tagList.Any())
                 {
                     tagList = tagList.Select(tag =>
@@ -180,9 +182,43 @@ namespace Kard.Dapper.Mysql.Repositories
 
                 return true;
             });
+
+            return resultDto;
         }
 
+        public bool UpdateEssay(EssayEntity essayEntity, IEnumerable<TagEntity> tagList)
+        {
+            return base.TransExecute((conn, trans) =>
+            {
+                var updateResult = conn.Update(essayEntity, trans);
+                if (!updateResult)
+                {
+                    return false;
+                }
 
+                string sql = "delete from tag  where EssayId=@EssayId";
+
+                conn.Execute(sql, new { EssayId = essayEntity.Id }, trans);
+
+                if (tagList != null && tagList.Any())
+                {
+                    tagList = tagList.Select(tag =>
+                    {
+                        tag.EssayId = essayEntity.Id;
+                        return tag;
+                    });
+
+                    var insertListResultDto = conn.CreateList(tagList, trans);
+                    if (!insertListResultDto.Result)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+
+        }
         public bool UpdateBrowseNum(long id)
         {
             //单个改动使用update的排他（update\delete\insert InnoDB会自动给涉及数据集加上）行锁（使用索引）就行

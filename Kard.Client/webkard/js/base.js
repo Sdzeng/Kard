@@ -1,8 +1,8 @@
 var basejs = {
-    requestDomain: "http://192.168.10.2:3703",
-    cdnDomain: "http://192.168.10.2:3703",
-    //requestDomain: "http://api.localyc.com",
-    //cdnDomain:"http://cdn.localyc.com",
+    //requestDomain: "http://192.168.10.2:3703/api",
+    //cdnDomain: "http://192.168.10.2:3703/api",
+    requestDomain: "http://api.localyc.com:81",
+    cdnDomain:"http://www.localyc.com",
     defaults: {
         type: "POST",
         async: true,
@@ -213,15 +213,19 @@ $.extend(httpHelper.prototype, {
 
             error: function (jqXHR, textStatus, errorThrown) {
 
-                console.error(errorThrown);
+                if (errorThrown) {
+                    console.log(errorThrown);
+                }
+       
                 //Unauthorized
                 if (jqXHR.status == 401 || jqXHR.status == 403) {
+                    debugger;
                     //Location=context.RedirectUri
                     storage.local.setItem("isLogin", "false");
                     _this.opts.error && _this.opts.error.apply(this, arguments);
-                    var truthBeTold = window.confirm("请先登陆");
+                    var truthBeTold = window.confirm(jqXHR.responseJSON.message);
                     if (truthBeTold) {
-                        window.location.href = "/login.html";
+                        window.location.href = "/login.html?returnUrl=" + encodeURI(location.href);
                     }
 
                     //var redirectUri = jqXHR.getResponseHeader("Location");

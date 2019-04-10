@@ -25,7 +25,7 @@ namespace Kard.Core.Dtos
 
         public string Category { get; set; }
 
-        public bool IsOriginal { get; set; }
+
         public decimal Score { get; set; }
 
         public long ScoreHeadCount { get; set; }
@@ -34,6 +34,8 @@ namespace Kard.Core.Dtos
         public int BrowseNum { get; set; }
         public int CommentNum { get; set; }
         public int LikeNum { get; set; }
+
+        public virtual DateTime CreationTime { get; set; }
 
 
         public string KuserNickName;

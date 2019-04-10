@@ -17,7 +17,9 @@ namespace Kard.Core.IRepositories
 
         EssayDto GetEssayDto(long id, long? currentUserId);
 
-        bool AddEssay(EssayEntity essayEntity, IEnumerable<TagEntity> tagList);
+        ResultDto<long> AddEssay(EssayEntity essayEntity, IEnumerable<TagEntity> tagList);
+
+        bool UpdateEssay(EssayEntity essayEntity, IEnumerable<TagEntity> tagList);
 
         bool UpdateBrowseNum(long id);
 

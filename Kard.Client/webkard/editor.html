@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>核心技术</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="icon" href="/image/logo-tab_16x16.ico" sizes="16x16">
+    <link rel="stylesheet" href="/css/kard.css" type="text/css" media="screen">
+    <!--<link rel="stylesheet/less" href="/less/kard.less" type="text/css" media="screen">
+    <script type="text/javascript" src="/js/less.js?v=1.0.0"></script>-->
+</head>
+<body id="editorPage">
+
+
+
+    <div class="isay-info">
+
+        <div class="isay-info-left">
+            <div class="isay-info-cover">
+                <div id="btnAddPic">
+                    封面
+                </div>
+                <input type="file" id="btnAddPicHide" name="btnAddPicHide" style="display:none;" />
+            </div>
+
+            <div class="isay-info-other">
+                <div class="isay-info-other-item isay-info-title">
+                    <div class="item-title">标题： </div>
+                    <div class="item-info">
+                        <input id="isayTitle" type="text" class="unify-input" />
+                    </div>
+                </div>
+
+                <div class="isay-info-other-item isay-info-tag">
+                    <div class="item-title">标签：</div>
+                    <div class="item-info">
+                        <input id="original" name="tagRadio" class="unify-input" type="radio" value="原创" /><label for="original">原创</label>
+                        <input id="authorization" name="tagRadio" class="unify-input" type="radio" value="授权" /><label for="authorization">获得授权</label>
+                        <input id="share" name="tagRadio" class="unify-input" type="radio" value="分享" checked="checked" /><label for="share">分享</label>
+                    </div>
+                </div>
+
+                <div class="isay-info-other-item isay-info-category">
+                    <div class="item-title">分类：</div>
+                    <div class="item-info">
+                        <span class="isay-info-category-span" data-val="人工智能">人工智能</span>
+                        <span class="isay-info-category-span" data-val=".Net core">.Net core</span>
+                        <span class="isay-info-category-span" data-val="Python">Python</span>
+                        <span class="isay-info-category-span" data-val="C++">C++</span>
+                        <span class="isay-info-category-span" data-val="JavaScript">JavaScript</span>
+                        <span class="isay-info-category-span" data-val="NodeJs">NodeJs</span>
+                        <span class="isay-info-category-span" data-val="Golang">Golang</span>
+
+                        <div style="width:100%;margin-top:20px;"> 没找到，新建一个 <input id="category" class="unify-input" type="text" /></div>
+                    </div>
+                </div>
+
+
+
+                <!--<div class="isay-info-other-item isay-info-status">
+                    <div class="item-title">状态：</div>
+                    <div class="item-info">
+                        <span class="autosave-status-label"></span>
+                    </div>
+                </div>-->
+
+
+
+
+            </div>
+
+            <div class="isay-info-save">
+                <div class="btn-save">发布</div>
+                <!--<div class="btn-publish">发布</div>-->
+            </div>
+        </div>
+
+        <div class="isay-info-right">
+
+
+            <div id="editor" class="isay-info-body">
+            </div>
+
+
+
+            <div class="isay-info-tip">
+                <ol>
+                    <li><p>Bulleted list – Start a line with * or - followed by a space.</p></li>
+                    <li><p>Numbered list – Start a line with 1. or 1) followed by a space.</p></li>
+                    <li><p>Headings – Start a line with # or ## or ### followed by a space to create a heading 1, heading 2 or heading 3 (up to heading 6 if options defines more headings).</p></li>
+                    <li><p>Bold – Type **text** or __text__, </p></li>
+                    <li><p>Italic – Type *text* or _text_,</p> </li>
+                    <li><p>Code – Type `text`.</p></li>
+                    <li><p>Press # + Space =___________</p></li>
+                </ol>
+            </div>
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+    <script type="text/javascript" src="./js/jquery-3.1.1.min.js?v=1.0.0"></script>
+    <script type="text/javascript" src="/js/storage.js?v=1.0.0"></script>
+    <script type="text/javascript" src="./js/util.js?v=1.0.0"></script>
+    <script type="text/javascript" src="./js/base.js?v=1.0.0"></script>
+
+
+    <script type="text/javascript" src="./plugins/ckeditor5-build-classic-12.0.0/build/ckeditor.js"></script>
+    <script type="text/javascript" src="./js/editor.js?v=1.0.0"></script>
+
+
+
+
+
+</body>
+</html>

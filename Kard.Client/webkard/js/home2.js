@@ -5,7 +5,7 @@
 
         //设置首页封面
         var helper = new httpHelper({
-            url: baseUrl+"/api/cover/",
+            url: basejs.requestDomain+"/cover/",
             success: function (data) {
 
                 //data = JSON.parse(data);
@@ -17,7 +17,7 @@
                 //data.media.hasOwnProperty("path")&&
 
 
-                $(".bg-layer").css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + imageUrl+"/assets/media/" + (data.media.cdnPath + "." + data.media.mediaExtension || "") + ")").fadeIn("slow");
+                $(".bg-layer").css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + imageUrl+"/assets/media/" + (data.essayCoverPath + "." + data.media.mediaExtension || "") + ")").fadeIn("slow");
                 $(".essay-content>blackquote>q").text(data.media.essay.simpleContent || "");
                 $(".author").text("@" + data.media.kuser.nickName || "");
                 $(".location").text((data.media.essay.location || "") + " 凌晨5点");
@@ -43,7 +43,7 @@ var hostSection = {
 
         //设置host
         var helper = new httpHelper({
-            url: baseUrl + "/api/getpicture/",
+            url: basejs.requestDomain + "/api/getpicture/",
             contentType: "application/json;charset=utf-8",
             success: function (data) {
 
@@ -78,7 +78,7 @@ var hostSection = {
 
         //设置host
         var helper = new httpHelper({
-            url: baseUrl + "/api/getessay/",
+            url: basejs.requestDomain + "/api/getessay/",
             contentType: "application/json;charset=utf-8",
             success: function (data) {
 

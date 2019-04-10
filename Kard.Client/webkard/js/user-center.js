@@ -186,12 +186,12 @@
                 contentType: false,
                 processData: false,
                 success: function (resultDto) {
-                
+
                     if (resultDto.result) {
                         $("#btnAddPic", _this.data.scope)
                             .css("background-image", "url('" + basejs.requestDomain + "/" + resultDto.data.fileUrl + "_100x100." + resultDto.data.fileExtension + "')")
-                            .attr("data-file-url", resultDto.data.fileUrl )
-                            .attr("data-file-extension", resultDto.data.fileExtension  );
+                            .attr("data-file-url", resultDto.data.fileUrl)
+                            .attr("data-file-extension", resultDto.data.fileExtension);
                     }
                 }
             });
@@ -209,138 +209,275 @@
             $(this).addClass("isay-info-category-span-checked");
         });
 
-        //$(".isay-info-submit", _this.data.scope).click(function () {
+        var autoSaveData = function (data) {
+            var category = $(".isay-info-category-span-checked", _this.data.scope).text();
+            var isOriginal = $("#isOriginal", _this.data.scope).prop('checked');
 
-        //});
+
+            var tag = $("#isayTag", _this.data.scope).val();
+            var title = $("#isayTitle", _this.data.scope).val();
+
+            var content = this.html.get();
+            if (!category) { alert("请选择类型"); return; }
+            if (!tag) { alert("请填写标签"); return; }
+            if (!title) { alert("请填写标题"); return; }
+            if (!content) { alert("请填写内容"); return; }
 
 
-
-        $.FroalaEditor.DefineIcon('saveSelection', { NAME: 'upload' });
-        $.FroalaEditor.RegisterCommand('saveSelection', {
-            title: '发布',
-            focus: true,
-            undo: false,
-            refreshAfterCallback: false,
-            callback: function () {
-               
-                //var mediaArr = [];
-                //$(".isay-info-buttom-medias>img", _this.data.scope).each(function (index, item) {
-                //    var $item = $(item);
-                //    var mediaExtension = $item.attr("data-file-extension");
-                //    var mediaType = "";
-                //    switch (mediaExtension) {
-                //        case "mp4": mediaType = "video"; break;
-                //        default: mediaType = "picture"; break;
-                //    }
-
-                //    mediaArr.push({
-                //        sort: index + 1,
-                //        mediaType: mediaType,
-                //        cdnPath: $item.attr("data-file-url"),
-                //        mediaExtension: mediaExtension
-                //    });
-                //});
-           
- 
-
-                var category = $(".isay-info-category-span-checked", _this.data.scope).text();
-                var isOriginal = $("#isOriginal", _this.data.scope).prop('checked');
-           
-           
-                var tag = $("#isayTag", _this.data.scope).val();
-                var title = $("#isayTitle", _this.data.scope).val();
-
-                var content = this.html.get();
-                if (!category) { alert("请选择类型"); return; }
-                if (!tag) { alert("请填写标签"); return; }
-                if (!title) { alert("请填写标题"); return; }
-                if (!content) { alert("请填写内容"); return; }
-               
-
-                var helper = new httpHelper({
-                    url: basejs.requestDomain + "/essay/add",
-                    type: 'POST',
-                    data: {
-                        essayEntity: {
-                            title: title,
-                            mediaType:"text",
-                            coverFile: $("#btnAddPic", _this.data.scope).attr("data-file-url"),
-                            coverExtension: $("#btnAddPic", _this.data.scope).attr("data-file-extension"),
-                            isOriginal: isOriginal,
-                            category: category,
-                            content: content
-                        },
-                        tagList: [{
-                            sort: 1,
-                            tagName: tag
-                        }]
+            var helper = new httpHelper({
+                url: basejs.requestDomain + "/essay/add",
+                type: 'POST',
+                data: {
+                    essayEntity: {
+                        title: title,
+                        mediaType: "text",
+                        coverFile: $("#btnAddPic", _this.data.scope).attr("data-file-url"),
+                        coverExtension: $("#btnAddPic", _this.data.scope).attr("data-file-extension"),
+                        isOriginal: isOriginal,
+                        category: category,
+                        content: content
                     },
-                    success: function (resultDto) {
-                        if (resultDto.result) {
-                            $("#isayTitle", _this.data.scope).val("");
-                            $("#isayContent", _this.data.scope).val("");
-                            $(".isay-info-buttom-medias>img", _this.data.scope).remove();
-                            alert("发布成功~");
-                        }
+                    tagList: [{
+                        sort: 1,
+                        tagName: tag
+                    }]
+                },
+                success: function (resultDto) {
+                    if (resultDto.result) {
+                        $("#isayTitle", _this.data.scope).val("");
+                        $("#isayContent", _this.data.scope).val("");
+                        $(".isay-info-buttom-medias>img", _this.data.scope).remove();
+                        alert("发布成功~");
                     }
-                });
+                }
+            });
 
 
-                helper.send();
+            helper.send();
 
-                alert('selection saved');
-            }
-        });
+            alert('selection saved');
+        };
+        var displayStatus = function (editor) {
+            const pendingActions = editor.plugins.get('PendingActions');
+            const statusIndicator = document.querySelector('#autosave-status');
 
- 
+            pendingActions.on('change:hasAny', function(evt, propertyName, newValue) {
+                if (newValue) {
+                    statusIndicator.classList.add('busy');
+                } else {
+                    statusIndicator.classList.remove('busy');
+                }
+            });
+        };
+        var isayEditor = null;
+        ClassicEditor.create(document.querySelector('#editor'), {
+            //language: 'zh-cn',
+            //plugins: [Markdown],
+            fontSize: {
+                options: [
+                    9,
+                    11,
+                    13,
+                    15,
+                    17,
+                    19,
+                    21
+                ]
+            },
+            fontFamily: {
+                options: [
+                    '默认,default',
+                    'Ubuntu, Arial, sans-serif',
+                    'Ubuntu Mono2, Courier New, Courier, monospace'
+                ]
+            },
+            highlight: {
+                options: [
+                    {
+                        model: 'greenMarker',
+                        class: 'marker-green',
+                        title: '绿色标记',
+                        color: 'rgb(25, 156, 25)',
+                        type: 'marker'
+                    },
+                    {
+                        model: 'yellowMarker',
+                        class: 'marker-yellow',
+                        title: '黄色标记',
+                        color: '#cac407',
+                        type: 'marker'
+                    },
+                    {
+                        model: 'redPen',
+                        class: 'pen-red',
+                        title: '红色钢笔',
+                        color: 'hsl(343, 82%, 58%)',
+                        type: 'pen'
+                    }
+                ]
 
-        //超大屏幕
-        var toolbarButtons = ['saveSelection', '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'];
-        ////大屏幕
-        //var toolbarButtonsMD = ['fullscreen', 'bold', 'italic', 'underline', 'fontFamily', 'fontSize', 'color', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'undo', 'redo', 'clearFormatting'];
-        ////小屏幕
-        //var toolbarButtonsSM = ['fullscreen', 'bold', 'italic', 'underline', 'fontFamily', 'fontSize', 'insertLink', 'insertImage', 'insertTable', 'undo', 'redo'];
-        ////手机
-        //var toolbarButtonsXS = ['bold', 'italic', 'fontFamily', 'fontSize', 'undo', 'redo'];
+            },
+            ckfinder: {
+                uploadUrl: basejs.requestDomain + "/common/fileupload?command=QuickUpload&type=Images&responseType=json"
+            },
+            autosave: {
+                //save(editor) {
+                //    // The saveData() function must return a promise
+                //    // which should be resolved when the data is successfully saved.
+                //    return autoSaveData(editor.getData());
+                //}
+            },
+            toolbar: ['heading', '|',
+                'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+                'fontSize', 'fontFamily', 'subscript', 'superscript', 'highlight', 'alignment:left', 'alignment:right', 'alignment:center', 'alignment:justify', '|',
+                'imageUpload', 'blockQuote', 'insertTable', 'mediaEmbed', 'underline', 'strikethrough', 'code', 'undo', 'redo'
+            ],
+        })
+            .then(function(editor) {
+                isayEditor = editor;
+                window.editor = editor;
+                var data = editor.getData();
 
-
-        $('#isayContent', _this.data.scope)
-            .on('froalaEditor.initialized', function (e, editor) {
-                $('#isayContent').parents('form').on('submit', function () {
-                    console.log($('#isayContent').val());
-                    return false;
-                })
+                displayStatus(editor);
             })
-            .froalaEditor({
-                charCounterCount: true,//默认
-                charCounterMax: 3000,//默认-1
-                enter: $.FroalaEditor.ENTER_P,
-                placeholderText: '#标签#我的推荐理由...',
-                language: 'zh_cn',
-                saveInterval: 0,//不自动保存，默认10000
-                theme: "red",
-                heightMin: "350px",
-                toolbarBottom: false,//默认
-                toolbarButtons: toolbarButtons,
-                //toolbarButtonsMD: toolbarButtonsMD,
-                //toolbarButtonsSM: toolbarButtonsSM,
-                //toolbarButtonsXS: toolbarButtonsXS,
-                toolbarInline: false,//true选中设置样式,默认false
-                requestWithCORS: true,//默认true
-                requestWithCredentials: true,
-                imageUploadMethod: 'POST',
-                imageUploadURL: basejs.requestDomain + "/essay/froalaupload",
-                fullPage: true
-                //imageUploadParam         : 'upImg',
-                //imageUploadParams: { id: "edit" }
+            .catch(function(err) {
+                console.error(err.stack);
+            });
 
 
 
-            })
 
-      
+
+
+
+
+        /*
+                $.FroalaEditor.DefineIcon('saveSelection', { NAME: 'upload' });
+                $.FroalaEditor.RegisterCommand('saveSelection', {
+                    title: '发布',
+                    focus: true,
+                    undo: false,
+                    refreshAfterCallback: false,
+                    callback: function () {
+                       
+                        //var mediaArr = [];
+                        //$(".isay-info-buttom-medias>img", _this.data.scope).each(function (index, item) {
+                        //    var $item = $(item);
+                        //    var mediaExtension = $item.attr("data-file-extension");
+                        //    var mediaType = "";
+                        //    switch (mediaExtension) {
+                        //        case "mp4": mediaType = "video"; break;
+                        //        default: mediaType = "picture"; break;
+                        //    }
+        
+                        //    mediaArr.push({
+                        //        sort: index + 1,
+                        //        mediaType: mediaType,
+                        //        cdnPath: $item.attr("data-file-url"),
+                        //        mediaExtension: mediaExtension
+                        //    });
+                        //});
+                   
+         
+        
+                        var category = $(".isay-info-category-span-checked", _this.data.scope).text();
+                        var isOriginal = $("#isOriginal", _this.data.scope).prop('checked');
+                   
+                   
+                        var tag = $("#isayTag", _this.data.scope).val();
+                        var title = $("#isayTitle", _this.data.scope).val();
+        
+                        var content = this.html.get();
+                        if (!category) { alert("请选择类型"); return; }
+                        if (!tag) { alert("请填写标签"); return; }
+                        if (!title) { alert("请填写标题"); return; }
+                        if (!content) { alert("请填写内容"); return; }
+                       
+        
+                        var helper = new httpHelper({
+                            url: basejs.requestDomain + "/essay/add",
+                            type: 'POST',
+                            data: {
+                                essayEntity: {
+                                    title: title,
+                                    mediaType:"text",
+                                    coverFile: $("#btnAddPic", _this.data.scope).attr("data-file-url"),
+                                    coverExtension: $("#btnAddPic", _this.data.scope).attr("data-file-extension"),
+                                    isOriginal: isOriginal,
+                                    category: category,
+                                    content: content
+                                },
+                                tagList: [{
+                                    sort: 1,
+                                    tagName: tag
+                                }]
+                            },
+                            success: function (resultDto) {
+                                if (resultDto.result) {
+                                    $("#isayTitle", _this.data.scope).val("");
+                                    $("#isayContent", _this.data.scope).val("");
+                                    $(".isay-info-buttom-medias>img", _this.data.scope).remove();
+                                    alert("发布成功~");
+                                }
+                            }
+                        });
+        
+        
+                        helper.send();
+        
+                        alert('selection saved');
+                   
+    });
+
+
+
+//超大屏幕
+var toolbarButtons = ['saveSelection', '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'];
+////大屏幕
+//var toolbarButtonsMD = ['fullscreen', 'bold', 'italic', 'underline', 'fontFamily', 'fontSize', 'color', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'undo', 'redo', 'clearFormatting'];
+////小屏幕
+//var toolbarButtonsSM = ['fullscreen', 'bold', 'italic', 'underline', 'fontFamily', 'fontSize', 'insertLink', 'insertImage', 'insertTable', 'undo', 'redo'];
+////手机
+//var toolbarButtonsXS = ['bold', 'italic', 'fontFamily', 'fontSize', 'undo', 'redo'];
+
+
+$('#isayContent', _this.data.scope)
+    .on('froalaEditor.initialized', function (e, editor) {
+        $('#isayContent').parents('form').on('submit', function () {
+            console.log($('#isayContent').val());
+            return false;
+        })
+    })
+    .froalaEditor({
+        charCounterCount: true,//默认
+        charCounterMax: 3000,//默认-1
+        enter: $.FroalaEditor.ENTER_P,
+        placeholderText: '#标签#我的推荐理由...',
+        language: 'zh_cn',
+        saveInterval: 0,//不自动保存，默认10000
+        theme: "red",
+        heightMin: "350px",
+        toolbarBottom: false,//默认
+        toolbarButtons: toolbarButtons,
+        //toolbarButtonsMD: toolbarButtonsMD,
+        //toolbarButtonsSM: toolbarButtonsSM,
+        //toolbarButtonsXS: toolbarButtonsXS,
+        toolbarInline: false,//true选中设置样式,默认false
+        requestWithCORS: true,//默认true
+        requestWithCredentials: true,
+        imageUploadMethod: 'POST',
+        imageUploadURL: basejs.requestDomain + "/essay/froalaupload",
+        fullPage: true
+        //imageUploadParam         : 'upImg',
+        //imageUploadParams: { id: "edit" }
+
+
+
+    }) }*/
 
     }
+
+
 
 };
 

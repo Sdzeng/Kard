@@ -51,7 +51,7 @@ var essaydetailjs = {
                 return;
             }
 
-            $(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + data.essayCoverPath + (data.essayCoverMediaType =="picture"?"_2560x1200." + data.essayCoverExtension:".jpg") + ")");
+            $(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + data.essayCoverPath + (data.essayCoverMediaType =="picture"?"." + data.essayCoverExtension:".jpg") + ")");
         });
     },
     bindEssay: function () {
@@ -74,7 +74,7 @@ var essaydetailjs = {
               
                 var avatarArr = data.kuserAvatarUrl.split('.');
 
-                $('.essay-detail-remark', _this.data.scope).html("<span>" + (data.isOriginal ? "获得授权" : "分享") + "</span>"+
+                $('.essay-detail-remark', _this.data.scope).html(
                    "<span><img  class='lazy' src='/image/default-avatar.jpg' data-original='" + basejs.cdnDomain + "/" + avatarArr[0] + "_30x30." + avatarArr[1] + "' >" + data.kuserNickName + "</span>" +
                     "<span>" + data.location + "</span><span>" + basejs.getDateDiff(basejs.getDateTimeStamp(data.creationTime)) + "发布</span><span>" + data.browseNum + "阅读</span>");
 
@@ -105,7 +105,7 @@ var essaydetailjs = {
                 }
                 $('.essay-detail-content', _this.data.scope).html("<p>" + data.content + "</p><p>" + imgs + "</p>");*/
 
-                $('.essay-detail-content', _this.data.scope).html($(data.content).text());
+                $('.essay-detail-content', _this.data.scope).html(data.content);
 
 
                 $('.essay-detail-like-share', _this.data.scope).html("<span id='btnLike' data-islike='" + data.isLike + "'>" + (data.isLike ? "已喜欢 " : "喜欢 ") + data.likeNum + "</span><span>分享 " + data.shareNum + "</span><span>举报</span>");
@@ -165,7 +165,7 @@ var essaydetailjs = {
                 var essayAHtml ="";
                 for (var index in data) {
                     var essay = data[index];
-                    essayAHtml += "<a href='essay-detail.html?id=" + essay.id + "'><div>《" + essay.title + " 》" + essay.content +"</div><div>" + basejs.getNumberDiff(essay.likeNum) + "人喜欢</div></a>";
+                    essayAHtml += "<a href='essay-detail.html?id=" + essay.id + "'><div>" + essay.title +"</div><div>" + basejs.getNumberDiff(essay.likeNum) + "人喜欢</div></a>";
                 }
                 if (essayAHtml == "") {
                     essayAHtml = "<div class='div-empty'><div><img src='/image/empty.gif'></div><div>空空如也</div></div>";
@@ -193,7 +193,7 @@ var essaydetailjs = {
                 var essayAHtml = "";
                 for (var index in data) {
                     var essay = data[index];
-                    essayAHtml += "<a href='essay-detail.html?id=" + essay.id + "'><div>《" + essay.title + " 》" + essay.content +"</div><div>" + basejs.getNumberDiff(essay.likeNum) + "人喜欢</div></a>";
+                    essayAHtml += "<a href='essay-detail.html?id=" + essay.id + "'><div>" + essay.title + "</div><div>" + basejs.getNumberDiff(essay.likeNum) + "人喜欢</div></a>";
                 }
                 if (essayAHtml == "") {
                     essayAHtml = "<div class='div-empty'><div><img src='/image/empty.gif'></div><div>空空如也</div></div>";

@@ -1,0 +1,184 @@
+.isay-info {
+    display: flex;
+    flex-wrap: nowrap;
+    border-bottom: 1px solid var(--ck-color-toolbar-border);
+
+    &-left {
+        border-right: 5px solid var(--ck-color-toolbar-border);
+        width: 25%;
+        font-size: larger;
+    }
+
+    &-right {
+        width: 75%;
+    }
+
+    &-cover {
+        border-bottom: 1px solid var(--ck-color-toolbar-border);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 250px;
+
+        #btnAddPic {
+            line-height: 194px;
+            height: 194px;
+            width: 260px;
+            text-align: center;
+            font-size: larger;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+    }
+
+    &-other {
+        &-item {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin: 60px 0px;
+
+            .item-title {
+                width: 20%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+
+            .item-info {
+                width: 80%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+                align-items: center;
+
+                input[type="text"] {
+                    border-bottom: 1px solid var(--ck-color-toolbar-border);
+                    width: 70%;
+                }
+
+                input[type="radio"] {
+                    margin: 0px 5px 0px 10px;
+                }
+            }
+        }
+    }
+
+
+
+
+
+    &-category {
+        align-items: flex-start;
+
+        &-span {
+            font-size: 14px;
+            padding: 6px 10px;
+            text-align: center;
+            border-radius: 3px;
+            background: #49cc90;
+            text-shadow: 0 1px 0 rgba(0,0,0,.1);
+            color: #fff;
+            cursor: pointer;
+            margin: 0px 10px 10px 0px;
+
+            &:hover {
+                background: #039993;
+            }
+
+            &-checked {
+                background-color: #039993;
+            }
+        }
+
+        &-input {
+            height: 28px;
+            font-size: 14px;
+            border: 1px solid var(--ck-color-toolbar-border);
+            border-radius: 3px;
+            width: 150px;
+        }
+    }
+
+    &-status {
+        .autosave-status-label {
+            color: green;
+            display: inline-block;
+            margin-right: var(--ck-spacing-medium);
+        }
+    }
+
+
+
+
+    .ck {
+        .ck-toolbar {
+            border-top: 0px;
+            border-left: 0px;
+        }
+
+        .ck-editor__editable_inline {
+            border-left: 0px;
+            border-bottom: 0px;
+        }
+
+        .ck-content {
+            min-height: 650px;
+            /*code {
+            width: 100%;
+            display: inline-block;
+            color: black;
+        }*/
+        }
+
+        .ck.ck-editor__main > .ck-editor__editable.ck-focused {
+            border: var(--ck-color-base-border);
+        }
+    }
+
+
+    &-tip {
+
+        ol {
+            font: italic 1em Georgia, Times, serif;
+            color: #999999;
+            list-style-type: decimal;
+            padding: 20px 30px;
+
+
+            p {
+                font: normal 1em Arial, Helvetica, sans-serif;
+                color: #000000;
+                padding: 10px 0px;
+            }
+        }
+    }
+
+
+
+    &-save {
+        height: 290px;
+        text-align: center;
+        display: flex;
+        justify-content:space-around;
+        align-items: center;
+        border-top: 1px solid var(--ck-color-toolbar-border);
+
+        .btn-save, .btn-publish {
+            font-size: 18px;
+            padding: 20px 100px;
+            text-align: center;
+            background: #49cc90;
+            text-shadow: 0 1px 0 rgba(0,0,0,.1);
+            color: #fff;
+            cursor: pointer;
+
+
+            &:hover {
+                background: #039993;
+            }
+        }
+    }
+}

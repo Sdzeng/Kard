@@ -17,6 +17,8 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Web;
+
 namespace Kard.Web.Controllers
 {
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
@@ -176,7 +178,7 @@ namespace Kard.Web.Controllers
         /// </summary>
         /// <returns></returns>
         //[HttpPost]
-        //[Route("api/common/uploadimg")]
+        //[Route("common/uploadimg")]
         //public async Task<IActionResult> UploadImg(IFormFile formFile)
         //{
         //    var json = new JsonResultModel<object>()
@@ -243,6 +245,7 @@ namespace Kard.Web.Controllers
             var rs = new JsonResult(new
             {
                 message = "您未登录不能查看该内容"
+
             });
 
             rs.StatusCode = 401;

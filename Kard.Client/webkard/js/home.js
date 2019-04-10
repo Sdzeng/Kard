@@ -78,7 +78,7 @@
 
 
 
-            $("blackquote.splash-txt>q", _this.data.scope).text(data.essayContent || data.essayTitle);
+            $("blackquote.splash-txt>q", _this.data.scope).html(data.essayContent || data.essayTitle);
             //图片懒加载
             basejs.lazyInof('blackquote.splash-author>img.lazy');
             var avatarArr = data.kuserAvatarUrl.split('.');
@@ -243,7 +243,7 @@
                         //likeNum: basejs.getNumberDiff(topMediaDto.likeNum),
                         //shareNum: basejs.getNumberDiff(topMediaDto.shareNum),
                         browseNum: basejs.getNumberDiff(topMediaDto.browseNum),
-                        tagSpan: "<span>" + (topMediaDto.isOriginal ? "原创" : "分享") + "</span>" + tagSpan,
+                        tagSpan: tagSpan,
                         defaultAvatarPath: basejs.defaults.avatarPath,
                         avatarCropPath: avatarCropPath,
                         //location: topMediaDto.location,

@@ -2,12 +2,12 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
-    <title>自然单品</title>
+    <title>核心技术</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="icon" href="/image/logo-tab_16x16.ico" sizes="16x16">
-    <!--<link rel="stylesheet" href="/css/kard.css" type="text/css" media="screen">-->
-    <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/kard.css" type="text/css" media="screen">
+    <!--<link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/font-awesome.min.css">
     <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/froala_editor.min.css" type="text/css" media="screen">
     <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/froala_style.min.css" type="text/css" media="screen">
     <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/plugins/code_view.css">
@@ -16,10 +16,10 @@
     <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/plugins/image.css">
     <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/plugins/table.css">
     <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/plugins/video.css">
-    <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/codemirror.min.css">
+    <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/codemirror.min.css">-->
 
-    <link rel="stylesheet/less" href="/less/kard.less" type="text/css" media="screen">
-    <script type="text/javascript" src="/js/less.js?v=1.0.0"></script>
+    <!--<link rel="stylesheet/less" href="/less/kard.less" type="text/css" media="screen">
+    <script type="text/javascript" src="/js/less.js?v=1.0.0"></script>-->
 
 
 </head>
@@ -28,7 +28,7 @@
     <nav id="navbar" class="navbar  bg-default navbar-bottom-shadow">
 
         <div class="navbar-logo">
-            <a href="/"><span><img src="/image/logo-nav_30x30.png"></span><span>自然单品</span></a>
+            <a href="/"><span><img src="/image/logo-nav.png"></span></a>
         </div>
         <div class="navbar-left">
             <ul id="menuList" class="navbar-nav"></ul>
@@ -74,19 +74,12 @@
                 </div>
 
             </blackquote>
-        </div> 
+        </div>
         <div class="splash-bg  bg-default">
 
         </div>
 
     </div>-->
-
-
-
-
-
-
-
     <!--host -->
     <div class="user-center-info">
 
@@ -185,11 +178,11 @@
 
                 <div class="isay-info">
                     <!--<div class="isay-info-head">
-        <input class="unify-input isay-info-title" id="isayTitle" rows="5" placeholder="主题" />
+                        <input class="unify-input isay-info-title" id="isayTitle" rows="5" placeholder="主题" />
 
 
 
-    </div>-->
+                    </div>-->
 
                     <div class="isay-info-category">
                         类型：
@@ -212,71 +205,93 @@
 
                     </div>
                     <div class="isay-info-title">
-                        标题： <input id="isayTitle" type="text" class="unify-input" /> 
+                        标题： <input id="isayTitle" type="text" class="unify-input" />
 
                     </div>
                     <div class="isay-info-body">
-                        <div id="isayContent">
-                         
-                            <p>#标签#我的推荐理由...</p>
+                        <div id="editor" class="isay-info-editor">
+                        </div>
+                        <div id="autosave-header">
+                            <div id="autosave-status">
+                                <div id="autosave-status_label">状态:</div>
+                                <div id="autosave-status_spinner">
+                                    <span id="autosave-status_spinner-label"></span>
+                                </div>
+                            </div>
 
-                            <p></p>
-
+                            <div id="autosave-server">
+                                <div id="autosave-server_label">HTTP server lag (ms):</div>
+                                <input id="autosave-lag" type="number" value="500" step="100" min="0" max="9000">
+                            </div>
                         </div>
                     </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    <div class="essay-info" style="margin-bottom: 20px;">
-                        <div class="essay-info-left" style="position: relative; width: 50px; float: left;"><img src="http://localhost:3703/user/1/photo_50x50.jpg" style="border-radius: 3px;" /></div>
-
-                        <div class="essay-info-right" style="margin-left: 60px; width:538px;">
-
-                            <div class="essay-info-right-user-name" style="font-size:15px;margin: 0 0 3px;"><a class="href-label">金鱼</a></div>
-                            <div class="essay-info-right-date" style="font-size: 12px; margin: 0 0 10px; color: #b6b6b6;"> 2016年08月15日 06:45 </div>
-                            <div class="essay-info-right-content" style="margin: 0 0 10px;"><p>现在画的是《寻找前世之旅》单行本颜色。软件是PS和CSP，请勿截屏截图，直播群：451396771。重复： 现在画的是《寻找前世之旅》单行本颜色。软件是PS和CSP，请勿截屏截图，直播群：451396771。</p></div>
-                            <div class="essay-info-right-media" style=" margin: 0 0 10px; ">
-                                <a href="http://localhost:3703/user/1/media/20170901/2371088718.jpg">
-                                    <img src="http://localhost:3703/user/1/media/20170901/2371088718_538x300.jpg" data-origin="http://localhost:3703/user/1/media/20170901/2371088718.jpg" alt="">
-                                </a>
-                            </div>
-
-                            <div class="essay-info-right-buttom">
-                                <ul>
-                                    <li class="essay-info-right-buttom-tags">
-                                        标签: <a href="https://www.douban.com/tag/动漫/" target="_blank">动漫</a> <a href="https://www.douban.com/tag/趣味/" target="_blank">趣味</a> <a href="https://www.douban.com/tag/人文/" target="_blank">人文</a> <a href="https://www.douban.com/tag/姚瑶/" target="_blank">姚瑶</a> <a href="https://www.douban.com/tag/日常/" target="_blank">日常</a>
-                                    </li>
-                                    <li class="essay-info-right-buttom-nums">
-                                        <a class="view">16820</a>
-                                        <a class="like">7</a>
-                                        <a class="comments">0</a>
-                                    </li>
-                                </ul>
-                            </div>
-
-                        </div>
+                    <div class="editor-tip">
+                        <ol>
+                            <li><p>Bulleted list – Start a line with * or - followed by a space.</p></li>
+                            <li><p>Numbered list – Start a line with 1. or 1) followed by a space.</p></li>
+                            <li><p>Headings – Start a line with # or ## or ### followed by a space to create a heading 1, heading 2 or heading 3 (up to heading 6 if options defines more headings).</p></li>
+                            <li><p>Bold – Type **text** or __text__, </p></li>
+                            <li><p> Italic – Type *text* or _text_,</p> </li>
+                            <li><p>Code – Type `text`.</p></li>
+                            <li><p>Press # + Space =___________</p></li>
+                        </ol>
                     </div>
-
-
                 </div>
-                <!--<div class="user-center-info-right">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="essay-info" style="margin-bottom: 20px;">
+                    <div class="essay-info-left" style="position: relative; width: 50px; float: left;"><img src="http://localhost:3703/user/1/photo_50x50.jpg" style="border-radius: 3px;" /></div>
+
+                    <div class="essay-info-right" style="margin-left: 60px; width:538px;">
+
+                        <div class="essay-info-right-user-name" style="font-size:15px;margin: 0 0 3px;"><a class="href-label">金鱼</a></div>
+                        <div class="essay-info-right-date" style="font-size: 12px; margin: 0 0 10px; color: #b6b6b6;"> 2016年08月15日 06:45 </div>
+                        <div class="essay-info-right-content" style="margin: 0 0 10px;"><p>现在画的是《寻找前世之旅》单行本颜色。软件是PS和CSP，请勿截屏截图，直播群：451396771。重复： 现在画的是《寻找前世之旅》单行本颜色。软件是PS和CSP，请勿截屏截图，直播群：451396771。</p></div>
+                        <div class="essay-info-right-media" style=" margin: 0 0 10px; ">
+                            <a href="http://localhost:3703/user/1/media/20170901/2371088718.jpg">
+                                <img src="http://localhost:3703/user/1/media/20170901/2371088718_538x300.jpg" data-origin="http://localhost:3703/user/1/media/20170901/2371088718.jpg" alt="">
+                            </a>
+                        </div>
+
+                        <div class="essay-info-right-buttom">
+                            <ul>
+                                <li class="essay-info-right-buttom-tags">
+                                    标签: <a href="https://www.douban.com/tag/动漫/" target="_blank">动漫</a> <a href="https://www.douban.com/tag/趣味/" target="_blank">趣味</a> <a href="https://www.douban.com/tag/人文/" target="_blank">人文</a> <a href="https://www.douban.com/tag/姚瑶/" target="_blank">姚瑶</a> <a href="https://www.douban.com/tag/日常/" target="_blank">日常</a>
+                                </li>
+                                <li class="essay-info-right-buttom-nums">
+                                    <a class="view">16820</a>
+                                    <a class="like">7</a>
+                                    <a class="comments">0</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <!--<div class="user-center-info-right">
 
                 <ul>
                     <li>
@@ -414,9 +429,9 @@
 
             </div>-->
 
-            </div>
         </div>
     </div>
+  
     <div style="min-height: 1000px;">123</div>
 
 
@@ -432,8 +447,9 @@
     <script type="text/javascript" src="/js/storage.js?v=1.0.0"></script>
     <script type="text/javascript" src="/js/base.js?v=1.0.0"></script>
 
+    <!--<script type="text/javascript" src="./plugins/ckeditor5-build-classic-12.0.0/build/ckeditor.js"></script>-->
 
-    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/codemirror.min.js"></script>
+    <!--<script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/codemirror.min.js"></script>
     <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/xml.min.js"></script>
     <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/froala_editor.min.js"></script>
     <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/fullscreen.min.js"></script>
@@ -453,7 +469,7 @@
     <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/video.min.js"></script>
     <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/url.min.js"></script>
     <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/plugins/entities.min.js"></script>
-    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/languages/zh_cn.js"></script>
+    <script type="text/javascript" src="/plugins/froala_editor_2.8.4/js/languages/zh_cn.js"></script>-->
 
     <script type="text/javascript" src="/js/user-center.js?v=1.0.0"></script>
 

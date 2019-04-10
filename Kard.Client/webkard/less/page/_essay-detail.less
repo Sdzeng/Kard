@@ -66,14 +66,12 @@
                         position: relative;
                         top: -3px;
                     }
-
-                    &:first-child {
+                    /*&:first-child {
                         padding: 3px 10px;
                         color: #9aabb8;
                         background-color: #dfe5e9;
                         border-radius: 3px;
-                    }
-
+                    }*/
                     &:not(:first-child) {
                         margin-left: 10px;
                     }
@@ -230,6 +228,11 @@
             .comment-like-menu {
                 border-bottom: 1px solid #e3f1ed; //1px solid #f6f7f9;
                 height: 30px;
+                list-style-type: none;
+                list-style-image: none;
+                padding: 0;
+                margin: 0;
+
 
                 li {
                     width: 80px;
@@ -251,7 +254,7 @@
                 padding: 10px 0px;
 
                 .comment-textarea-info {
-                 
+
 
                     textarea.comment-new-textarea {
                         width: 100%;

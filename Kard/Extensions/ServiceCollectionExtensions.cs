@@ -93,10 +93,20 @@ namespace Kard.Extensions
 
         private static void ScanModule(this IServiceCollection services, Func<ITypeSourceSelector,IImplementationTypeSelector> typeSelector)
         {
-            services.Scan(scan => typeSelector(scan).AddTransientInterfaces());
-            services.Scan(scan => typeSelector(scan).AddScopedInterfaces());
-            services.Scan(scan => typeSelector(scan).AddSingletonInterfaces());
-            services.Scan(scan => typeSelector(scan).AddAttributes());
+            //services.Scan(scan => typeSelector(scan).AddTransientInterfaces());
+            //services.Scan(scan => typeSelector(scan).AddScopedInterfaces());
+            //services.Scan(scan => typeSelector(scan).AddSingletonInterfaces());
+            //services.Scan(scan => typeSelector(scan).AddAttributes());
+
+            services.Scan(scan =>
+            {
+                IImplementationTypeSelector selector = typeSelector(scan);
+                selector.AddTransientInterfaces();
+                selector.AddScopedInterfaces();
+                selector.AddSingletonInterfaces();
+                selector.AddAttributes();
+            });
+
         }
 
         public static IHostingEnvironment GetHostingEnvironment(this IServiceCollection services)

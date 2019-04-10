@@ -15,7 +15,7 @@ var loginjs = {
             if (!data) {
                 return;
             }
-            $(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),url(" + basejs.cdnDomain + "/" + data.essayCoverPath + (data.essayCoverMediaType == "picture" ? "_2560x1200." + data.essayCoverExtension : ".jpg") + ")");
+            $(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),url(" + basejs.cdnDomain + "/" + data.essayCoverPath + (data.essayCoverMediaType == "picture" ? "." + data.essayCoverExtension : ".jpg") + ")");
         });
     },
     login: function () {
@@ -35,16 +35,27 @@ var loginjs = {
             // 阻止表单提交  
             event.preventDefault();
 
+            var formData = $(this).serialize();
+            var queryData = basejs.getQueryString();
+            //if (queryData.returnUrl) {
+            //    formData += "&returnUrl=" + queryData.returnUrl;
+            //}
             var helper = new httpHelper({
                 url: basejs.requestDomain + "/webuser/login",//this.url || this.form.action,
                 type: 'POST',
                 //contentType: "application/json;charset=utf-8",
-                data: $(this).serialize(),//{"username":$("#username").val()},//
+                data: formData,//{"username":$("#username").val()},//
                 success: function (data) {
                     //var result = JSON.parse(data);
                     if (data.result) {
                         storage.local.setItem("isLogin", "true");
-                        window.location.href = "/user-center.html";
+                        if (queryData.returnUrl) {
+                            window.location.href = decodeURI(queryData.returnUrl);
+                        }
+                        else {
+                            window.location.href = "/editor.html";
+                        }
+                       
                     }
                     else {
                         storage.local.setItem("isLogin", "false");

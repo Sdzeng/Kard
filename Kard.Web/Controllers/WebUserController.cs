@@ -86,6 +86,7 @@ namespace Kard.Web.Controllers
             if (result.Result)
             {
                 var identity = result.Data;
+            
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), new AuthenticationProperties { IsPersistent = (remember == "on") });
 
                 //if (returnUrl.IsNullOrEmpty())
