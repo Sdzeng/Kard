@@ -88,7 +88,8 @@ namespace Kard.Web.Controllers
                     flie.CopyTo(stream);
                 }
                 result.Result = true;
-                result.Data = new { Url = Path.Combine(_defaultRepository.Configuration.GetValue<string>("AppSetting:ApiDomain"), newFolder, fileName + fileExtension).Replace("\\", "/") ,FileUrl = Path.Combine(newFolder, fileName).Replace("\\", "/"), FileExtension = fileExtension.Replace(".", "") };
+                var host = HttpContext.Request.Host;
+                result.Data = new { Url = Path.Combine(host.Host+":"+(host.Port.HasValue? host.Port.Value.ToString():""), newFolder, fileName + fileExtension).Replace("\\", "/") ,FileUrl = Path.Combine(newFolder, fileName).Replace("\\", "/"), FileExtension = fileExtension.Replace(".", "") };
                 return result;
             }
 

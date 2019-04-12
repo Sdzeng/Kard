@@ -93,14 +93,12 @@
         color: #555;
         line-height: 25px;
 
-        p {
-            margin: 0px;
-
-            img, video {
-                width: 100%;
-                margin-top: 10px;
-            }
+        img, video {
+             width: 100%;
+            margin-top: 10px;
         }
+
+       
     }
     /*.essay-detail-tag {
         margin-top: 5px;
@@ -244,7 +242,7 @@
         .comment-empty {
             padding: 30px;
             color: #bbb;
-            text-align:center;
+            text-align: center;
         }
 
         .comment-info {
@@ -313,5 +311,29 @@
                 }
             }
         }
+    }
+}
+
+
+.ckeditor-data {
+    blockquote {
+        overflow: hidden;
+        padding-right: 1.5em;
+        padding-left: 1.5em;
+        margin-left: 0;
+        font-style: italic;
+        border-left: 5px solid #ccc;
+    }
+
+    .marker-green {
+        background-color: green;
+    }
+
+    .marker-yellow {
+        background-color: yellow;
+    }
+
+    .pen-red {
+        color: red;
     }
 }

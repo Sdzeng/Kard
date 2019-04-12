@@ -31,6 +31,8 @@ namespace Kard.Core.Dtos
 
         public string Title { get; set; }
 
+        public string Content { get; set; }
+
         public string CreatorUserId { get; set; }
 
         public DateTime CreationTime { get; set; }

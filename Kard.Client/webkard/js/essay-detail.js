@@ -20,7 +20,7 @@ var essaydetailjs = {
                 "<div><a> #{nickName}</a>#{content}</div> " +
                 "#{commentParent}" +
                 "</div >"),
-            like: ("<div class='like-info'> <span class='like-info-avatar'><img  class='lazy' src='/image/default-avatar.jpg' data-original='#{avatarUrl}'>#{nickName} 喜欢了这件单品</span><span>#{creationTime}</span></div>"),
+            like: ("<div class='like-info'> <span class='like-info-avatar'><img  class='lazy' src='/image/default-avatar.jpg' data-original='#{avatarUrl}'>#{nickName} 喜欢了这篇文章</span><span>#{creationTime}</span></div>"),
             video: (
                 "<video class='bg-video' autoplay='autoplay' loop='loop' poster='#{videoCoverPath}' id='bgvideo'>" +
                 "<source src='#{videoPath}' type='video/#{videoExtension}' >" +
@@ -117,7 +117,7 @@ var essaydetailjs = {
 
 
                 $(".essay-score-num", _this.data.scope).text(data.score);
-                $(".people-grade", _this.data.scope).text(data.scoreHeadCount);
+                $(".people-grade", _this.data.scope).text(data.scoreHeadCount +"人参与评分");
 
 
                 $(".big-star", _this.data.scope).addClass(basejs.getStarClass("bigstar",data.score));

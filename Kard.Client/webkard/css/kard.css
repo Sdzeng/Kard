@@ -815,14 +815,14 @@ th {
   justify-content: center;
 }
 .navigation-link {
-  width: 1010px;
+  width: 1130px;
   border-bottom: 1px solid #f4f4f4;
   padding: 10px 0px;
   color: #bbb;
 }
 @media (min-width: 1400px) {
   .navigation-link {
-    width: 1150px;
+    width: 1180px;
   }
 }
 .navigation-link a {
@@ -981,33 +981,33 @@ th {
   margin-top: 10px;
 }
 .essay-detail-info .go-to-top {
-  margin-left: 520px;
+  margin-left: 400px;
 }
 @media (min-width: 1400px) {
   .essay-detail-info .go-to-top {
-    margin-left: 590px;
+    margin-left: 400px;
   }
 }
 .essay-detail-info-left {
-  margin-right: 60px;
-  width: 700px;
+  margin-right: 50px;
+  width: 850px;
 }
 @media (min-width: 1400px) {
   .essay-detail-info-left {
-    margin-right: 100px;
+    width: 900px;
   }
 }
 .essay-detail-info-left .essay-detail-title {
   font-size: 180%;
-  word-spacing: 2px;
-  letter-spacing: 1px;
+  /*word-spacing: 2px;
+            letter-spacing: 1px;*/
 }
 .essay-detail-info-left .essay-detail-subheading {
   line-height: 30px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding-top: 10px;
+  padding-top: 15px;
 }
 .essay-detail-info-left .essay-detail-subheading .essay-detail-remark {
   color: #bbb;
@@ -1052,13 +1052,13 @@ th {
 .essay-detail-info-left .essay-detail-content {
   text-align: left;
   color: #555;
-  padding-top: 10px;
+  padding-top: 20px;
   line-height: 25px;
   min-height: 450px;
 }
 .essay-detail-info-left .essay-detail-content img,
 .essay-detail-info-left .essay-detail-content video {
-  width: 700px;
+  max-width: 700px;
   margin-top: 20px;
 }
 .essay-detail-info-left .essay-detail-like-share {
@@ -1310,7 +1310,7 @@ th {
   display: block;
 }
 .essay-detail-info-right {
-  width: 250px;
+  width: 230px;
   /*.essay-author {
             padding: 10px;
             margin-bottom: 20px;
@@ -1376,11 +1376,6 @@ th {
             }
         }*/
 }
-@media (min-width: 1400px) {
-  .essay-detail-info-right {
-    width: 350px;
-  }
-}
 .essay-detail-info-right .essay-score {
   padding: 10px;
   margin-bottom: 60px;
@@ -1409,19 +1404,11 @@ th {
   padding: 10px;
   color: #4f946e;
   border-bottom: 1px dashed #e3f1ed;
-  width: 250px;
+  width: 100%;
   height: 39px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-}
-@media (min-width: 1400px) {
-  .essay-detail-info-right .essay-similar .essay-similar-a a,
-  .essay-detail-info-right .essay-other .essay-similar-a a,
-  .essay-detail-info-right .essay-similar .essay-other-a a,
-  .essay-detail-info-right .essay-other .essay-other-a a {
-    width: 350px;
-  }
 }
 .essay-detail-info-right .essay-similar .essay-similar-a a:hover,
 .essay-detail-info-right .essay-other .essay-similar-a a:hover,
@@ -1434,19 +1421,28 @@ th {
 .essay-detail-info-right .essay-other .essay-similar-a a div:first-child,
 .essay-detail-info-right .essay-similar .essay-other-a a div:first-child,
 .essay-detail-info-right .essay-other .essay-other-a a div:first-child {
-  width: 160px;
+  width: 65%;
   overflow: hidden;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   white-space: nowrap;
 }
-@media (min-width: 1400px) {
-  .essay-detail-info-right .essay-similar .essay-similar-a a div:first-child,
-  .essay-detail-info-right .essay-other .essay-similar-a a div:first-child,
-  .essay-detail-info-right .essay-similar .essay-other-a a div:first-child,
-  .essay-detail-info-right .essay-other .essay-other-a a div:first-child {
-    width: 260px;
-  }
+.ckeditor-data blockquote {
+  overflow: hidden;
+  padding-right: 1.5em;
+  padding-left: 1.5em;
+  margin-left: 0;
+  font-style: italic;
+  border-left: 5px solid #ccc;
+}
+.ckeditor-data .marker-green {
+  background-color: green;
+}
+.ckeditor-data .marker-yellow {
+  background-color: yellow;
+}
+.ckeditor-data .pen-red {
+  color: red;
 }
 .user-center-info {
   display: flex;

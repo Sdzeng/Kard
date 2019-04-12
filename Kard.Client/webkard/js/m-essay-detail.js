@@ -55,7 +55,7 @@ var essaydetailjs = {
                 $('.essay-min-author-txt-name', _this.data.scope).text(data.kuserNickName);
                 $('.essay-min-author-txt-introduction', _this.data.scope).html("<span>" + basejs.getDateDiff(basejs.getDateTimeStamp(data.creationTime)) + "</span><span>" + data.browseNum + " 阅读</span><span>" + data.score + " 分</span>");
 
-
+               
                 //var imgs = "";
                 //var wxImgUrl = "";
                 //for (var i in data.mediaList) {
@@ -99,74 +99,78 @@ var essaydetailjs = {
                 basejs.lazyInof('.essay-detail-info img.lazy');
 
 
-                var jssdkHelper = new httpHelper({
-                    url: basejs.requestDomain + '/essay/jssdk',
-                    type: "POST",
-                    data: { url: location.href.split('#')[0] },
-                    success: function (resultDto2) {
-                        if (!resultDto2.result) {
-                            alert(resultDto2.message);
-                        }
-                        var data2 = resultDto2.data;
-                        //alert(JSON.stringify(data2));
-                        wx.config({
-                            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                            appId: data2.appId, // 必填，公众号的唯一标识
-                            timestamp: data2.timestamp, // 必填，生成签名的时间戳
-                            nonceStr: data2.nonceStr, // 必填，生成签名的随机串
-                            signature: data2.signature,// 必填，签名
-                            jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage']// 必填，需要使用的JS接口列表
-                        });
-                        wx.error(function (res) {
-                            alert('wx.error: ' + JSON.stringify(res));
-                        });
+                //var jssdkHelper = new httpHelper({
+                //    url: basejs.requestDomain + '/essay/jssdk',
+                //    type: "POST",
+                //    data: { url: location.href.split('#')[0] },
+                //    success: function (resultDto2) {
+                //        if (!resultDto2.result) {
+                //            alert(resultDto2.message);
+                //        }
+                //        var data2 = resultDto2.data;
+                //        var wxImgUrl = basejs.requestDomain + "/" + data.coverPath + "_60x60." + data.coverExtension;
+                //        wxImgUrl = wxImgUrl.replace(/\\/g, "/");
 
-                        wx.ready(function () {
-                            var link = location.href.split('#')[0];
-                            //转发到朋友圈
-                            wx.onMenuShareTimeline({
-                                title: data.title,
-                                link: link,
-                                imgUrl: wxImgUrl,
-                                success: function () {
-                                    //alert('转发成功！');
-                                },
-                                cancel: function () {
-                                    //alert('转发失败！');
-                                }
-                            });
-                            //转发给朋友
-                            //alert(((data.content || "").length > 20 ? data.content.substr(0, 20) : data.content));
-                            //var imgUrl = basejs.cdnDomain + "/" + avatarArr[0] + "_60x60." + avatarArr[1];
-                            //imgUrl = imgUrl.replace(/\\/g, "/");
-                            //alert(imgUrl);
-                            wx.onMenuShareAppMessage({
-                                title: data.title,
-                                desc: ((data.content || "").length > 30 ? data.content.substr(0, 30)+"..." : data.content),
-                                link: link,
-                                imgUrl: wxImgUrl,
-                                type: 'link',
-                                dataUrl: '',
-                                success: function () {
-                                    //alert('转发成功！');
-                                },
-                                cancel: function () {
+                //        wx.config({
+                //            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                //            appId: data2.appId, // 必填，公众号的唯一标识
+                //            timestamp: data2.timestamp, // 必填，生成签名的时间戳
+                //            nonceStr: data2.nonceStr, // 必填，生成签名的随机串
+                //            signature: data2.signature,// 必填，签名
+                //            jsApiList: ["updateAppMessageShareData","updateTimelineShareData"] // 必填，需要使用的JS接口列表
+                //        });
+                       
+                    
+                //        wx.ready(function () {
+                //            var link = location.href.split('#')[0];
+                //            //转发到朋友圈
+                //            wx.updateTimelineShareData({
+                //                title: data.title,
+                //                link: link,
+                //                imgUrl: wxImgUrl,
+                //                success: function () {
+                //                    alert('转发成功！');
+                //                },
+                //                cancel: function () {
+                //                    //alert('转发失败！');
+                //                }
+                //            });
+                //            //转发给朋友
+                //            //alert(((data.content || "").length > 20 ? data.content.substr(0, 20) : data.content));
+                //            //var imgUrl = basejs.cdnDomain + "/" + avatarArr[0] + "_60x60." + avatarArr[1];
+                //            //imgUrl = imgUrl.replace(/\\/g, "/");
+                //            //alert(imgUrl);
+                //            wx.updateAppMessageShareData({
+                //                title: data.title,
+                //                desc: data.title,//((data.content || "").length > 30 ? data.content.substr(0, 30)+"..." : data.content),
+                //                link: link,
+                //                imgUrl: wxImgUrl,
+                //                success: function () {
+                //                    alert('转发成功！');
+                //                },
+                //                cancel: function () {
 
-                                    //alert('转发失败！');
-                                }
-                            });
-                        });
+                //                    //alert('转发失败！');
+                //                }
+                //            });
+                //        });
 
-                    },
-                    error: function (res) {
 
-                        alert("报错：" + res);
-                        console.log(res);
-                        //layer.msg("网络异常，请稍后再试", { time: 1500 });
-                    }
-                });
+                //        wx.error(function (res) {
+                //            alert('wx.error: ' + JSON.stringify(res));
+                //        });
 
-                jssdkHelper.send();
+
+                //    },
+                //    error: function (res) {
+
+                //        alert("报错：" + res);
+                //        console.log(res);
+                //        //layer.msg("网络异常，请稍后再试", { time: 1500 });
+                //    }
+                //});
+
+                //jssdkHelper.send();
               
             }
         });

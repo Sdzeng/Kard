@@ -7,22 +7,52 @@
           "namech": "首页",
           "url": "/"
         },
-        
         {
           "id": "2",
           "name": "BS",
-          "namech": "下载",
-          "url": "download.html"
+          "namech": "人工智能",
+          "url": "search.html?category=人工智能"
         },
         {
           "id": "3",
-          "name": "CS",
-          "namech": "关于我们",
-          "url": "about.html"
-
+          "name": "BS",
+          "namech": "Python",
+          "url": "search.html?category=Python"
         },
         {
           "id": "4",
+          "name": "BS",
+          "namech": ".Net Core",
+          "url": "search.html?category=.Net Core"
+        },
+        {
+          "id": "5",
+          "name": "BS",
+          "namech": "C++",
+          "url": "search.html?category=C++"
+        },
+        {
+          "id": "6",
+          "name": "BS",
+          "namech": "JavaScript",
+          "url": "search.html?category=JavaScript"
+        },
+        {
+          "id": "2",
+          "name": "BS",
+          "namech": "Html",
+          "url": "search.html?category=Html"
+        },
+        {
+          "id": "7",
+          "name": "BS",
+          "namech": "微信",
+          "url": "search.html?category=微信"
+        },
+       
+
+        {
+          "id": "8",
           "name": "CS",
           "namech": "搜索",
           "url": "search.html"

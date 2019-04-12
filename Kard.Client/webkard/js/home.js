@@ -29,7 +29,7 @@
             "<img class='lazy' src='#{defaultPicturePath}' data-original='#{ pictureCropPath }'    />" +
             "</a >" +
             "<div class='picture-info'>" +
-            "<div class='picture-header'><span>#{category}</span><span title='#{title}'>#{title}</span></div>" +
+            "<div class='picture-header'>#{title}</div>" +
             "<div class='picture-body'><div><span class='min-star #{allstarClass}'></span><span class='essay-score'>#{score}</span></div><div class='picture-body-tag'>#{tagSpan}</div></div>" +
             //"<div class='picture-body'><div class='picture-body-tag'>#{tagSpan}</div><div class='picture-body-num'><span class='essay-like-num'>#{ likeNum}</span><span class='essay-share-num'>#{shareNum}</span><span class='essay-browse-num'>#{browseNum}</span></div></div>" +//media.creatorNickName).substring(0, 6)
             //"<div class='picture-footer'><div class='picture-footer-author '><span class='essay-avatar'><img class='lazy' src='#{defaultAvatarPath}' data-original='#{ avatarCropPath }'   /> </span><span>#{creatorNickName} </span></div> <div><span class='essay-city'>#{location}</span><span>#{creationTime}</span></div></div>" +
@@ -78,7 +78,7 @@
 
 
 
-            $("blackquote.splash-txt>q", _this.data.scope).html(data.essayContent || data.essayTitle);
+            $("blackquote.splash-txt>q", _this.data.scope).text(data.essayContent || data.essayTitle);
             //图片懒加载
             basejs.lazyInof('blackquote.splash-author>img.lazy');
             var avatarArr = data.kuserAvatarUrl.split('.');
@@ -212,7 +212,7 @@
                         tagSpan += "<span title='" + topMediaDto.tagList[0].tagName + "'>" + topMediaDto.tagList[0].tagName + "</span>";//(topMediaDto.tagList[0].tagName.length > 4 ? topMediaDto.tagList[0].tagName.substr(0, 3) + "..." : topMediaDto.tagList[0].tagName);
                         titleTagArr.push(topMediaDto.tagList[0].tagName);
                     }
-
+                    tagSpan += "<span title='" + topMediaDto.category + "'>" + topMediaDto.category + "</span>";
                     //pictureRowHtml += _this.template.pictureRow.format({
                     //    essayDetailPage,
                     //    defaultPicturePath,
@@ -234,7 +234,7 @@
                         essayDetailPage: essayDetailPage,
                         defaultPicturePath: defaultPicturePath,
                         pictureCropPath: pictureCropPath,
-                        category: topMediaDto.category,
+                       
                         //isOriginal:(topMediaDto.isOriginal ? "原创" : "分享"),
                         title: topMediaDto.title,
                         allstarClass: basejs.getStarClass("minstar", topMediaDto.score),

@@ -401,7 +401,7 @@ namespace Kard.Web.Controllers
         [HttpPost("jssdk")]
         public async Task<ResultDto> JsSdkAsync(string url)
         {
-            var configSection = _configuration.GetSection("WeChat:Web");
+            var configSection = _configuration.GetSection("AppSetting:WeChat:Web");
             //获取时间戳
             var timestamp = JSSDKHelper.GetTimestamp();
             //获取随机码

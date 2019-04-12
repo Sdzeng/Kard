@@ -22,27 +22,27 @@
     }
 
     .go-to-top {
-        margin-left: 520px;
+        margin-left: 400px;
 
         @media (min-width: @screen-lg-min) {
-            margin-left: 590px;
+            margin-left: 400px;
         }
     }
 
 
     &-left {
-        margin-right: 60px;
-        width: 700px;
+        margin-right: 50px;
+        width: 850px;
 
         @media (min-width: @screen-lg-min) {
-            margin-right: 100px;
+            width: 900px;
         }
 
 
         .essay-detail-title {
             font-size: 180%;
-            word-spacing: 2px;
-            letter-spacing: 1px;
+            /*word-spacing: 2px;
+            letter-spacing: 1px;*/
         }
 
         .essay-detail-subheading {
@@ -50,7 +50,7 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            padding-top: 10px;
+            padding-top: 15px;
 
             .essay-detail-remark {
                 color: #bbb;
@@ -108,12 +108,12 @@
         .essay-detail-content {
             text-align: left;
             color: #555;
-            padding-top: 10px;
+            padding-top: 20px;
             line-height: 25px;
             min-height: 450px;
 
             img, video {
-                width: 700px;
+                max-width: 700px;
                 margin-top: 20px;
             }
         }
@@ -432,12 +432,10 @@
 
 
     &-right {
-        width: 250px;
+        width: 230px;
 
 
-        @media (min-width: @screen-lg-min) {
-            width: 350px;
-        }
+
 
         .essay-score {
             padding: 10px;
@@ -531,19 +529,19 @@
             }
 
             .essay-similar-a, .essay-other-a {
+
+
                 a {
                     padding: 10px;
                     color: #4f946e;
                     border-bottom: 1px dashed #e3f1ed;
-                    width: 250px;
+                    width: 100%;
                     height: 39px;
                     display: flex;
                     flex-direction: row;
                     justify-content: space-between;
 
-                    @media (min-width: @screen-lg-min) {
-                        width: 350px;
-                    }
+
 
 
                     &:hover {
@@ -552,18 +550,38 @@
                     }
 
                     div:first-child {
-                        width: 160px;
+                        width: 65%;
                         overflow: hidden;
                         text-overflow: ellipsis;
                         -o-text-overflow: ellipsis;
                         white-space: nowrap;
-
-                        @media (min-width: @screen-lg-min) {
-                            width: 260px;
-                        }
                     }
                 }
             }
         }
+    }
+}
+
+
+.ckeditor-data {
+    blockquote {
+        overflow: hidden;
+        padding-right: 1.5em;
+        padding-left: 1.5em;
+        margin-left: 0;
+        font-style: italic;
+        border-left: 5px solid #ccc;
+    }
+
+    .marker-green {
+        background-color: green;
+    }
+
+    .marker-yellow {
+        background-color: yellow;
+    }
+
+    .pen-red {
+        color: red;
     }
 }

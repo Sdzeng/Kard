@@ -58,7 +58,20 @@ namespace Kard.Web
             //    //options.ForwardClientCertificate = false;
 
             //});
+            #region 跨域
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin", builder =>
+                {
+                    builder.WithOrigins(new string[] { "*" }).
+                        AllowAnyMethod().
+                        AllowAnyHeader().
 
+                        AllowCredentials();
+                });
+            });
+
+            #endregion
 
             services.AddMvc(options =>
             {
@@ -89,20 +102,7 @@ namespace Kard.Web
             //services.AddMvcCore().AddApiExplorer();
             #endregion
 
-            #region 跨域
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowSpecificOrigin", builder =>
-                {
-                    builder.WithOrigins(new string[] { "*" }).
-                        AllowAnyMethod().
-                        AllowAnyHeader().
-                        AllowAnyOrigin().
-                        AllowCredentials();
-                });
-            });
 
-            #endregion
 
             #region 内存缓存
             services.AddMemoryCache();
@@ -187,8 +187,9 @@ namespace Kard.Web
             Action<CookieAuthenticationOptions> cookieSettingAction = (o) =>
             {
                 o.Cookie.HttpOnly = true;//置为后台只读模式,前端无法通过JS来获取cookie值,可以有效的防止XXS攻击
+                //o.Cookie.Domain = ".localyc.com";
                 o.LoginPath = "/user/notlogin";
-                //o.AccessDeniedPath = "/user/notlogin";
+                o.AccessDeniedPath = "/user/notlogin";
                 o.SlidingExpiration = true;
                 o.ExpireTimeSpan = TimeSpan.FromDays(7);  //当HttpContext.SignInAsync的IsPersistent = true 时生效
                 //o.SessionStore = true;

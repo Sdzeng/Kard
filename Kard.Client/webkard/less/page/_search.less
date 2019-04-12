@@ -1,0 +1,156 @@
+.search-form {
+    text-align: center;
+    padding   : 90px 0px 30px;
+
+
+    .form-control {
+        display           : block;
+        width             : 40%;
+        height            : 34px;
+        padding           : 6px 12px;
+        font-size         : 14px;
+        line-height       : 1.42858;
+        color             : #555;
+        background-color  : #fff;
+        background-image  : none;
+        border            : 1px solid #ccc;
+        border-radius     : 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        box-shadow        : inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+        -o-transition     : border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+        transition        : border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+        font-family       : inherit;
+    }
+}
+
+
+
+
+.search-result {
+    display        : flex;
+    flex-direction : row;
+    justify-content: center;
+    margin-top     : 30px;
+    word-break     : break-all;
+    word-wrap      : break-word;
+
+
+
+    &-left {
+        margin-right: 50px;
+        width       : 850px;
+
+        @media (min-width: @screen-lg-min) {
+            width: 900px;
+        }
+    }
+
+    &-warp {
+        display       : flex;
+        flex-direction: row;
+        width         : 100%;
+        margin-bottom : 30px;
+
+        .result-score {
+            width: 10%;
+
+            .essay-score {
+                border         : 1px solid #ccc;
+                display        : flex;
+                flex-direction : row;
+                justify-content: center;
+                align-items    : center;
+                height         : 60px;
+                width          : 60px;
+                border-radius  : 3px;
+                font-size      : 200%;
+                color          : yellowgreen;
+            }
+        }
+
+        .result-entity {
+            width          : 90%;
+            display        : flex;
+            flex-direction : row;
+            justify-content: space-between;
+
+
+            .result-info {
+                display       : flex;
+                flex-direction: column;
+
+                .result-header {
+
+                    a {
+
+                        font-weight : 500;
+                        font-size   : 18px;
+                        margin-right: 20px;
+
+                        &:hover {
+                            color: yellowgreen;
+                        }
+                    }
+                }
+
+                .result-content {
+                    padding: 10px 10px 10px 0px;
+                    a {
+                        color  : #888;  
+                    }
+                }
+
+                .result-footer {
+                    display        : flex;
+                    flex-direction : row;
+                    justify-content: flex-start;
+                    color          : #bbb;
+
+                    >span:not(:first-child) {
+                        margin-left: 10px;
+                    }
+
+                    .essay-nickname {
+
+                        a {
+                            color: #666;
+
+                            &:hover {
+                                color: yellowgreen;
+                            }
+                        }
+                    }
+
+                    .essay-category {
+                        overflow        : hidden;
+                        text-overflow   : ellipsis;
+                        -o-text-overflow: ellipsis;
+                        white-space     : nowrap;
+                        background-color: #ee6e73;
+                        color           : white;
+                        padding         : 1px 5px;
+                        border-radius   : 2px;
+                        cursor          : pointer;
+
+
+                    }
+                }
+            }
+
+            .result-img {
+                img {
+                    border-radius: 3px;
+                    width        : 100px;
+                    height       : 100px;
+                }
+            }
+        }
+    }
+
+    .result-info {}
+
+    &-right {
+        width: 230px;
+    }
+}

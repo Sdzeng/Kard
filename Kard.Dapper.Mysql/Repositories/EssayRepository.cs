@@ -24,17 +24,17 @@ namespace Kard.Dapper.Mysql.Repositories
             int pageStart = ((pageIndex - 1) * pageSize);
             pageStart = pageStart > 0 ? (pageStart - 1) : pageStart;
 
-            var sql = $@"select essay.Id,essay.Category,essay.Score,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.Location,essay.CreatorUserId,essay.CreationTime,essay.CoverPath,essay.CoverMediaType,essay.CoverExtension,
+            var sql = $@"select essay.Id,essay.Category,essay.Score,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.content,essay.Location,essay.CreatorUserId,essay.CreationTime,essay.CoverPath,essay.CoverMediaType,essay.CoverExtension,
                                kuser.AvatarUrl,kuser.NickName CreatorNickName,tag.*  
                 from 
                 essay  
                 join kuser on essay.CreatorUserId=kuser.Id  
                 left join tag on essay.Id=tag.EssayId and tag.Sort=1 
-                where 1=1 {(category != "精选" ? " and essay.Category=@Category " : "")} 
+                where 1=1 {(category != "精选" ? " and essay.Category like @Category " : "")} 
                 order by (essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum) desc,essay.Score desc,essay.Id desc limit @PageStart,@PageSize
                 ";
 
-            var param = new { Category = category, PageStart = pageStart, PageSize = pageSize };
+            var param = new { Category = $"%{category}%", PageStart = pageStart, PageSize = pageSize };
 
 
 

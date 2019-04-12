@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Kard.Web.Controllers
@@ -37,16 +38,22 @@ namespace Kard.Web.Controllers
         {
             var today = DateTime.Now.Date;
             //string cacheKey = $"homeCover[{today.ToString("yyyyMMdd")}]";
-            //CoverEntity coverEntity = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
+            //CoverDto coverDto = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
             //{
 
             //    cacheEntry.SetAbsoluteExpiration(today.AddDays(1));
             //    return _defaultRepository.Cover.GetDateCover(today);
             //});
+            //coverDto.EssayContent =Regex.Replace(coverDto.EssayContent, "<style>[.\n\r]*?</style>|<xml>[.\n\r]*?</xml>|</?[^>]*>|\"? ?/>|/[a-zA-Z]+>|&nbsp;|[ \n\r\t]", "", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            //return new ResultDto<CoverDto>() { Result = true, Data = coverDto };
 
-            //return new ResultDto<CoverEntity>() { Result = true, Data = coverEntity };
-
-            return new ResultDto<CoverDto>() { Result = true, Data = _defaultRepository.Cover.GetDateCover(today) };
+            var coverDto = _defaultRepository.Cover.GetDateCover(today);
+            if (coverDto.EssayContent.Contains("。"))
+            {
+                coverDto.EssayContent = coverDto.EssayContent.Split("。")[0] + "。";
+            }
+            coverDto.EssayContent = Regex.Replace(coverDto.EssayContent, "\\s|<style>[.\n\r]*?</style>|<xml>[.\n\r]*?</xml>|</?[^>]*>|\"? ?/>|/[a-zA-Z]+>|&nbsp;|[ \n\r\t]", "", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            return new ResultDto<CoverDto>() { Result = true, Data = coverDto };
 
         }
 
@@ -56,16 +63,25 @@ namespace Kard.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("essays")]
-        public ResultDto GetEssays(string category,int pageIndex=1,int pageSize=20)
+        public ResultDto GetEssays(string category, int pageIndex = 1, int pageSize = 20)
         {
-            var essayList = _defaultRepository.Essay.GetHomeMediaPictureList(category, pageIndex, pageSize+1);
+            var essayList = _defaultRepository.Essay.GetHomeMediaPictureList(category, pageIndex, pageSize + 1) ?? new List<TopMediaDto>();
+            essayList = essayList.Select(item =>
+            {
+                item.Content = Regex.Replace(item.Content, "\\s|<style>[.\n\r]*?</style>|<xml>[.\n\r]*?</xml>|</?[^>]*>|\"? ?/>|/[a-zA-Z]+>|&nbsp;|[ \n\r\t]", "", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                if (item.Content.Length > 100)
+                {
+                    item.Content = item.Content.Remove(100) + "...";
+                };
+                return item;
+            });
             var hasNextPage = essayList.Count() > pageSize;
             var resultDto = new ResultDto();
             resultDto.Result = true;
             resultDto.Data = new
             {
                 hasNextPage,
-                essayList = hasNextPage? essayList.SkipLast(1): essayList
+                essayList = hasNextPage ? essayList.SkipLast(1) : essayList
             };
 
             //var aWeekAgo = DateTime.Now.Date.AddYears(-7);
@@ -108,7 +124,7 @@ namespace Kard.Web.Controllers
         //            CosmeticsList = _defaultRepository.GetHomeMediaPictureList(12, "物件"),
         //            OriginalityList = _defaultRepository.GetHomeMediaPictureList(12, "设计"),
         //            FashionSenseList = _defaultRepository.GetHomeMediaPictureList(12, "潮拍")
-                 
+
         //            //ExcerptList = _defaultRepository.GetHomeMediaPicture(12, "摘录")
         //        };
         //        //var aWeekAgo = DateTime.Now.Date.AddYears(-7);
@@ -122,9 +138,9 @@ namespace Kard.Web.Controllers
         //}
 
 
-      
 
- 
+
+
 
     }
 }

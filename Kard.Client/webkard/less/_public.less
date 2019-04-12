@@ -410,11 +410,12 @@ th {
 
 .picture-warp {
     background-color: white;
-    margin-top:20px;
-    &:not(:first-child){
-        margin-left: 20px;
+    margin-top: 20px;
 
+    &:not(:first-child) {
+        margin-left: 20px;
     }
+
     width: 210px;
     /* transition: all .35s; */
     /*.transition(all .35s ease);*/
@@ -439,28 +440,18 @@ th {
         color: #666;
 
         .picture-header {
-            line-height: 35px;
-            padding: 0px 10px;
-            height: 35px;
-            overflow: hidden;
+            /*line-height: 35px;*/
+            padding: 10px 10px;
+            /*height: 35px;*/
+            /*overflow: hidden;
             text-overflow: ellipsis;
             -o-text-overflow: ellipsis;
-            white-space: nowrap;
+            white-space: nowrap;*/
             width: 210px;
             display: block;
 
             @media (min-width: @screen-lg-min) {
                 width: 260px;
-            }
-
-            span:first-child {
-                font-size: 12px;
-                margin-right: 5px;
-                padding: 1px 5px;
-                margin-right: 5px;
-                color: white;
-                background-color: #ee6e73;
-                border-radius: 2px;
             }
         }
 
@@ -477,6 +468,9 @@ th {
             &-tag {
                 justify-content: flex-start;
 
+
+
+
                 span {
                     overflow: hidden;
                     text-overflow: ellipsis;
@@ -492,7 +486,14 @@ th {
                         margin-left: 5px;
                     }
 
-                    &:hover {
+                    &:last-child {
+                        padding: 1px 5px;
+                        color: white;
+                        background-color: #ee6e73;
+                        border-radius: 2px;
+                    }
+
+                    &:not(:last-child):hover {
                         color: #4f946e;
                         cursor: pointer;
                     }
@@ -718,3 +719,5 @@ th {
         padding: 5px 20px;
     }
 }
+
+

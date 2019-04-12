@@ -1,8 +1,8 @@
 var basejs = {
-    //requestDomain: "http://192.168.10.2:3703/api",
-    //cdnDomain: "http://192.168.10.2:3703/api",
-    requestDomain: "http://api.localyc.com:81",
-    cdnDomain:"http://www.localyc.com",
+    requestDomain: "http://192.168.10.3:5000",
+    cdnDomain: "http://192.168.10.3:5000",
+    //requestDomain: "http://www.localyc.com:81",
+    //cdnDomain:"http://cdn.localyc.com",
     defaults: {
         type: "POST",
         async: true,
@@ -219,7 +219,7 @@ $.extend(httpHelper.prototype, {
        
                 //Unauthorized
                 if (jqXHR.status == 401 || jqXHR.status == 403) {
-                    debugger;
+  
                     //Location=context.RedirectUri
                     storage.local.setItem("isLogin", "false");
                     _this.opts.error && _this.opts.error.apply(this, arguments);
