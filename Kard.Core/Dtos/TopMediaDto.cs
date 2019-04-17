@@ -17,6 +17,8 @@ namespace Kard.Core.Dtos
 
         public decimal Score { get; set; }
 
+        public long ScoreHeadCount { get; set; }
+
         public int ShareNum { get; set; }
 
         public int LikeNum { get; set; }

@@ -204,6 +204,8 @@ namespace Kard.Web.Controllers
         {
             var userId = _kardSession.UserId.Value;
             essayEntity.Location = Utils.GetCity(HttpContext,_memoryCache);
+            essayEntity.Score =6m;
+            essayEntity.ScoreHeadCount = 1;
             essayEntity.AuditCreation(userId);
             tagList.AuditCreation(userId);
             var resultDto = _defaultRepository.Essay.AddEssay(essayEntity, tagList);

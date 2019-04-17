@@ -6,31 +6,31 @@
             //设置essays加载更多
             offOn: false,
             page: 1
+
         }
     },
     init: function () {
         var _this = this;
         _this.bindCover();
-
-
         _this.bindSearchResult();
+        _this.bindRecommendList();
 
-
+        $('.go-to-top', _this.data.scope).goToTop();
     },
     template: {
         searchResultRow: ("<div class='search-result-warp'>" +
-            "<div class='result-score'><div class='essay-score'>#{score}</div></div>" +
+            "<div class='result-score'><div class='essay-score'>#{score}</div><div class='essay-score-head-count'>#{scoreHeadCount}</div></div>" +
 
             "<div class='result-entity'>" +
 
             "<div class='result-info'>" +
-   
+
             "<div class='result-header'><a href='#{essayDetailPage}' class='essay-title'>#{title}</a></div>" +
             "<div class='result-content'><a href='#{essayDetailPage}' class='essay-content'>#{content}</a></div>" +
             //"<div class='picture-body'><div class='picture-body-tag'>#{tagSpan}</div><div class='picture-body-num'><span class='essay-like-num'>#{ likeNum}</span><span class='essay-share-num'>#{shareNum}</span><span class='essay-browse-num'>#{browseNum}</span></div></div>" +//media.creatorNickName).substring(0, 6)
             //"<div class='picture-footer'><div class='picture-footer-author '><span class='essay-avatar'><img class='lazy' src='#{defaultAvatarPath}' data-original='#{ avatarCropPath }'   /> </span><span>#{creatorNickName} </span></div> <div><span class='essay-city'>#{location}</span><span>#{creationTime}</span></div></div>" +
             "<div class='result-footer'><span class='essay-nickname'><a>#{creatorNickName}</a></span> <span class='essay-creationtime'>#{creationTime}</span><span>#{browseNum}阅读</span>#{tagSpan}#{categorySpan}</div>" +
-        
+
             "</div>" +
 
             "<div class='result-img'>" +
@@ -59,20 +59,27 @@
         var $loadMore = $(".load-more>span", _this.data.scope);
         $loadMore.text("加载中...");
 
-        var category = null;
-        if (_this.data.queryString && _this.data.queryString.category && _this.data.queryString.category.length > 0) {
-            category = decodeURI(_this.data.queryString.category); 
-            $("#searchBox", _this.data.scope).val(category);
+        var keyword = null;
+        if (_this.data.queryString && _this.data.queryString.keyword && _this.data.queryString.keyword.length > 0) {
+            keyword = decodeURI(_this.data.queryString.keyword);
+            $("#searchBox", _this.data.scope).val(keyword);
         }
         var httpPars = {
             url: basejs.requestDomain + "/home/essays",
             type: "GET",
-            data: { category: (category||"精选"), pageIndex: 1, pageSize: 15 },
+            data: { keyword: keyword, pageIndex: 1, pageSize: 10, orderBy: "" },
             success: function (resultDto) {
                 //设置essays加载更多
                 if (!resultDto.result) {
                     return;
                 }
+
+                _this.bindResultInfo(resultDto.data.essayList);
+                //图片懒加载
+                $imageLazy = $(".search-result-warp img.lazy", _this.data.scope);
+                basejs.lazyInof($imageLazy);
+                $imageLazy.removeClass("lazy");
+
                 if (resultDto.data.hasNextPage) {
                     _this.data.loadMorePars.offOn = true;
                     _this.data.loadMorePars.page++;
@@ -82,11 +89,6 @@
                     _this.data.loadMorePars.offOn = false;
                     $loadMore.text("已经是底部");
                 }
-                _this.bindResultInfo(resultDto.data.essayList);
-                //图片懒加载
-                $imageLazy = $(".search-result-warp img.lazy", _this.data.scope);
-                basejs.lazyInof($imageLazy);
-                $imageLazy.removeClass("lazy");
             },
             error: function () {
                 _this.data.loadMorePars.offOn = true;
@@ -98,15 +100,22 @@
         var essaysHttpHelper = new httpHelper(httpPars);
         essaysHttpHelper.send();
 
-        $(".section-style-title-big>span", _this.data.scope).click(function () {
+        $(".btn-search", _this.data.scope).click(function () {
 
             _this.data.loadMorePars.offOn = false;
             _this.data.loadMorePars.page = 1;
-            httpPars.data.category = $("#searchBox", _this.data.scope).val();
+            httpPars.data.keyword = $("#searchBox", _this.data.scope).val();
             httpPars.data.pageIndex = _this.data.loadMorePars.page;
+
             $loadMore.text("加载中...");
             essaysHttpHelper = new httpHelper(httpPars);
             essaysHttpHelper.send();
+        });
+
+        $("body").keydown(function () {
+            if (event.keyCode == "13") {//keyCode=13是回车键；数字不同代表监听的按键不同
+                $(".btn-search", _this.data.scope).click();
+            }
         });
 
 
@@ -115,7 +124,7 @@
             if (_this.data.loadMorePars.offOn) {
                 _this.data.loadMorePars.offOn = false;
 
-                httpPars.data.category = $("#searchBox", _this.data.scope).val();
+                httpPars.data.keyword = $("#searchBox", _this.data.scope).val();
                 httpPars.data.pageIndex = _this.data.loadMorePars.page;
                 $loadMore.text("加载中...");
                 essaysHttpHelper = new httpHelper(httpPars);
@@ -134,7 +143,6 @@
             var resultRowHtml = "";
 
             for (var index in data) {
-                var current = parseInt(index) + 1;
                 var topMediaDto = data[index];
                 var essayDetailPage = "/essay-detail.html?id=" + topMediaDto.id;
                 var defaultPicturePath = "/image/default-picture_100x100.jpg";
@@ -159,13 +167,14 @@
 
                     title: topMediaDto.title,
                     content: topMediaDto.content,
-                
+
                     score: topMediaDto.score,
+                    scoreHeadCount: topMediaDto.scoreHeadCount + "人评",
                     creatorNickName: topMediaDto.creatorNickName,
 
                     browseNum: basejs.getNumberDiff(topMediaDto.browseNum),
                     tagSpan: tagSpan,
-                    categorySpan:categorySpan,
+                    categorySpan: categorySpan,
 
                     creationTime: basejs.getDateDiff(basejs.getDateTimeStamp(topMediaDto.creationTime))
 
@@ -178,10 +187,49 @@
 
             }
 
-            $(".search-result-left", _this.data.scope).append(resultHtml);
+            if (_this.data.loadMorePars.page == 1) {
+                $(".search-result-left", _this.data.scope).html(resultHtml);
+            } else {
+                $(".search-result-left", _this.data.scope).append(resultHtml);
+            }
         }
 
 
+    },
+    bindRecommendList: function () {
+        var _this=this;
+        var httpPars = {
+            url: basejs.requestDomain + "/home/essays",
+            type: "GET",
+            data: { keyword: "", pageIndex: 1, pageSize: 10, orderBy: "choiceness" },
+            success: function (resultDto) {
+
+                if (!resultDto.result) {
+                    return;
+                }
+                if ((!resultDto.data)||(!resultDto.data.essayList)||resultDto.data.essayList.length<=0) {
+                    return;
+                }
+                var data=resultDto.data.essayList;
+                var essayRecommendAObj = $(".essay-recommend-a", _this.data.scope);
+
+                for (var index in data) {
+                    
+                    var topMediaDto = data[index];
+                     
+                    var essayDetailPage = "/essay-detail.html?id=" + topMediaDto.id;
+                    essayRecommendAObj.append("<a href='" + essayDetailPage + "' title='"+topMediaDto.title+"'>" + (parseInt(index)+1)+". "+topMediaDto.title + "</a>");
+                }
+            },
+            error: function () {
+                _this.data.loadMorePars.offOn = true;
+
+                $(".search-result-left", _this.data.scope).empty();
+            }
+        };
+
+        var essaysHttpHelper = new httpHelper(httpPars);
+        essaysHttpHelper.send();
     }
 };
 

@@ -255,20 +255,3 @@ body {
 .essay-detail-info .comment-list .comment-info-content-txt-parent a:after {
   content: "  :  ";
 }
-.ckeditor-data blockquote {
-  overflow: hidden;
-  padding-right: 1.5em;
-  padding-left: 1.5em;
-  margin-left: 0;
-  font-style: italic;
-  border-left: 5px solid #ccc;
-}
-.ckeditor-data .marker-green {
-  background-color: green;
-}
-.ckeditor-data .marker-yellow {
-  background-color: yellow;
-}
-.ckeditor-data .pen-red {
-  color: red;
-}

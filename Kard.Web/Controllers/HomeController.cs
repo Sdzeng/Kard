@@ -63,9 +63,9 @@ namespace Kard.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("essays")]
-        public ResultDto GetEssays(string category, int pageIndex = 1, int pageSize = 20)
+        public ResultDto GetEssays(string keyword, string orderBy,int pageIndex = 1, int pageSize = 20)
         {
-            var essayList = _defaultRepository.Essay.GetHomeMediaPictureList(category, pageIndex, pageSize + 1) ?? new List<TopMediaDto>();
+            var essayList = _defaultRepository.Essay.GetHomeMediaPictureList(keyword, pageIndex, pageSize + 1, orderBy) ?? new List<TopMediaDto>();
             essayList = essayList.Select(item =>
             {
                 item.Content = Regex.Replace(item.Content, "\\s|<style>[.\n\r]*?</style>|<xml>[.\n\r]*?</xml>|</?[^>]*>|\"? ?/>|/[a-zA-Z]+>|&nbsp;|[ \n\r\t]", "", RegexOptions.IgnoreCase | RegexOptions.Multiline);

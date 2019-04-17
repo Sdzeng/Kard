@@ -11,43 +11,43 @@
           "id": "2",
           "name": "BS",
           "namech": "人工智能",
-          "url": "search.html?category=人工智能"
+          "url": "search.html?keyword=人工智能"
         },
         {
           "id": "3",
           "name": "BS",
           "namech": "Python",
-          "url": "search.html?category=Python"
+          "url": "search.html?keyword=Python"
         },
         {
           "id": "4",
           "name": "BS",
           "namech": ".Net Core",
-          "url": "search.html?category=.Net Core"
+          "url": "search.html?keyword=.Net Core"
         },
         {
           "id": "5",
           "name": "BS",
           "namech": "C++",
-          "url": "search.html?category=C++"
+          "url": "search.html?keyword=C++"
         },
         {
           "id": "6",
           "name": "BS",
           "namech": "JavaScript",
-          "url": "search.html?category=JavaScript"
+          "url": "search.html?keyword=JavaScript"
         },
         {
           "id": "2",
           "name": "BS",
           "namech": "Html",
-          "url": "search.html?category=Html"
+          "url": "search.html?keyword=Html"
         },
         {
           "id": "7",
           "name": "BS",
           "namech": "微信",
-          "url": "search.html?category=微信"
+          "url": "search.html?keyword=微信"
         },
        
 

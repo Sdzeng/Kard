@@ -3,10 +3,84 @@
     padding   : 90px 0px 30px;
 
 
+
+
+    .btn-search {
+        width : 65px;
+        height: 45px;
+
+        position       : relative;
+        left           : 18.5%;
+        top            : 45px;
+        cursor         : pointer;
+        display        : flex;
+        flex-direction : row;
+        justify-content: center;
+        align-items    : center;
+
+        &:hover {
+
+            .icon-search {
+                border-color: yellowgreen;
+            }
+
+            .icon-search-after {
+
+                background-color: yellowgreen;
+
+            }
+        }
+
+        .icon-search {
+
+            width : 18px;
+            height: 18px;
+
+            border-radius: 100%;
+
+            border: 2px solid #888;
+
+
+
+
+        }
+
+        .icon-search-after {
+
+            -webkit-transform: rotate(45deg);
+
+            -moz-transform: rotate(45deg);
+
+            transform: rotate(45deg);
+
+            width: 8px;
+
+            height: 2px;
+
+            position: absolute;
+
+            top: 32px;
+
+            left: 38px;
+
+            background-color: #888;
+
+
+        }
+
+
+    }
+
+
+
+
+
+
+
     .form-control {
         display           : block;
         width             : 40%;
-        height            : 34px;
+        height            : 45px;
         padding           : 6px 12px;
         font-size         : 14px;
         line-height       : 1.42858;
@@ -31,6 +105,7 @@
     display        : flex;
     flex-direction : row;
     justify-content: center;
+    align-items    : flex-start;
     margin-top     : 30px;
     word-break     : break-all;
     word-wrap      : break-word;
@@ -53,7 +128,7 @@
         margin-bottom : 30px;
 
         .result-score {
-            width: 10%;
+            padding-right: 10px;
 
             .essay-score {
                 border         : 1px solid #ccc;
@@ -67,26 +142,53 @@
                 font-size      : 200%;
                 color          : yellowgreen;
             }
+
+            .essay-score-head-count {
+
+                color     : #888;
+                margin-top: 10px;
+                text-align: center;
+                width     : 60px;
+            }
         }
 
+
+
         .result-entity {
-            width          : 90%;
+
             display        : flex;
             flex-direction : row;
-            justify-content: space-between;
+            justify-content: flex-start;
+            width          : 780px;
 
+            @media (min-width: @screen-lg-min) {
+                width: 830px;
+            }
 
             .result-info {
                 display       : flex;
                 flex-direction: column;
+                padding       : 0px 10px;
+                width         : 680px;
+
+                @media (min-width: @screen-lg-min) {
+                    width: 730px;
+                }
 
                 .result-header {
 
                     a {
 
-                        font-weight : 500;
-                        font-size   : 18px;
-                        margin-right: 20px;
+                        font-weight: 500;
+                        font-size  : 18px;
+
+
+                        overflow        : hidden;
+                        text-overflow   : ellipsis;
+                        -o-text-overflow: ellipsis;
+                        white-space     : nowrap;
+                        width           : 700px;
+                        display         : block;
 
                         &:hover {
                             color: yellowgreen;
@@ -95,9 +197,10 @@
                 }
 
                 .result-content {
-                    padding: 10px 10px 10px 0px;
+                    padding: 10px 0px;
+
                     a {
-                        color  : #888;  
+                        color: #888;
                     }
                 }
 
@@ -139,6 +242,7 @@
             }
 
             .result-img {
+
                 img {
                     border-radius: 3px;
                     width        : 100px;
@@ -148,9 +252,41 @@
         }
     }
 
-    .result-info {}
+
 
     &-right {
         width: 230px;
+
+
+        >div {
+            h4 {
+                margin-bottom: 20px;
+            }
+
+            width        : 100%;
+            margin-bottom: 50px;
+
+        }
+
+        .essay-recommend-a {
+
+            a {
+
+                display: inline-block;
+
+                margin-bottom   : 10px;
+                overflow        : hidden;
+                text-overflow   : ellipsis;
+                -o-text-overflow: ellipsis;
+                white-space     : nowrap;
+                width           : 230px;
+                font-size       : 14px;
+
+                &:hover {
+
+                    color: yellowgreen;
+                }
+            }
+        }
     }
 }

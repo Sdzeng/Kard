@@ -1,8 +1,8 @@
 var basejs = {
     requestDomain: "http://192.168.10.3:5000",
     cdnDomain: "http://192.168.10.3:5000",
-    //requestDomain: "http://www.localyc.com:81",
-    //cdnDomain:"http://cdn.localyc.com",
+    // requestDomain: "http://api.localyc.com:81",
+    // cdnDomain:"http://www.localyc.com",
     defaults: {
         type: "POST",
         async: true,

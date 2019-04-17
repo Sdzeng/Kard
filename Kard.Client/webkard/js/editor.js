@@ -24,7 +24,9 @@ var editorjs = {
         });
 
         $(".btn-save", _this.data.scope).click(function () {
-            _this.saveEssay(false, _this.data.editor.getData());
+           
+            
+            _this.saveEssay(false);
         });
 
         //$(".btn-publish", _this.data.scope).click(function () {
@@ -32,7 +34,7 @@ var editorjs = {
         //});
 
         _this.bindEditor();
-        _this.bindEssay();
+        
         _this.bindUploadImg();
     },
 
@@ -96,98 +98,185 @@ var editorjs = {
 
 
         var editorData = null;
-        ClassicEditor.create(document.querySelector('#editor'), {
-            //language: 'zh-cn',
-            //plugins: [Markdown],
-            fontSize: {
-                options: [
-                    9,
-                    11,
-                    13,
-                    15,
-                    17,
-                    19,
-                    21
-                ]
-            },
-            fontFamily: {
-                options: [
-                    '默认,default',
-                    'Ubuntu, Arial, sans-serif',
-                    'Ubuntu Mono2, Courier New, Courier, monospace'
-                ]
-            },
-            highlight: {
-                options: [
-                    {
-                        model: 'greenMarker',
-                        class: 'marker-green',
-                        title: '绿色标记',
-                        color: 'rgb(25, 156, 25)',
-                        type: 'marker'
-                    },
-                    {
-                        model: 'yellowMarker',
-                        class: 'marker-yellow',
-                        title: '黄色标记',
-                        color: '#cac407',
-                        type: 'marker'
-                    },
-                    {
-                        model: 'redPen',
-                        class: 'pen-red',
-                        title: '红色钢笔',
-                        color: 'hsl(343, 82%, 58%)',
-                        type: 'pen'
+        // ClassicEditor.create(document.querySelector('#editor'), {
+        //     //language: 'zh-cn',
+        //     //plugins: [Markdown],
+        //     fontSize: {
+        //         options: [
+        //             9,
+        //             11,
+        //             13,
+        //             15,
+        //             17,
+        //             19,
+        //             21
+        //         ]
+        //     },
+        //     fontFamily: {
+        //         options: [
+        //             '默认,default',
+        //             'Ubuntu, Arial, sans-serif',
+        //             'Ubuntu Mono2, Courier New, Courier, monospace'
+        //         ]
+        //     },
+        //     highlight: {
+        //         options: [
+        //             {
+        //                 model: 'greenMarker',
+        //                 class: 'marker-green',
+        //                 title: '绿色标记',
+        //                 color: 'rgb(25, 156, 25)',
+        //                 type: 'marker'
+        //             },
+        //             {
+        //                 model: 'yellowMarker',
+        //                 class: 'marker-yellow',
+        //                 title: '黄色标记',
+        //                 color: '#cac407',
+        //                 type: 'marker'
+        //             },
+        //             {
+        //                 model: 'redPen',
+        //                 class: 'pen-red',
+        //                 title: '红色钢笔',
+        //                 color: 'hsl(343, 82%, 58%)',
+        //                 type: 'pen'
+        //             }
+        //         ]
+
+        //     },
+        //     //ckfinder: {
+        //     //    uploadUrl: basejs.requestDomain + "/common/editoruploadfile?command=QuickUpload&type=Files&responseType=json",
+        //     //    options: {
+        //     //    }
+        //     //},
+        //     //autosave: {
+        //     //    save(editor) {
+        //     //        // The saveData() function must return a promise
+        //     //        // which should be resolved when the data is successfully saved.
+        //     //        var data = editor.getData();
+
+
+        //     //        return new Promise(resolve => {
+        //     //            if (data) {
+        //     //                _this.autoSaveData(data);
+        //     //            }
+        //     //            resolve();
+        //     //        });
+        //     //    }
+
+        //     //},
+        //     toolbar: ['heading', '|',
+        //         'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+        //         'fontSize', 'fontFamily', 'subscript', 'superscript', 'highlight', 'alignment:left', 'alignment:right', 'alignment:center', 'alignment:justify', '|',
+        //         'imageUpload', 'blockQuote', 'insertTable', 'mediaEmbed', 'underline', 'strikethrough', 'code', 'undo', 'redo'
+        //     ],
+        // })
+        //     .then(function (editor) {
+        //         _this.data.editor = editor;
+        //         editorData = editor.getData();
+        //         //window.editor = editor;
+        //         //var data = editor.getData();
+
+        //         //_this.displayStatus(editor);
+        //         // 这个地方加载了适配器
+        //         editor.plugins.get('FileRepository').createUploadAdapter = function (loader){
+        //             return new UploadAdapter(loader);
+        //         };
+
+        //     })
+        //     .catch(function (err) {
+        //         console.error(err.stack);
+        //     });
+
+        tinymce.init({
+            selector: '#tinyeditor',
+            language: 'zh_CN',
+            // plugins: 'print preview fullpage powerpaste searchreplace autolink directionality advcode visualblocks visualchars fullscreen image link media mediaembed template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount tinymcespellchecker a11ychecker imagetools textpattern help formatpainter permanentpen pageembed tinycomments mentions linkchecker', 
+            // toolbar: 'formatselect | bold italic strikethrough forecolor backcolor permanentpen formatpainter | link image media pageembed | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat | addcomment',
+            plugins: 'print autoresize preview fullpage paste searchreplace autolink directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking emoticons anchor toc insertdatetime advlist lists wordcount  imagetools textpattern help  link',
+            toolbar: 'formatselect | bold italic strikethrough forecolor backcolor permanentpen formatpainter | link image media pagebreak table | codesample code | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent | removeformat ',
+            min_height:600,
+            automatic_uploads: true,
+            //images_upload_url: basejs.requestDomain + "/common/uploadfile",
+            //images_upload_credentials: true,
+            //images_upload_base_path: basejs.requestDomain,
+            automatic_uploads: true,
+            images_upload_handler: function (blobInfo, success, failure) {
+                const formData = new FormData();
+                formData.append('flie', blobInfo.blob());
+
+                var helper = new httpHelper({
+                    url: basejs.requestDomain + "/common/uploadfile",
+                    type: 'POST',
+                    async: false,
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (resultDto) {
+
+                        if (resultDto.result) {
+                            success(resultDto.data.url);
+                        }
+                        else {
+                            failure(resultDto.message);
+                        }
                     }
-                ]
+                });
+
+                helper.send();
 
             },
-            //ckfinder: {
-            //    uploadUrl: basejs.requestDomain + "/common/editoruploadfile?command=QuickUpload&type=Files&responseType=json",
-            //    options: {
-            //    }
-            //},
-            //autosave: {
-            //    save(editor) {
-            //        // The saveData() function must return a promise
-            //        // which should be resolved when the data is successfully saved.
-            //        var data = editor.getData();
-
-
-            //        return new Promise(resolve => {
-            //            if (data) {
-            //                _this.autoSaveData(data);
-            //            }
-            //            resolve();
-            //        });
-            //    }
-
-            //},
-            toolbar: ['heading', '|',
-                'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
-                'fontSize', 'fontFamily', 'subscript', 'superscript', 'highlight', 'alignment:left', 'alignment:right', 'alignment:center', 'alignment:justify', '|',
-                'imageUpload', 'blockQuote', 'insertTable', 'mediaEmbed', 'underline', 'strikethrough', 'code', 'undo', 'redo'
+            templates: [
+                { title: 'Test template 1', content: 'Test 1' },
+                { title: 'Test template 2', content: 'Test 2' }
             ],
-        })
-            .then(function (editor) {
-                _this.data.editor = editor;
-                editorData = editor.getData();
-                //window.editor = editor;
-                //var data = editor.getData();
 
-                //_this.displayStatus(editor);
-                // 这个地方加载了适配器
-                editor.plugins.get('FileRepository').createUploadAdapter = function (loader){
-                    return new UploadAdapter(loader);
-                };
+            content_css: [
 
-            })
-            .catch(function (err) {
-                console.error(err.stack);
-            });
+                '/plugins/tinymce/js/tinymce/css/codepen.min.css',
+                '/css/tinymce_editor.css'
+            ],
+            content_style: [
+                'body{padding:100px; margin:auto;font-size:16px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; line-height:1.3; letter-spacing: -0.03em;color:#222} h1,h2,h3,h4,h5,h6 {font-weight:400;margin-top:1.2em} h1 {} h2{} .tiny-table {width:100%; border-collapse: collapse;} .tiny-table td, th {border: 1px solid #555D66; padding:10px; text-align:left;font-size:16px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; line-height:1.6;} .tiny-table th {background-color:#E2E4E7}'
+            ],
+            init_instance_callback: function (editor) {
+                _this.data.editor=editor;
+                // editor.on('SetContent', function (e) {
+                //     console.log(e.content);
+                //   });
+                editor.setContent("<div style='display: flex;flex-direction:row;justify-content: center;align-items: center;'><h5>加载内容中...</h5><div>");
+                _this.bindEssay();
+              
+            },
+            setup: function(ed) {
+                
+             
+               ed.ui.registry.addContextToolbar('imagealignment', {
+                predicate: function (node) {
+                  return node.nodeName.toLowerCase() === 'img'
+                },
+                items: 'alignleft aligncenter alignright',
+                position: 'node',
+                scope: 'node'
+              });
+          
+             
+                 
+              ed.ui.registry.addContextToolbar('textselection', {
+                predicate: function (node) {
+                  return !ed.selection.isCollapsed();
+                },
+                items: 'bold italic blockquote | image | codesample',
+                position: 'selection',
+                scope: 'node'
+              });
 
-        $(".ck-content", _this.data.scope).addClass("");
+             }
+             
+        });
+
+      
     },
     bindEssay: function () {
         var _this = this;
@@ -218,8 +307,8 @@ var editorjs = {
                         else {
                             $("#category", _this.data.scope).val(resultDto.data.category);
                         }
-
-                        _this.data.editor.setData(resultDto.data.content);
+                        
+                        tinymce.activeEditor.setContent(resultDto.data.content);
                     }
                 }
             };
@@ -228,8 +317,11 @@ var editorjs = {
             helper.send();
         }
     },
-    saveEssay: function (isPublish, data) {
+    saveEssay: function (isPublish) {
         var _this = this;
+        debugger;
+        // Save contents using some XHR call
+        var data= _this.data.editor.getBody().innerHTML;
 
         var btnSave = $('.btn-save', _this.data.scope);
 
@@ -309,48 +401,48 @@ var editorjs = {
 
 
 
-function UploadAdapter(loader) {
-    this.loader = loader;
-}
+// function UploadAdapter(loader) {
+//     this.loader = loader;
+// }
 
-UploadAdapter.prototype.upload = function () {
-    var _this = this;
+// UploadAdapter.prototype.upload = function () {
+//     var _this = this;
 
-    return new Promise(function (resolve, reject) {
+//     return new Promise(function (resolve, reject) {
 
-        _this.loader.file.then(function (file) {
-            const formData = new FormData();
-            formData.append('flie', file);
+//         _this.loader.file.then(function (file) {
+//             const formData = new FormData();
+//             formData.append('flie', file);
 
-            var helper = new httpHelper({
-                url: basejs.requestDomain + "/common/uploadfile",
-                type: 'POST',
-                async: false,
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (resultDto) {
+//             var helper = new httpHelper({
+//                 url: basejs.requestDomain + "/common/uploadfile",
+//                 type: 'POST',
+//                 async: false,
+//                 data: formData,
+//                 contentType: false,
+//                 processData: false,
+//                 success: function (resultDto) {
 
-                    if (resultDto.result) {
-                        resolve({
-                            default: resultDto.data.url
-                        });
-                    }
-                    else {
-                        reject(resultDto.message);
-                    }
-                }
-            });
+//                     if (resultDto.result) {
+//                         resolve({
+//                             default: resultDto.data.url
+//                         });
+//                     }
+//                     else {
+//                         reject(resultDto.message);
+//                     }
+//                 }
+//             });
 
 
-            helper.send();
-        });
+//             helper.send();
+//         });
 
-    });
-}
+//     });
+// }
 
-UploadAdapter.prototype.abort = function () {
-}
+// UploadAdapter.prototype.abort = function () {
+// }
 
 $(function () {
     //编辑器

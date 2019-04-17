@@ -19,22 +19,36 @@ namespace Kard.Dapper.Mysql.Repositories
         {
         }
 
-        public IEnumerable<TopMediaDto> GetHomeMediaPictureList(string category, int pageIndex, int pageSize)
+        public IEnumerable<TopMediaDto> GetHomeMediaPictureList(string keyword, int pageIndex, int pageSize, string orderBy)
         {
             int pageStart = ((pageIndex - 1) * pageSize);
             pageStart = pageStart > 0 ? (pageStart - 1) : pageStart;
 
-            var sql = $@"select essay.Id,essay.Category,essay.Score,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.content,essay.Location,essay.CreatorUserId,essay.CreationTime,essay.CoverPath,essay.CoverMediaType,essay.CoverExtension,
+
+            if (string.IsNullOrEmpty(orderBy))
+            {
+                orderBy = "essay.id";
+            }
+            else
+            {
+                switch (orderBy)
+                {
+                    case "choiceness": orderBy = "(essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum) desc,essay.Score desc,essay.Id desc"; break;
+                    default: break;
+                }
+            }
+
+            var sql = $@"select essay.Id,essay.Category,essay.Score,essay.ScoreHeadCount,essay.ShareNum,essay.LikeNum,essay.BrowseNum,essay.CommentNum,essay.title,essay.content,essay.Location,essay.CreatorUserId,essay.CreationTime,essay.CoverPath,essay.CoverMediaType,essay.CoverExtension,
                                kuser.AvatarUrl,kuser.NickName CreatorNickName,tag.*  
                 from 
                 essay  
                 join kuser on essay.CreatorUserId=kuser.Id  
                 left join tag on essay.Id=tag.EssayId and tag.Sort=1 
-                where 1=1 {(category != "精选" ? " and essay.Category like @Category " : "")} 
-                order by (essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum) desc,essay.Score desc,essay.Id desc limit @PageStart,@PageSize
+                where 1=1 {((!string.IsNullOrEmpty(keyword )) ? " and (essay.Category like @Keyword or essay.Title like @Keyword ) " : "")} 
+                order by {orderBy} limit @PageStart,@PageSize
                 ";
 
-            var param = new { Category = $"%{category}%", PageStart = pageStart, PageSize = pageSize };
+            var param = new { Keyword = $"%{keyword}%", PageStart = pageStart, PageSize = pageSize };
 
 
 

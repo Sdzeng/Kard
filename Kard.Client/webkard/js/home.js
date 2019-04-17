@@ -121,12 +121,19 @@
             var httpPars = {
                 url: basejs.requestDomain + "/home/essays",
                 type: "GET",
-                data: { category: "精选",pageIndex:1, pageSize: 15 },
+                data: { keyword: "",pageIndex:1, pageSize: 15,orderBy:"choiceness" },
                 success: function (resultDto) {
                     //设置essays加载更多
                     if (!resultDto.result) {
                         return;
                     }
+                   
+                    _this.showPicture(homejs.data.loadMorePars.isChangeCategory,_this.hostTitleObj, _this.hostBodyObj, resultDto.data.essayList);
+                    //图片懒加载
+                    $imageLazy = $(".section-style-body-block img.lazy", homejs.data.scope);
+                    basejs.lazyInof($imageLazy);
+                    $imageLazy.removeClass("lazy");
+
                     if (resultDto.data.hasNextPage) {
                         homejs.data.loadMorePars.offOn = true;
                         homejs.data.loadMorePars.page++;
@@ -136,11 +143,6 @@
                         homejs.data.loadMorePars.offOn = false;
                         $loadMore.text("已经是底部");
                     }
-                    _this.showPicture(homejs.data.loadMorePars.isChangeCategory,_this.hostTitleObj, _this.hostBodyObj, resultDto.data.essayList);
-                    //图片懒加载
-                    $imageLazy = $(".section-style-body-block img.lazy", homejs.data.scope);
-                    basejs.lazyInof($imageLazy);
-                    $imageLazy.removeClass("lazy");
                 },
                 error: function () {
                     homejs.data.loadMorePars.offOn = true;
@@ -158,7 +160,7 @@
                 homejs.data.loadMorePars.offOn = false;
                 homejs.data.loadMorePars.page = 1;
                 homejs.data.loadMorePars.isChangeCategory = true;
-                httpPars.data.category = $(this).text();
+                httpPars.data.keyword = $(this).attr("data-keyword");
                 httpPars.data.pageIndex = homejs.data.loadMorePars.page;
                 $loadMore.text("加载中...");
                 essaysHttpHelper = new httpHelper(httpPars);
@@ -171,7 +173,7 @@
                 if (homejs.data.loadMorePars.offOn) {
                     homejs.data.loadMorePars.offOn = false;
                     homejs.data.loadMorePars.isChangeCategory = false;
-                    httpPars.data.category = $(".section-style-title-big-active", homejs.data.scope).text();
+                    httpPars.data.keyword = $(".section-style-title-big-active", homejs.data.scope).attr("data-keyword");
                     httpPars.data.pageIndex = homejs.data.loadMorePars.page;
                     $loadMore.text("加载中...");
                     essaysHttpHelper = new httpHelper(httpPars);

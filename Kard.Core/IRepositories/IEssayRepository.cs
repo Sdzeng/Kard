@@ -9,7 +9,7 @@ namespace Kard.Core.IRepositories
 {
     public interface IEssayRepository : IRepository
     {
-        IEnumerable<TopMediaDto> GetHomeMediaPictureList(string type, int pageIndex, int pageSize);
+        IEnumerable<TopMediaDto> GetHomeMediaPictureList(string keyword, int pageIndex, int pageSize,string orderBy);
 
         IEnumerable<TopMediaDto> GetUserMediaPictureList(long userId, int count);
 

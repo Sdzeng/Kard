@@ -89,7 +89,7 @@ namespace Kard.Web.Controllers
                 }
                 result.Result = true;
                 var host = HttpContext.Request.Host;
-                result.Data = new { Url = Path.Combine(host.Host+":"+(host.Port.HasValue? host.Port.Value.ToString():""), newFolder, fileName + fileExtension).Replace("\\", "/") ,FileUrl = Path.Combine(newFolder, fileName).Replace("\\", "/"), FileExtension = fileExtension.Replace(".", "") };
+                result.Data = new { Url = Path.Combine(HttpContext.Request.Scheme+"://"+host.Value, newFolder, fileName + fileExtension).Replace("\\", "/") ,FileUrl = Path.Combine(newFolder, fileName).Replace("\\", "/"), FileExtension = fileExtension.Replace(".", "") };
                 return result;
             }
 

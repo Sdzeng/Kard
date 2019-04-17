@@ -1,16 +1,33 @@
 ﻿<!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="utf-8">
-    <title>核心技术</title>
+    <title id="essay-detail-title">核心技术</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="icon" href="/image/logo-tab_16x16.ico" sizes="16x16">
     <link rel="stylesheet" href="/css/kard.css" type="text/css" media="screen">
 
-    <!--<link rel="stylesheet/less" href="/less/kard.less" type="text/css" media="screen">
-    <script type="text/javascript" src="/js/less.js?v=1.0.0"></script>-->
+
+    <!-- <link rel="stylesheet/less" href="/less/kard.less" type="text/css" media="screen">
+    <script type="text/javascript" src="/js/less.js?v=1.0.0"></script> -->
+
+    <link rel="stylesheet" href="./plugins/tinymce/js/tinymce/skins/ui/oxide/content.min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="./plugins/tinymce/js/tinymce/css/codepen.min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="./css/tinymce_editor.css" type="text/css" media="screen">
+    <script>
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?a9fadc2a7ef37a47bba581348e6fad6c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
 </head>
+
 <body id="essayDetailPage">
 
     <nav id="navbar" class="navbar bg-default navbar-bottom-shadow">
@@ -23,7 +40,8 @@
         </div>
         <div class="navbar-right">
             <ul class="navbar-nav">
-                <li id="authBtns1"><a href="login.html" target="_self">登陆</a>|<a href="register.html" target="_blank">注册</a></li>
+                <li id="authBtns1"><a href="login.html" target="_self">登陆</a>|<a href="register.html"
+                        target="_blank">注册</a></li>
                 <li id="authBtns2"><a href="user-center.html" target="_self">我的</a>|<a id="btnLogout">退出</a></li>
                 <li><a id="btnTest">测试登陆状态</a></li>
             </ul>
@@ -31,7 +49,9 @@
 
     </nav>
 
-    <div class="navigation"><div class="navigation-link"><a href="/">首页</a>\<a class="category"></a></div></div>
+    <div class="navigation">
+        <div class="navigation-link"><a href="/">首页</a>\<a class="category"></a></div>
+    </div>
     <div class="essay-detail-info">
 
         <div class="essay-detail-info-left">
@@ -47,9 +67,9 @@
                 </div>
             </div>
 
-
-            <div class="ckeditor-data essay-detail-content">
-                <!--<p>
+    
+                <div class="mce-content-body essay-detail-content">
+                    <!--<p>
                    端午的节氛慢慢起来了，
 
                     昨日去县城，
@@ -83,7 +103,8 @@
                     <img class="lazy" src="http://192.168.10.2:3703/user/1/media/20180602/021236132275.jpg" style="">
                     <img class="lazy"  src="http://192.168.10.2:3703/user/1/media/20180603/031412238550.jpg" style="">
                 </p>-->
-            </div>
+                </div>
+          
 
             <div class="essay-detail-like-share"></div>
 
@@ -93,7 +114,7 @@
                 </div>
                 <div class="essay-author-txt">
                     <div class="essay-author-txt-name">
-                        <span>作者</span>  <span>关注</span>
+                        <span>作者</span> <span>关注</span>
                     </div>
                     <div class="essay-author-txt-introduction">
                     </div>
@@ -103,11 +124,15 @@
 
             <div class="essay-detail-comment-like">
 
-                <ul class="comment-like-menu"><li class="comment-like-menu-active">评论</li><li>喜欢</li></ul>
+                <ul class="comment-like-menu">
+                    <li class="comment-like-menu-active">评论</li>
+                    <li>喜欢</li>
+                </ul>
                 <div class="comment-like-list">
                     <div class="comment-list comment-like-content-active">
                         <div class="comment-textarea-info">
-                            <textarea class="unify-input comment-new-textarea" id="newComment" rows="5" placeholder="说几句..." data-parent-id=""></textarea>
+                            <textarea class="unify-input comment-new-textarea" id="newComment" rows="5"
+                                placeholder="说几句..." data-parent-id=""></textarea>
                             <div class="comment-new-btns">
                                 <span class="comment-new-overnum">0/140</span>
                                 <a class="comment-new-submit">完成</a>
@@ -236,11 +261,13 @@
     <script type="text/javascript" src="/js/storage.js?v=1.0.0"></script>
     <script type="text/javascript" src="/js/util.js?v=1.0.0"></script>
     <script type="text/javascript" src="/js/base.js?v=1.0.0"></script>
-
+    <!-- <script type="text/javascript" src="./plugins/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
+    <script type="text/javascript" src="./plugins/tinymce/js/tinymce/tinymce.min.js"></script> -->
 
     <script type="text/javascript" src="/js/essay-detail.js?v=1.0.0"></script>
 
 
 
 </body>
+
 </html>
