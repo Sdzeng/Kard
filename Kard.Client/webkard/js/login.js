@@ -53,7 +53,7 @@ var loginjs = {
                             window.location.href = decodeURI(queryData.returnUrl);
                         }
                         else {
-                            window.location.href = "/editor.html";
+                            window.location.href = "/user-center.html";
                         }
                        
                     }

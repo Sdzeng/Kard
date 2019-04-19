@@ -1,12 +1,13 @@
 ﻿<!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="utf-8">
     <title>核心技术</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="icon" href="/image/logo-tab_16x16.ico" sizes="16x16">
-    <link rel="stylesheet" href="/css/kard.css" type="text/css" media="screen">
+    <!-- <link rel="stylesheet" href="/css/kard.css" type="text/css" media="screen"> -->
     <!--<link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/font-awesome.min.css">
     <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/froala_editor.min.css" type="text/css" media="screen">
     <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/froala_style.min.css" type="text/css" media="screen">
@@ -18,11 +19,12 @@
     <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/plugins/video.css">
     <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/codemirror.min.css">-->
 
-    <!--<link rel="stylesheet/less" href="/less/kard.less" type="text/css" media="screen">
-    <script type="text/javascript" src="/js/less.js?v=1.0.0"></script>-->
+    <link rel="stylesheet/less" href="/less/kard.less" type="text/css" media="screen">
+    <script type="text/javascript" src="/js/less.js?v=1.0.0"></script>
 
 
 </head>
+
 <body id="userCenterPage">
     <!--公共导航栏 -->
     <nav id="navbar" class="navbar  bg-default navbar-bottom-shadow">
@@ -35,9 +37,10 @@
         </div>
         <div class="navbar-right">
             <ul class="navbar-nav">
-                <li id="authBtns1"><a href="login.html" target="_self">登陆</a>|<a href="register.html" target="_self">注册</a></li>
+                <li id="authBtns1"><a href="login.html" target="_self">登陆</a>|<a href="register.html"
+                        target="_self">注册</a></li>
                 <li id="authBtns2"><a id="btnLogout">退出</a></li>
-                <li><a id="btnTest">测试登陆状态</a></li>
+                <!-- <li><a id="btnTest">测试登陆状态</a></li> -->
             </ul>
         </div>
 
@@ -82,362 +85,86 @@
     </div>-->
     <!--host -->
     <div class="user-center-info">
+        <div class="user-center-header">
+            <div class="author">
+                <input type="file" id="btnAddAvatarHide" name="btnAddPicHide" style="display:none;" />
+                <a class="author-avatar">
+                    <img class='lazy' src='/image/default-avatar.jpg' data-original=''>
 
-        <div class="user-center-info-body">
-
-            <div class="user-center-info-left">
-                <div class="user-center-author">
-                    <input type="file" id="btnAddAvatarHide" name="btnAddPicHide" style="display:none;" />
-                    <a class="user-center-author-avatar">
-                        <img class='lazy' src='/image/default-avatar.jpg' data-original=''>
-
-                    </a>
-                    <div class="user-center-author-txt">
-                        <div class="user-center-author-txt-name">
-                            <span>作者</span><span></span>
-                        </div>
-
-                        <div class="user-center-author-txt-introduction">
-
-                        </div>
-                        <div class="user-center-author-txt-num">
-                            <span></span><span></span><span></span>
-                        </div>
-
+                </a>
+                <div class="author-txt">
+                    <div class="author-txt-name">
+                        <span>作者</span><span></span>
                     </div>
 
-                </div>
+                    <div class="author-txt-introduction">
 
-                <div class="user-center-self-black">
+                    </div>
+                    <div class="author-txt-num">
+                        <span></span><span></span><span></span>
+                    </div>
 
-                    <ul>
-                        <li>首页</li>
-                        <li>发布</li>
-                        <li>消息</li>
-                        <li>
-                            <h4>我的单品</h4>
-                            <ul>
-                                <li>汤之味  (258人喜欢)</li>
-                                <li>山的芍药  (138人喜欢)</li>
-                                <li>楝花、金银花、小笋与蓬蘽  (275人喜欢)</li>
-                                <li>中一日  (443人喜欢)</li>
-                                <li>四季|耕田  (406人喜欢)</li>
-                                <li>哪种粽子最好吃？</li>
-                            </ul>
-                        </li>
-                        <li>
-                            <h4>我的喜爱</h4>
-                            <ul>
-                                <li>汤之味  (258人喜欢)</li>
-                                <li>山的芍药  (138人喜欢)</li>
-                                <li>楝花、金银花、小笋与蓬蘽  (275人喜欢)</li>
-                                <li>中一日  (443人喜欢)</li>
-                                <li>四季|耕田  (406人喜欢)</li>
-                                <li>哪种粽子最好吃？</li>
-                            </ul>
-                        </li>
-                        <li>
-                            <h4>我的喜爱</h4>
-                            <ul>
-                                <li>汤之味  (258人喜欢)</li>
-                                <li>山的芍药  (138人喜欢)</li>
-                                <li>楝花、金银花、小笋与蓬蘽  (275人喜欢)</li>
-                                <li>中一日  (443人喜欢)</li>
-                                <li>四季|耕田  (406人喜欢)</li>
-                                <li>哪种粽子最好吃？</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="user-center-self-black">
-                    <h4>我的喜爱</h4>
-                    <ul>
-                        <li>汤之味  (258人喜欢)</li>
-                        <li>山的芍药  (138人喜欢)</li>
-                        <li>楝花、金银花、小笋与蓬蘽  (275人喜欢)</li>
-                        <li>中一日  (443人喜欢)</li>
-                        <li>四季|耕田  (406人喜欢)</li>
-                        <li>哪种粽子最好吃？</li>
-                    </ul>
-                </div>
-                <div class="user-center-self-black">
-                    <h4>我的关注</h4>
-                    <ul>
-                        <li>汤之味  (258人喜欢)</li>
-                        <li>山的芍药  (138人喜欢)</li>
-                        <li>楝花、金银花、小笋与蓬蘽  (275人喜欢)</li>
-                        <li>中一日  (443人喜欢)</li>
-                        <li>四季|耕田  (406人喜欢)</li>
-                        <li>哪种粽子最好吃？</li>
-                    </ul>
                 </div>
 
             </div>
-            <div class="user-center-info-middle">
-
-                <div class="isay-info">
-                    <!--<div class="isay-info-head">
-                        <input class="unify-input isay-info-title" id="isayTitle" rows="5" placeholder="主题" />
-
-
-
-                    </div>-->
-
-                    <div class="isay-info-category">
-                        类型：
-                        <span class="isay-info-category-span">物件</span>
-                        <span class="isay-info-category-span">潮拍</span>
-                        <span class="isay-info-category-span">笔记</span>
-                    </div>
-
-
-                    <div class="isay-info-cover">
-                        封面：<div id="btnAddPic" class="isay-info-cover-btn">+</div>
-                        <input type="file" id="btnAddPicHide" name="btnAddPicHide" style="display:none;" />
-                    </div>
-
-                    <div class="isay-info-isOriginal">
-                        原创： <input id="isOriginal" class="unify-input" type="checkbox" />
-                    </div>
-                    <div class="isay-info-tag">
-                        标签： <input id="isayTag" type="text" class="unify-input" /><span>+</span>
-
-                    </div>
-                    <div class="isay-info-title">
-                        标题： <input id="isayTitle" type="text" class="unify-input" />
-
-                    </div>
-                    <div class="isay-info-body">
-                        <div id="editor" class="isay-info-editor">
-                        </div>
-                        <div id="autosave-header">
-                            <div id="autosave-status">
-                                <div id="autosave-status_label">状态:</div>
-                                <div id="autosave-status_spinner">
-                                    <span id="autosave-status_spinner-label"></span>
-                                </div>
-                            </div>
-
-                            <div id="autosave-server">
-                                <div id="autosave-server_label">HTTP server lag (ms):</div>
-                                <input id="autosave-lag" type="number" value="500" step="100" min="0" max="9000">
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="editor-tip">
-                        <ol>
-                            <li><p>Bulleted list – Start a line with * or - followed by a space.</p></li>
-                            <li><p>Numbered list – Start a line with 1. or 1) followed by a space.</p></li>
-                            <li><p>Headings – Start a line with # or ## or ### followed by a space to create a heading 1, heading 2 or heading 3 (up to heading 6 if options defines more headings).</p></li>
-                            <li><p>Bold – Type **text** or __text__, </p></li>
-                            <li><p> Italic – Type *text* or _text_,</p> </li>
-                            <li><p>Code – Type `text`.</p></li>
-                            <li><p>Press # + Space =___________</p></li>
-                        </ol>
-                    </div>
-                </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <div class="essay-info" style="margin-bottom: 20px;">
-                    <div class="essay-info-left" style="position: relative; width: 50px; float: left;"><img src="http://localhost:3703/user/1/photo_50x50.jpg" style="border-radius: 3px;" /></div>
-
-                    <div class="essay-info-right" style="margin-left: 60px; width:538px;">
-
-                        <div class="essay-info-right-user-name" style="font-size:15px;margin: 0 0 3px;"><a class="href-label">金鱼</a></div>
-                        <div class="essay-info-right-date" style="font-size: 12px; margin: 0 0 10px; color: #b6b6b6;"> 2016年08月15日 06:45 </div>
-                        <div class="essay-info-right-content" style="margin: 0 0 10px;"><p>现在画的是《寻找前世之旅》单行本颜色。软件是PS和CSP，请勿截屏截图，直播群：451396771。重复： 现在画的是《寻找前世之旅》单行本颜色。软件是PS和CSP，请勿截屏截图，直播群：451396771。</p></div>
-                        <div class="essay-info-right-media" style=" margin: 0 0 10px; ">
-                            <a href="http://localhost:3703/user/1/media/20170901/2371088718.jpg">
-                                <img src="http://localhost:3703/user/1/media/20170901/2371088718_538x300.jpg" data-origin="http://localhost:3703/user/1/media/20170901/2371088718.jpg" alt="">
-                            </a>
-                        </div>
-
-                        <div class="essay-info-right-buttom">
-                            <ul>
-                                <li class="essay-info-right-buttom-tags">
-                                    标签: <a href="https://www.douban.com/tag/动漫/" target="_blank">动漫</a> <a href="https://www.douban.com/tag/趣味/" target="_blank">趣味</a> <a href="https://www.douban.com/tag/人文/" target="_blank">人文</a> <a href="https://www.douban.com/tag/姚瑶/" target="_blank">姚瑶</a> <a href="https://www.douban.com/tag/日常/" target="_blank">日常</a>
-                                </li>
-                                <li class="essay-info-right-buttom-nums">
-                                    <a class="view">16820</a>
-                                    <a class="like">7</a>
-                                    <a class="comments">0</a>
-                                </li>
-                            </ul>
-                        </div>
-
-                    </div>
-                </div>
-
-
-            </div>
-            <!--<div class="user-center-info-right">
-
+            <div class="menu">
                 <ul>
-                    <li>
-                        <div class="header1 wrapper4">
-                            <a href="/zhubo/" hashlink="" class="fr" style=" float: right;">全部</a>
-                            <h3 style=""><i class="icon-discover icon-hot"></i>热门话题</h3>
-                        </div>
-                    </li>
-                    <li class="item cl wrapper5">
-                        <span class="section-host-right-li-num">1</span>
-                        <div class="section-host-right-li-left">
-                            <a href="http://www.ximalaya.com/zhubo/93341012/" hashlink="" class="pic circle default-user">
-                                话题一
-                            </a>
-                        </div>
-                        <div class="section-host-right-li-right">
-                            <a href="http://www.ximalaya.com/zhubo/93341012/" hashlink="" class="href-label">俞灏明工作室</a>
-
-                        </div>
-                    </li>
-                    <li class="item cl wrapper5">
-                        <span class="section-host-right-li-num">2</span>
-                        <div class="section-host-right-li-left">
-                            <a href="http://www.ximalaya.com/zhubo/92896537/" hashlink="" class="pic circle default-user">
-                                话题二
-                            </a>
-                        </div>
-                        <div class="section-host-right-li-right">
-                            <a href="http://www.ximalaya.com/zhubo/92896537/" hashlink="" class="href-label">新东方俞敏洪</a>
-
-                        </div>
-                    </li>
-                    <li class="item cl wrapper5">
-                        <span class="section-host-right-li-num">3</span>
-                        <div class="section-host-right-li-left">
-                            <a href="http://www.ximalaya.com/zhubo/83432108/" hashlink="" class="pic circle default-user">
-                                话题三
-                            </a>
-                        </div>
-                        <div class="section-host-right-li-right">
-                            <a href="http://www.ximalaya.com/zhubo/83432108/" hashlink="" class="href-label">冬吴同学会</a>
-                        </div>
-                    </li>
-                    <li class="item cl wrapper5">
-                        <span class="section-host-right-li-num">4</span>
-                        <div class="section-host-right-li-left">
-                            <a href="http://www.ximalaya.com/zhubo/83432108/" hashlink="" class="pic circle default-user">
-                                话题四
-                            </a>
-                        </div>
-                        <div class="section-host-right-li-right">
-                            <a href="http://www.ximalaya.com/zhubo/83432108/" hashlink="" class="href-label">冬吴同学会</a>
-                        </div>
-                    </li>
-                    <li class="item cl wrapper5">
-                        <span class="section-host-right-li-num">5</span>
-                        <div class="section-host-right-li-left">
-                            <a href="http://www.ximalaya.com/zhubo/83432108/" hashlink="" class="pic circle default-user">
-                                话题五
-                            </a>
-                        </div>
-                        <div class="section-host-right-li-right">
-                            <a href="http://www.ximalaya.com/zhubo/83432108/" hashlink="" class="href-label">冬吴同学会</a>
-                        </div>
-                    </li>
-                    <li class="item cl wrapper5">
-                        <span class="section-host-right-li-num">6</span>
-                        <div class="section-host-right-li-left">
-                            <a href="http://www.ximalaya.com/zhubo/83432108/" hashlink="" class="pic circle default-user">
-                                话题六
-                            </a>
-                        </div>
-                        <div class="section-host-right-li-right">
-                            <a href="http://www.ximalaya.com/zhubo/83432108/" hashlink="" class="href-label">冬吴同学会</a>
-                        </div>
-                    </li>
-
-
-                    <li class="item cl wrapper5">
-                        <span class="section-host-right-li-num">7</span>
-                        <div class="section-host-right-li-left">
-                            <a href="http://www.ximalaya.com/zhubo/83432108/" hashlink="" class="pic circle default-user">
-                                话题七
-                            </a>
-                        </div>
-                        <div class="section-host-right-li-right">
-                            <a href="http://www.ximalaya.com/zhubo/83432108/" hashlink="" class="href-label">冬吴同学会</a>
-                        </div>
-                    </li>
-
-
-                    <li class="item cl wrapper5">
-                        <span class="section-host-right-li-num">8</span>
-                        <div class="section-host-right-li-left">
-                            <a href="http://www.ximalaya.com/zhubo/83432108/" hashlink="" class="pic circle default-user">
-                                话题八
-                            </a>
-                        </div>
-                        <div class="section-host-right-li-right">
-                            <a href="http://www.ximalaya.com/zhubo/83432108/" hashlink="" class="href-label">冬吴同学会</a>
-                        </div>
-                    </li>
-
-
-                    <li class="item cl wrapper5">
-                        <span class="section-host-right-li-num">9</span>
-                        <div class="section-host-right-li-left">
-                            <a href="http://www.ximalaya.com/zhubo/83432108/" hashlink="" class="pic circle default-user">
-                                话题九
-                            </a>
-                        </div>
-                        <div class="section-host-right-li-right">
-                            <a href="http://www.ximalaya.com/zhubo/83432108/" hashlink="" class="href-label">冬吴同学会</a>
-                        </div>
-                    </li>
-
-                    <li class="item cl wrapper5">
-                        <span class="section-host-right-li-num">10</span>
-                        <div class="section-host-right-li-left">
-                            <a href="http://www.ximalaya.com/zhubo/83432108/" hashlink="" class="pic circle default-user">
-                                话题十
-                            </a>
-                        </div>
-                        <div class="section-host-right-li-right">
-                            <a href="http://www.ximalaya.com/zhubo/83432108/" hashlink="" class="href-label">冬吴同学会</a>
-                        </div>
-                    </li>
-
-
-
+                    <li data-opt="news" class="menu-active">动态</li>
+                    <li data-opt="essay">文章</li>
+                    <li data-opt="like">喜欢</li>
+                    <li data-opt="comment">评论</li>
+                    <li data-opt="fans">粉丝</li>
+                    <li data-opt="follow">关注</li>
+                    <li data-opt="follow">设置</li>
                 </ul>
+            </div>
+        </div>
+
+        <div class="user-center-content">
+            <div id="my-content" class="my-content">
+
+            </div>
+            <!-- <div id="my-essay-c">
+                <div class="add-isay"><a href="editor.html">+</a></div>
 
 
+            </div> -->
 
 
-            </div>-->
+            <div class="go-to-top" style="display: block;">
+                <a href="javascript:;" class="lnk-back-top"><span>返回页顶</span></a>
+            </div>
+
+            <div class="load-more">
+                <span>加载更多</span>
+            </div>
+
 
         </div>
+
     </div>
-  
-    <div style="min-height: 1000px;">123</div>
+
+
+
+
 
 
     <!-- 以下是公共页脚 -->
-    <footer class="blog-footer">
-        <p>? 2015-2016 初</p>
+    <footer class="min-footer">
+        <div>
+            <div>
+                <span>©Bit-版权所有</span>
+            </div>
+
+            <div>
+                <span><a target="_blank" href="">关于Bit</a></span>
+                <span><a target="_blank" href="">在Bit工作</a></span>
+                <span><a target="_blank" href="">联系我们</a></span>
+                <span><a target="_blank" href="">免责声明</a></span>
+                <span><a target="_blank" href="">帮助中心</a></span>
+                <span><a target="_blank" href="">Bit广告</a></span>
+            </div>
+        </div>
     </footer>
 
     <!-- 公共js -->
@@ -445,6 +172,7 @@
     <script type="text/javascript" src="/js/jquery.lazyload.min.js?v=1.0.0"></script>
 
     <script type="text/javascript" src="/js/storage.js?v=1.0.0"></script>
+    <script type="text/javascript" src="/js/util.js?v=1.0.0"></script>
     <script type="text/javascript" src="/js/base.js?v=1.0.0"></script>
 
     <!--<script type="text/javascript" src="./plugins/ckeditor5-build-classic-12.0.0/build/ckeditor.js"></script>-->
@@ -474,4 +202,5 @@
     <script type="text/javascript" src="/js/user-center.js?v=1.0.0"></script>
 
 </body>
+
 </html>

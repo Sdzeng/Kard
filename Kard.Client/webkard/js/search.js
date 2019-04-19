@@ -34,7 +34,7 @@
             "</div>" +
 
             "<div class='result-img'>" +
-            "<img class='lazy' src='#{defaultPicturePath}' data-original='#{pictureCropPath}'    />" +
+            "<a href='#{essayDetailPage}'><img class='lazy' src='#{defaultPicturePath}' data-original='#{pictureCropPath}'    /></a>" +
             "</div>" +
 
             "</div >" +
@@ -218,7 +218,7 @@
                     var topMediaDto = data[index];
                      
                     var essayDetailPage = "/essay-detail.html?id=" + topMediaDto.id;
-                    essayRecommendAObj.append("<a href='" + essayDetailPage + "' title='"+topMediaDto.title+"'>" + (parseInt(index)+1)+". "+topMediaDto.title + "</a>");
+                    essayRecommendAObj.append("<a href='" + essayDetailPage + "' title='"+topMediaDto.title+"'><span class='recommend-list-number'>" + (parseInt(index)+1)+"</span>"+topMediaDto.title + "</a>");
                 }
             },
             error: function () {

@@ -69,7 +69,8 @@ var essaydetailjs = {
                 }
                 $(".category", _this.data.scope).text(data.category).attr("href","search.html?keyword="+data.category);
                 $(".essay-detail-title", _this.data.scope).text(data.title);
-                $("#essay-detail-title").text(data.title+"_核心技术");
+                $("title").text(data.title+"_"+data.kuserNickName + "_核心技术");
+                $("meta[property='og:description']").attr("content",data.meta);
 
               
                 var avatarArr = data.kuserAvatarUrl.split('.');

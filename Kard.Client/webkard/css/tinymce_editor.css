@@ -1,5 +1,5 @@
 .mce-content-body{
-    padding:0px;
+   
 }
 .mce-content-body blockquote {
     overflow: hidden;
@@ -50,4 +50,8 @@ background: #CCC;
 
 
     
+}
+
+.mce-content-body a{
+color:#3598db
 }

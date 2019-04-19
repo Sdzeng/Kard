@@ -1,31 +1,30 @@
-
 .essay-detail-info {
     padding: 15px 10px 50px 10px;
 
     .essay-detail-title {
-        font-size: 130%;
+        font-size  : 130%;
         line-height: 40px;
     }
 
     .essay-min-author {
-        margin-top: 13px;
-        display: flex;
-        flex-direction: row;
+        margin-top     : 13px;
+        display        : flex;
+        flex-direction : row;
         justify-content: space-between;
 
         &-left {
-            display: flex;
-            flex-direction: row;
+            display        : flex;
+            flex-direction : row;
             justify-content: flex-start;
 
 
             .essay-min-author-avatar {
-                width: 30px;
+                width : 30px;
                 margin: 3px 10px 0px 0px;
 
                 img {
-                    width: 30px;
-                    height: 30px;
+                    width        : 30px;
+                    height       : 30px;
                     border-radius: 15px;
                 }
             }
@@ -36,20 +35,20 @@
                     line-height: 20px;
                     /*span {
                         &:last-child {
-                            margin-left: 10px;
-                            padding: 3px 10px;
-                            color: #9aabb8;
+                            margin-left     : 10px;
+                            padding         : 3px 10px;
+                            color           : #9aabb8;
                             background-color: #dfe5e9;
-                            border-radius: 3px;
-                            font-size:12px;
+                            border-radius   : 3px;
+                            font-size       :12px;
                         }
                     }*/
                 }
 
                 &-introduction {
                     line-height: 20px;
-                    color: #bbb;
-                    font-size: 12px;
+                    color      : #bbb;
+                    font-size  : 12px;
 
                     span {
                         &:not(:first-child) {
@@ -65,23 +64,23 @@
         }
 
         &-right {
-            height: 35px;
-            display: flex;
-            flex-direction: column;
+            height         : 35px;
+            display        : flex;
+            flex-direction : column;
             justify-content: center;
-            align-items: center;
+            align-items    : center;
 
             span {
-                padding: 2px 10px;
+                padding         : 2px 10px;
                 background-color: #ffebee;
-                color: #e53935;
-                border: 1px solid #ffcdd2;
-                border-radius: 2px;
-                cursor: pointer;
-                font-size: 13px;
+                color           : #e53935;
+                border          : 1px solid #ffcdd2;
+                border-radius   : 2px;
+                cursor          : pointer;
+                font-size       : 13px;
 
                 &:hover {
-                    border-color: #efabab;
+                    border-color    : #efabab;
                     background-color: #fce4ec;
                 }
             }
@@ -89,28 +88,33 @@
     }
 
     .essay-detail-content {
-        margin-top: 13px;
-        color: #555;
+        margin-top : 13px;
+        color      : #555;
         line-height: 25px;
 
-        img, video {
-             width: 100%;
+        img,
+        video {
+            width     : auto;
+            height    : auto;
+            max-width : 100%;
+            max-height: 100%;
             margin-top: 10px;
         }
 
-       
+
     }
+
     /*.essay-detail-tag {
         margin-top: 5px;
-        color: white;
+        color     : white;
 
         span {
-            padding: 2px 10px;
+            padding         : 2px 10px;
             background-color: #f2f8f2;
-            color: #4f946e;
-            border: 1px solid #e3f1ed;
-            border-radius: 2px;
-            font-size: 13px;
+            color           : #4f946e;
+            border          : 1px solid #e3f1ed;
+            border-radius   : 2px;
+            font-size       : 13px;
         }
 
         span:not(:first-child) {
@@ -120,18 +124,18 @@
     .essay-detail-like-share {
         margin-top: 50px;
         text-align: right;
-        height: 30px;
+        height    : 30px;
 
         span {
-            text-align: center;
-            color: #ca6445;
-            border: 1px solid #fad5b5;
-            background: #fbe9d9;
-            padding: 5px 10px;
-            height: 12px;
-            line-height: 1;
+            text-align   : center;
+            color        : #ca6445;
+            border       : 1px solid #fad5b5;
+            background   : #fbe9d9;
+            padding      : 5px 10px;
+            height       : 12px;
+            line-height  : 1;
             border-radius: 2px;
-            font-size: 13px;
+            font-size    : 13px;
 
 
             &:not(:first-child) {
@@ -139,26 +143,26 @@
             }
 
             &:last-child {
-                color: #bbb;
-                border: 0;
+                color     : #bbb;
+                border    : 0;
                 background: white;
             }
         }
     }
 
     .essay-author {
-        padding: 10px;
-        margin: 40px 0px;
+        padding         : 10px;
+        margin          : 40px 0px;
         background-color: #fff6ed;
 
         &-avatar {
-            width: 50px;
-            float: left;
+            width       : 50px;
+            float       : left;
             margin-right: 10px;
 
             img {
-                height: 50px;
-                width: 50px;
+                height       : 50px;
+                width        : 50px;
                 border-radius: 25px;
             }
         }
@@ -166,31 +170,31 @@
         &-txt {
 
             &-name {
-                padding: 4px 0px;
-                display: flex;
-                flex-direction: row;
+                padding        : 4px 0px;
+                display        : flex;
+                flex-direction : row;
                 justify-content: space-between;
 
 
                 span {
                     &:first-child {
-                        font-size: 16px;
+                        font-size   : 16px;
                         margin-right: 10px;
                     }
 
                     &:last-child {
-                        padding: 2px 10px;
+                        padding         : 2px 10px;
                         background-color: #ffebee;
-                        color: #e53935;
-                        border: 1px solid #ffcdd2;
-                        border-radius: 2px;
-                        cursor: pointer;
-                        font-size: 13px;
+                        color           : #e53935;
+                        border          : 1px solid #ffcdd2;
+                        border-radius   : 2px;
+                        cursor          : pointer;
+                        font-size       : 13px;
 
 
 
                         &:hover {
-                            border-color: #efabab;
+                            border-color    : #efabab;
                             background-color: #fce4ec;
                         }
                     }
@@ -198,13 +202,13 @@
             }
 
             &-introduction {
-                color: #bbb;
-                font-size: 13px;
-                /*overflow: hidden;
-                    text-overflow: ellipsis;
+                color               : #bbb;
+                font-size           : 13px;
+                /*overflow          : hidden;
+                    text-overflow   : ellipsis;
                     -o-text-overflow: ellipsis;
-                    white-space: nowrap;
-                    display: block;
+                    white-space     : nowrap;
+                    display         : block;
                    
                     width: 160px;
 
@@ -220,37 +224,37 @@
 
     .comment-list {
         margin-top: 20px;
-        padding: 10px;
+        padding   : 10px;
 
 
         ul.comment-menu {
-            border-bottom: 1px solid #e3f1ed; //1px solid #f6f7f9;
-            height: 30px;
-            list-style-type: none;
+            border-bottom   : 1px solid #e3f1ed; //1px solid #f6f7f9;
+            height          : 30px;
+            list-style-type : none;
             list-style-image: none;
-            padding: 0;
-            margin: 0;
+            padding         : 0;
+            margin          : 0;
 
 
             li {
-                float: left;
+                float  : left;
                 padding: 2px 10px;
-                color: #4f946e;
+                color  : #4f946e;
             }
         }
 
         .comment-empty {
-            padding: 30px;
-            color: #bbb;
+            padding   : 30px;
+            color     : #bbb;
             text-align: center;
         }
 
         .comment-info {
-            padding-top: 15px;
-            display: flex;
-            flex-direction: row;
+            padding-top    : 15px;
+            display        : flex;
+            flex-direction : row;
             justify-content: flex-start;
-            align-items: flex-start;
+            align-items    : flex-start;
 
 
 
@@ -258,46 +262,46 @@
                 margin-top: 5px;
 
                 img {
-                    width: 30px;
-                    height: 30px;
+                    width        : 30px;
+                    height       : 30px;
                     border-radius: 15px;
                 }
             }
 
             &-content {
                 margin-left: 15px;
-                width: 100%;
+                width      : 100%;
 
 
                 &-user {
-                    width: 100%;
-                    padding: 5px 0px;
-                    display: flex;
-                    flex-direction: row;
+                    width          : 100%;
+                    padding        : 5px 0px;
+                    display        : flex;
+                    flex-direction : row;
                     justify-content: space-between;
 
                     span {
 
                         &:not(:first-child) {
-                            color: #bbb;
+                            color    : #bbb;
                             font-size: 13px;
                         }
                     }
                 }
 
                 &-txt {
-                    width: 100%;
-                    min-height: 30px;
+                    width      : 100%;
+                    min-height : 30px;
                     padding-top: 5px;
-                    word-wrap: break-word;
-                    overflow: hidden;
+                    word-wrap  : break-word;
+                    overflow   : hidden;
                     line-height: 30px;
 
                     &-parent {
-                        color: #bbb;
+                        color        : #bbb;
                         margin-bottom: 10px;
-                        padding-left: 5px;
-                        border-left: 2px solid#f4f4f4;
+                        padding-left : 5px;
+                        border-left  : 2px solid#f4f4f4;
 
 
                         a {
@@ -313,6 +317,3 @@
         }
     }
 }
-
-
- 

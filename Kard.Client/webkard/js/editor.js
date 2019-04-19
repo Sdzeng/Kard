@@ -196,6 +196,7 @@ var editorjs = {
             // toolbar: 'formatselect | bold italic strikethrough forecolor backcolor permanentpen formatpainter | link image media pageembed | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat | addcomment',
             plugins: 'print autoresize preview fullpage paste searchreplace autolink directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking emoticons anchor toc insertdatetime advlist lists wordcount  imagetools textpattern help  link',
             toolbar: 'formatselect | bold italic strikethrough forecolor backcolor permanentpen formatpainter | link image media pagebreak table | codesample code | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent | removeformat ',
+            //imagetools_toolbar: "rotateleft rotateright | flipv fliph | editimage imageoptions",
             min_height:600,
             automatic_uploads: true,
             //images_upload_url: basejs.requestDomain + "/common/uploadfile",
@@ -216,7 +217,7 @@ var editorjs = {
                     success: function (resultDto) {
 
                         if (resultDto.result) {
-                            success(resultDto.data.url);
+                            success(basejs.cdnDomain+"/"+resultDto.data.fileUrl+"."+resultDto.data.fileExtension);
                         }
                         else {
                             failure(resultDto.message);
@@ -238,14 +239,14 @@ var editorjs = {
                 '/css/tinymce_editor.css'
             ],
             content_style: [
-                'body{padding:100px; margin:auto;font-size:16px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; line-height:1.3; letter-spacing: -0.03em;color:#222} h1,h2,h3,h4,h5,h6 {font-weight:400;margin-top:1.2em} h1 {} h2{} .tiny-table {width:100%; border-collapse: collapse;} .tiny-table td, th {border: 1px solid #555D66; padding:10px; text-align:left;font-size:16px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; line-height:1.6;} .tiny-table th {background-color:#E2E4E7}'
+                'body{padding:20px; margin:auto;font-size:16px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; line-height:1.3; letter-spacing: -0.03em;color:#222} h1,h2,h3,h4,h5,h6 {font-weight:400;margin-top:1.2em} h1 {} h2{} .tiny-table {width:100%; border-collapse: collapse;} .tiny-table td, th {border: 1px solid #555D66; padding:10px; text-align:left;font-size:16px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; line-height:1.6;} .tiny-table th {background-color:#E2E4E7}'
             ],
             init_instance_callback: function (editor) {
                 _this.data.editor=editor;
                 // editor.on('SetContent', function (e) {
                 //     console.log(e.content);
                 //   });
-                editor.setContent("<div style='display: flex;flex-direction:row;justify-content: center;align-items: center;'><h5>加载内容中...</h5><div>");
+                //editor.setContent("<div style='display: flex;flex-direction:row;justify-content: center;align-items: center;'><h5>加载内容中...</h5><div>");
                 _this.bindEssay();
               
             },
@@ -256,7 +257,7 @@ var editorjs = {
                 predicate: function (node) {
                   return node.nodeName.toLowerCase() === 'img'
                 },
-                items: 'alignleft aligncenter alignright',
+                items: 'alignleft aligncenter alignright | rotateleft rotateright | flipv fliph | editimage imageoptions',
                 position: 'node',
                 scope: 'node'
               });
@@ -319,7 +320,7 @@ var editorjs = {
     },
     saveEssay: function (isPublish) {
         var _this = this;
-        debugger;
+       
         // Save contents using some XHR call
         var data= _this.data.editor.getBody().innerHTML;
 

@@ -10,15 +10,15 @@ body {
   padding: 15px 10px 50px 10px;
   /*.essay-detail-tag {
         margin-top: 5px;
-        color: white;
+        color     : white;
 
         span {
-            padding: 2px 10px;
+            padding         : 2px 10px;
             background-color: #f2f8f2;
-            color: #4f946e;
-            border: 1px solid #e3f1ed;
-            border-radius: 2px;
-            font-size: 13px;
+            color           : #4f946e;
+            border          : 1px solid #e3f1ed;
+            border-radius   : 2px;
+            font-size       : 13px;
         }
 
         span:not(:first-child) {
@@ -54,12 +54,12 @@ body {
   line-height: 20px;
   /*span {
                         &:last-child {
-                            margin-left: 10px;
-                            padding: 3px 10px;
-                            color: #9aabb8;
+                            margin-left     : 10px;
+                            padding         : 3px 10px;
+                            color           : #9aabb8;
                             background-color: #dfe5e9;
-                            border-radius: 3px;
-                            font-size:12px;
+                            border-radius   : 3px;
+                            font-size       :12px;
                         }
                     }*/
 }
@@ -101,7 +101,10 @@ body {
 }
 .essay-detail-info .essay-detail-content img,
 .essay-detail-info .essay-detail-content video {
-  width: 100%;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
   margin-top: 10px;
 }
 .essay-detail-info .essay-detail-like-share {
@@ -169,11 +172,11 @@ body {
 .essay-detail-info .essay-author-txt-introduction {
   color: #bbb;
   font-size: 13px;
-  /*overflow: hidden;
-                    text-overflow: ellipsis;
+  /*overflow          : hidden;
+                    text-overflow   : ellipsis;
                     -o-text-overflow: ellipsis;
-                    white-space: nowrap;
-                    display: block;
+                    white-space     : nowrap;
+                    display         : block;
                    
                     width: 160px;
 

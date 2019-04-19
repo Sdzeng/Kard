@@ -592,7 +592,7 @@ th {
   background-position: 0 -150px;
 }
 .load-more {
-  padding-top: 100px;
+  padding: 100px 0px;
   width: 100%;
   display: block;
   text-align: center;
@@ -1050,13 +1050,15 @@ th {
 .essay-detail-info-left .essay-detail-content {
   text-align: left;
   color: #555;
-  padding-top: 20px;
   line-height: 25px;
   min-height: 450px;
 }
 .essay-detail-info-left .essay-detail-content img,
 .essay-detail-info-left .essay-detail-content video {
-  max-width: 700px;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
   margin-top: 20px;
 }
 .essay-detail-info-left .essay-detail-like-share {
@@ -2011,11 +2013,13 @@ th {
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   white-space: nowrap;
-  background-color: #ee6e73;
   color: white;
   padding: 1px 5px;
   border-radius: 2px;
   cursor: pointer;
+  background-color: #f2f8f2;
+  color: #4f946e;
+  border: 1px solid #e3f1ed;
 }
 .search-result-warp .result-entity .result-img img {
   border-radius: 3px;
@@ -2041,13 +2045,24 @@ th {
   white-space: nowrap;
   width: 230px;
   font-size: 14px;
+  height: 30px;
+  line-height: 30px;
 }
 .search-result-right .essay-recommend-a a:hover {
   color: yellowgreen;
 }
+.search-result-right .essay-recommend-a a .recommend-list-number {
+  background: #ee6e73;
+  color: white;
+  height: 30px;
+  width: 30px;
+  display: inline-block;
+  text-align: center;
+  margin-right: 10px;
+  border-radius: 3px;
+}
 .footer {
   color: #bbb;
-  padding-top: 100px;
   background-color: #f5f5f5;
 }
 .footer ul,
@@ -2090,7 +2105,7 @@ th {
   color: #bbb;
 }
 .min-footer {
-  margin-top: 200px;
+  margin-top: 100px;
   height: 40px;
   line-height: 40px;
   width: 100%;

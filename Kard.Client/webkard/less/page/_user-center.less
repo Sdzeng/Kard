@@ -1,43 +1,39 @@
 .user-center-info {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding-top: 80px;
-    width: 100%;
-    min-width: @page-min-width;
+    display        : flex;
+    flex-direction : column;
+    justify-content: flex-start;
+    align-items    : center;
+    padding        : 80px 0px;
+    width          : 100%;
+    min-width      : @page-min-width;
 
-
-
-    &-body {
-        min-height: 300px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: flex-start;
-
-        > div {
-            &:not(:first-child) {
-                margin-left: 30px;
-            }
-        }
+    ul {
+        list-style-type : none;
+        list-style-image: none;
+        padding         : 0;
+        margin          : 0;
     }
 
-    &-left {
-        display: inline-block;
-        width: 360px;
+    .user-center-header {
+        width           : 1050px;
+        background-color: #f5f5f5;
+        border-radius   : 3px;
+        display         : flex;
+        flex-direction  : row;
+        justify-content : space-between;
 
-        .user-center-author {
-            background-color: #fff6ed;
-            padding: 10px 5px;
-            margin-bottom: 20px;
+        .author {
+            width: 350px;
+
+            padding: 10px;
 
             &-avatar {
-                float: left;
+                float       : left;
                 margin-right: 10px;
 
                 img {
-                    height: 80px;
-                    width: 80px;
+                    height       : 80px;
+                    width        : 80px;
                     border-radius: 40px;
                 }
             }
@@ -53,8 +49,8 @@
 
                     span:last-child {
                         margin-left: 10px;
-                        font-size: 12px;
-                        color: #bbb;
+                        font-size  : 12px;
+                        color      : #bbb;
                     }
                 }
 
@@ -64,7 +60,7 @@
 
                 &-num {
                     padding-top: 10px;
-                    color: #bbb;
+                    color      : #bbb;
 
                     span {
                         &:not(:first-child) {
@@ -75,113 +71,285 @@
             }
         }
 
+        .menu {
 
+            height        : 108px;
+            display       : flex;
+            flex-direction: row;
+            align-items   : flex-end;
 
-        .user-center-self-black {
-            margin-top: 10px;
+            &-active {
 
-            h4 {
-                color: #666666;
-                padding: 10px 5px;
-                /*background-color: #f5f5f5;*/
-                border-bottom: 1px solid #f4f4f4;
+                background-color: #f2f8f2;
+                color           : #4f946e;
+                border          : 1px solid #e3f1ed;
             }
 
             ul {
-                padding: 5px 0px;
+                padding: 10px;
+
+                margin-right: 20px;
 
                 li {
-                    padding: 5px;
-                    color: #bbb;
+                    padding   : 5px 15px;
+                    color     : hsl(147, 27%, 50%);
+                    cursor    : pointer;
+                    text-align: right;
+                    font-size : 15px;
+                    float     : left;
+
+                    &:not(:last-child) {
+                        margin-right: 10px;
+                    }
+
+                    &:hover {
+                        background-color: #f2f8f2;
+                        color           : #4f946e;
+                    }
                 }
             }
         }
-        /*.picture-warp {
-            float: left;
-            min-width: 170px;
-            min-height: 170px;
-
-            &:nth-child(even) {
-                margin-bottom: 30px;
-            }
-
-            &:nth-child(odd) {
-                margin-left: 20px;
-                margin-bottom: 30px;
-            }
-
-            img {
-                border-radius: 3px;
-            }
-
-            .picture-desc {
-                padding: 3px 0;
-
-                .picture-name {
-                    margin-right: 5px;
-                }
-
-                .picture-num {
-                    margin-right: 5px;
-                    color: #ccc;
-                }
-
-                .picture-like {
-                    margin-right: 5px;
-                }
-            }
-        }*/
     }
 
-    &-middle {
-        display: inline-block;
-        width: 820px;
+    .user-center-content {
 
-        
+        min-height      : 300px;
+        width           : 1050px;
+        padding         : 30px 25px;
+        background-color: #f5f5f5;
 
-        .essay-info {
-            width: 100%;
-            display: inline-block;
 
-            &-right {
 
-                &-buttom {
-                    li {
-                        font-size: 12px;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        color: #b6b6b6;
 
-                        a {
-                            margin-left: 10px;
+        #my-content {
+            .result-warp {
+                width           : 100%;
+                display         : flex;
+                flex-direction  : row;
+                justify-content : flex-start;
+                background-color: white;
+                padding         : 10px 0px;
+                margin-bottom   : 10px;
+
+                .result-auth {
+                    width          : 60px;
+                    display        : flex;
+                    flex-direction : column;
+                    justify-content: flex-start;
+                    align-items    : center;
+
+                    img {
+                        width        : 40px;
+                        height       : 40px;
+                        border-radius: 3px;
+                    }
+                }
+
+                .result-info {
+                    width  : 840px;
+                    padding: 0px 10px;
+                }
+
+                .result-cover {
+                    width: 100px;
+                }
+            }
+
+            .essay-warp {
+                .result-info {
+
+                    .essay-header {
+                        font-size: 15px;
+
+                        .essay-title {
+                            color: #619001;
+
+                            &:hover {
+
+                                color: yellowgreen;
+                            }
                         }
                     }
 
-                    &-tags {
-                        float: left;
+
+
+                    .essay-content {
+                        padding: 10px 0px;
                     }
 
-                    &-nums {
-                        float: right;
+                    .essay-footer {
+                        span {
+
+                            white-space: nowrap;
+                            color      : #b6b6b6;
+
+                            &:not(:last-child) {
+                                margin-right: 10px;
+                            }
+
+
+                        }
+
+
+                        .essay-category {
+                            padding         : 1px 5px;
+                            border-radius   : 2px;
+                            cursor          : pointer;
+                            background-color: #f2f8f2;
+                            color           : #4f946e;
+                            border          : 1px solid #e3f1ed;
+                        }
+                    }
+
+                }
+
+                .result-cover {
+
+                    a {
+                        &:hover {
+                            cursor: pointer;
+                        }
+
+                        img {
+                            border-radius: 3px;
+                            width        : 80px;
+                            height       : 80px;
+                        }
+                    }
+                }
+            }
+
+            .essay-like-warp {
+                .result-info {
+
+                    display        : flex;
+                    flex-direction : column;
+                    justify-content: space-between;
+
+                    .like-content {
+                        font-size: 15px;
+
+                        a {
+                            color: #619001;
+
+                            &:hover {
+
+                                color: yellowgreen;
+                            }
+                        }
+                    }
+
+                    .like-footer {
+                        span {
+
+                            white-space: nowrap;
+                            color      : #b6b6b6;
+
+                            &:not(:last-child) {
+                                margin-right: 10px;
+                            }
+
+
+                        }
+                    }
+                }
+            }
+
+            .essay-comment-warp {
+                .result-info {
+
+                   
+
+                    .comment-header {
+                        font-size: 15px;
+
+                        a {
+                            color: #619001;
+
+                            &:hover {
+
+                                color: yellowgreen;
+                            }
+                        }
+                    }
+
+                    .comment-content {
+                        padding: 10px 0px;
+                    }
+
+                    .comment-footer {
+                        span {
+
+                            white-space: nowrap;
+                            color      : #b6b6b6;
+
+                            &:not(:last-child) {
+                                margin-right: 10px;
+                            }
+
+
+                        }
                     }
                 }
             }
         }
+
+        #my-essay-c {
+            .add-isay {
+                text-align: center;
+                display   : inline-block;
+                padding   : 20px 0px;
+                width     : 100%;
+
+                a {
+
+                    font-size       : 200%;
+                    background-color: #ee6e73;
+                    border          : 5px solid #fdcccd;
+                    color           : white;
+                    width           : 50px;
+                    height          : 50px;
+                    display         : inline-block;
+                    border-radius   : 25px;
+                    transition      : all 300ms cubic-bezier(0, 0, 1, 1);
+
+                    &:hover {
+                        background-color: hsl(358, 85%, 61%);
+                        border-color    : hsl(359, 93%, 83%);
+                        width           : 80px;
+
+
+                    }
+                }
+
+            }
+        }
     }
-    /*&-right {
+
+
+
+
+}
+
+
+
+
+
+
+/*&-right {
         display: inline-block;
-        width: 220px;
+        width  : 220px;
 
         ul {
-            padding: 0px 10px;
+            padding      : 0px 10px;
             //sborder-top: 1px dotted #b6b6b6;
             li {
-                overflow: hidden;
-                white-space: nowrap;
-                color: #b6b6b6;
+                overflow     : hidden;
+                white-space  : nowrap;
+                color        : #b6b6b6;
                 border-bottom: 1px dotted #b6b6b6;
-                padding: 8px 0px;
-                line-height: 24px;
+                padding      : 8px 0px;
+                line-height  : 24px;
 
                 &:first-child {
                     line-height: 34px;
@@ -189,26 +357,25 @@
 
 
                 span.section-host-right-li-num {
-                    float: left;
-                    width: 24px;
-                    height: 24px;
-                    text-align: center;
-                    font-size: 16px;
+                    float       : left;
+                    width       : 24px;
+                    height      : 24px;
+                    text-align  : center;
+                    font-size   : 16px;
                     margin-right: 10px;
-                    background: #ec4d00;
-                    color: #fff;
+                    background  : #ec4d00;
+                    color       : #fff;
                 }
 
                 div.section-host-right-li-left {
                     display: inline-block;
-                    float: left;
+                    float  : left;
                 }
 
                 div.section-host-right-li-right {
                     display: inline-block;
-                    float: right;
+                    float  : right;
                 }
             }
         }
     }*/
-}
