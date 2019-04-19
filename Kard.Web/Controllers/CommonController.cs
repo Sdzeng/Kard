@@ -82,14 +82,23 @@ namespace Kard.Web.Controllers
             {
                 string fileName = now.ToString("ddHHmmssffff");
                 string fileExtension = Path.GetExtension(flie.FileName.Trim('"')).ToLower(); // Path.GetExtension(ContentDispositionHeaderValue.Parse(mediaFlie.ContentDisposition).FileName.Trim('"'));
+                if (string.IsNullOrEmpty(fileExtension)) {
+                    switch (flie.ContentType.ToLower()) {
+                        case "image/png":fileExtension = ".png";break;
+                        case "image/jpg":
+                        case "image/jpeg": fileExtension = ".jpg"; break;
+                    }
+                }
+
                 string fullPath = Path.Combine(newPath, fileName + fileExtension);
                 using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
                     flie.CopyTo(stream);
                 }
                 result.Result = true;
-                var host = HttpContext.Request.Host;
-                result.Data = new { Url = Path.Combine(HttpContext.Request.Scheme+"://"+host.Value, newFolder, fileName + fileExtension).Replace("\\", "/") ,FileUrl = Path.Combine(newFolder, fileName).Replace("\\", "/"), FileExtension = fileExtension.Replace(".", "") };
+                //var host = HttpContext.Request.Host;
+                //Url = Path.Combine(_configuration.GetValue<string>("AppSetting:CDN:Url") , newFolder, fileName + fileExtension).Replace("\\", "/") ,
+                result.Data = new { FileUrl = Path.Combine(newFolder, fileName).Replace("\\", "/"), FileExtension = fileExtension.Replace(".", "") };
                 return result;
             }
 

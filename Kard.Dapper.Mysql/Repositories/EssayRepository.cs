@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Kard.Dapper.Mysql.Repositories
 {
@@ -99,23 +100,52 @@ namespace Kard.Dapper.Mysql.Repositories
         }
 
 
-        public IEnumerable<TopMediaDto> GetUserMediaPictureList(long userId, int count)
-        {
-            return ConnExecute(conn =>
-            {
-                string sql = @"select t.EssayMediaCount,essay.LikeNum EssayLikeNum,media.EssayId,media.CdnPath,media.MediaExtension,essay.Content EssayContent,essay.CreatorUserId,kuser.NickName CreatorNickName from (
-                    select  media.EssayId,min(media.Sort) MinSort,count(media.Id) EssayMediaCount
-                    from media join essay on media.EssayId=essay.Id and media.MediaType='picture'  
-                    where media.CreatorUserId=@CreatorUserId 
-                    group by media.EssayId  order by essay.LikeNum desc  limit @Count 
-                    ) t join media on t.EssayId=media.EssayId and t.MinSort=media.Sort 
-                   join essay on media.EssayId=essay.Id 
-                   join kuser on essay.CreatorUserId=kuser.Id   
-                  order by EssayLikeNum desc,essay.CreationTime desc";
-                var topMediaDtoList = conn.Query<TopMediaDto>(sql, new { CreatorUserId = userId, Count = count });
+        
 
-                return topMediaDtoList;
-            });
+        public IEnumerable<object> GetUserNews(long userId, int pageIndex, int pageSize, string orderBy)
+        {
+
+            var resultList = new List<object>();
+            int pageStart = ((pageIndex - 1) * pageSize);
+            pageStart = pageStart > 0 ? (pageStart - 1) : pageStart;
+            string followUserSql = "select BeConcernedUserId from kuserFans where CreatorUserId =@CreatorUserId ";
+            var followUsers=Query<long>(followUserSql, new { CreatorUserId = userId }).ToList();
+            followUsers.Add(userId);
+            string sql = $@"select t.* from(
+                                    select 'essay' as newsType,a.Id,a.CreationTime,a.Title as EssayTitle,b.NickName,b.AvatarUrl from essay a join kuser b on a.CreatorUserId=b.id where a.IsDeleted=0 and a.CreatorUserId in @FollowUsers 
+                                    union
+                                    select 'essayLike' as newsType,a.Id,a.CreationTime ,c.Title as EssayTitle,b.NickName,b.AvatarUrl from essayLike a join kuser b on a.CreatorUserId=b.id join essay c on  a.EssayId=c.Id where c.CreatorUserId =@CreatorUserId 
+                                    union
+                                    select 'essayComment' as newsType,a.Id,a.CreationTime,c.Title as EssayTitle,b.NickName,b.AvatarUrl from essayComment a join kuser b on a.CreatorUserId=b.id join essay c on  a.EssayId=c.Id where a.IsDeleted=0 and a.CreatorUserId <> @CreatorUserId and c.CreatorUserId = @CreatorUserId 
+                                    union
+                                    select 'kuserFans' as newsType,a.Id,a.CreationTime,'' as EssayTitle,b.NickName,b.AvatarUrl from kuserFans  a join kuser b on a.CreatorUserId=b.id where a.BeConcernedUserId =@CreatorUserId 
+                                    union
+                                    select 'kuserFollow' as newsType,a.Id,a.CreationTime,'' as EssayTitle,b.NickName,b.AvatarUrl from kuserFans a join kuser b on a.BeConcernedUserId=b.id  where a.CreatorUserId =@CreatorUserId 
+                                    ) t
+                                    order by {orderBy} limit @PageStart,@PageSize";
+
+            var userNewsDtoList = ConnExecute(conn =>  conn.Query<UserNewsDto>(sql, new { FollowUsers= followUsers,CreatorUserId = userId, PageStart = pageStart, PageSize = pageSize }))??new List<UserNewsDto>();
+            foreach(var dto in userNewsDtoList) {
+                object info = null;
+                switch (dto.NewsType) {
+                    case "essay": var essayEntity = FirstOrDefault<EssayEntity>(dto.Id);
+                        essayEntity.Content = Utils.ContentRegex.Replace(essayEntity.Content, "");
+                        if (essayEntity.Content.Length > 100)
+                        {
+                            essayEntity.Content = essayEntity.Content.Remove(100) + "...";
+                        };
+                        info = essayEntity;
+                        break;
+                    case "essayLike": info = FirstOrDefault<EssayLikeEntity>( dto.Id ); break;
+                    case "essayComment": info = FirstOrDefault<EssayCommentEntity>(dto.Id); break;
+                    case "kuserFans": info = FirstOrDefault<KuserFansEntity>(dto.Id); break;
+                    case "kuserFollow": info = FirstOrDefault<KuserFansEntity>(dto.Id); break;
+                   default: continue;
+                }
+                resultList.Add(new { Dto = dto, Info = info });
+            }
+
+            return resultList;
         }
 
 
@@ -152,10 +182,10 @@ namespace Kard.Dapper.Mysql.Repositories
 
         public EssayDto GetEssayDto(long id, long? currentUserId)
         {
-            string sql = @"select essay.*,kuser.NickName KuserNickName,kuser.Introduction KuserIntroduction,kuser.AvatarUrl KuserAvatarUrl,(essay_like.id!=null)   IsLike
+            string sql = @"select essay.*,kuser.NickName KuserNickName,kuser.Introduction KuserIntroduction,kuser.AvatarUrl KuserAvatarUrl,(essayLike.id!=null)   IsLike
                 from essay 
                 left join kuser on essay.CreatorUserId=kuser.Id 
-                left join essay_like on essay.Id=essay_like.EssayId and essay_like.CreatorUserId=@CurrentUserId 
+                left join essayLike on essay.Id=essayLike.EssayId and essayLike.CreatorUserId=@CurrentUserId 
                 where essay.id=@EssayId  ";
 
             return ConnExecute(conn =>

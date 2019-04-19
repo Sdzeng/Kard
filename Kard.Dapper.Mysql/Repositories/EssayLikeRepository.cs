@@ -47,15 +47,15 @@ namespace Kard.Dapper.Mysql.Repositories
             return resultDto;
         }
 
-        public IEnumerable<EssayLikeEntity> GetEssayLikeList(long id)
+        public IEnumerable<EssayLikeDto> GetEssayLikeList(long id)
         {
             string sql = @"select * 
-                from essay_like 
-                left join kuser on essay_like.CreatorUserId=kuser.Id 
-                where essay_like.EssayId=@EssayId 
-               order by essay_like.CreationTime desc";
+                from essayLike 
+                left join kuser on essayLike.CreatorUserId=kuser.Id 
+                where essayLike.EssayId=@EssayId 
+               order by essayLike.CreationTime desc";
 
-            return ConnExecute(conn => conn.Query<EssayLikeEntity, KuserEntity, EssayLikeEntity>(sql, (essayLike, kuser) => { essayLike.Kuser = kuser.ToSecurity(); return essayLike; },
+            return ConnExecute(conn => conn.Query<EssayLikeDto, KuserEntity, EssayLikeDto>(sql, (essayLike, kuser) => { essayLike.Kuser = kuser.ToSecurity(); return essayLike; },
                                                                                                                                                                           new { EssayId = id },
                                                                                                                                                                           splitOn: "Id"));
         }

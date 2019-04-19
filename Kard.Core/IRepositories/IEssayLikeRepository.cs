@@ -11,6 +11,6 @@ namespace Kard.Core.IRepositories
 
         ResultDto ChangeEssayLike(long userId, long essayId);
 
-        IEnumerable<EssayLikeEntity> GetEssayLikeList(long id);
+        IEnumerable<EssayLikeDto> GetEssayLikeList(long id);
     }
 }

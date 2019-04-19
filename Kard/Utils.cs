@@ -103,5 +103,7 @@ namespace Kard
 
             return city;
         }
+
+        public static Regex ContentRegex { get; } = new Regex("\\s|<style>[.\n\r]*?</style>|<xml>[.\n\r]*?</xml>|</?[^>]*>|\"? ?/>|/[a-zA-Z]+>|&nbsp;|[ \n\r\t]", RegexOptions.IgnoreCase | RegexOptions.Multiline);
     }
 }

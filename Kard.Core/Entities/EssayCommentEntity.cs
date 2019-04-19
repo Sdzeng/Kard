@@ -20,4 +20,7 @@ namespace Kard.Core.Entities
     }
 
 
+ 
+
+
 }

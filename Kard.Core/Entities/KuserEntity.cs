@@ -35,9 +35,10 @@ namespace Kard.Core.Entities
 
         public string City { get; set; }
         public string Language { get; set; }
+        public int FollowNum { get; set; }
+        public int LikeNum { get; set; }
+        public int FansNum { get; set; }
 
-
-        public int ExperienceValue { get; set; }
         public int KroleId { get; set; }
 
         public string AuthenticationType { get; set; }

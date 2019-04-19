@@ -38,15 +38,16 @@ namespace Kard.Core.Dtos
         public virtual DateTime CreationTime { get; set; }
 
 
-        public string KuserNickName;
+        public string KuserNickName { get; set; }
 
-        public string KuserIntroduction;
+        public string KuserIntroduction { get; set; }
 
-        public string KuserAvatarUrl;
+        public string KuserAvatarUrl { get; set; }
 
-        public bool IsLike;
+        public bool IsLike { get; set; }
 
         public IList<TagEntity> TagList;
 
+        public string Meta { get; set; }
     }
 }

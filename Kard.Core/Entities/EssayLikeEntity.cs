@@ -8,7 +8,7 @@ namespace Kard.Core.Entities
         public long Id { get; set; }
         public long EssayId { get; set; }
 
-        public KuserEntity Kuser;
+        //public KuserEntity Kuser;
     }
 
  

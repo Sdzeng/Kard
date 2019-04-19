@@ -44,7 +44,7 @@ namespace Kard.Web.Controllers
             //    cacheEntry.SetAbsoluteExpiration(today.AddDays(1));
             //    return _defaultRepository.Cover.GetDateCover(today);
             //});
-            //coverDto.EssayContent =Regex.Replace(coverDto.EssayContent, "<style>[.\n\r]*?</style>|<xml>[.\n\r]*?</xml>|</?[^>]*>|\"? ?/>|/[a-zA-Z]+>|&nbsp;|[ \n\r\t]", "", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            //coverDto.EssayContent = Utils.ContentRegex.Replace(coverDto.EssayContent, "");
             //return new ResultDto<CoverDto>() { Result = true, Data = coverDto };
 
             var coverDto = _defaultRepository.Cover.GetDateCover(today);
@@ -52,7 +52,7 @@ namespace Kard.Web.Controllers
             {
                 coverDto.EssayContent = coverDto.EssayContent.Split("。")[0] + "。";
             }
-            coverDto.EssayContent = Regex.Replace(coverDto.EssayContent, "\\s|<style>[.\n\r]*?</style>|<xml>[.\n\r]*?</xml>|</?[^>]*>|\"? ?/>|/[a-zA-Z]+>|&nbsp;|[ \n\r\t]", "", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            coverDto.EssayContent = Utils.ContentRegex.Replace(coverDto.EssayContent, "");
             return new ResultDto<CoverDto>() { Result = true, Data = coverDto };
 
         }
@@ -68,7 +68,7 @@ namespace Kard.Web.Controllers
             var essayList = _defaultRepository.Essay.GetHomeMediaPictureList(keyword, pageIndex, pageSize + 1, orderBy) ?? new List<TopMediaDto>();
             essayList = essayList.Select(item =>
             {
-                item.Content = Regex.Replace(item.Content, "\\s|<style>[.\n\r]*?</style>|<xml>[.\n\r]*?</xml>|</?[^>]*>|\"? ?/>|/[a-zA-Z]+>|&nbsp;|[ \n\r\t]", "", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                item.Content = Utils.ContentRegex.Replace(item.Content, "");
                 if (item.Content.Length > 100)
                 {
                     item.Content = item.Content.Remove(100) + "...";

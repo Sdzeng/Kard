@@ -47,7 +47,7 @@ namespace Kard.Dapper.Mysql.Repositories
             //    new List<Assembly>(),
             //    new MySqlDialect());
 
-            _dapperConfig = new DE.DapperExtensionsConfiguration(typeof(CustomPluralizedAutoClassMapper<>), new List<Assembly>(), new MySqlDialect());
+            _dapperConfig = new DE.DapperExtensionsConfiguration(typeof(CustomPluralizedAutoClassMapper<>), new List<Assembly> { typeof(KuserMapper).Assembly }, new MySqlDialect());
             //使用connection
             DE.DapperExtensions.Configure(_dapperConfig);
             DE.DapperAsyncExtensions.Configure(_dapperConfig);
@@ -330,7 +330,7 @@ namespace Kard.Dapper.Mysql.Repositories
 
         public T FirstOrDefault<T>(object id, int? commandTimeout = null) where T : class
         {
-            return ConnExecute(conn => conn.Get<T>(id, null, commandTimeout));
+            return ConnExecute(conn => conn.FirstOrDefault<T>(new { Id = id }, null, commandTimeout));
         }
 
         public Task<T> FirstOrDefaultAsync<T>(dynamic id, int? commandTimeout = null) where T : class

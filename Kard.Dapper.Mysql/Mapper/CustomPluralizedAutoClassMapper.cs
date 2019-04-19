@@ -17,7 +17,8 @@ namespace Kard.Dapper.Mysql.Mapper
 
         public override void Table(string tableName)
         {
-            tableName = tableName.Replace("Entity", "").ToLower();
+            tableName = tableName.Replace("Entity", "");
+            tableName = tableName.Remove(1).ToLower() + tableName.Substring(1);
             base.Table(tableName);
         }
     }

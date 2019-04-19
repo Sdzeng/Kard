@@ -11,7 +11,7 @@ namespace Kard.Core.IRepositories
     {
         IEnumerable<TopMediaDto> GetHomeMediaPictureList(string keyword, int pageIndex, int pageSize,string orderBy);
 
-        IEnumerable<TopMediaDto> GetUserMediaPictureList(long userId, int count);
+        IEnumerable<object> GetUserNews(long userId, int pageIndex, int pageSize, string orderBy);
 
         IEnumerable<EssayDto> GetEssayList(DateTime creationTime);
 

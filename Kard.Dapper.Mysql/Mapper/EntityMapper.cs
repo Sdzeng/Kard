@@ -19,24 +19,24 @@ namespace Kard.Dapper.Mysql.Mapper
         }
     }
 
-    public class EssayCommentMapper : ClassMapper<EssayCommentEntity>
-    {
+    //public class EssayCommentMapper : ClassMapper<EssayCommentEntity>
+    //{
 
-        public EssayCommentMapper()
-        {
-            Table("essay_comment");
-            //Map(e => e.Kuser).Ignore();
-            //Map(e => e.EssayCommentEntityList).Ignore();
-            AutoMap();
-        }
-    }
+    //    public EssayCommentMapper()
+    //    {
+    //        Table("essayComment");
+    //        //Map(e => e.Kuser).Ignore();
+    //        //Map(e => e.EssayCommentEntityList).Ignore();
+    //        AutoMap();
+    //    }
+    //}
 
     public class LongTaskMapper : ClassMapper<LongTaskEntity>
     {
 
         public LongTaskMapper()
         {
-            Table("long_task");
+            Table("longTask");
             Map(e => e.IsLongTerm).Ignore();
             Map(e => e.TaskDate).Ignore();
             AutoMap();

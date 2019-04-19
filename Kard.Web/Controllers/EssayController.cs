@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Kard.Core.Dtos;
 using Kard.Core.Entities;
@@ -58,6 +59,20 @@ namespace Kard.Web.Controllers
         {
             //单品信息
             var essayEntity = _defaultRepository.Essay.GetEssayDto(id, _kardSession.UserId);
+            essayEntity.Meta = Utils.ContentRegex.Replace(essayEntity.Content, "");
+            if (essayEntity.Meta.Contains("。"))
+            {
+                essayEntity.Meta = essayEntity.Meta.Split("。")[0];
+            }
+            else if (essayEntity.Meta.Contains("."))
+            {
+                essayEntity.Meta = essayEntity.Meta.Split(".")[0];
+            }
+            else if (essayEntity.Meta.Length > 15)
+            {
+                essayEntity.Meta = essayEntity.Meta.Remove(15);
+            }
+
             var resultDto = new ResultDto();
             resultDto.Result = essayEntity != null;
             resultDto.Data = essayEntity;
@@ -203,8 +218,8 @@ namespace Kard.Web.Controllers
         public ResultDto<long> Add(EssayEntity essayEntity, IEnumerable<TagEntity> tagList)
         {
             var userId = _kardSession.UserId.Value;
-            essayEntity.Location = Utils.GetCity(HttpContext,_memoryCache);
-            essayEntity.Score =6m;
+            essayEntity.Location = Utils.GetCity(HttpContext, _memoryCache);
+            essayEntity.Score = 6m;
             essayEntity.ScoreHeadCount = 1;
             essayEntity.AuditCreation(userId);
             tagList.AuditCreation(userId);
@@ -219,7 +234,7 @@ namespace Kard.Web.Controllers
         }
 
 
-        
+
 
         /// <summary>
         /// 修改纪录
@@ -333,9 +348,9 @@ namespace Kard.Web.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("likelist")]
-        public ResultDto<IEnumerable<EssayLikeEntity>> GetLikeList(long essayId)
+        public ResultDto<IEnumerable<EssayLikeDto>> GetLikeList(long essayId)
         {
-            var resultDto = new ResultDto<IEnumerable<EssayLikeEntity>>();
+            var resultDto = new ResultDto<IEnumerable<EssayLikeDto>>();
             resultDto.Result = true;
             resultDto.Data = _defaultRepository.EssayLike.GetEssayLikeList(essayId);
             return resultDto;

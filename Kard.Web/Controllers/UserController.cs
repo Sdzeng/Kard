@@ -60,7 +60,7 @@ namespace Kard.Web.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("{userId}")]
-        public ResultDto<KuserEntity> Index(long? userId)
+        public ResultDto<KuserEntity> Index(long userId)
         {
             var resultDto = new ResultDto<KuserEntity>() { Result = true, Data = GetUser(userId) };
             return resultDto;
@@ -73,21 +73,23 @@ namespace Kard.Web.Controllers
         [HttpGet("cover")]
         public ResultDto<KuserEntity> GetCover()
         {
-            var resultDto = new ResultDto<KuserEntity>() { Result = true, Data = GetUser(_kardSession.UserId) };
+            var resultDto = new ResultDto<KuserEntity>() { Result = true, Data = GetUser(_kardSession.UserId.Value) };
             return resultDto;
         }
 
 
-        private KuserEntity GetUser(long? userId)
+        private KuserEntity GetUser(long userId)
         {
-            string cacheKey = $"user[{userId}]";
-            KuserEntity kuserEntity = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
-            {
-                cacheEntry.SetAbsoluteExpiration(DateTime.Now.Date.AddDays(60));
+            //string cacheKey = $"user[{userId}]";
+            //KuserEntity kuserEntity = _memoryCache.GetOrCreate(cacheKey, (cacheEntry) =>
+            //{
+            //    cacheEntry.SetAbsoluteExpiration(DateTime.Now.Date.AddDays(60));
 
-                return _defaultRepository.FirstOrDefault<KuserEntity>(_kardSession.UserId.Value);
-            });
-            return kuserEntity;
+            //    return _defaultRepository.FirstOrDefault<KuserEntity>(userId);
+            //});
+            //return kuserEntity;
+
+            return _defaultRepository.FirstOrDefault<KuserEntity>(userId);
         }
 
         /// <summary>
@@ -160,13 +162,24 @@ namespace Kard.Web.Controllers
 
 
         /// <summary>
-        /// 获取单品图片
+        /// 获取动态
         /// </summary>
         /// <returns></returns>
-        [HttpGet("pictures")]
-        public ResultDto<IEnumerable<TopMediaDto>> GetPicture()
+        [HttpGet("news")]
+        public ResultDto GetNews(int pageIndex, int pageSize)
         {
-            return new ResultDto<IEnumerable<TopMediaDto>>() { Result = true, Data = _defaultRepository.Essay.GetUserMediaPictureList(_kardSession.UserId.Value, 4) };
+            var resultDto = new ResultDto();
+            var newsList = _defaultRepository.Essay.GetUserNews(_kardSession.UserId.Value, pageIndex, pageSize + 1, "t.CreationTime desc");
+            var hasNextPage = newsList.Count() > pageSize;
+     
+            resultDto.Result = true;
+            resultDto.Data = new
+            {
+                hasNextPage,
+                newsList = hasNextPage ? newsList.SkipLast(1) : newsList
+            };
+
+            return resultDto;
         }
 
 
