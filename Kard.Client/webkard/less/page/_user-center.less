@@ -17,24 +17,24 @@
     .user-center-header {
         width           : 1050px;
         background-color: #f5f5f5;
-        border-radius   : 3px;
+       
         display         : flex;
         flex-direction  : row;
         justify-content : space-between;
-
+        border-bottom: 1px solid #fdfdfd;
         .author {
-            width: 350px;
+            width: 500px;
 
-            padding: 10px;
+            padding: 10px 25px;
 
             &-avatar {
                 float       : left;
                 margin-right: 10px;
 
                 img {
-                    height       : 80px;
-                    width        : 80px;
-                    border-radius: 40px;
+                    height       : 90px;
+                    width        : 90px;
+                    border-radius: 45px;
                 }
             }
 
@@ -78,15 +78,9 @@
             flex-direction: row;
             align-items   : flex-end;
 
-            &-active {
-
-                background-color: #f2f8f2;
-                color           : #4f946e;
-                border          : 1px solid #e3f1ed;
-            }
+            
 
             ul {
-                padding: 10px;
 
                 margin-right: 20px;
 
@@ -97,15 +91,18 @@
                     text-align: right;
                     font-size : 15px;
                     float     : left;
+                    
 
                     &:not(:last-child) {
                         margin-right: 10px;
                     }
 
-                    &:hover {
-                        background-color: #f2f8f2;
-                        color           : #4f946e;
+                    &.menu-active,&:hover {
+                        background-color:#4f946e; 
+                        color           : #f2f8f2;
                     }
+
+                    
                 }
             }
         }
@@ -146,12 +143,12 @@
                 }
 
                 .result-info {
-                    width  : 840px;
+                    width  : 830px;
                     padding: 0px 10px;
                 }
 
                 .result-cover {
-                    width: 100px;
+                    width: 110px;
                 }
             }
 
@@ -163,18 +160,25 @@
 
                         .essay-title {
                             color: #619001;
-
+                            font-size: 15px;
                             &:hover {
 
                                 color: yellowgreen;
                             }
                         }
+
+                         .essay-edit{
+
+                            font-size: 12px;
+                            padding-left: 6px;
+                         }
                     }
 
 
 
                     .essay-content {
                         padding: 10px 0px;
+                        min-height: 56px;
                     }
 
                     .essay-footer {
@@ -209,11 +213,11 @@
                         &:hover {
                             cursor: pointer;
                         }
-
+                        padding-right: 10px;
                         img {
                             border-radius: 3px;
-                            width        : 80px;
-                            height       : 80px;
+                            width        : 100px;
+                            height       : 100px;
                         }
                     }
                 }
@@ -292,13 +296,99 @@
                     }
                 }
             }
+
+
+            .kuser-fans-warp {
+                .result-info {
+
+                   
+
+                    .fans-header {
+                        font-size: 15px;
+
+                        a {
+                            color: #619001;
+
+                            &:hover {
+
+                                color: yellowgreen;
+                            }
+                        }
+                    }
+
+                
+                    .fans-footer {
+                        span {
+
+                            white-space: nowrap;
+                            color      : #b6b6b6;
+
+                            &:not(:last-child) {
+                                margin-right: 10px;
+                            }
+
+
+                        }
+                    }
+                }
+            }
+
+            .kuser-follow-warp {
+                .result-info {
+
+                   
+
+                    .fans-header {
+                        font-size: 15px;
+ 
+                    }
+
+                
+                    .fans-footer {
+                        span {
+
+                            white-space: nowrap;
+                            color      : #b6b6b6;
+
+                            &:not(:last-child) {
+                                margin-right: 10px;
+                            }
+
+
+                        }
+                    }
+                }
+            }
+
+            .fans-warp{
+
+                display         : inline-block;
+                
+                background-color: white;
+                padding         : 10px;
+                border:1px solid #fff;
+                margin   : 10px;
+                border-radius: 3px;
+                img{
+
+                    width:100px;
+                    height:100px;
+                }
+
+                .result-nickname{
+
+                    text-align: center;
+                    padding-top:5px;
+                }
+            }
         }
 
         #my-essay-c {
+            margin-bottom: 35px;
             .add-isay {
                 text-align: center;
                 display   : inline-block;
-                padding   : 20px 0px;
+              
                 width     : 100%;
 
                 a {

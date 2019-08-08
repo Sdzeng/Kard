@@ -1,4 +1,4 @@
-// String
+ï»¿// String
 if (!String.prototype.format) {
     String.prototype.format = function () {
         var args = arguments,
@@ -25,12 +25,12 @@ if (!String.prototype.format) {
 if (!jQuery.fn.goToTop) {
     jQuery.fn.goToTop = function () {
         var _this = this;
-        // ÅĞ¶ÏÈç¹û´°¿Ú¹ö¶¯¾àÀëĞ¡ÓÚ0£¬Òş²Ø°´Å¥
+        // åˆ¤æ–­å¦‚æœçª—å£æ»šåŠ¨è·ç¦»å°äº0ï¼Œéšè—æŒ‰é’®
         if ($(window).scrollTop() < 500) {
             $(_this).hide();
         }
 
-        // ´°¿Ú¹ö¶¯Ê±£¬ÅĞ¶Ïµ±Ç°´°¿Ú¹ö¶¯¾àÀë
+        // çª—å£æ»šåŠ¨æ—¶ï¼Œåˆ¤æ–­å½“å‰çª—å£æ»šåŠ¨è·ç¦»
         $(window).scroll(function () {
             if ($(this).scrollTop() >= 500) {
                 $(_this).fadeIn();
@@ -39,7 +39,7 @@ if (!jQuery.fn.goToTop) {
             }
         });
 
-        // ¸øÕâ¸ö°´Å¥°ó¶¨Ò»¸öclickÊÂ¼ş
+        // ç»™è¿™ä¸ªæŒ‰é’®ç»‘å®šä¸€ä¸ªclickäº‹ä»¶
         _this.bind('click', function () {
             $('html ,body').animate({ scrollTop: 0 }, 500);
             return false;
@@ -51,10 +51,10 @@ if (!jQuery.fn.loadMore) {
     jQuery.fn.loadMore = function (bottom,loadingDataFn) {
         var _this = this;
         $(window).scroll(function () {
-            //µ±Ê±¹ö¶¯ÌõÀëµ×²¿350pxÊ±¿ªÊ¼¼ÓÔØÏÂÒ»Ò³µÄÄÚÈİ
-            //$(window).scrollTop()¹ö¶¯Æ«ÒÆÁ¿
-            // $(window).height() ´ú±íÁËµ±Ç°¿É¼ûÇøÓòµÄ´óĞ¡£¬
-            // $(document).height() ´ú±íÁËÕû¸öhtmlÎÄµµµÄ¸ß¶È
+            //å½“æ—¶æ»šåŠ¨æ¡ç¦»åº•éƒ¨350pxæ—¶å¼€å§‹åŠ è½½ä¸‹ä¸€é¡µçš„å†…å®¹
+            //$(window).scrollTop()æ»šåŠ¨åç§»é‡
+            // $(window).height() ä»£è¡¨äº†å½“å‰å¯è§åŒºåŸŸçš„å¤§å°ï¼Œ
+            // $(document).height() ä»£è¡¨äº†æ•´ä¸ªhtmlæ–‡æ¡£çš„é«˜åº¦
             if ($(this).scrollTop() + $(this).height() > $(document).height() - bottom ) {
                 loadingDataFn && loadingDataFn();
             }
@@ -63,13 +63,13 @@ if (!jQuery.fn.loadMore) {
 }
 
 //if (!String.prototype.htmlEncode) {
-//    /*1.ÓÃä¯ÀÀÆ÷ÄÚ²¿×ª»»Æ÷ÊµÏÖhtml×ªÂë*/
+//    /*1.ç”¨æµè§ˆå™¨å†…éƒ¨è½¬æ¢å™¨å®ç°htmlè½¬ç */
 //    String.prototype.htmlEncode = function () {
-//        //1.Ê×ÏÈ¶¯Ì¬´´½¨Ò»¸öÈİÆ÷±êÇ©ÔªËØ£¬ÈçDIV
+//        //1.é¦–å…ˆåŠ¨æ€åˆ›å»ºä¸€ä¸ªå®¹å™¨æ ‡ç­¾å…ƒç´ ï¼Œå¦‚DIV
 //        var temp = document.createElement("div");
-//        //2.È»ºó½«Òª×ª»»µÄ×Ö·û´®ÉèÖÃÎªÕâ¸öÔªËØµÄinnerText(ieÖ§³Ö)»òÕßtextContent(»ğºü£¬googleÖ§³Ö)
+//        //2.ç„¶åå°†è¦è½¬æ¢çš„å­—ç¬¦ä¸²è®¾ç½®ä¸ºè¿™ä¸ªå…ƒç´ çš„innerText(ieæ”¯æŒ)æˆ–è€…textContent(ç«ç‹ï¼Œgoogleæ”¯æŒ)
 //        (temp.textContent != undefined) ? (temp.textContent = this) : (temp.innerText = this);
-//        //3.×îºó·µ»ØÕâ¸öÔªËØµÄinnerHTML£¬¼´µÃµ½¾­¹ıHTML±àÂë×ª»»µÄ×Ö·û´®ÁË
+//        //3.æœ€åè¿”å›è¿™ä¸ªå…ƒç´ çš„innerHTMLï¼Œå³å¾—åˆ°ç»è¿‡HTMLç¼–ç è½¬æ¢çš„å­—ç¬¦ä¸²äº†
 //        var output = temp.innerHTML;
 //        temp = null;
 //        return output;
@@ -77,13 +77,13 @@ if (!jQuery.fn.loadMore) {
 //}
 
 //if (!String.prototype.htmlDecode) {
-//    /*2.ÓÃä¯ÀÀÆ÷ÄÚ²¿×ª»»Æ÷ÊµÏÖhtml½âÂë*/
+//    /*2.ç”¨æµè§ˆå™¨å†…éƒ¨è½¬æ¢å™¨å®ç°htmlè§£ç */
 //    String.prototype.htmlDecode = function () {
-//        //1.Ê×ÏÈ¶¯Ì¬´´½¨Ò»¸öÈİÆ÷±êÇ©ÔªËØ£¬ÈçDIV
+//        //1.é¦–å…ˆåŠ¨æ€åˆ›å»ºä¸€ä¸ªå®¹å™¨æ ‡ç­¾å…ƒç´ ï¼Œå¦‚DIV
 //        var temp = document.createElement("div");
-//        //2.È»ºó½«Òª×ª»»µÄ×Ö·û´®ÉèÖÃÎªÕâ¸öÔªËØµÄinnerHTML(ie£¬»ğºü£¬google¶¼Ö§³Ö)
+//        //2.ç„¶åå°†è¦è½¬æ¢çš„å­—ç¬¦ä¸²è®¾ç½®ä¸ºè¿™ä¸ªå…ƒç´ çš„innerHTML(ieï¼Œç«ç‹ï¼Œgoogleéƒ½æ”¯æŒ)
 //        temp.innerHTML = this;
-//        //3.×îºó·µ»ØÕâ¸öÔªËØµÄinnerText(ieÖ§³Ö)»òÕßtextContent(»ğºü£¬googleÖ§³Ö)£¬¼´µÃµ½¾­¹ıHTML½âÂëµÄ×Ö·û´®ÁË¡£
+//        //3.æœ€åè¿”å›è¿™ä¸ªå…ƒç´ çš„innerText(ieæ”¯æŒ)æˆ–è€…textContent(ç«ç‹ï¼Œgoogleæ”¯æŒ)ï¼Œå³å¾—åˆ°ç»è¿‡HTMLè§£ç çš„å­—ç¬¦ä¸²äº†ã€‚
 //        var output = temp.innerText || temp.textContent;
 //        temp = null;
 //        return output;

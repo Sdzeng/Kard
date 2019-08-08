@@ -3,7 +3,7 @@
 var essaydetailjs = {
     data: {
         scope: $("#essayDetailPage"),
-        queryString: basejs.getQueryString(),
+        //queryString: basejs.getQueryString(),
         template: {
             comment: ("<div class='comment-info' data-id='#{id}'>"+
                     "<div class='comment-info-auth' >" +
@@ -56,10 +56,24 @@ var essaydetailjs = {
     },
     bindEssay: function () {
         var _this = this;
-      
-        //设置菜单封面
+        var essayId=$(".essay-detail-info",_this.data.scope).attr("data-id");
+        var avatarImg=$("img[data-initpic]",_this.data.scope);
+        var creationTime=$("span[data-creationtime]",_this.data.scope);
+        // var isLike=$('span[data-islike]', _this.data.scope);
+        // var shareNum=$('span[data-sharenum]', _this.data.scope);
+
+        var avatarArr =avatarImg.attr("data-initpic").split('.');
+        var avatarUrl=basejs.cdnDomain + "/" + avatarArr[0] + "_30x30." + avatarArr[1];
+        avatarImg.attr("data-original",avatarUrl);
+        $(".essay-author-avatar>img", _this.data.scope).attr("data-original", basejs.cdnDomain + "/" + avatarArr[0] + "_80x80." + avatarArr[1]);
+        basejs.lazyInof('.essay-detail-info-left img.lazy');
+        creationTime.text(basejs.getDateDiff(basejs.getDateTimeStamp(creationTime.attr("data-creationtime"))) + "发布");
+        // isLike.text((isLike.attr("data-islike")=="true" ? "已喜欢 " : "喜欢 ") + (parseInt(isLike.attr("data-likenum"))>0?isLike.attr("data-likenum"):""));
+        // shareNum.text("分享 "+(parseInt(shareNum.attr("data-sharenum"))>0?shareNum.attr("data-sharenum"):""));
+        
         var helper = new httpHelper({
-            url: basejs.requestDomain + "/essay/" + _this.data.queryString.id,
+            url: basejs.requestDomain + "/essay/"+essayId,
+            
             type: "GET",
             success: function (resultDto) {
                 var data = resultDto.data;
@@ -67,63 +81,63 @@ var essaydetailjs = {
                 if (!data) {
                     return;
                 }
-                $(".category", _this.data.scope).text(data.category).attr("href","search.html?keyword="+data.category);
-                $(".essay-detail-title", _this.data.scope).text(data.title);
-                $("title").text(data.title+"_"+data.kuserNickName + "_核心技术");
-                $("meta[property='og:description']").attr("content",data.meta);
+            //     $(".category", _this.data.scope).text(data.category).attr("href","search.html?keyword="+data.category);
+            //     $(".essay-detail-title", _this.data.scope).text(data.title);
+            //     $("title").text(data.title+"_"+data.kuserNickName + "_核心技术");
+            //     $("meta[property='og:description']").attr("content",data.meta);
 
               
-                var avatarArr = data.kuserAvatarUrl.split('.');
+            //     var avatarArr = data.kuserAvatarUrl.split('.');
 
-                $('.essay-detail-remark', _this.data.scope).html(
-                   "<span><img  class='lazy' src='/image/default-avatar.jpg' data-original='" + basejs.cdnDomain + "/" + avatarArr[0] + "_30x30." + avatarArr[1] + "' >" + data.kuserNickName + "</span>" +
-                    "<span>" + data.location + "</span><span>" + basejs.getDateDiff(basejs.getDateTimeStamp(data.creationTime)) + "发布</span><span>" + data.browseNum + "阅读</span>");
+            //     $('.essay-detail-remark', _this.data.scope).html(
+            //        "<span><img  class='lazy' src='/image/default-avatar.jpg' data-original='" + basejs.cdnDomain + "/" + avatarArr[0] + "_30x30." + avatarArr[1] + "' >" + data.kuserNickName + "</span>" +
+            //         "<span>" + data.location + "</span><span>" + basejs.getDateDiff(basejs.getDateTimeStamp(data.creationTime)) + "发布</span><span>" + data.browseNum + "阅读</span>");
 
 
-                var tagSpan = "";
-                for (var i in data.tagList) {
-                    var tag = data.tagList[i];
-                    tagSpan += "<span data-tagid='" + tag.id + "'>" + tag.tagName + "</span>";
-                }
-                $(".essay-detail-tag", _this.data.scope).html(tagSpan);
+            //     var tagSpan = "";
+            //     for (var i in data.tagList) {
+            //         var tag = data.tagList[i];
+            //         tagSpan += "<span data-tagid='" + tag.id + "'>" + tag.tagName + "</span>";
+            //     }
+            //     $(".essay-detail-tag", _this.data.scope).html(tagSpan);
 
             
 
-               /* var imgs = "";
-                for (var i in data.mediaList) {
-                    var media = data.mediaList[i];
-                    switch (media.mediaType) {
-                        case "picture": imgs += " <img src='" + basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension + "' style=''>"; break;
-                        case "video":
-                            imgs += _this.data.template.video.format({
-                                videoCoverPath: basejs.cdnDomain + "/" + media.cdnPath + ".jpg",
-                                videoPath: basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension,
-                                videoExtension: media.mediaExtension
-                            });
-                            break;
-                    }
+            //    /* var imgs = "";
+            //     for (var i in data.mediaList) {
+            //         var media = data.mediaList[i];
+            //         switch (media.mediaType) {
+            //             case "picture": imgs += " <img src='" + basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension + "' style=''>"; break;
+            //             case "video":
+            //                 imgs += _this.data.template.video.format({
+            //                     videoCoverPath: basejs.cdnDomain + "/" + media.cdnPath + ".jpg",
+            //                     videoPath: basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension,
+            //                     videoExtension: media.mediaExtension
+            //                 });
+            //                 break;
+            //         }
                   
-                }
-                $('.essay-detail-content', _this.data.scope).html("<p>" + data.content + "</p><p>" + imgs + "</p>");*/
+            //     }
+            //     $('.essay-detail-content', _this.data.scope).html("<p>" + data.content + "</p><p>" + imgs + "</p>");*/
 
-                $('.essay-detail-content', _this.data.scope).html(data.content);
+            //     $('.essay-detail-content', _this.data.scope).html(data.content);
 
-
-                $('.essay-detail-like-share', _this.data.scope).html("<span id='btnLike' data-islike='" + data.isLike + "'>" + (data.isLike ? "已喜欢 " : "喜欢 ") + data.likeNum + "</span><span>分享 " + data.shareNum + "</span><span>举报</span>");
+             $(".browse-num", _this.data.scope).text(data.browseNum+"阅读");
+             $('.essay-detail-like-share', _this.data.scope).html("<span id='btnLike' data-islike='" + data.isLike + "'>" + (data.isLike ? "已喜欢 " : "喜欢 ") + data.likeNum + "</span><span>分享 " + data.shareNum + "</span><span>举报</span>");
 
            
-                $(".essay-author-avatar>img", _this.data.scope).attr("data-original", basejs.cdnDomain + "/" + avatarArr[0] + "_80x80." + avatarArr[1]);
-                $(".essay-author-txt-name>span:eq(0)", _this.data.scope).text(data.kuserNickName);
-                $(".essay-author-txt-introduction", _this.data.scope).text(data.kuserIntroduction);
+            //     $(".essay-author-avatar>img", _this.data.scope).attr("data-original", basejs.cdnDomain + "/" + avatarArr[0] + "_80x80." + avatarArr[1]);
+            //     $(".essay-author-txt-name>span:eq(0)", _this.data.scope).text(data.kuserNickName);
+            //     $(".essay-author-txt-introduction", _this.data.scope).text(data.kuserIntroduction);
 
 
                 $(".essay-score-num", _this.data.scope).text(data.score);
-                $(".people-grade", _this.data.scope).text(data.scoreHeadCount +"人参与评分");
+                $(".people-grade", _this.data.scope).text((data.likeNum>0?data.likeNum +"个喜欢":"推荐分"));
 
 
                 $(".big-star", _this.data.scope).addClass(basejs.getStarClass("bigstar",data.score));
 
-                basejs.lazyInof('.essay-detail-info-left img.lazy');
+            //     basejs.lazyInof('.essay-detail-info-left img.lazy');
 
                 $("#btnLike", _this.data.scope).click(function () {
                     var $btnLike = $(this);
@@ -131,7 +145,7 @@ var essaydetailjs = {
                     (new httpHelper({
                         url: basejs.requestDomain + "/essay/like",
                         type: "POST",
-                        data: { essayId: _this.data.queryString.id },
+                        data: { essayId:essayId},
                         success: function (resultDto) {
 
                             if (resultDto.result) {
@@ -155,7 +169,7 @@ var essaydetailjs = {
         var helper = new httpHelper({
             url: basejs.requestDomain + "/essay/similarlist",
             type: "GET",
-            data: { essayId: _this.data.queryString.id },
+            data: { essayId: $(".essay-detail-info",_this.data.scope).attr("data-id") },
             success: function (resultDto) {
                 var data = resultDto.data;
                 //data = JSON.parse(data);
@@ -166,10 +180,10 @@ var essaydetailjs = {
                 var essayAHtml ="";
                 for (var index in data) {
                     var essay = data[index];
-                    essayAHtml += "<a href='essay-detail.html?id=" + essay.id + "'><div>" + essay.title +"</div><div>" + basejs.getNumberDiff(essay.likeNum) + "人喜欢</div></a>";
+                    essayAHtml += "<a href='"+basejs.cdnDomain+"/" + essay.pageUrl + "'><div>" + essay.title +"</div><div>" +(essay.likeNum>0?basejs.getNumberDiff(essay.likeNum) + "人喜欢":"")+"</div></a>";
                 }
                 if (essayAHtml == "") {
-                    essayAHtml = "<div class='div-empty'><div><img src='/image/empty.gif'></div><div>空空如也</div></div>";
+                    essayAHtml = "<div class='div-empty'><div><img src='"+basejs.cdnDomain+"/image/empty.gif'></div><div>空空如也</div></div>";
                 }
                 $(".essay-similar-a", _this.data.scope).html(essayAHtml);
             }
@@ -183,7 +197,7 @@ var essaydetailjs = {
         var helper = new httpHelper({
             url: basejs.requestDomain + "/essay/otherlist",
             type: "GET",
-            data: { essayId: _this.data.queryString.id },
+            data: { essayId: $(".essay-detail-info",_this.data.scope).attr("data-id") },
             success: function (resultDto) {
                 var data = resultDto.data;
                 //data = JSON.parse(data);
@@ -194,10 +208,10 @@ var essaydetailjs = {
                 var essayAHtml = "";
                 for (var index in data) {
                     var essay = data[index];
-                    essayAHtml += "<a href='essay-detail.html?id=" + essay.id + "'><div>" + essay.title + "</div><div>" + basejs.getNumberDiff(essay.likeNum) + "人喜欢</div></a>";
+                    essayAHtml += "<a href='"+basejs.cdnDomain+"/" + essay.pageUrl + "'><div>" + essay.title + "</div><div>" + (essay.likeNum>0?basejs.getNumberDiff(essay.likeNum) + "人喜欢":"")+"</div></a>";
                 }
                 if (essayAHtml == "") {
-                    essayAHtml = "<div class='div-empty'><div><img src='/image/empty.gif'></div><div>空空如也</div></div>";
+                    essayAHtml = "<div class='div-empty'><div><img src='"+basejs.cdnDomain+"/image/empty.gif'></div><div>空空如也</div></div>";
                 }
                 $(".essay-other-a", _this.data.scope).html(essayAHtml);
             }
@@ -218,7 +232,7 @@ var essaydetailjs = {
             var $newComment = $("#newComment", _this.data.scope);
             var parentId = $newComment.attr("data-parent-id");
             var data = {
-                essayId: _this.data.queryString.id,
+                essayId: $(".essay-detail-info",_this.data.scope).attr("data-id"),
                 content: $newComment.val()
             };
             if (parentId != "" && parentId != null) {
@@ -254,7 +268,7 @@ var essaydetailjs = {
         var helper = new httpHelper({
             url: basejs.requestDomain + "/essay/commentlist",
             type: "GET",
-            data: { essayId: _this.data.queryString.id},
+            data: { essayId: $(".essay-detail-info",_this.data.scope).attr("data-id")},
             success: function (resultDto) {
                 if (!resultDto.result) {
                     alert(resultDto.message);
@@ -263,7 +277,7 @@ var essaydetailjs = {
                  
                 for (var index in resultDto.data) {
                     var dto = resultDto.data[index];
-                    var avatarArr = dto.kuser.avatarUrl.split('.');
+                    var avatarArr = dto.kuserAvatarUrl.split('.');
                     var avatarCropPath = basejs.cdnDomain + "/" + avatarArr[0] + "_50x50." + avatarArr[1];
 
                     var parentCommentHtml = _this._getParentCommentHtml(dto.parentCommentDtoList);
@@ -271,7 +285,7 @@ var essaydetailjs = {
 
                     commentHtml+= _this.data.template.comment.format({
                         avatarUrl: avatarCropPath,
-                        nickName: dto.kuser.nickName,
+                        nickName: dto.kuserNickName,
                         creationTime: basejs.getDateDiff(basejs.getDateTimeStamp(dto.creationTime)),
                         content: content,
                         id:dto.id,
@@ -280,7 +294,7 @@ var essaydetailjs = {
                 }
 
                 if (commentHtml == "") {
-                    commentHtml =  "<div class='div-empty'><div><img src='/image/empty.gif'></div><div>空空如也</div></div>";
+                    commentHtml =  "<div class='div-empty'><div><img src='"+basejs.cdnDomain+"/image/empty.gif'></div><div>空空如也</div></div>";
                 }
       
                 $(".comment-info-list", _this.data.scope).html(commentHtml);
@@ -318,7 +332,7 @@ var essaydetailjs = {
         var helper = new httpHelper({
             url: basejs.requestDomain + "/essay/likelist",
             type: "GET",
-            data: { essayId: _this.data.queryString.id },
+            data: { essayId: $(".essay-detail-info",_this.data.scope).attr("data-id") },
             success: function (resultDto) {
                 if (!resultDto.result) {
                     alert(resultDto.message);
@@ -326,20 +340,23 @@ var essaydetailjs = {
                    
                     if (resultDto.data) {
                         var likeHtml = "";
+                        var likeNum=resultDto.data.length;
+                        $(".people-grade", _this.data.scope).text((likeNum>0?likeNum +"个喜欢":"推荐分"));
+
                         for (var index in resultDto.data) {
                             var entity = resultDto.data[index];
-                            var avatarArr = entity.kuser.avatarUrl.split('.');
+                            var avatarArr = entity.kuserAvatarUrl.split('.');
                             var avatarCropPath = basejs.cdnDomain + "/" + avatarArr[0] + "_30x30." + avatarArr[1];
 
                             likeHtml += _this.data.template.like.format({
                                 avatarUrl: avatarCropPath,
-                                nickName: entity.kuser.nickName,
+                                nickName: entity.kuserNickName,
                                 creationTime: basejs.getDateDiff(basejs.getDateTimeStamp(entity.creationTime)),
                             });
                         }
 
                         if (likeHtml == "") {
-                            likeHtml = "<div class='div-empty'><div><img src='/image/empty.gif'></div><div>空空如也</div></div>";
+                            likeHtml = "<div class='div-empty'><div><img src='"+basejs.cdnDomain+"/image/empty.gif'></div><div>空空如也</div></div>";
                         }
 
                         $(".like-list", _this.data.scope).html(likeHtml);

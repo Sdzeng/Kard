@@ -198,10 +198,12 @@ var editorjs = {
             toolbar: 'formatselect | bold italic strikethrough forecolor backcolor permanentpen formatpainter | link image media pagebreak table | codesample code | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent | removeformat ',
             //imagetools_toolbar: "rotateleft rotateright | flipv fliph | editimage imageoptions",
             min_height:600,
-            automatic_uploads: true,
+            relative_urls : false, 
+            remove_script_host : false,
+            //automatic_uploads: true,
             //images_upload_url: basejs.requestDomain + "/common/uploadfile",
             //images_upload_credentials: true,
-            //images_upload_base_path: basejs.requestDomain,
+            images_upload_base_path: basejs.requestDomain,
             automatic_uploads: true,
             images_upload_handler: function (blobInfo, success, failure) {
                 const formData = new FormData();
@@ -292,24 +294,25 @@ var editorjs = {
 
                     if (resultDto.result) {
                         $("#btnAddPic", _this.data.scope)
-                            .css("background-image", "url('" + basejs.requestDomain + "/" + resultDto.data.coverPath + "_260x194." + resultDto.data.coverExtension + "')")
+                            .css("background-image", "url('" + basejs.requestDomain + "/" + resultDto.data.essay.coverPath + "_260x194." + resultDto.data.essay.coverExtension + "')")
                             .css("color", "white")
-                            .attr("data-file-url", resultDto.data.coverPath)
-                            .attr("data-file-extension", resultDto.data.coverExtension);
-                        $("#isayTitle", _this.data.scope).val(resultDto.data.title);
+                            .attr("data-file-url", resultDto.data.essay.coverPath)
+                            .attr("data-file-extension", resultDto.data.essay.coverExtension);
+                        $("#isayTitle", _this.data.scope).val(resultDto.data.essay.title);
                         if (resultDto.data.tagList.length > 0) {
                             $("input:radio[name='tagRadio'][value='" + resultDto.data.tagList[0].tagName + "']", _this.data.scope).attr("checked", "checked");
                         }
 
-                        var categoryObj = $(".isay-info-category-span[data-val='" + resultDto.data.category + "']");
+                        var categoryObj = $(".isay-info-category-span[data-val='" + resultDto.data.essay.category + "']");
                         if (categoryObj && categoryObj.length > 0) {
                             categoryObj.addClass("isay-info-category-span-checked");
                         }
                         else {
-                            $("#category", _this.data.scope).val(resultDto.data.category);
+                            $("#category", _this.data.scope).val(resultDto.data.essay.category);
                         }
                         
-                        tinymce.activeEditor.setContent(resultDto.data.content);
+                        $('#isPublish', _this.data.scope).attr("checked", resultDto.data.essay.isPublish);
+                        tinymce.activeEditor.setContent(resultDto.data.essayContent.content);
                     }
                 }
             };
@@ -358,7 +361,7 @@ var editorjs = {
         }
 
 
-        btnSave.text('发布中...');
+        btnSave.text('保存中...');
 
         var isAdd = !(_this.data.essayId && _this.data.essayId > 0);
         var helper = new httpHelper({
@@ -372,6 +375,11 @@ var editorjs = {
                     coverPath: $("#btnAddPic", _this.data.scope).attr("data-file-url"),
                     coverExtension: $("#btnAddPic", _this.data.scope).attr("data-file-extension"),
                     category: category,
+                    isPublish: $("#isPublish", _this.data.scope).prop("checked")
+                   
+                },
+                essayContentEntity: {
+                    essayId: _this.data.essayId,
                     content: content
                 },
                 tagList: [{
@@ -384,7 +392,7 @@ var editorjs = {
                     if (isAdd) {
                         _this.data.essayId = resultDto.data;
                     }
-                    btnSave.text('发布成功');
+                    btnSave.text('保存成功');
                 }
                 else {
                     btnSave.css("background", "#ccc").css("color", "red").text(resultDto.message);

@@ -14,8 +14,12 @@ namespace Kard.Core.Dtos
 
         public string EssayTitle { get; set; }
 
+        public string EssayPageUrl { get; set; }
+
         public string NickName { get; set; }
 
         public string AvatarUrl { get; set; }
+
+
     }
 }

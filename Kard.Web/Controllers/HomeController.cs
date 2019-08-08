@@ -34,7 +34,7 @@ namespace Kard.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("cover")]
-        public ResultDto<CoverDto> GetCover()
+        public async Task<ResultDto<CoverDto>> GetCover()
         {
             var today = DateTime.Now.Date;
             //string cacheKey = $"homeCover[{today.ToString("yyyyMMdd")}]";
@@ -52,8 +52,8 @@ namespace Kard.Web.Controllers
             {
                 coverDto.EssayContent = coverDto.EssayContent.Split("。")[0] + "。";
             }
-            coverDto.EssayContent = Utils.ContentRegex.Replace(coverDto.EssayContent, "");
-            return new ResultDto<CoverDto>() { Result = true, Data = coverDto };
+       
+            return await Task.FromResult(new ResultDto<CoverDto>() { Result = true, Data = coverDto });
 
         }
 
@@ -63,18 +63,10 @@ namespace Kard.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("essays")]
-        public ResultDto GetEssays(string keyword, string orderBy,int pageIndex = 1, int pageSize = 20)
+        public async Task<ResultDto> GetEssays(string keyword, string orderBy,int pageIndex = 1, int pageSize = 20)
         {
             var essayList = _defaultRepository.Essay.GetHomeMediaPictureList(keyword, pageIndex, pageSize + 1, orderBy) ?? new List<TopMediaDto>();
-            essayList = essayList.Select(item =>
-            {
-                item.Content = Utils.ContentRegex.Replace(item.Content, "");
-                if (item.Content.Length > 100)
-                {
-                    item.Content = item.Content.Remove(100) + "...";
-                };
-                return item;
-            });
+             
             var hasNextPage = essayList.Count() > pageSize;
             var resultDto = new ResultDto();
             resultDto.Result = true;
@@ -85,7 +77,7 @@ namespace Kard.Web.Controllers
             };
 
             //var aWeekAgo = DateTime.Now.Date.AddYears(-7);
-            return resultDto;
+            return await Task.FromResult(resultDto);
         }
 
         ///// <summary>

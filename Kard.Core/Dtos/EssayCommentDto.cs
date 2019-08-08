@@ -19,8 +19,15 @@ namespace Kard.Core.Dtos
 
         public DateTime CreationTime { get; set; }
 
-        public KuserEntity Kuser;
+        public string KuserAvatarUrl { get; set; }
+ 
+        public string KuserNickName { get; set; }
+
 
         public IEnumerable<EssayCommentDto> ParentCommentDtoList { get; set; }
+
+        public string EssayTitle { get; set; }
+
+        public string EssayPageUrl { get; set; }
     }
 }

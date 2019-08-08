@@ -318,6 +318,12 @@ namespace Kard.Dapper.Mysql.Repositories
             return ConnExecute(conn => conn.Query<T>(sql, parameters, null, true, commandTimeout, commandType));
         }
 
+        public IEnumerable<T> QueryByPredicate<T>(object predicate = null,  int? commandTimeout = null) where T : class
+        {
+
+            return ConnExecute(conn => conn.GetList<T>(predicate, null, null, commandTimeout,true));
+        }
+
         public IEnumerable<T> Query<T>(object predicate = null, IList<DE.ISort> sort = null, int? commandTimeout = null) where T : class
         {
             return ConnExecute(conn => conn.GetList<T>(predicate, sort, null, commandTimeout,true ));

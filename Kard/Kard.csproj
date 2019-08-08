@@ -21,6 +21,7 @@
     <Compile Remove="Runtime\Security\Authentication\WeChat\WeChatAppOptions.cs" />
     <Compile Remove="Runtime\Security\Authentication\WeChat\WeChatAppPostConfigureOptions.cs" />
     <Compile Remove="Runtime\Session\NullKardSession.cs" />
+    <Compile Remove="Workers\TimerWorker.cs" />
   </ItemGroup>
 
   <ItemGroup>

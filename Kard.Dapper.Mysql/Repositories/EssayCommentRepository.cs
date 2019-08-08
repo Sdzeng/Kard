@@ -19,15 +19,13 @@ namespace Kard.Dapper.Mysql.Repositories
 
         public IEnumerable<EssayCommentDto> GetEssayCommentList(long id)
         {
-            string sql = @"select * 
+            string sql = @"select essayComment.*,kuser.AvatarUrl KuserAvatarUrl,kuser.NickName KuserNickName,
                 from essayComment 
                 left join kuser on essayComment.CreatorUserId=kuser.Id 
                 where essayComment.EssayId=@EssayId and essayComment.IsDeleted=0 
                order by essayComment.CreationTime desc";
 
-            return ConnExecute(conn => conn.Query<EssayCommentDto, KuserEntity, EssayCommentDto>(sql, (essayComment, kuser) => { essayComment.Kuser = kuser.ToSecurity(); return essayComment; },
-                                                                                                                                                                          new { EssayId = id },
-                                                                                                                                                                          splitOn: "Id"));
+            return ConnExecute(conn => conn.Query<EssayCommentDto>(sql, new { EssayId = id }));
         }
     }
 }

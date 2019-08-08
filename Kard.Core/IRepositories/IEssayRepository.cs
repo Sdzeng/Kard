@@ -12,14 +12,20 @@ namespace Kard.Core.IRepositories
         IEnumerable<TopMediaDto> GetHomeMediaPictureList(string keyword, int pageIndex, int pageSize,string orderBy);
 
         IEnumerable<object> GetUserNews(long userId, int pageIndex, int pageSize, string orderBy);
+        IEnumerable<EssayEntity> GetUserEssay(long userId, int pageIndex, int pageSize, string orderBy, bool? isPublish = null);
+        IEnumerable<EssayLikeDto> GetUserLike(long userId, int pageIndex, int pageSize, string orderBy);
+        IEnumerable<EssayCommentDto> GetUserComment(long userId, int pageIndex, int pageSize, string orderBy);
 
-        IEnumerable<EssayDto> GetEssayList(DateTime creationTime);
+        IEnumerable<EssayLikeDto> GetUserFans(long userId, int pageIndex, int pageSize, string orderBy);
+        //IEnumerable<EssayDto> GetEssayList(DateTime creationTime);
+        EssayDto GetHtmlEssayDto(long id);
+
 
         EssayDto GetEssayDto(long id, long? currentUserId);
 
-        ResultDto<long> AddEssay(EssayEntity essayEntity, IEnumerable<TagEntity> tagList);
+        ResultDto<long> AddEssay(EssayEntity essayEntity, EssayContentEntity essayConentEntity, IEnumerable<TagEntity> tagList);
 
-        bool UpdateEssay(EssayEntity essayEntity, IEnumerable<TagEntity> tagList);
+        bool UpdateEssay(EssayEntity essayEntity, EssayContentEntity essayContentEntity, IEnumerable<TagEntity> tagList);
 
         bool UpdateBrowseNum(long id);
 

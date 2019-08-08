@@ -29,6 +29,7 @@ namespace Kard.Core.IRepositories
 
         IEnumerable<T> Query<T>(string sql, object parameters = null, int? commandTimeout = null, CommandType? commandType = default(CommandType?));
 
+        IEnumerable<T> QueryByPredicate<T>(object predicate = null, int? commandTimeout = null) where T : class;
 
         T FirstOrDefault<T>(object id, int? commandTimeout = null) where T : class;
 

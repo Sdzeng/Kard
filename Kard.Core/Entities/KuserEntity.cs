@@ -1,10 +1,11 @@
 ﻿using Kard.Domain.Entities.Auditing;
+using System;
 using System.Security.Principal;
 
 namespace Kard.Core.Entities
 {
     //Table:user
-    public class KuserEntity : LastModificationAuditedEntity, ILastModificationAuditedEntity, IIdentity
+    public class KuserEntity :  IIdentity
     {
 
         public KuserEntity()
@@ -45,14 +46,14 @@ namespace Kard.Core.Entities
 
         public bool IsAuthenticated { get; set; }
 
-        //public static long AdminId => 1;
+        public DateTime CreationTime { get; set; }
 
-        public KuserEntity ToSecurity() {
-            this.Password = "******";
-            this.WxSessionKey = "******";
-            this.WxOpenId = "******";
-            return this;
-        }
+        //public KuserEntity ToSecurity() {
+        //    this.Password = "******";
+        //    this.WxSessionKey = "******";
+        //    this.WxOpenId = "******";
+        //    return this;
+        //}
     }
 
 

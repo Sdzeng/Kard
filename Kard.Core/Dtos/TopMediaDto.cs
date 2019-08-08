@@ -33,7 +33,9 @@ namespace Kard.Core.Dtos
 
         public string Title { get; set; }
 
-        public string Content { get; set; }
+        public string SubContent { get; set; }
+
+        public string PageUrl { get; set; }
 
         public string CreatorUserId { get; set; }
 

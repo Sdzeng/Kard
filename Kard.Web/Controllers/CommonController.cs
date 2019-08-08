@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Kard.Core.AppServices.Baiduspider;
 using Kard.Core.Dtos;
 using Kard.Core.Entities;
 using Kard.Core.IRepositories;
@@ -12,6 +13,7 @@ using Kard.Json;
 using Kard.Runtime.Security;
 using Kard.Runtime.Security.Authentication.WeChat;
 using Kard.Runtime.Session;
+using Kard.Workers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -32,19 +34,23 @@ namespace Kard.Web.Controllers
     public class CommonController : BaseController
     {
         private readonly IHostingEnvironment _env;
-        private readonly IDefaultRepository _defaultRepository;
+        private readonly IBaiduspiderAppService _baiduspiderAppService;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<ThreadWorker> _threadWorkerlogger;
 
         public CommonController(IHostingEnvironment env,
             ILogger<EssayController> logger,
+            ILogger<ThreadWorker> threadWorkerlogger,
             IMemoryCache memoryCache,
-            IDefaultRepository defaultRepository,
+            IBaiduspiderAppService baiduspiderAppService,
+
             IKardSession kardSession,
             IConfiguration configuration) : base(logger, memoryCache, kardSession)
         {
             _env = env;
-            _defaultRepository = defaultRepository;
+            _baiduspiderAppService = baiduspiderAppService;
             _configuration = configuration;
+            _threadWorkerlogger = threadWorkerlogger;
         }
 
 
@@ -54,7 +60,7 @@ namespace Kard.Web.Controllers
         [HttpPost("uploadfile")]
         //[Consumes("multipart/form-data")]
         //[RequestSizeLimit(100_000_000)]
-        public ResultDto UploadFile(IFormFile flie)
+        public async Task<ResultDto> UploadFile(IFormFile flie)
         {
             var result = new ResultDto();
             if (flie == null && Request.Form.Files.Any())
@@ -82,9 +88,11 @@ namespace Kard.Web.Controllers
             {
                 string fileName = now.ToString("ddHHmmssffff");
                 string fileExtension = Path.GetExtension(flie.FileName.Trim('"')).ToLower(); // Path.GetExtension(ContentDispositionHeaderValue.Parse(mediaFlie.ContentDisposition).FileName.Trim('"'));
-                if (string.IsNullOrEmpty(fileExtension)) {
-                    switch (flie.ContentType.ToLower()) {
-                        case "image/png":fileExtension = ".png";break;
+                if (string.IsNullOrEmpty(fileExtension))
+                {
+                    switch (flie.ContentType.ToLower())
+                    {
+                        case "image/png": fileExtension = ".png"; break;
                         case "image/jpg":
                         case "image/jpeg": fileExtension = ".jpg"; break;
                     }
@@ -103,9 +111,9 @@ namespace Kard.Web.Controllers
             }
 
             result.Result = false;
-            result.Data = new  {Url = "/" };
-           result.Message = "上传失败";
-            return result;
+            result.Data = new { Url = "/" };
+            result.Message = "上传失败";
+            return await Task.FromResult(result);
         }
 
         ///// <summary>
@@ -149,14 +157,42 @@ namespace Kard.Web.Controllers
         //            editorFlie.CopyTo(stream);
         //        }
 
-             
+
         //        return new {Uploaded=1,FileName= fileName + fileExtension, Url = Path.Combine(_defaultRepository.Configuration.GetValue<string>("AppSetting:ApiDomain"), newFolder, fileName + fileExtension).Replace("\\", "/") };
         //    }
 
 
-           
+
         //    return new {  Uploaded = 1, FileName = "", Url = "/",Error=new { Message=""} };
         //}
+
+       /// <summary>
+       /// 提交链接
+       /// </summary>
+       /// <param name="urls"></param>
+       /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet("baiduspider")]
+        public async Task<IActionResult> Baiduspider(List<string> urls)
+        {
+            var spiderWorker = new ThreadWorker(_threadWorkerlogger, new WorkTaskArgs
+            {
+                WorkName = "百度爬虫",//定制订单逾期（过期）判断 | 推广订单逾期（过期）判断 | 公共（推荐）
+                ThreadInterval = 3*60*60,//3小时执行一次
+                TaskMethod = (log, taskArgs) =>
+                {
+                    return  _baiduspiderAppService.BaiduspiderAsync(urls).Result.Result;
+                }
+            });
+
+            var workers = new CompositeWorker();
+            workers.Add(spiderWorker);
+            workers.Start();
+
+            return await Task.FromResult(Content("启动成功"));
+       
+        }
+
     }
 
 }

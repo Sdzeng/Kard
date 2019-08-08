@@ -19,7 +19,10 @@ namespace Kard.Core.Dtos
 
         public string CoverExtension { get; set; }
 
-        public string Content { get; set; }
+        public string PageUrl { get; set; }
+        public string  Content { get; set; }
+
+        public string SubContent { get; set; }
 
         public string Location { get; set; }
 
@@ -49,5 +52,8 @@ namespace Kard.Core.Dtos
         public IList<TagEntity> TagList;
 
         public string Meta { get; set; }
+
+
+  
     }
 }

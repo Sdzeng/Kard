@@ -1,5 +1,45 @@
-﻿var userjs = {
-    data: { scope: $("#userPage") },
+﻿var usercenterjs = {
+    data: {
+        scope: $("#userPage"),
+        queryString: basejs.getQueryString(),
+        loadMorePars: {
+            //设置加载更多
+            offOn: false,
+            page: 1
+
+        }
+    },
+    init: function () {
+        var _this = this;
+        _this.userCover();
+        
+        _this.bindMenu();
+        _this.bindResult();
+      
+        $('.go-to-top', _this.data.scope).goToTop();
+    },
+    template: {
+        
+        essay:  ("<div class='result-warp essay-warp'>"+
+        "<div class='result-info' style='width:890px;'>" +
+        "<div class='essay-header'><a class='essay-title' href='#{essayDetailPage}'>#{essayTitle}</a></div>" +
+        "<div class='essay-content'><a  href='#{essayDetailPage}'>#{essaySubContent}</a></div>" +
+        "<div class='essay-footer'>" +
+        "<span>#{location}</span> " +
+        "<span>#{creationTime}</span> " +
+        "<span>#{browseNum}阅读</span>" +
+        "<span>#{likeNum}喜欢</span>" +
+        "<span>#{commentNum}评论</span>" +
+        "<span class='essay-category'>#{category}</span>" +
+        "</div>" +
+        "</div>" +
+        "<div class='result-cover'><a href='#{essayDetailPage}'><img class='lazy' src='#{defaultPicturePath}' data-original='#{pictureCropPath}'></a></div>" +
+        "</div>"),
+        essayFans: ("<div class='fans-warp'>" +
+        "<a class='result-avatar' href='/user.html?id=#{kuserId}'><img class='lazy' src='#{defaultAvatarPath}' data-original='#{avatarCropPath}' /></a>" +
+        "<div class='result-nickname'>#{kuserNickName}</div>" +
+        "</div>")
+    },
     userCover: function () {
 
         var _this = this;
@@ -8,6 +48,7 @@
         var helper = new httpHelper({
             url: basejs.requestDomain + "/user/cover",
             type: "GET",
+            data: {userId: _this.data.queryString.id},
             success: function (resultDto) {
                 var data = resultDto.data;
                 //data = JSON.parse(data);
@@ -15,17 +56,40 @@
                     return;
                 }
 
-
-                //data.media.hasOwnProperty("path")&&
-
-
-                $(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.coverPath || "") + ")").fadeIn("slow");
+                $(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),url(" + basejs.cdnDomain + "/" + (data.coverPath || "") + ")");
                 //$(".essay-content>blackquote>q").text("测试");
-                $(".author", _this.data.scope).text("@" + data.nickName || "");
+                $(".author-txt-name>span:eq(0)", _this.data.scope).text(data.nickName || "");
 
 
-                topCover.scroll();
+                
 
+
+                var avatarCropPath = "";
+                if(data.avatarUrl.indexOf("http") >= 0 ) { 
+                    avatarCropPath=data.avatarUrl;
+                }
+                else
+                {
+                    var avatarArr = data.avatarUrl.split('.');
+                    avatarCropPath=basejs.cdnDomain + "/" + avatarArr[0] + "_90x90." + avatarArr[1];
+                }
+                
+
+               
+                $(".author-avatar>img", _this.data.scope).attr("data-original",avatarCropPath);
+                var $userCenterAuthorTxt = $(".author-txt", _this.data.scope);
+                var $userCenterAuthorTxtName = $userCenterAuthorTxt.children(".author-txt-name");
+                $userCenterAuthorTxtName.children("span:eq(0)").text(data.nickName);
+                $userCenterAuthorTxtName.children("span:eq(1)").text(data.city);
+                $userCenterAuthorTxt.children(".author-txt-introduction").text(data.introduction);
+                var $userCenterAuthorTxtNum = $userCenterAuthorTxt.children(".author-txt-num");
+                $userCenterAuthorTxtNum.children("span:eq(0)").text(data.followNum + "关注");
+                $userCenterAuthorTxtNum.children("span:eq(1)").text(data.fansNum + "粉丝");
+                $userCenterAuthorTxtNum.children("span:eq(2)").text("获得" + data.likeNum + "个喜欢");
+
+                //图片懒加载
+                $imageLazy = $(".author-avatar img.lazy", _this.data.scope);
+                basejs.lazyInof($imageLazy);
             },
             error: function (jqXHR, textStatus, errorThrown) {
 
@@ -35,172 +99,226 @@
 
 
     },
-    setPictures: function () {
+
+
+ 
+    bindMenu: function () {
         var _this = this;
 
-        //设置host
-        var helper = new httpHelper({
-            url: basejs.requestDomain + "/user/pictures",
+        $(".menu li", _this.data.scope).click(function () {
+           
+            $(".menu-active", _this.data.scope).removeClass("menu-active");
+            $(this).addClass("menu-active");
+            _this.data.loadMorePars.offOn=false;
+            _this.data.loadMorePars.page=1;
+            $("#my-content", _this.data.scope).empty();
+            _this.bindResult();
+        });
+
+    },
+    bindResult: function () {
+        var _this = this;
+
+        var $loadMore = $(".load-more>span", _this.data.scope);
+        $loadMore.text("加载中...");
+
+        function successFunc(resultDto){
+            //图片懒加载
+            $imageLazy = $("#my-content img.lazy", _this.data.scope);
+            basejs.lazyInof($imageLazy);
+            $imageLazy.removeClass("lazy");
+            
+            if (resultDto.data.hasNextPage) {
+                _this.data.loadMorePars.offOn = true;
+                _this.data.loadMorePars.page++;
+                $loadMore.text("加载更多");
+            }
+            else {
+                _this.data.loadMorePars.offOn = false;
+                $loadMore.text("已经是底部");
+            }
+        };
+
+        function errorFunc(){
+            _this.data.loadMorePars.offOn = true;
+
+            $("#my-content", _this.data.scope).empty();
+        }
+        
+        var opt=$(".menu-active", _this.data.scope).attr("data-opt");
+      
+        var httpPars=null;
+        switch(opt){
+            
+           case "essay":httpPars=_this.getEssayHttpPars(successFunc,errorFunc);break;
+           case "fans":httpPars=_this.getFansHttpPars(successFunc,errorFunc);break;
+          
+
+        }
+
+        var helper=new httpHelper(httpPars);
+        helper.send();
+
+        $loadMore.loadMore(50, function () {
+           
+            //这里用 [ off_on ] 来控制是否加载 （这样就解决了 当上页的条件满足时，一下子加载多次的问题啦）
+            if (_this.data.loadMorePars.offOn) {
+                _this.data.loadMorePars.offOn = false;
+                 
+                var loadMoreOpt=$(".menu-active", _this.data.scope).attr("data-opt");
+      
+                var loadMoreHttpPars=null;
+                switch(loadMoreOpt){
+                  
+                   case "essay":loadMoreHttpPars=_this.getEssayHttpPars(successFunc,errorFunc);break;
+                   case "fans":httpPars=_this.getFansHttpPars(successFunc,errorFunc);break;
+                   
+                }
+             
+                loadMoreHttpPars.data.pageIndex = _this.data.loadMorePars.page;
+                $loadMore.text("加载中...");
+                helper = new httpHelper(loadMoreHttpPars);
+                helper.send();
+            }
+        });
+    },
+   
+    getEssayHttpPars: function (successFunc,errorFunc) {
+        var _this = this;
+
+        //设置httpHelper
+        var httpPars = {
+            url: basejs.requestDomain + "/user/essay",
             type: "GET",
+            data: { userId: _this.data.queryString.id, pageIndex: 1, pageSize: 10 },
             success: function (resultDto) {
-                var data = resultDto.data;
-                //data = JSON.parse(data);
+                var data = resultDto.data.essayList;
+             
                 if (!data) {
                     return;
                 }
-                var topMediaPictureHtml = "";
-                //data.media.hasOwnProperty("path")&&
+                var essayHtml = "";
+
 
                 for (var index in data) {
-                    var media = data[index];
-                    var picturePath = basejs.cdnDomain + "/" + media.cdnPath + "." + media.mediaExtension;
-                    var pictureCropPath = basejs.cdnDomain + "/" + media.cdnPath + "_170x150." + media.mediaExtension;
-                    topMediaPictureHtml += "<div class='picture-warp'>" +
-                        "<a href= '" + picturePath + "' >" +
-                        "<img src='" + pictureCropPath + "' data-origin='" + picturePath + "' alt='' />" +
-                        "</a >" +
-                        "<div class='picture-desc'>" +
-                        "<span class='picture-name'><a href='" + picturePath + "'>" + (media.firstTagName || media.creatorNickName).substring(0, 6) + "</a></span>" +
-                        "<span class='picture-num'>" + media.essayMediaCount + "张</span>" +
-                        "<a class='href-label picture-like'>" + media.essayLikeNum + "人喜欢</a>" +
-                        "</div>" +
-                        "</div >";
+                   
+                    var essay = data[index];
+                    // var avatarArr = news.dto.avatarUrl.split('.');
+                    // var avatarCropPath = basejs.cdnDomain + "/" + avatarArr[0] + "_40x40." + avatarArr[1];
+                    var essayDetailPage = "/" + essay.pageUrl;
+                    var defaultPicturePath = "/image/default-picture_100x100.jpg";
+                    var pictureCropPath = "";
+                    switch (essay.coverMediaType) {
+                        case "picture": pictureCropPath = basejs.cdnDomain + "/" + essay.coverPath + "_100x100." + essay.coverExtension; break;
+                        case "video": pictureCropPath = basejs.cdnDomain + "/" + essay.coverPath + "_100x100.jpg"; break;
+                    }
+
+                    essayHtml += _this.template.essay.format({
+
+                        essayDetailPage: essayDetailPage,
+                        essayTitle: essay.title,
+                     
+                        essaySubContent: essay.subContent,
+                        location: essay.location,
+                        browseNum: basejs.getNumberDiff(essay.browseNum),
+                        likeNum: basejs.getNumberDiff(essay.likeNum),
+                        commentNum: basejs.getNumberDiff(essay.commentNum),
+                        category: essay.category,
+                        //score: essay.score,
+                        creationTime: basejs.getDateDiff(basejs.getDateTimeStamp(essay.creationTime)),
+                        defaultPicturePath: defaultPicturePath,
+                        pictureCropPath: pictureCropPath
+                    });
+                            
+                }
+                if(httpPars.data.pageIndex==1){
+                   $("#my-content", _this.data.scope).empty();
+                   
                 }
 
-                $(".section-userinfo-left", _this.data.scope).append(topMediaPictureHtml);
+                $("#my-content", _this.data.scope).append(essayHtml);
+               
+                successFunc&&successFunc(resultDto);
 
+               
+            },
+            error: function () {
+                errorFunc&&errorFunc();
+               
             }
-        });
-        helper.send();
+        };
+
+        return httpPars;
     },
-
-
-    uploadImg: function () {
+    getFansHttpPars: function (successFunc,errorFunc) {
         var _this = this;
 
-        $("#btnAddPic", _this.data.scope).click(function () {
-            $("#btnAddPicHide", _this.data.scope).trigger("click");
-        });
+        //设置httpHelper
+        var httpPars = {
+            url: basejs.requestDomain + "/user/fans",
+            type: "GET",
+            data: {  userId: _this.data.queryString.id,pageIndex: 1, pageSize: 10 },
+            success: function (resultDto) {
+                var data = resultDto.data.fansList;
+             
+                if (!data) {
+                    return;
+                }
+                var fansHtml = "";
 
-        $("#btnAddPicHide", _this.data.scope).change(function () {
+            
 
+                for (var index in data) {
+                   
+                    var fans = data[index];
+                 
+                    var avatarCropPath = "";
+                    if(fans.kuserAvatarUrl.indexOf("http") >= 0 ) { 
+                        avatarCropPath=fans.kuserAvatarUrl;
+                    }
+                    else
+                    {
+                        var avatarArr = fans.kuserAvatarUrl.split('.');
+                        avatarCropPath=basejs.cdnDomain + "/" + avatarArr[0] + "_80x80." + avatarArr[1];
+                    }
+                    
+                    fansHtml += _this.template.essayFans.format({
+                        kuserId:fans.kuserId,
+                        avatarCropPath:  avatarCropPath,
+                        defaultAvatarPath:basejs.defaults.avatarPath,
+                        kuserNickName:fans.kuserNickName
+                    });
+                            
+                }
+                if(httpPars.data.pageIndex==1){
+                   $("#my-content", _this.data.scope).empty();
+                }
+                $("#my-content", _this.data.scope).append(fansHtml);
+               
+                successFunc&&successFunc(resultDto);
 
-
-            //formData.append("Id", rackId);
-            //formData.append("PicturePath", $("#PicturePath", $maskScope).val());
-            //var files = $("#uploadImgFile", $maskScope).get(0).files;
-            //if (files.length != 0) {
-            //    formData.append("PictureContent", files[0]);
-            //}
-            ////else if (!$("#PicturePath", $maskScope).val()) {
-            ////    dialog.alert("请选择摆放示意图", "warn").load();
-            ////    return false;
-            ////}
-
-            //formData.append("RackGoodsLocationJson", JSON.stringify(rackGoodsLocation));
-            //$.ajax({
-            //    url: basejs.requestDomain + "/web/user/uploadMedia/",
-            //    type: "POST",
-            //    async: false,
-            //    contentType: false,
-            //    processData: false,
-            //    xhrFields: {
-            //        withCredentials: true
-            //    },
-            //    crossDomain: true,
-            //    data: formData,
-            //    success: function (res) {
-            //        console.info(res.data);
-            //        layer.msg(res.message, { time: 1500 });
-            //        if (res.code == '200') {
-            //            url = res.data;
-            //        }
-            //    },
-            //    error: function (res) {
-            //        console.log(res);
-            //        //layer.msg("网络异常，请稍后再试", { time: 1500 });
-            //    }
-            //});
-
-            var formData = new FormData();
-            var files = $(this).get(0).files;
-            if (files.length != 0) {
-                formData.append("mediaFile", files[0]);
+               
+            },
+            error: function () {
+                errorFunc&&errorFunc();
+               
             }
-            var helper = new httpHelper({
-                url: basejs.requestDomain + "/user/uploadmedia",
-                type: 'POST',
-                async: false,
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (resultDto) {
-                  
-                    if (resultDto.result) {
-                        $("#btnAddPic", _this.data.scope).before("<img class='isay-info-buttom-medias-item' data-file-url='" + resultDto.data.fileUrl + "' data-file-extension='" + resultDto.data.fileExtension + "' src='" + basejs.requestDomain + "/" + resultDto.data.fileUrl + "_50x50" + resultDto.data.fileExtension + "'></img>");
-                    }
-                }
-            });
+        };
 
-
-            helper.send();
-        });
-
-    },
-    saveIsay: function () {
-        var _this = this;
-
-        $(".isay-info-category-span", _this.data.scope).click(function () {
-            $(".isay-info-category-span-checked", _this.data.scope).removeClass("isay-info-category-span-checked");
-            $(this).addClass("isay-info-category-span-checked");
-        });
-
-        $(".isay-info-submit", _this.data.scope).click(function () {
-            var mediaArr = [];
-            $(".isay-info-buttom-medias>img", _this.data.scope).each(function (index, item) {
-                var $item = $(item);
-                mediaArr.push({
-                    sort: index + 1,
-                    mediaType: "picture",
-                    cdnPath: $item.attr("data-file-url"),
-                    mediaExtension: $item.attr("data-file-extension")
-                });
-            });
-            alert($(".isay-info-category-span-checked", _this.data.scope).text());
-            var helper = new httpHelper({
-                url: basejs.requestDomain + "/user/add",
-                type: 'POST',
-                data: {
-                    essayEntity: {
-                        title: $("#isayTitle", _this.data.scope).val(),
-                        category: $(".isay-info-category-span-checked", _this.data.scope).text(),
-                        content: $("#isayContent", _this.data.scope).val()
-                    },
-                    mediaList: mediaArr
-                },
-                success: function (resultDto) {
-                    if (resultDto.result) {
-                        $("#isayTitle", _this.data.scope).val("");
-                        $("#isayContent", _this.data.scope).val("");
-                        $(".isay-info-buttom-medias>img", _this.data.scope).remove();
-                        alert("成功成功");
-                    }
-                }
-            });
-
-
-            helper.send();
-        });
-
-
+        return httpPars;
     }
+
+
+
 
 };
 
 $(function () {
-    //封面
-    userjs.userCover();
-    userjs.setPictures();
-    userjs.uploadImg();
-    userjs.saveIsay();
+    //菜单
+    topMenu.bindMenu();
+    topMenu.logout();
+    topMenu.authTest();
+
+    usercenterjs.init();
+
 });

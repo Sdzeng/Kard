@@ -19,6 +19,17 @@ namespace Kard.Dapper.Mysql.Mapper
         }
     }
 
+    public class EssayContentMapper : ClassMapper<EssayContentEntity>
+    {
+
+        public EssayContentMapper()
+        {
+            Table("essayContent");
+            Map(e => e.EssayId).Key(KeyType.Assigned);
+            AutoMap();
+        }
+    }
+
     //public class EssayCommentMapper : ClassMapper<EssayCommentEntity>
     //{
 

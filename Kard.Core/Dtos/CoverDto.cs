@@ -21,6 +21,9 @@ namespace Kard.Core.Dtos
 
         public string EssayTitle { get; set; }
         public string EssayContent { get; set; }
+
+        public string EssayPageUrl{ get; set; }
+
         public string EssayLocation { get; set; }
         public DateTime EssayCreationTime { get; set; }
 

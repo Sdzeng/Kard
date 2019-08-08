@@ -1,43 +1,40 @@
 {
-  "pages":[
-    
+  "pages": [
     "pages/index/index",
-
     "pages/task/add",
     "pages/social/social",
-   
     "pages/task/edit",
     "pages/test/test",
     "pages/test2/test2",
     "pages/test3/index"
   ],
-  "window":{
+  "window": {
     "navigationStyle": "default",
     "navigationBarBackgroundColor": "#fff",
-    "backgroundColor":"#f6f8f8",
+    "backgroundColor": "#f6f8f8",
     "navigationBarTitleText": "目标大作战",
     "navigationBarTextStyle": "black",
     "backgroundTextStyle": "dark",
-    "enablePullDownRefresh":true
+    "enablePullDownRefresh": true
   },
-    "tabBar": {
-      "color": "#1aad16",
-      "list": [
-        {
-          "pagePath": "pages/index/index",
-          "text": "我的",
-          "iconPath": "/icons/account.png",
-          "selectedIconPath": "/icons/account_select.png"
-        },
-        {
-          "pagePath": "pages/social/social",
-          "text": "达人圈",
-          "iconPath": "/icons/lights.png",
-          "selectedIconPath": "/icons/lights_select.png"
-        }
-      ],
-      "position": "bottom"
-    },
-    
-  "debug":true
+  "tabBar": {
+    "color": "#1aad16",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "我的",
+        "iconPath": "/icons/account.png",
+        "selectedIconPath": "/icons/account_select.png"
+      },
+      {
+        "pagePath": "pages/social/social",
+        "text": "达人圈",
+        "iconPath": "/icons/lights.png",
+        "selectedIconPath": "/icons/lights_select.png"
+      }
+    ],
+    "position": "bottom"
+  },
+  "debug": true,
+  "sitemapLocation": "sitemap.json"
 }

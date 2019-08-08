@@ -76,7 +76,7 @@ namespace Kard.Web.Controllers
                 case "accountLogin":resultDto = await AccountLoginAsync(username, password, remember);break;
                 case "phoneLogin":break;
             }
-            return resultDto;
+            return await Task.FromResult(resultDto);
         }
 
 
@@ -97,7 +97,7 @@ namespace Kard.Web.Controllers
                 //return Redirect(returnUrl);
                 return new ResultDto() { Result = true, Message = "登录成功" };
             }
-            return new ResultDto() { Result = false, Message = "登录失败，用户名密码不正确" };
+            return await Task.FromResult(new ResultDto() { Result = false, Message = "登录失败，用户名密码不正确" });
         }
 
 
@@ -108,26 +108,26 @@ namespace Kard.Web.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("register")]
-        public ResultDto Register(KuserEntity user)
+        public async Task<ResultDto> Register(KuserEntity user)
         {
             user.UserType = "WebAccount";
             user.KroleId = 1;
             user.City = "广州";
             user.AvatarUrl = @"user\id\avatar.jpg";
             user.CoverPath = "";
-            user.AuditCreation(1);
-            return _loginAppService.Register("accountRegister", user);
+            //user.AuditCreation(1);
+            return await Task.FromResult(_loginAppService.Register("accountRegister", user));
         }
         /// <summary>
         /// 退出
         /// </summary>
         /// <returns></returns>
         [HttpGet("logout")]
-        public ResultDto Logout()
+        public async Task<ResultDto> Logout()
         {
 
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return new ResultDto() { Result = true, Message = "退出成功" }; 
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return await Task.FromResult(new ResultDto() { Result = true, Message = "退出成功" }); 
         }
 
  

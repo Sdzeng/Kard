@@ -40,12 +40,17 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  align-items: center;
 }
 .essay-detail-info .essay-min-author-left .essay-min-author-avatar {
-  width: 30px;
-  margin: 3px 10px 0px 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-right: 10px;
 }
 .essay-detail-info .essay-min-author-left .essay-min-author-avatar img {
+  margin: 3px 5px 0px 0px;
   width: 30px;
   height: 30px;
   border-radius: 15px;

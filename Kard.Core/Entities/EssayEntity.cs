@@ -26,7 +26,11 @@ namespace Kard.Core.Entities
 
         public string CoverExtension { get; set; }
 
-        public string Content { get; set; }
+        public string SubContent { get; set; }
+
+        public bool IsPublish { get; set; }
+
+        public string PageUrl {get;set;}
 
         public string Location { get; set; }
 

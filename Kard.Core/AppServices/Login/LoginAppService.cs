@@ -117,13 +117,13 @@ namespace Kard.Core.AppServices.Default
 
 
 
-        public ResultDto<ClaimsIdentity> WxLogin(string code)
+        public ResultDto<ClaimsIdentity> WxLogin(string code, WeChatUserDto userInfo)
         {
             var result = new ResultDto<ClaimsIdentity>();
             var appid = "wx109fc14b4956fc70";
             var secret = "a8e7f19d69cbde0272fd866fe7392874";
-            var url = "https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code";
-            url = string.Format(url, appid, secret, code);
+            var url = $"https://api.weixin.qq.com/sns/jscode2session?appid={appid}&secret={secret}&js_code={code}&grant_type=authorization_code";
+            
             var client = new HttpClient();
             var json = client.GetStringAsync(url).Result;
             var wxAuthDto = Serialize.FromJson<WxAuthDto>(json);
@@ -140,7 +140,12 @@ namespace Kard.Core.AppServices.Default
             if (user != null)
             {
                 user.WxSessionKey = wxAuthDto.session_key;
-                user.AuditLastModification(_kardSession.UserId.Value);
+                user.AvatarUrl = userInfo.AvatarUrl;
+                user.NickName = userInfo.NickName;
+                user.City = userInfo.City;
+                user.Language = userInfo.Language;
+                user.Gender = userInfo.Gender;
+
                 var updateUserResultDto = _defaultRepository.Update(user);
                 if (!updateUserResultDto.Result)
                 {
@@ -156,7 +161,13 @@ namespace Kard.Core.AppServices.Default
                 user.WxSessionKey = wxAuthDto.session_key;
                 user.UserType = "WeChatApp";
                 user.KroleId = 1;
-                user.AuditCreation(_kardSession.UserId.Value);
+                user.AvatarUrl = userInfo.AvatarUrl;
+                user.NickName = userInfo.NickName;
+                user.City = userInfo.City;
+                user.Language = userInfo.Language;
+                user.Gender = userInfo.Gender;
+                user.CreationTime = DateTime.Now;
+
                 var createResult = _defaultRepository.CreateAndGetId<KuserEntity, long>(user);
                 if (!createResult.Result)
                 {
@@ -182,7 +193,7 @@ namespace Kard.Core.AppServices.Default
             switch (registerType)
             {
                 case "accountRegister": resultDto = AccountRegister(user); break;
-                case "wxRegister": resultDto = WxRegister(user); break;
+                //case "wxRegister": resultDto = WxRegister(user); break;
             }
             return resultDto;
         }
@@ -223,34 +234,34 @@ namespace Kard.Core.AppServices.Default
             return resultDto;
 
         }
-        private ResultDto WxRegister(KuserEntity user)
-        {
-            var result = new ResultDto();
+        //private ResultDto WxRegister(KuserEntity user)
+        //{
+        //    var result = new ResultDto();
 
-            var userEntity = _defaultRepository.FirstOrDefaultByPredicate<KuserEntity>(new { WxOpenId = user.WxOpenId });
-            if (userEntity == null)
-            {
-                result.Result = false;
-                result.Message = $"用户{user.NickName}未登陆成功，注册失败";
-                return result;
-            }
+        //    var userEntity = _defaultRepository.FirstOrDefaultByPredicate<KuserEntity>(new { WxOpenId = user.WxOpenId });
+        //    if (userEntity == null)
+        //    {
+        //        result.Result = false;
+        //        result.Message = $"用户{user.NickName}未登陆成功，注册失败";
+        //        return result;
+        //    }
 
-            userEntity.AvatarUrl = user.AvatarUrl;
-            userEntity.NickName = user.NickName;
-            userEntity.City = user.City;
-            userEntity.Language = user.Language;
-            userEntity.AuditLastModification(_kardSession.UserId.Value);
-            result = _defaultRepository.Update(userEntity);
-            if (!result.Result)
-            {
-                result.Message = $"用户{user.NickName}注册失败";
-                return result;
-            }
+        //    userEntity.AvatarUrl = user.AvatarUrl;
+        //    userEntity.NickName = user.NickName;
+        //    userEntity.City = user.City;
+        //    userEntity.Language = user.Language;
+        //    userEntity.AuditLastModification(_kardSession.UserId.Value);
+        //    result = _defaultRepository.Update(userEntity);
+        //    if (!result.Result)
+        //    {
+        //        result.Message = $"用户{user.NickName}注册失败";
+        //        return result;
+        //    }
 
-            result.Result = true;
-            result.Message = "注册成功";
-            return result;
-        }
+        //    result.Result = true;
+        //    result.Message = "注册成功";
+        //    return result;
+        //}
 
         private ClaimsIdentity AddSessionData(KuserEntity user, string scheme = CookieAuthenticationDefaults.AuthenticationScheme)
         {

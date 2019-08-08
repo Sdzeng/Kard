@@ -60,21 +60,37 @@ namespace Kard.Web.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("{userId}")]
-        public ResultDto<KuserEntity> Index(long userId)
+        public async Task<ResultDto<KuserEntity>> Index(long userId)
         {
             var resultDto = new ResultDto<KuserEntity>() { Result = true, Data = GetUser(userId) };
-            return resultDto;
+            return await Task.FromResult(resultDto);
         }
+
+    
+
+
+        /// <summary>
+        /// 获取我的封面
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("usercover")]
+        public async Task<ResultDto<KuserEntity>> GetUserCover()
+        {
+            var resultDto = new ResultDto<KuserEntity>() { Result = true, Data = GetUser(_kardSession.UserId.Value) };
+            return await Task.FromResult(resultDto);
+        }
+
 
         /// <summary>
         /// 获取用户封面
         /// </summary>
         /// <returns></returns>
         [HttpGet("cover")]
-        public ResultDto<KuserEntity> GetCover()
+        [AllowAnonymous]
+        public async Task<ResultDto<KuserEntity>> GetCover(long userId)
         {
-            var resultDto = new ResultDto<KuserEntity>() { Result = true, Data = GetUser(_kardSession.UserId.Value) };
-            return resultDto;
+            var resultDto = new ResultDto<KuserEntity>() { Result = true, Data = GetUser(userId) };
+            return await Task.FromResult(resultDto);
         }
 
 
@@ -100,7 +116,7 @@ namespace Kard.Web.Controllers
         [HttpPost("uploadavathor")]
         //[Consumes("multipart/form-data")]
         //[RequestSizeLimit(100_000_000)]
-        public ResultDto UploadAvatar(IFormFile avathorFlie)
+        public async Task<ResultDto> UploadAvatar(IFormFile avathorFlie)
         {
             var result = new ResultDto();
             if (avathorFlie == null && Request.Form.Files.Any())
@@ -148,14 +164,14 @@ namespace Kard.Web.Controllers
             fileExtension = $"{fileExtension}?v={ DateTime.Now.ToString("ddHHmmssffff")}";
             var kuser = _defaultRepository.FirstOrDefault<KuserEntity>(_kardSession.UserId.Value);
             kuser.AvatarUrl = Path.Combine(newFolder, fileName+fileExtension);
-            kuser.AuditLastModification(_kardSession.UserId.Value);
+            //kuser.AuditLastModification(_kardSession.UserId.Value);
             result = _defaultRepository.Update(kuser);
             if (result.Result)
             {
                 result.Data = new { FileUrl = Path.Combine(newFolder, fileName), FileExtension = fileExtension };
                 _memoryCache.Remove($"user[{_kardSession.UserId.Value}]");
             }
-            return result;
+            return await Task.FromResult(result);
 
         }
 
@@ -165,8 +181,8 @@ namespace Kard.Web.Controllers
         /// 获取动态
         /// </summary>
         /// <returns></returns>
-        [HttpGet("news")]
-        public ResultDto GetNews(int pageIndex, int pageSize)
+        [HttpGet("usernews")]
+        public async Task<ResultDto> GetUserNews(int pageIndex, int pageSize)
         {
             var resultDto = new ResultDto();
             var newsList = _defaultRepository.Essay.GetUserNews(_kardSession.UserId.Value, pageIndex, pageSize + 1, "t.CreationTime desc");
@@ -179,9 +195,137 @@ namespace Kard.Web.Controllers
                 newsList = hasNextPage ? newsList.SkipLast(1) : newsList
             };
 
-            return resultDto;
+            return await Task.FromResult(resultDto);
         }
 
+        /// <summary>
+        /// 获取我的文章
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("useressay")]
+        public async Task<ResultDto> GetUserEssay(int pageIndex, int pageSize)
+        {
+            var resultDto = new ResultDto();
+            var essayList = _defaultRepository.Essay.GetUserEssay(_kardSession.UserId.Value, pageIndex, pageSize + 1, "CreationTime desc");
+            var hasNextPage = essayList.Count() > pageSize;
+
+            resultDto.Result = true;
+            resultDto.Data = new
+            {
+                hasNextPage,
+                essayList = hasNextPage ? essayList.SkipLast(1) : essayList
+            };
+
+            return await Task.FromResult(resultDto);
+        }
+
+        /// <summary>
+        /// 获取文章
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("essay")]
+        [AllowAnonymous]
+        public async Task<ResultDto> GetEssay(long userId,int pageIndex, int pageSize)
+        {
+            var resultDto = new ResultDto();
+            var essayList = _defaultRepository.Essay.GetUserEssay(userId, pageIndex, pageSize + 1, "CreationTime desc",true);
+            var hasNextPage = essayList.Count() > pageSize;
+
+            resultDto.Result = true;
+            resultDto.Data = new
+            {
+                hasNextPage,
+                essayList = hasNextPage ? essayList.SkipLast(1) : essayList
+            };
+
+            return await Task.FromResult(resultDto);
+        }
+
+        /// <summary>
+        /// 获取我的喜欢
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("userlike")]
+        public async Task<ResultDto> GetUserLike(int pageIndex, int pageSize)
+        {
+            var resultDto = new ResultDto();
+            var likeList = _defaultRepository.Essay.GetUserLike(_kardSession.UserId.Value, pageIndex, pageSize + 1, "a.CreationTime desc");
+            var hasNextPage = likeList.Count() > pageSize;
+
+            resultDto.Result = true;
+            resultDto.Data = new
+            {
+                hasNextPage,
+                likeList = hasNextPage ? likeList.SkipLast(1) : likeList
+            };
+
+            return await Task.FromResult(resultDto);
+        }
+
+
+        /// <summary>
+        /// 获取我的评论
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("usercomment")]
+        public async Task<ResultDto> GetUserComment(int pageIndex, int pageSize)
+        {
+            var resultDto = new ResultDto();
+            var commentList = _defaultRepository.Essay.GetUserComment(_kardSession.UserId.Value, pageIndex, pageSize + 1, "a.CreationTime desc");
+            var hasNextPage = commentList.Count() > pageSize;
+
+            resultDto.Result = true;
+            resultDto.Data = new
+            {
+                hasNextPage,
+                commentList = hasNextPage ? commentList.SkipLast(1) : commentList
+            };
+
+            return await Task.FromResult(resultDto);
+        }
+
+        /// <summary>
+        /// 获取我的粉丝
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("userfans")]
+        public async Task<ResultDto> GetUserFans(int pageIndex, int pageSize)
+        {
+            var resultDto = new ResultDto();
+            var fansList = _defaultRepository.Essay.GetUserFans(_kardSession.UserId.Value, pageIndex, pageSize + 1, "a.CreationTime desc");
+            var hasNextPage = fansList.Count() > pageSize;
+
+            resultDto.Result = true;
+            resultDto.Data = new
+            {
+                hasNextPage,
+                fansList = hasNextPage ? fansList.SkipLast(1) : fansList
+            };
+
+            return await Task.FromResult(resultDto);
+        }
+
+        /// <summary>
+        /// 获取粉丝
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("fans")]
+        [AllowAnonymous]
+        public async Task<ResultDto> GetFans(long userId,int pageIndex, int pageSize)
+        {
+            var resultDto = new ResultDto();
+            var fansList = _defaultRepository.Essay.GetUserFans(userId, pageIndex, pageSize + 1, "a.CreationTime desc");
+            var hasNextPage = fansList.Count() > pageSize;
+
+            resultDto.Result = true;
+            resultDto.Data = new
+            {
+                hasNextPage,
+                fansList = hasNextPage ? fansList.SkipLast(1) : fansList
+            };
+
+            return await Task.FromResult(resultDto);
+        }
 
 
 
@@ -253,7 +397,7 @@ namespace Kard.Web.Controllers
 
         [HttpGet("notlogin")]
         [AllowAnonymous]
-        public IActionResult NotLogin()
+        public async Task<IActionResult > NotLogin()
         {
             var rs = new JsonResult(new
             {
@@ -262,7 +406,7 @@ namespace Kard.Web.Controllers
             });
 
             rs.StatusCode = 401;
-            return rs;
+            return await Task.FromResult(rs);
         }
         #endregion
     }

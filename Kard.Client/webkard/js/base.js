@@ -1,8 +1,8 @@
 var basejs = {
     requestDomain: "http://192.168.10.3:5000",
     cdnDomain: "http://192.168.10.3:5000",
-    // requestDomain: "http://api.localyc.com:81",
-    // cdnDomain:"http://www.localyc.com",
+    // requestDomain: "http://api.coretn.cn:81",
+    // cdnDomain:"http://www.coretn.cn",
     defaults: {
         type: "POST",
         async: true,
@@ -273,8 +273,9 @@ var topMenu = {
                         m.sublist ? "<li class='dropdown'><a class='dropdown-toggle' data-toggle='dropdown' href='javascript:;' >"
                             + m.namech
                             + "<span class='caret'></span></a><ul class='dropdown-menu' aria-labelledby='themes'></ul></li>"
-                            : "<li><a href='javascript:;'>" + m.namech + "</a></li>").appendTo(wrapper)
+                            : "<li><a href='javascript:;' class='"+(encodeURI(m.url)==location.href?"menu-active":"")+"'>" + m.namech + "</a></li>").appendTo(wrapper)
                         .children();
+                      
                     /*
                      * var child = $("<li " + (m.sublist ? "class='treeview'" : "") + ">" + "<a
                      * href='javascript:;' >" + (isRoot ? "<i class='fa

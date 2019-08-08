@@ -76,9 +76,9 @@
             //$(".bg-default", _this.data.scope).css("background-image", "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),url(" + basejs.cdnDomain + "/" + (data.essayCover.cdnPath + "_2560x1200.gif") + ")");
 
 
+           var essayDetailPage = "/" + data.essayPageUrl;
 
-
-            $("blackquote.splash-txt>q", _this.data.scope).text(data.essayContent || data.essayTitle);
+            $("blackquote.splash-txt>q", _this.data.scope).html("<a href='"+essayDetailPage+"' style='color:#fff;'>"+data.essayContent+" 点击查看</a>");
             //图片懒加载
             basejs.lazyInof('blackquote.splash-author>img.lazy');
             var avatarArr = data.kuserAvatarUrl.split('.');
@@ -195,7 +195,7 @@
                 for (var index in data) {
                     var current = parseInt(index) + 1;
                     var topMediaDto = data[index];
-                    var essayDetailPage = "/essay-detail.html?id=" + topMediaDto.id;
+                    var essayDetailPage = "/" + topMediaDto.pageUrl;
                     var defaultPicturePath = "/image/default-picture_260x195.jpg";
                     var pictureCropPath = "";
                     switch (topMediaDto.coverMediaType) {

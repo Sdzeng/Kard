@@ -17,7 +17,7 @@ namespace Kard.Core.AppServices.Default
 
         
 
-        ResultDto<ClaimsIdentity> WxLogin(string code);
+        ResultDto<ClaimsIdentity> WxLogin(string code, WeChatUserDto userInfo);
 
         ResultDto Register(string registerType, KuserEntity user);
     }

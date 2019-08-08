@@ -679,7 +679,8 @@ th {
   border-radius: 3px;
 }
 .navbar .navbar-nav li a:hover,
-.navbar .navbar-nav li a:focus {
+.navbar .navbar-nav li a:focus,
+.navbar .navbar-nav li a.menu-active {
   background-color: rgba(0, 0, 0, 0.4);
   filter: alpha(opacity=40);
 }
@@ -1429,25 +1430,284 @@ th {
 }
 .user-center-info {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  padding-top: 80px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 80px 0px;
   width: 100%;
   min-width: 1240px;
-  /*&-right {
+}
+.user-center-info ul {
+  list-style-type: none;
+  list-style-image: none;
+  padding: 0;
+  margin: 0;
+}
+.user-center-info .user-center-header {
+  width: 1050px;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid #fdfdfd;
+}
+.user-center-info .user-center-header .author {
+  width: 500px;
+  padding: 10px 25px;
+}
+.user-center-info .user-center-header .author-avatar {
+  float: left;
+  margin-right: 10px;
+}
+.user-center-info .user-center-header .author-avatar img {
+  height: 90px;
+  width: 90px;
+  border-radius: 45px;
+}
+.user-center-info .user-center-header .author-txt-name {
+  line-height: 40px;
+}
+.user-center-info .user-center-header .author-txt-name span:first-child {
+  font-size: 18px;
+}
+.user-center-info .user-center-header .author-txt-name span:last-child {
+  margin-left: 10px;
+  font-size: 12px;
+  color: #bbb;
+}
+.user-center-info .user-center-header .author-txt-introduction {
+  color: #666666;
+}
+.user-center-info .user-center-header .author-txt-num {
+  padding-top: 10px;
+  color: #bbb;
+}
+.user-center-info .user-center-header .author-txt-num span:not(:first-child) {
+  margin-left: 10px;
+}
+.user-center-info .user-center-header .menu {
+  height: 108px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+.user-center-info .user-center-header .menu ul {
+  margin-right: 20px;
+}
+.user-center-info .user-center-header .menu ul li {
+  padding: 5px 15px;
+  color: #5da27c;
+  cursor: pointer;
+  text-align: right;
+  font-size: 15px;
+  float: left;
+}
+.user-center-info .user-center-header .menu ul li:not(:last-child) {
+  margin-right: 10px;
+}
+.user-center-info .user-center-header .menu ul li.menu-active,
+.user-center-info .user-center-header .menu ul li:hover {
+  background-color: #4f946e;
+  color: #f2f8f2;
+}
+.user-center-info .user-center-content {
+  min-height: 300px;
+  width: 1050px;
+  padding: 30px 25px;
+  background-color: #f5f5f5;
+}
+.user-center-info .user-center-content #my-content .result-warp {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  background-color: white;
+  padding: 10px 0px;
+  margin-bottom: 10px;
+}
+.user-center-info .user-center-content #my-content .result-warp .result-auth {
+  width: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.user-center-info .user-center-content #my-content .result-warp .result-auth img {
+  width: 40px;
+  height: 40px;
+  border-radius: 3px;
+}
+.user-center-info .user-center-content #my-content .result-warp .result-info {
+  width: 830px;
+  padding: 0px 10px;
+}
+.user-center-info .user-center-content #my-content .result-warp .result-cover {
+  width: 110px;
+}
+.user-center-info .user-center-content #my-content .essay-warp .result-info .essay-header {
+  font-size: 15px;
+}
+.user-center-info .user-center-content #my-content .essay-warp .result-info .essay-header .essay-title {
+  color: #619001;
+  font-size: 15px;
+}
+.user-center-info .user-center-content #my-content .essay-warp .result-info .essay-header .essay-title:hover {
+  color: yellowgreen;
+}
+.user-center-info .user-center-content #my-content .essay-warp .result-info .essay-header .essay-edit {
+  font-size: 12px;
+  padding-left: 6px;
+}
+.user-center-info .user-center-content #my-content .essay-warp .result-info .essay-content {
+  padding: 10px 0px;
+  min-height: 56px;
+}
+.user-center-info .user-center-content #my-content .essay-warp .result-info .essay-footer span {
+  white-space: nowrap;
+  color: #b6b6b6;
+}
+.user-center-info .user-center-content #my-content .essay-warp .result-info .essay-footer span:not(:last-child) {
+  margin-right: 10px;
+}
+.user-center-info .user-center-content #my-content .essay-warp .result-info .essay-footer .essay-category {
+  padding: 1px 5px;
+  border-radius: 2px;
+  cursor: pointer;
+  background-color: #f2f8f2;
+  color: #4f946e;
+  border: 1px solid #e3f1ed;
+}
+.user-center-info .user-center-content #my-content .essay-warp .result-cover a {
+  padding-right: 10px;
+}
+.user-center-info .user-center-content #my-content .essay-warp .result-cover a:hover {
+  cursor: pointer;
+}
+.user-center-info .user-center-content #my-content .essay-warp .result-cover a img {
+  border-radius: 3px;
+  width: 100px;
+  height: 100px;
+}
+.user-center-info .user-center-content #my-content .essay-like-warp .result-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.user-center-info .user-center-content #my-content .essay-like-warp .result-info .like-content {
+  font-size: 15px;
+}
+.user-center-info .user-center-content #my-content .essay-like-warp .result-info .like-content a {
+  color: #619001;
+}
+.user-center-info .user-center-content #my-content .essay-like-warp .result-info .like-content a:hover {
+  color: yellowgreen;
+}
+.user-center-info .user-center-content #my-content .essay-like-warp .result-info .like-footer span {
+  white-space: nowrap;
+  color: #b6b6b6;
+}
+.user-center-info .user-center-content #my-content .essay-like-warp .result-info .like-footer span:not(:last-child) {
+  margin-right: 10px;
+}
+.user-center-info .user-center-content #my-content .essay-comment-warp .result-info .comment-header {
+  font-size: 15px;
+}
+.user-center-info .user-center-content #my-content .essay-comment-warp .result-info .comment-header a {
+  color: #619001;
+}
+.user-center-info .user-center-content #my-content .essay-comment-warp .result-info .comment-header a:hover {
+  color: yellowgreen;
+}
+.user-center-info .user-center-content #my-content .essay-comment-warp .result-info .comment-content {
+  padding: 10px 0px;
+}
+.user-center-info .user-center-content #my-content .essay-comment-warp .result-info .comment-footer span {
+  white-space: nowrap;
+  color: #b6b6b6;
+}
+.user-center-info .user-center-content #my-content .essay-comment-warp .result-info .comment-footer span:not(:last-child) {
+  margin-right: 10px;
+}
+.user-center-info .user-center-content #my-content .kuser-fans-warp .result-info .fans-header {
+  font-size: 15px;
+}
+.user-center-info .user-center-content #my-content .kuser-fans-warp .result-info .fans-header a {
+  color: #619001;
+}
+.user-center-info .user-center-content #my-content .kuser-fans-warp .result-info .fans-header a:hover {
+  color: yellowgreen;
+}
+.user-center-info .user-center-content #my-content .kuser-fans-warp .result-info .fans-footer span {
+  white-space: nowrap;
+  color: #b6b6b6;
+}
+.user-center-info .user-center-content #my-content .kuser-fans-warp .result-info .fans-footer span:not(:last-child) {
+  margin-right: 10px;
+}
+.user-center-info .user-center-content #my-content .kuser-follow-warp .result-info .fans-header {
+  font-size: 15px;
+}
+.user-center-info .user-center-content #my-content .kuser-follow-warp .result-info .fans-footer span {
+  white-space: nowrap;
+  color: #b6b6b6;
+}
+.user-center-info .user-center-content #my-content .kuser-follow-warp .result-info .fans-footer span:not(:last-child) {
+  margin-right: 10px;
+}
+.user-center-info .user-center-content #my-content .fans-warp {
+  display: inline-block;
+  background-color: white;
+  padding: 10px;
+  border: 1px solid #fff;
+  margin: 10px;
+  border-radius: 3px;
+}
+.user-center-info .user-center-content #my-content .fans-warp img {
+  width: 100px;
+  height: 100px;
+}
+.user-center-info .user-center-content #my-content .fans-warp .result-nickname {
+  text-align: center;
+  padding-top: 5px;
+}
+.user-center-info .user-center-content #my-essay-c {
+  margin-bottom: 35px;
+}
+.user-center-info .user-center-content #my-essay-c .add-isay {
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+}
+.user-center-info .user-center-content #my-essay-c .add-isay a {
+  font-size: 200%;
+  background-color: #ee6e73;
+  border: 5px solid #fdcccd;
+  color: white;
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  border-radius: 25px;
+  transition: all 300ms cubic-bezier(0, 0, 1, 1);
+}
+.user-center-info .user-center-content #my-essay-c .add-isay a:hover {
+  background-color: #f0474d;
+  border-color: #fcabad;
+  width: 80px;
+}
+/*&-right {
         display: inline-block;
-        width: 220px;
+        width  : 220px;
 
         ul {
-            padding: 0px 10px;
+            padding      : 0px 10px;
             //sborder-top: 1px dotted #b6b6b6;
             li {
-                overflow: hidden;
-                white-space: nowrap;
-                color: #b6b6b6;
+                overflow     : hidden;
+                white-space  : nowrap;
+                color        : #b6b6b6;
                 border-bottom: 1px dotted #b6b6b6;
-                padding: 8px 0px;
-                line-height: 24px;
+                padding      : 8px 0px;
+                line-height  : 24px;
 
                 &:first-child {
                     line-height: 34px;
@@ -1455,152 +1715,28 @@ th {
 
 
                 span.section-host-right-li-num {
-                    float: left;
-                    width: 24px;
-                    height: 24px;
-                    text-align: center;
-                    font-size: 16px;
+                    float       : left;
+                    width       : 24px;
+                    height      : 24px;
+                    text-align  : center;
+                    font-size   : 16px;
                     margin-right: 10px;
-                    background: #ec4d00;
-                    color: #fff;
+                    background  : #ec4d00;
+                    color       : #fff;
                 }
 
                 div.section-host-right-li-left {
                     display: inline-block;
-                    float: left;
+                    float  : left;
                 }
 
                 div.section-host-right-li-right {
                     display: inline-block;
-                    float: right;
+                    float  : right;
                 }
             }
         }
     }*/
-}
-.user-center-info-body {
-  min-height: 300px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-.user-center-info-body > div:not(:first-child) {
-  margin-left: 30px;
-}
-.user-center-info-left {
-  display: inline-block;
-  width: 360px;
-  /*.picture-warp {
-            float: left;
-            min-width: 170px;
-            min-height: 170px;
-
-            &:nth-child(even) {
-                margin-bottom: 30px;
-            }
-
-            &:nth-child(odd) {
-                margin-left: 20px;
-                margin-bottom: 30px;
-            }
-
-            img {
-                border-radius: 3px;
-            }
-
-            .picture-desc {
-                padding: 3px 0;
-
-                .picture-name {
-                    margin-right: 5px;
-                }
-
-                .picture-num {
-                    margin-right: 5px;
-                    color: #ccc;
-                }
-
-                .picture-like {
-                    margin-right: 5px;
-                }
-            }
-        }*/
-}
-.user-center-info-left .user-center-author {
-  background-color: #fff6ed;
-  padding: 10px 5px;
-  margin-bottom: 20px;
-}
-.user-center-info-left .user-center-author-avatar {
-  float: left;
-  margin-right: 10px;
-}
-.user-center-info-left .user-center-author-avatar img {
-  height: 80px;
-  width: 80px;
-  border-radius: 40px;
-}
-.user-center-info-left .user-center-author-txt-name {
-  line-height: 40px;
-}
-.user-center-info-left .user-center-author-txt-name span:first-child {
-  font-size: 18px;
-}
-.user-center-info-left .user-center-author-txt-name span:last-child {
-  margin-left: 10px;
-  font-size: 12px;
-  color: #bbb;
-}
-.user-center-info-left .user-center-author-txt-introduction {
-  color: #666666;
-}
-.user-center-info-left .user-center-author-txt-num {
-  padding-top: 10px;
-  color: #bbb;
-}
-.user-center-info-left .user-center-author-txt-num span:not(:first-child) {
-  margin-left: 10px;
-}
-.user-center-info-left .user-center-self-black {
-  margin-top: 10px;
-}
-.user-center-info-left .user-center-self-black h4 {
-  color: #666666;
-  padding: 10px 5px;
-  /*background-color: #f5f5f5;*/
-  border-bottom: 1px solid #f4f4f4;
-}
-.user-center-info-left .user-center-self-black ul {
-  padding: 5px 0px;
-}
-.user-center-info-left .user-center-self-black ul li {
-  padding: 5px;
-  color: #bbb;
-}
-.user-center-info-middle {
-  display: inline-block;
-  width: 820px;
-}
-.user-center-info-middle .essay-info {
-  width: 100%;
-  display: inline-block;
-}
-.user-center-info-middle .essay-info-right-buttom li {
-  font-size: 12px;
-  overflow: hidden;
-  white-space: nowrap;
-  color: #b6b6b6;
-}
-.user-center-info-middle .essay-info-right-buttom li a {
-  margin-left: 10px;
-}
-.user-center-info-middle .essay-info-right-buttom-tags {
-  float: left;
-}
-.user-center-info-middle .essay-info-right-buttom-nums {
-  float: right;
-}
 .login-section {
   display: flex;
   flex-direction: row;
@@ -2009,11 +2145,6 @@ th {
   color: yellowgreen;
 }
 .search-result-warp .result-entity .result-info .result-footer .essay-category {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  white-space: nowrap;
-  color: white;
   padding: 1px 5px;
   border-radius: 2px;
   cursor: pointer;
@@ -2062,7 +2193,7 @@ th {
   border-radius: 3px;
 }
 .footer {
-  color: #bbb;
+  color: #bbb !important;
   background-color: #f5f5f5;
 }
 .footer ul,
@@ -2083,13 +2214,15 @@ th {
 }
 .footer-content ul li {
   line-height: 30px;
-  cursor: pointer;
 }
 .footer-content ul li:first-child {
   line-height: 50px;
   font-size: 120%;
 }
-.footer-content ul li:hover {
+.footer-content ul a {
+  color: #bbb !important;
+}
+.footer-content ul a:hover {
   color: #ededed;
 }
 .footer-tip {

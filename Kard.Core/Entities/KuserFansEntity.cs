@@ -4,7 +4,7 @@ using System;
 namespace Kard.Core.Entities 
 {
          //Table:user_follower
-        public class KuserFansEntity : LastModificationAuditedEntity,ILastModificationAuditedEntity
+        public class KuserFansEntity : CreationAuditedEntity, ICreationAuditedEntity
     {
     
         public KuserFansEntity()

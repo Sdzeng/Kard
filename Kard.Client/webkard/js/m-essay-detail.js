@@ -3,7 +3,7 @@
 var essaydetailjs = {
     data: {
         scope: $("#mEssayDetailPage"),
-        queryString: basejs.getQueryString(),
+        //queryString: basejs.getQueryString(),
         template: {
             comment: ("<div class='comment-info'>" +
                 "<a class='comment-info-avatar' > <img class='lazy' src='/image/default-avatar.jpg' data-original='#{avatarUrl}'></a>" +
@@ -34,10 +34,20 @@ var essaydetailjs = {
     },
     bindEssay: function () {
         var _this = this;
+        var essayId=$(".essay-detail-info",_this.data.scope).attr("data-id");
+        var avatarImg=$("img[data-initpic]",_this.data.scope);
+        var creationTime=$("span[data-creationtime]",_this.data.scope);
 
+        var avatarArr =avatarImg.attr("data-initpic").split('.');
+        var avatarUrl=basejs.cdnDomain + "/" + avatarArr[0] + "_60x60." + avatarArr[1];
+        avatarImg.attr("data-original",avatarUrl);
+        $(".essay-author-avatar>img", _this.data.scope).attr("data-original", avatarUrl);
+        creationTime.text(basejs.getDateDiff(basejs.getDateTimeStamp(creationTime.attr("data-creationtime"))) + "发布");
+
+        basejs.lazyInof('.essay-detail-info img.lazy');
         //设置单品信息
         var helper = new httpHelper({
-            url: basejs.requestDomain + "/essay/" + _this.data.queryString.id,
+            url: basejs.requestDomain + "/essay/" + essayId,
             type: "GET",
             success: function (resultDto) {
                 var data = resultDto.data;
@@ -45,17 +55,18 @@ var essaydetailjs = {
                 if (!data) {
                     return;
                 }
-                $(".essay-detail-title", _this.data.scope).text(data.title);
+                // $(".essay-detail-title", _this.data.scope).text(data.title);
 
                
-                var avatarArr = data.kuserAvatarUrl.split('.');
-                var avatarUrl = basejs.cdnDomain + "/" + avatarArr[0] + "_60x60." + avatarArr[1];
-                avatarUrl = avatarUrl.replace(/\\/g, "/");
-                $(".essay-min-author-avatar>img", _this.data.scope).attr("data-original", avatarUrl);
-                $('.essay-min-author-txt-name', _this.data.scope).text(data.kuserNickName);
-                $('.essay-min-author-txt-introduction', _this.data.scope).html("<span>" + basejs.getDateDiff(basejs.getDateTimeStamp(data.creationTime)) + "</span><span>" + data.browseNum + " 阅读</span><span>" + data.score + " 分</span>");
+                // var avatarArr = data.kuserAvatarUrl.split('.');
+                // var avatarUrl = basejs.cdnDomain + "/" + avatarArr[0] + "_60x60." + avatarArr[1];
+                // avatarUrl = avatarUrl.replace(/\\/g, "/");
+                // $(".essay-min-author-avatar>img", _this.data.scope).attr("data-original", avatarUrl);
+                // $('.essay-min-author-txt-name', _this.data.scope).text(data.kuserNickName);
+                // $('.essay-min-author-txt-introduction', _this.data.scope).html("<span>" + basejs.getDateDiff(basejs.getDateTimeStamp(data.creationTime)) + "</span><span>" + data.browseNum + " 阅读</span><span>" + data.score + " 分</span>");
 
-               
+                $(".browse-num", _this.data.scope).text(data.browseNum+"阅读");
+                $('.essay-score', _this.data.scope).text(data.score+"分");
                 //var imgs = "";
                 //var wxImgUrl = "";
                 //for (var i in data.mediaList) {
@@ -77,7 +88,7 @@ var essaydetailjs = {
                 //            break;
                 //    }
                 //}
-                $('.essay-detail-content', _this.data.scope).html( data.content);
+                //$('.essay-detail-content', _this.data.scope).html( data.content);
 
                 //var tagSpan = "";
                 //for (var i in data.tagList) {
@@ -87,16 +98,16 @@ var essaydetailjs = {
                 //$(".essay-detail-tag", _this.data.scope).html(tagSpan);
            
 
-                var isLike = (data.essayLike != null);
-                $('.essay-detail-like-share', _this.data.scope).html("<span id='btnLike' data-islike='" + isLike + "'>" + (isLike ? "已喜欢 " : "喜欢 ") + data.likeNum + "</span><span>分享 " + data.shareNum + "</span><span>举报</span>");
+ 
+                $('.essay-detail-like-share', _this.data.scope).html("<span id='btnLike' data-islike='" + data.isLike + "'>" + (data.isLike ? "已喜欢 " : "喜欢 ") + data.likeNum + "</span><span>分享 " + data.shareNum + "</span><span>举报</span>");
 
                 //avatarUrl = basejs.cdnDomain + "/" + avatarArr[0] + "_80x80." + avatarArr[1];
                 //avatarUrl = avatarUrl.replace(/\\/g, "/");
-                $(".essay-author-avatar>img", _this.data.scope).attr("data-original", avatarUrl);
-                $('.essay-author-txt-name>span:eq(0)', _this.data.scope).text(data.kuserNickName);
-                $(".essay-author-txt-introduction", _this.data.scope).text(data.kuserIntroduction);
+                // $(".essay-author-avatar>img", _this.data.scope).attr("data-original", avatarUrl);
+                // $('.essay-author-txt-name>span:eq(0)', _this.data.scope).text(data.kuserNickName);
+                // $(".essay-author-txt-introduction", _this.data.scope).text(data.kuserIntroduction);
 
-                basejs.lazyInof('.essay-detail-info img.lazy');
+              
 
 
                 //var jssdkHelper = new httpHelper({
@@ -185,7 +196,7 @@ var essaydetailjs = {
         var helper = new httpHelper({
             url: basejs.requestDomain + "/essay/commentlist",
             type: "GET",
-            data: { essayId: _this.data.queryString.id },
+            data: { essayId: $(".essay-detail-info",_this.data.scope).attr("data-id") },
             success: function (resultDto) {
                 if (!resultDto.result) {
                     alert(resultDto.message);
@@ -198,7 +209,7 @@ var essaydetailjs = {
                 else {
                     for (var index in resultDto.data) {
                         var dto = resultDto.data[index];
-                        var avatarArr = dto.kuserAvatarUrl.split('.');
+                        var avatarArr =  dto.kuserAvatarUrl.split('.');
                         var avatarCropPath = basejs.cdnDomain + "/" + avatarArr[0] + "_50x50." + avatarArr[1];
 
                         var parentCommentHtml = _this._getParentCommentHtml(dto.parentCommentDtoList);
@@ -206,7 +217,7 @@ var essaydetailjs = {
 
                         commentHtml += _this.data.template.comment.format({
                             avatarUrl: avatarCropPath,
-                            nickName: dto.kuser.nickName,
+                            nickName: dto.kuserNickName,
                             creationTime: basejs.getDateDiff(basejs.getDateTimeStamp(dto.creationTime)),
                             content: content,
                             id: dto.id,

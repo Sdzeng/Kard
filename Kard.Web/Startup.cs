@@ -1,9 +1,11 @@
-﻿using Kard.Core.Entities;
+﻿using Kard.Core.AppServices.Baiduspider;
+using Kard.Core.Entities;
 using Kard.Extensions;
 using Kard.Json;
 using Kard.Runtime.Security.Authentication.WeChat;
 using Kard.Web.Filters;
 using Kard.Web.Middlewares.ImageHandle;
+using Kard.Workers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,6 +20,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.Extensions.WebEncoders;
 using NLog.Extensions.Logging;
 using NLog.Web;
 using Senparc.CO2NET;
@@ -30,6 +33,8 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 //dotnet publish --framework netcoreapp2.0 --output "D:\GitRepository\Kard.Publish" --configuration Release
 namespace Kard.Web
@@ -187,7 +192,7 @@ namespace Kard.Web
             Action<CookieAuthenticationOptions> cookieSettingAction = (o) =>
             {
                 o.Cookie.HttpOnly = true;//置为后台只读模式,前端无法通过JS来获取cookie值,可以有效的防止XXS攻击
-                //o.Cookie.Domain = ".localyc.com";
+                //o.Cookie.Domain = ".corntn.cn";
                 o.LoginPath = "/user/notlogin";
                 o.AccessDeniedPath = "/user/notlogin";
                 o.SlidingExpiration = true;
@@ -242,6 +247,10 @@ namespace Kard.Web
             services.TryAddScoped<IPasswordHasher<KuserEntity>, PasswordHasher<KuserEntity>>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             #endregion
+
+
+            services.Configure<WebEncoderOptions>(options =>options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All));
+
         }
 
         // 请求管道会按顺序执行下列委托（中间件），返回顺序则相反；

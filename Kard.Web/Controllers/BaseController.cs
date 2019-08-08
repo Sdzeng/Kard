@@ -1,11 +1,9 @@
-﻿using Kard.Core.Entities;
-using Kard.Extensions;
+﻿using Kard.Extensions;
 using Kard.Runtime.Session;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace Kard.Web.Controllers
@@ -42,9 +40,9 @@ namespace Kard.Web.Controllers
             }
         }
 
+   
 
 
- 
 
     }
 }

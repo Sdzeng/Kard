@@ -19,14 +19,14 @@
     },
     template: {
         searchResultRow: ("<div class='search-result-warp'>" +
-            "<div class='result-score'><div class='essay-score'>#{score}</div><div class='essay-score-head-count'>#{scoreHeadCount}</div></div>" +
+            "<div class='result-score'><div class='essay-score'>#{score}</div><div class='essay-score-head-count'>#{likeNum}</div></div>" +
 
             "<div class='result-entity'>" +
 
             "<div class='result-info'>" +
 
             "<div class='result-header'><a href='#{essayDetailPage}' class='essay-title'>#{title}</a></div>" +
-            "<div class='result-content'><a href='#{essayDetailPage}' class='essay-content'>#{content}</a></div>" +
+            "<div class='result-content'><a href='#{essayDetailPage}' class='essay-content'>#{subContent}</a></div>" +
             //"<div class='picture-body'><div class='picture-body-tag'>#{tagSpan}</div><div class='picture-body-num'><span class='essay-like-num'>#{ likeNum}</span><span class='essay-share-num'>#{shareNum}</span><span class='essay-browse-num'>#{browseNum}</span></div></div>" +//media.creatorNickName).substring(0, 6)
             //"<div class='picture-footer'><div class='picture-footer-author '><span class='essay-avatar'><img class='lazy' src='#{defaultAvatarPath}' data-original='#{ avatarCropPath }'   /> </span><span>#{creatorNickName} </span></div> <div><span class='essay-city'>#{location}</span><span>#{creationTime}</span></div></div>" +
             "<div class='result-footer'><span class='essay-nickname'><a>#{creatorNickName}</a></span> <span class='essay-creationtime'>#{creationTime}</span><span>#{browseNum}阅读</span>#{tagSpan}#{categorySpan}</div>" +
@@ -144,8 +144,8 @@
 
             for (var index in data) {
                 var topMediaDto = data[index];
-                var essayDetailPage = "/essay-detail.html?id=" + topMediaDto.id;
-                var defaultPicturePath = "/image/default-picture_100x100.jpg";
+                var essayDetailPage = "/" + topMediaDto.pageUrl;
+                var defaultPicturePath = basejs.cdnDomain +"/image/default-picture_100x100.jpg";
                 var pictureCropPath = "";
                 switch (topMediaDto.coverMediaType) {
                     case "picture": pictureCropPath = basejs.cdnDomain + "/" + topMediaDto.coverPath + "_100x100." + topMediaDto.coverExtension; break;
@@ -166,10 +166,10 @@
                     pictureCropPath: pictureCropPath,
 
                     title: topMediaDto.title,
-                    content: topMediaDto.content,
+                    subContent: topMediaDto.subContent,
 
                     score: topMediaDto.score,
-                    scoreHeadCount: topMediaDto.scoreHeadCount + "人评",
+                    likeNum:(topMediaDto.likeNum>0?topMediaDto.likeNum + "喜欢":""),
                     creatorNickName: topMediaDto.creatorNickName,
 
                     browseNum: basejs.getNumberDiff(topMediaDto.browseNum),
@@ -217,7 +217,7 @@
                     
                     var topMediaDto = data[index];
                      
-                    var essayDetailPage = "/essay-detail.html?id=" + topMediaDto.id;
+                    var essayDetailPage = "/" + topMediaDto.pageUrl;
                     essayRecommendAObj.append("<a href='" + essayDetailPage + "' title='"+topMediaDto.title+"'><span class='recommend-list-number'>" + (parseInt(index)+1)+"</span>"+topMediaDto.title + "</a>");
                 }
             },

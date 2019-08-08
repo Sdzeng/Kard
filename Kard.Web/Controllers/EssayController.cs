@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Kard.Core.Dtos;
+﻿using Kard.Core.Dtos;
 using Kard.Core.Entities;
 using Kard.Core.IRepositories;
 using Kard.Extensions;
 using Kard.Json;
-using Kard.Runtime.Security;
 using Kard.Runtime.Security.Authentication.WeChat;
 using Kard.Runtime.Session;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -18,11 +10,23 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Senparc.Weixin.MP.Containers;
 using Senparc.Weixin.MP.Helpers;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Kard.Web.Controllers
 {
@@ -33,10 +37,17 @@ namespace Kard.Web.Controllers
     public class EssayController : BaseController
     {
         private readonly IHostingEnvironment _env;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IRazorViewEngine _razorViewEngine;
+        private readonly ITempDataProvider _tempDataProvider;
         private readonly IDefaultRepository _defaultRepository;
         private readonly IConfiguration _configuration;
 
         public EssayController(IHostingEnvironment env,
+            IServiceProvider serviceProvider,
+            IRazorViewEngine razorViewEngine,
+            ITempDataProvider tempDataProvider,
+
             ILogger<EssayController> logger,
             IMemoryCache memoryCache,
             IDefaultRepository defaultRepository,
@@ -44,11 +55,19 @@ namespace Kard.Web.Controllers
             IConfiguration configuration) : base(logger, memoryCache, kardSession)
         {
             _env = env;
+            _serviceProvider = serviceProvider;
+            _razorViewEngine = razorViewEngine;
+            _tempDataProvider = tempDataProvider;
             _defaultRepository = defaultRepository;
             _configuration = configuration;
         }
 
         #region essay
+
+
+       
+
+
         /// <summary>
         /// 获取单品信息
         /// </summary>
@@ -59,19 +78,6 @@ namespace Kard.Web.Controllers
         {
             //单品信息
             var essayEntity = _defaultRepository.Essay.GetEssayDto(id, _kardSession.UserId);
-            essayEntity.Meta = Utils.ContentRegex.Replace(essayEntity.Content, "");
-            if (essayEntity.Meta.Contains("。"))
-            {
-                essayEntity.Meta = essayEntity.Meta.Split("。")[0];
-            }
-            else if (essayEntity.Meta.Contains("."))
-            {
-                essayEntity.Meta = essayEntity.Meta.Split(".")[0];
-            }
-            else if (essayEntity.Meta.Length > 15)
-            {
-                essayEntity.Meta = essayEntity.Meta.Remove(15);
-            }
 
             var resultDto = new ResultDto();
             resultDto.Result = essayEntity != null;
@@ -92,20 +98,25 @@ namespace Kard.Web.Controllers
         }
 
 
+        
+
+
         /// <summary>
         /// 获取单品信息
         /// </summary>
         /// <returns></returns>
         [HttpGet("updateinfo")]
-        public ResultDto GeUpdateInfo(long id)
+        public async Task<ResultDto> GeUpdateInfo(long id)
         {
             //单品信息
-            var essayEntity = _defaultRepository.Essay.GetEssayDto(id, _kardSession.UserId);
+            var essayEntity = await _defaultRepository.FirstOrDefaultAsync<EssayEntity>(id);
+            var essayContentEntity = _defaultRepository.FirstOrDefaultByPredicate<EssayContentEntity>(new { EssayId=id});
+            var tagList = _defaultRepository.QueryByPredicate<TagEntity>(new { EssayId = id });
             var resultDto = new ResultDto();
             resultDto.Result = essayEntity != null;
-            resultDto.Data = essayEntity;
+            resultDto.Data =new { essay = essayEntity, essayContent= essayContentEntity, tagList };
 
-            return resultDto;
+            return await Task.FromResult(resultDto);
         }
 
         ///// <summary>
@@ -209,28 +220,142 @@ namespace Kard.Web.Controllers
         //    return result;
         //}
 
-        /// <summary>
+         
+
         /// 添加纪录
         /// </summary>
         /// <param name="essayEntity"></param>
         /// <param name="tagList"></param>
         [HttpPost("add")]
-        public ResultDto<long> Add(EssayEntity essayEntity, IEnumerable<TagEntity> tagList)
+        public async Task<ResultDto<long>> Add(EssayEntity essayEntity, EssayContentEntity essayContentEntity, IEnumerable<TagEntity> tagList)
         {
             var userId = _kardSession.UserId.Value;
+
+            essayEntity.SubContent = Utils.ContentRegex.Replace(essayContentEntity.Content, "");
+            if (essayEntity.SubContent.Length > 100)
+            {
+                essayEntity.SubContent = essayEntity.SubContent.Remove(100) + "...";
+            };
+
+
             essayEntity.Location = Utils.GetCity(HttpContext, _memoryCache);
             essayEntity.Score = 6m;
             essayEntity.ScoreHeadCount = 1;
             essayEntity.AuditCreation(userId);
             tagList.AuditCreation(userId);
-            var resultDto = _defaultRepository.Essay.AddEssay(essayEntity, tagList);
+            var resultDto = _defaultRepository.Essay.AddEssay(essayEntity, essayContentEntity, tagList);
 
             if (resultDto.Result)
             {
-                string cacheKey = $"homeCover[{DateTime.Now.ToString("yyyyMMdd")}]";
-                _memoryCache.Remove(cacheKey);
+                var createHtmlResult = await CreateHtml(resultDto.Data);
+                essayEntity.PageUrl = createHtmlResult.Data;
+                await _defaultRepository.UpdateAsync(essayEntity);
+                //string cacheKey = $"homeCover[{DateTime.Now.ToString("yyyyMMdd")}]";
+                //_memoryCache.Remove(cacheKey);
             }
-            return resultDto;
+            return await Task.FromResult(resultDto);
+        }
+
+
+        private async Task<ResultDto<string>> CreateHtml(long id, string oldUrl = null)
+        {
+            //单品信息
+            var essayEntity = _defaultRepository.Essay.GetHtmlEssayDto(id);
+            essayEntity.Meta = essayEntity.SubContent;
+            if (essayEntity.Meta.Contains("。"))
+            {
+                essayEntity.Meta = essayEntity.Meta.Split("。")[0];
+            }
+            else if (essayEntity.Meta.Contains("."))
+            {
+                essayEntity.Meta = essayEntity.Meta.Split(".")[0];
+            }
+            else if (essayEntity.Meta.Length > 15)
+            {
+                essayEntity.Meta = essayEntity.Meta.Remove(15);
+            }
+
+            if (!string.IsNullOrEmpty(oldUrl))
+            {
+                var oldFile = Path.Combine(_env.WebRootPath, oldUrl);
+                if (System.IO.File.Exists(oldFile))
+                {
+                    System.IO.File.Delete(oldFile);
+                }
+
+                oldFile = Path.Combine(_env.WebRootPath, oldUrl.Replace("essay",Path.Combine("essay","m")));
+                if (System.IO.File.Exists(oldFile))
+                {
+                    System.IO.File.Delete(oldFile);
+                }
+            }
+
+            var folderPath = "essay";
+            var mfolderPath = Path.Combine("essay", "m");
+            string fileName = oldUrl.Replace(folderPath, "").Replace("\\","").Replace("/", "");// $"{DateTime.Now.ToString("MMddHHmmssffff")}.html";
+            var page=WriteViewToFileAsync("EssayDetail", essayEntity, folderPath, fileName);
+            await WriteViewToFileAsync("MEssayDetail", essayEntity, mfolderPath, fileName);
+
+            return await page;
+        }
+
+        private async Task<ResultDto<string>> WriteViewToFileAsync(string viewName, object model, string folderPath,string fileName)
+        {
+            var resultDto = new ResultDto<string> { Result = false };
+            try
+            {
+
+                var html = await RenderToStringAsync(viewName, model);
+                if (string.IsNullOrWhiteSpace(html))
+                    return resultDto;
+
+              
+            
+
+              
+                string absolutePath = Path.Combine(_env.WebRootPath, folderPath);
+            
+
+                string fullPath = Path.Combine(absolutePath, fileName);
+                if (!Directory.Exists(absolutePath))
+                {
+                    Directory.CreateDirectory(absolutePath);
+                }
+
+                System.IO.File.WriteAllText(fullPath, html, Encoding.UTF8);
+                resultDto.Result = true;
+                resultDto.Data = Path.Combine(folderPath, fileName).Replace("\\", "/");
+
+
+              
+            }
+            catch (Exception ex)
+            {
+                resultDto.Message = $"生成html静态文件失败:{ex.Message}";
+            }
+
+            return await Task.FromResult(resultDto);
+        }
+
+
+
+        /// <summary>
+        /// 渲染视图
+        /// </summary>
+        private async Task<string> RenderToStringAsync(string viewName, object model)
+        {
+            var httpContext = new DefaultHttpContext { RequestServices = _serviceProvider };
+            var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
+            using (var stringWriter = new StringWriter())
+            {
+                var viewResult = _razorViewEngine.FindView(actionContext, viewName, true);
+                if (viewResult.View == null)
+                    throw new ArgumentNullException($"未找到视图： {viewName}");
+                var viewDictionary = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary()) { Model = model };
+                var viewContext = new ViewContext(actionContext, viewResult.View, viewDictionary, new TempDataDictionary(actionContext.HttpContext, _tempDataProvider), stringWriter, new HtmlHelperOptions());
+                await viewResult.View.RenderAsync(viewContext);
+                return stringWriter.ToString();
+            }
         }
 
 
@@ -240,9 +365,10 @@ namespace Kard.Web.Controllers
         /// 修改纪录
         /// </summary>
         /// <param name="essayEntity"></param>
+        /// <param name="essayContentEntity"></param>
         /// <param name="tagList"></param>
         [HttpPost("update")]
-        public ResultDto Update(EssayEntity essayEntity, IEnumerable<TagEntity> tagList)
+        public async Task<ResultDto> Update(EssayEntity essayEntity, EssayContentEntity essayContentEntity, IEnumerable<TagEntity> tagList)
         {
             var resultDto = new ResultDto();
             var userId = _kardSession.UserId.Value;
@@ -274,16 +400,27 @@ namespace Kard.Web.Controllers
             entity.CoverPath = essayEntity.CoverPath;
             entity.CoverExtension = essayEntity.CoverExtension;
             entity.Category = essayEntity.Category;
-            entity.Content = essayEntity.Content;
-            essayEntity.Location = Utils.GetCity(HttpContext, _memoryCache);
+            entity.IsPublish = essayEntity.IsPublish;
 
+            entity.SubContent = Utils.ContentRegex.Replace(essayContentEntity.Content, "");
+            if (entity.SubContent.Length > 100)
+            {
+                entity.SubContent = entity.SubContent.Remove(100) + "...";
+            };
+
+             
+            essayEntity.Location = Utils.GetCity(HttpContext, _memoryCache);
+         
             entity.AuditLastModification(userId);
             tagList.AuditCreation(userId);
 
-            var result = _defaultRepository.Essay.UpdateEssay(entity, tagList);
+            var result = _defaultRepository.Essay.UpdateEssay(entity, essayContentEntity, tagList);
 
             if (result)
             {
+                var createHtmlResult = await CreateHtml(entity.Id, entity.PageUrl);
+                entity.PageUrl = createHtmlResult.Data;
+                await _defaultRepository.UpdateAsync(entity);
                 resultDto.Result = true;
                 resultDto.Message = "修改成功";
                 string cacheKey = $"homeCover[{DateTime.Now.ToString("yyyyMMdd")}]";
@@ -294,7 +431,7 @@ namespace Kard.Web.Controllers
                 resultDto.Result = false;
                 resultDto.Message = "修改失败";
             }
-            return resultDto;
+            return await Task.FromResult(resultDto);
         }
 
         /// <summary>
@@ -303,12 +440,12 @@ namespace Kard.Web.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("similarlist")]
-        public ResultDto<IEnumerable<EssayEntity>> GetEssaySimilarList(long essayId)
+        public async Task<ResultDto<IEnumerable<EssayEntity>>> GetEssaySimilarList(long essayId)
         {
             var resultDto = new ResultDto<IEnumerable<EssayEntity>>();
             resultDto.Result = true;
             resultDto.Data = _defaultRepository.Essay.GetEssaySimilarList(essayId);
-            return resultDto;
+            return await Task.FromResult(resultDto);
         }
 
 
@@ -318,12 +455,12 @@ namespace Kard.Web.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("otherlist")]
-        public ResultDto<IEnumerable<EssayEntity>> GetEssayOtherList(long essayId)
+        public async Task<ResultDto<IEnumerable<EssayEntity>>> GetEssayOtherList(long essayId)
         {
             var resultDto = new ResultDto<IEnumerable<EssayEntity>>();
             resultDto.Result = true;
             resultDto.Data = _defaultRepository.Essay.GetEssayOtherList(essayId);
-            return resultDto;
+            return await Task.FromResult(resultDto);
         }
 
         #endregion
@@ -336,9 +473,9 @@ namespace Kard.Web.Controllers
         /// <param name="essayId"></param>
         /// <returns></returns>
         [HttpPost("like")]
-        public ResultDto Like(long essayId)
+        public async Task<ResultDto> Like(long essayId)
         {
-            return _defaultRepository.EssayLike.ChangeEssayLike(_kardSession.UserId.Value, essayId);
+            return await Task.FromResult(_defaultRepository.EssayLike.ChangeEssayLike(_kardSession.UserId.Value, essayId));
         }
 
         /// <summary>
@@ -348,12 +485,12 @@ namespace Kard.Web.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("likelist")]
-        public ResultDto<IEnumerable<EssayLikeDto>> GetLikeList(long essayId)
+        public async Task<ResultDto<IEnumerable<EssayLikeDto>>> GetLikeList(long essayId)
         {
             var resultDto = new ResultDto<IEnumerable<EssayLikeDto>>();
             resultDto.Result = true;
             resultDto.Data = _defaultRepository.EssayLike.GetEssayLikeList(essayId);
-            return resultDto;
+            return await Task.FromResult(resultDto);
         }
 
         /// <summary>
@@ -364,7 +501,7 @@ namespace Kard.Web.Controllers
         /// <param name="parentId"></param>
         /// <returns></returns>
         [HttpPost("addcomment")]
-        public ResultDto AddComment(long essayId, string content, long? parentId)
+        public async Task<ResultDto> AddComment(long essayId, string content, long? parentId)
         {
             var resultDto = new ResultDto();
             var essayComment = new EssayCommentEntity
@@ -376,7 +513,7 @@ namespace Kard.Web.Controllers
 
             essayComment.AuditCreation(_kardSession.UserId.Value);
             resultDto.Result = _defaultRepository.CreateAndGetId<EssayCommentEntity, long>(essayComment).Result;
-            return resultDto;
+            return await Task.FromResult(resultDto);
         }
 
         /// <summary>
@@ -386,7 +523,7 @@ namespace Kard.Web.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("commentlist")]
-        public ResultDto<IEnumerable<EssayCommentDto>> GetCommentList(long essayId)
+        public async Task<ResultDto<IEnumerable<EssayCommentDto>>> GetCommentList(long essayId)
         {
             var essayCommentList = _defaultRepository.EssayComment.GetEssayCommentList(essayId) ?? new List<EssayCommentDto>();
             var pageCommentList = essayCommentList.Where((item, index) => index < 10);
@@ -394,7 +531,7 @@ namespace Kard.Web.Controllers
             var resultDto = new ResultDto<IEnumerable<EssayCommentDto>>();
             resultDto.Result = true;
             resultDto.Data = AppendChild(pageCommentList, essayCommentList);
-            return resultDto;
+            return await Task.FromResult(resultDto);
         }
 
         private IEnumerable<EssayCommentDto> AppendChild(IEnumerable<EssayCommentDto> childList, IEnumerable<EssayCommentDto> commentList)
@@ -416,7 +553,7 @@ namespace Kard.Web.Controllers
         /// </summary>
         [AllowAnonymous]
         [HttpPost("jssdk")]
-        public async Task<ResultDto> JsSdkAsync(string url)
+        public async Task<ResultDto> JsSdk(string url)
         {
             var configSection = _configuration.GetSection("AppSetting:WeChat:Web");
             //获取时间戳
@@ -444,7 +581,7 @@ namespace Kard.Web.Controllers
             };
 
             _logger.LogDebug(Serialize.ToJson(new { url, appId, jsTicket, timestamp, nonceStr, signature }));
-            return resultDto;
+            return await Task.FromResult(resultDto);
         }
 
 
@@ -455,36 +592,36 @@ namespace Kard.Web.Controllers
         /// 测试
         /// </summary>
         /// <param name="connNum"></param>
-        /// <returns></returns>
-        [HttpGet("test")]
-        public async Task<ResultDto<string>> TestAsync(long? connNum = 10)
-        {
-            var milliseconds = await RunTask(connNum);
-            _logger.LogDebug($"耗时：{milliseconds}ms");
-            return new ResultDto<string>() { Result = true, Data = $"耗时：{milliseconds}ms" };
-        }
+        ///// <returns></returns>
+        //[HttpGet("test")]
+        //public async Task<ResultDto<string>> Test(long? connNum = 10)
+        //{
+        //    var milliseconds = await RunTask(connNum);
+        //    _logger.LogDebug($"耗时：{milliseconds}ms");
+        //    return new ResultDto<string>() { Result = true, Data = $"耗时：{milliseconds}ms" };
+        //}
 
-        private async Task<long> RunTask(long? taskNum)
-        {
-            var taskList = new List<Task<long>>();
-            for (int i = 0; i < taskNum; i++)
-            {
-                taskList.Add(Task.Run(() =>
-                {
-                    Stopwatch sw = new Stopwatch();
-                    sw.Start();
-                    for (int j = 0; j < taskNum; j++)
-                    {
-                        Like(taskNum.Value);
-                    }
-                    sw.Stop();
-                    return sw.ElapsedMilliseconds;
-                }));
-            }
+        //private async Task<long> RunTask(long? taskNum)
+        //{
+        //    var taskList = new List<Task<long>>();
+        //    for (int i = 0; i < taskNum; i++)
+        //    {
+        //        taskList.Add(Task.RunAsync(() =>
+        //        {
+        //            Stopwatch sw = new Stopwatch();
+        //            sw.Start();
+        //            for (int j = 0; j < taskNum; j++)
+        //            {
+        //               await Like(taskNum.Value);
+        //            }
+        //            sw.Stop();
+        //            return sw.ElapsedMilliseconds;
+        //        }));
+        //    }
 
-            var result = await Task.WhenAll(taskList);
-            return (result.Sum() / (taskNum.Value * taskNum.Value));
-        }
+        //    var result = await Task.WhenAll(taskList);
+        //    return (result.Sum() / (taskNum.Value * taskNum.Value));
+        //}
 
 
         ///// <summary>

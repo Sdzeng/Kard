@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="icon" href="/image/logo-tab_16x16.ico" sizes="16x16">
-    <!-- <link rel="stylesheet" href="/css/kard.css" type="text/css" media="screen"> -->
+    <link rel="stylesheet" href="/css/kard.css" type="text/css" media="screen">
     <!--<link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/font-awesome.min.css">
     <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/froala_editor.min.css" type="text/css" media="screen">
     <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/froala_style.min.css" type="text/css" media="screen">
@@ -19,9 +19,19 @@
     <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/plugins/video.css">
     <link rel="stylesheet" href="/plugins/froala_editor_2.8.4/css/codemirror.min.css">-->
 
-    <link rel="stylesheet/less" href="/less/kard.less" type="text/css" media="screen">
-    <script type="text/javascript" src="/js/less.js?v=1.0.0"></script>
+    <!-- <link rel="stylesheet/less" href="/less/kard.less" type="text/css" media="screen">
+    <script type="text/javascript" src="/js/less.js?v=1.0.0"></script> -->
 
+    
+    <script>
+            var _hmt = _hmt || [];
+            (function() {
+              var hm = document.createElement("script");
+              hm.src = "https://hm.baidu.com/hm.js?859279995ee2971ae63f27a948d9f465";
+              var s = document.getElementsByTagName("script")[0]; 
+              s.parentNode.insertBefore(hm, s);
+            })();
+     </script>
 
 </head>
 
@@ -37,7 +47,7 @@
         </div>
         <div class="navbar-right">
             <ul class="navbar-nav">
-                <li id="authBtns1"><a href="login.html" target="_self">登陆</a>|<a href="register.html"
+                <li id="authBtns1"><a href="/login.html" target="_self">登陆</a>|<a href="/register.html"
                         target="_self">注册</a></li>
                 <li id="authBtns2"><a id="btnLogout">退出</a></li>
                 <!-- <li><a id="btnTest">测试登陆状态</a></li> -->
@@ -115,7 +125,7 @@
                     <li data-opt="comment">评论</li>
                     <li data-opt="fans">粉丝</li>
                     <li data-opt="follow">关注</li>
-                    <li data-opt="follow">设置</li>
+                    <li data-opt="setting">设置</li>
                 </ul>
             </div>
         </div>
@@ -124,11 +134,7 @@
             <div id="my-content" class="my-content">
 
             </div>
-            <!-- <div id="my-essay-c">
-                <div class="add-isay"><a href="editor.html">+</a></div>
-
-
-            </div> -->
+           
 
 
             <div class="go-to-top" style="display: block;">
