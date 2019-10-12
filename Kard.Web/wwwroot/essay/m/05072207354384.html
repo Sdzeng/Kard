@@ -1,0 +1,130 @@
+﻿
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit" />
+    <meta name="keywords"
+          content="人工智能,AI,核心技术,开发者,博客园,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,技术社区,技术" />
+    <meta name="description"
+          content="核心技术是一个面向开发者的知识分享社区，致力并专注于为开发者打造一个纯净的技术交流社区，推动并帮助开发者通过互联网分享知识，从而让更多开发者从中受益。核心技术的使命是帮助开发者用人工智能代码改变世界。" />
+    <meta name="author" content="Bit" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <meta property="og:description" content="有园友在博问中提了这样一个问题——.NETCore中文等非英文文字html编码输出问题，到我们的ASP.NETCore项目中一看，也是同样的问题" />
+    <title>依赖注入的威力，.NET Core的魅力：解决MVC视图中的中文被html编码的问题-馆花-核心技术</title>
+
+
+    <link rel="stylesheet" href="../plugins/tinymce/js/tinymce/skins/ui/oxide/content.min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="../plugins/tinymce/js/tinymce/css/codepen.min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="../css/m-kard.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="../css/tinymce_editor.css" type="text/css" media="screen">
+
+
+    <!-- <link rel="stylesheet/less" href="../less/m-kard.less" type="text/css" media="screen">
+    <script type="text/javascript" src="../js/less.js?v=1.0.0"></script> -->
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?859279995ee2971ae63f27a948d9f465";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+</head>
+<body id="mEssayDetailPage" class="">
+
+    <div class="essay-detail-info">
+        <div class="essay-detail-title"></div>
+
+        <div class="essay-min-author">
+            <div class="essay-min-author-left">
+                <div class="essay-min-author-avatar"><img class='lazy' src='../image/default-avatar.jpg' data-initpic="user/18/avatar.jpg?v=011108193042" data-original=''>馆花</div>
+                <div class="essay-min-author-txt">
+                    <div class="essay-min-author-txt-name"></div>
+                    <div class="essay-min-author-txt-introduction"><span data-creationtime="2019/5/7 8:17:48">发布</span> <span class="browse-num">阅读</span><span class="essay-score"> 分</span> </div>
+                </div>
+            </div>
+
+
+            <div class="essay-min-author-right">
+                <span>关注</span>
+            </div>
+        </div>
+
+        <!--<div class="essay-detail-tag"></div>-->
+        <div class="ckeditor-data essay-detail-content">   <p>有园友在博问中提了这样一个问题 ——&nbsp;<a href="https://q.cnblogs.com/q/86078/" data-mce-href="https://q.cnblogs.com/q/86078/">.NET Core 中文等非英文文字html编码输出问题</a>，到我们的 ASP.NET Core 项目中一看，也是同样的问题。</p><p>比如下面的Razor视图代码：</p><div class="cnblogs_code"><pre class="language-csharp" contenteditable="false">@<span class="token punctuation">{</span>
+    ViewBag<span class="token punctuation">.</span>Title <span class="token operator">=</span> <span class="token string">"代码改变世界"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token operator">&lt;</span>title<span class="token operator">&gt;</span>@ViewBag<span class="token punctuation">.</span>Title<span class="token operator">&lt;</span><span class="token operator">/</span>title<span class="token operator">&gt;</span></pre></div><p>输出的html代码变成了：</p><div class="cnblogs_code"><pre class="language-csharp" contenteditable="false"><span class="token operator">&lt;</span>title<span class="token operator">&gt;</span><span class="token operator">&amp;</span>#x4EE3<span class="token punctuation">;</span><span class="token operator">&amp;</span>#x7801<span class="token punctuation">;</span><span class="token operator">&amp;</span>#x6539<span class="token punctuation">;</span><span class="token operator">&amp;</span>#x53D8<span class="token punctuation">;</span><span class="token operator">&amp;</span>#x4E16<span class="token punctuation">;</span><span class="token operator">&amp;</span>#x754C<span class="token punctuation">;</span><span class="token operator">&lt;</span><span class="token operator">/</span>title<span class="token operator">&gt;</span></pre></div><p>上面的&nbsp;<span class="cnblogs_code">@ViewBag.Title</span>&nbsp;实际上等同于下面的代码：</p><div class="cnblogs_code"><pre class="language-csharp" contenteditable="false">@Html<span class="token punctuation">.</span><span class="token function">Raw</span><span class="token punctuation">(</span>Html<span class="token punctuation">.</span><span class="token function">Encode</span><span class="token punctuation">(</span>ViewBag<span class="token punctuation">.</span>Title<span class="token punctuation">)</span><span class="token punctuation">)</span></pre></div><p>所以解决这个问题需要从ASP.NET Core MVC中的HtmlHelper下手（上面代码中Html的类型就是HtmlHelper）。</p><p>从GitHub上签出MVC的源代码看看HtmlHelper.Encode()的实现：</p><div class="cnblogs_code"><pre class="language-csharp" contenteditable="false"><span class="token keyword">private</span> <span class="token keyword">readonly</span> IHtmlGenerator _htmlGenerator<span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">Encode</span><span class="token punctuation">(</span><span class="token keyword">string</span> <span class="token keyword">value</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">return</span> _htmlGenerator<span class="token punctuation">.</span><span class="token function">Encode</span><span class="token punctuation">(</span><span class="token keyword">value</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></pre></div><p>实际调用的是IHtmlGenerator接口的Encode()方法，MVC中实现这个接口的是DefaultHtmlGenerator，其对应的Encode()实现代码如下：</p><div class="cnblogs_code"><pre class="language-csharp" contenteditable="false"><span class="token keyword">private</span> <span class="token keyword">readonly</span> HtmlEncoder _htmlEncoder<span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">Encode</span><span class="token punctuation">(</span><span class="token keyword">string</span> <span class="token keyword">value</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token operator">!</span><span class="token keyword">string</span><span class="token punctuation">.</span><span class="token function">IsNullOrEmpty</span><span class="token punctuation">(</span><span class="token keyword">value</span><span class="token punctuation">)</span> <span class="token operator">?</span> _htmlEncoder<span class="token punctuation">.</span><span class="token function">Encode</span><span class="token punctuation">(</span><span class="token keyword">value</span><span class="token punctuation">)</span> <span class="token punctuation">:</span> <span class="token keyword">string</span><span class="token punctuation">.</span>Empty<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></pre></div><p>原来真正干活的主角是HtmlEncoder，但它不是在MVC中实现的，而是在.NET Core Framework中实现的，命名空间是&nbsp;<a href="https://github.com/dotnet/corefx/tree/master/src/System.Text.Encodings.Web" target="_blank" rel="noopener" data-mce-href="https://github.com/dotnet/corefx/tree/master/src/System.Text.Encodings.Web">System.Text.Encodings.Web</a>&nbsp;。</p><p>写个.NET Core控制台程序直接调用HtmlEncoder看看是不是就是它惹的祸。</p><div class="cnblogs_code"><div class="cnblogs_code_toolbar"><pre class="language-csharp" contenteditable="false"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Program</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">Main</span><span class="token punctuation">(</span><span class="token keyword">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>            
+        Console<span class="token punctuation">.</span><span class="token function">WriteLine</span><span class="token punctuation">(</span>HtmlEncoder<span class="token punctuation">.</span>Default<span class="token punctuation">.</span><span class="token function">Encode</span><span class="token punctuation">(</span><span class="token string">"代码改变世界"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></pre></div></div><p>输出结果与MVC中是同样的问题。</p><p><img src="http://www.coretn.cn/user/18/media/20190507/071356103784.png" alt="" width="780" height="74" data-mce-src="http://www.coretn.cn/user/18/media/20190507/071356103784.png"></p><p>试试不用默认的HtmlEncoder实例（HtmlEncoder.Default），而是自己调用HtmlEncoder.Create()方法创建实例，这时发现了UnicodeRange参数类型。</p><div class="cnblogs_code"><pre class="language-csharp" contenteditable="false"><span class="token keyword">public</span> <span class="token keyword">static</span> HtmlEncoder <span class="token function">Create</span><span class="token punctuation">(</span><span class="token keyword">params</span> UnicodeRange<span class="token punctuation">[</span><span class="token punctuation">]</span> allowedRanges<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></div><p>当使用UnicodeRanges.All作为参数创建HtmlEncoder实例时，问题就解决了。</p><div class="cnblogs_code"><pre class="language-csharp" contenteditable="false">Console<span class="token punctuation">.</span><span class="token function">WriteLine</span><span class="token punctuation">(</span>HtmlEncoder<span class="token punctuation">.</span><span class="token function">Create</span><span class="token punctuation">(</span>UnicodeRanges<span class="token punctuation">.</span>All<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Encode</span><span class="token punctuation">(</span><span class="token string">"代码改变世界"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></div><p>紧接着从GitHub上签出System.Text.Encodings.Web的源代码，看看HtmlEncoder.Default对应的HtmlEncode实例是如何被创建的：</p><div class="cnblogs_code"><pre class="language-csharp" contenteditable="false"><span class="token keyword">internal</span> <span class="token keyword">readonly</span> <span class="token keyword">static</span> DefaultHtmlEncoder Singleton <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DefaultHtmlEncoder</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">TextEncoderSettings</span><span class="token punctuation">(</span>UnicodeRanges<span class="token punctuation">.</span>BasicLatin<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></div><p>原来用的是UnicodeRanges.BasicLatin，难怪中文会被编码，搞不懂为什么默认不用UnicodeRanges.All？</p><p>知道了问题的原因，解决起来就不难了，只要我们以HtmlEncoder.Create(UnicodeRanges.All)创建HtmlEncoder实例，并替换掉MVC中所用的默认HtmlEncoder实例。那如何替换呢？</p><p>回到MVC的源代码中，看看DefaultHtmlGenerator的实现，发现它的构造函数参数中有HtmlEncoder：</p><div class="cnblogs_code"><div class="cnblogs_code_toolbar"><pre class="language-csharp" contenteditable="false"><span class="token keyword">public</span> <span class="token function">DefaultHtmlGenerator</span><span class="token punctuation">(</span>
+    IAntiforgery antiforgery<span class="token punctuation">,</span>
+    IOptions<span class="token operator">&lt;</span>MvcViewOptions<span class="token operator">&gt;</span> optionsAccessor<span class="token punctuation">,</span>
+    IModelMetadataProvider metadataProvider<span class="token punctuation">,</span>
+    IUrlHelperFactory urlHelperFactory<span class="token punctuation">,</span>
+    HtmlEncoder htmlEncoder<span class="token punctuation">,</span>
+    ClientValidatorCache clientValidatorCache<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token punctuation">}</span></pre></div></div><p>根据.NET从上到下、由内而外全面依赖注入的秉性，这个地方应该也是依赖注入的，我们只需注入一个新的HtmlEncoder实例即可，是不是这样呢？</p><p>码上一行，你就知道。</p><p>在 Startup.cs 的 ConfigureServices() 方法中添加下面的一行代码：</p><div class="cnblogs_code"><pre class="language-csharp" contenteditable="false">services<span class="token punctuation">.</span><span class="token function">AddSingleton</span><span class="token punctuation">(</span>HtmlEncoder<span class="token punctuation">.</span><span class="token function">Create</span><span class="token punctuation">(</span>UnicodeRanges<span class="token punctuation">.</span>All<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></div><p>运行ASP.NET Core站点，输出结果如下：</p><div class="cnblogs_code"><pre class="language-markup" contenteditable="false"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">&gt;</span></span>代码改变世界<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">&gt;</span></span></pre></div><p>一行注入，立马解决。依赖注入的威力，.NET Core的魅力。</p><p>更新1：根据&nbsp;<a id="a_comment_author_3520097" href="http://www.cnblogs.com/Ricky81317/" target="_blank" rel="noopener" data-mce-href="http://www.cnblogs.com/Ricky81317/">零度的火</a>&nbsp;的评论，更好的解决方法是</p><div class="cnblogs_code"><pre class="language-csharp" contenteditable="false">services<span class="token punctuation">.</span>Configure<span class="token operator">&lt;</span>WebEncoderOptions<span class="token operator">&gt;</span><span class="token punctuation">(</span>options <span class="token operator">=</span><span class="token operator">&gt;</span>
+<span class="token punctuation">{</span>
+      options<span class="token punctuation">.</span>TextEncoderSettings <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TextEncoderSettings</span><span class="token punctuation">(</span>UnicodeRanges<span class="token punctuation">.</span>All<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></div><p>更新2：后来发现更好的解决方法</p><div class="cnblogs_code"><pre class="language-markup" contenteditable="false">services.Configure<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>WebEncoderOptions</span><span class="token punctuation">&gt;</span></span>(options =&gt;
+    options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.BasicLatin,UnicodeRanges.CjkUnifiedIdeographs));</pre></div></div>
+
+        <div class="essay-detail-like-share"></div>
+
+
+        <div class="essay-author">
+            <div class="essay-author-avatar">
+                <img class='lazy' src='/image/default-avatar.jpg' data-original=''>
+            </div>
+            <div class="essay-author-txt">
+                <div class="essay-author-txt-name">
+                    <span>馆花</span>  <span>关注</span>
+                </div>
+                <div class="essay-author-txt-introduction">
+                    前端 | 理想工作室 | 约稿联系：632110344@qq.com
+                </div>
+            </div>
+        </div>
+
+
+        <div class="comment-list">
+            <ul class="comment-menu"><li>评论</li></ul>
+            <div class="comment-info-list"></div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+    <script type="text/javascript" src="../js/jquery-3.1.1.min.js?v=1.0.0"></script>
+    <script type="text/javascript" src="../js/jquery.lazyload.min.js?v=1.0.0"></script>
+    <script type="text/javascript" src="../js/util.js?v=1.0.0"></script>
+    <script type="text/javascript" src="../js/base.js?v=1.0.0"></script>
+    <script type="text/javascript" src="../js/m-essay-detail.js?v=1.0.1"></script>
+
+</body>
+</html>

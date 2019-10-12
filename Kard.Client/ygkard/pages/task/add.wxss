@@ -1,0 +1,251 @@
+
+
+.section {
+  width: 100%;
+
+  background: #fff;
+  /* border-top: 2rpx solid #dfdfdf; */
+  border-bottom: 2rpx solid #dfdfdf;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20rpx;
+
+}
+
+/* .section:first-child {
+  border-top: 0;
+} */
+
+
+
+.section-row{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 120rpx;
+  border-top: 2rpx solid #dfdfdf;
+}
+
+.section-area-row{
+
+    display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+  border-top: 2rpx solid #dfdfdf;
+}
+
+.section-row-icon{
+  width: 20%;
+  text-align: center;
+  line-height: 120rpx;
+}
+
+.section-row-content{
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+
+.section-row-txt {
+  line-height: 120rpx;
+  width: 80%;
+}
+
+.section-row-switch {
+  line-height: 120rpx;
+  width: 20%;
+  text-align: center;
+}
+
+
+
+.btn-block {
+  width: 100%;
+  border-top: 2rpx solid #dfdfdf;
+
+  display: flex;
+  flex-direction: row;
+
+}
+
+.btn-block .btn-default {
+  width: 50%;
+  border-radius: 0rpx;
+}
+
+.btn-block button {
+  width: 50%;
+  border-radius: 0rpx;
+}
+
+
+.task-datetime {
+  width: 45%;
+  /* padding: 20rpx 0; */
+  display: flex;
+  flex-direction:row;
+  justify-content:flex-start;
+  
+}
+
+.task-datetime view{
+  font-size: 32rpx;
+  height: 120rpx;
+  line-height:120rpx;
+}
+
+.task-datetime #taskEndTime:before{
+   content: "到"
+}
+
+
+.task-datetime-longterm {
+  width: 45%;
+  /* padding: 20rpx 0; */
+  display: flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  
+}
+
+.task-datetime-longterm  view{
+  font-size: 30rpx;
+  height: 120rpx;
+  line-height:60rpx;
+}
+
+.task-datetime-touch {
+  color: #00c000;
+  text-shadow: 1px 2px 4px rgba(0, 192, 0, 0.16);
+}
+
+
+.task-angle {
+  width: 10%;
+  position: relative; /*方便相对于父元素进行定位*/
+}
+
+.task-angle::before, .task-angle::after {
+  content: "";
+  position: absolute; /*方便进行定位*/
+  height: 70rpx;
+  width: 2rpx;
+  background-color: #dfdfdf;
+}
+
+.task-angle::before {
+  top: -4rpx;
+  left: -16rpx; /*设置top和right使图像在20*20框中居中*/
+  transform: rotate(-30deg); /*进行旋转*/
+}
+
+.task-angle::after {
+  top: 56rpx;
+  left: -16rpx; /*设置top和right使图像在20*20框中居中*/
+  transform: rotate(30deg);
+}
+
+ 
+ 
+.task-week{
+  width: 80%;
+  padding: 25rpx 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.task-week-btn {
+  /* border: 6rpx solid #00e676; */
+  width: 70rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  text-align: center;
+  font-size: 90%;
+  border-radius: 35rpx;
+  background-color: #a5d6a7;
+  color: #fff;
+}
+
+.task-week-btn-choosed {
+  color: #fff;
+  background-color: #00c000;
+}
+
+
+
+.task-content {
+padding: 20rpx 0rpx;
+min-height: 160rpx;
+
+}
+
+.task-content-placeholder{
+
+z-index: 1;
+}
+
+
+
+ 
+
+.date-picker-dialog {
+
+  width: 80%;
+  
+  overflow: hidden;
+  position: fixed;
+  top: 25%;
+  left: 0;
+  z-index: 1001;
+  background: #f9f9f9;
+  margin: 0 10%;
+  border-radius: 12rpx;
+ 
+}
+
+
+.date_picker_view,.time_picker_view {
+  flex-grow: 1;
+
+  height: 400rpx;
+  
+  overflow: hidden;
+   border:2px solid white;
+}
+
+ 
+
+.date_picker_view_cols {
+  text-align: center;
+  line-height: 100rpx;
+}
+
+
+
+.dialog_btns {
+
+ 
+  border-top: 2rpx solid #dfdfdf;
+  z-index: 1002;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+}
+.dialog_btns view{
+  width: 50%;
+
+}
+.dialog_btns view:last-child{
+
+    border-left: 2rpx solid #eee;
+
+   
+}
+
+
+

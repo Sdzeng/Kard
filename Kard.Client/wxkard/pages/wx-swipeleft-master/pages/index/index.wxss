@@ -1,0 +1,80 @@
+/**index.wxss**/
+
+.msg-list {
+}
+
+.msg-item {
+  width: 100%;
+  height: 150rpx;
+  border-bottom: 1rpx solid rgb(233, 233, 233);
+  position: relative;
+  left:0;
+  top:0;
+  overflow: hidden;
+}
+
+.msg {
+  position: absolute;
+  width: 100%;
+  height: 150rpx;
+  left:0;
+  top:0;
+  z-index: 100;
+  background-color: #FFF;
+}
+
+.header-img {
+  position: absolute;
+  width: 110rpx;
+  height: 110rpx;
+  left: 20rpx;
+  top: 20rpx;
+  border-radius: 10%;
+}
+
+.user-name {
+  position: absolute;
+  left: 150rpx;
+  top: 20rpx;
+}
+
+.msg-text {
+  position: absolute;
+  left: 150rpx;
+  bottom: 20rpx;
+  font-size: 80%;
+  color: rgb(127, 127, 127);
+}
+
+.msg-menu {
+  position: absolute;
+  width: 100%;
+  height: 150rpx;
+  left:0;
+  top:0;
+  z-index: 0;
+}
+
+.menu-delete {
+  position: absolute;
+  width: 150rpx;
+  height: 148rpx;
+  top:1rpx;
+  right: 0;
+  background-color: rgb(255, 58, 50);
+  color:#FFF;
+  text-align: center;
+  line-height:150rpx;
+}
+
+.menu-mark {
+  position: absolute;
+  width: 200rpx;
+  height: 148rpx;
+  top:1rpx;
+  right: 150rpx;
+  background-color: rgb(200, 199, 205);
+  color:#FFF;
+  text-align: center;
+  line-height:150rpx;
+}

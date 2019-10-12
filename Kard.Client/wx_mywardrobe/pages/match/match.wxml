@@ -1,0 +1,29 @@
+<!--index.wxml-->
+<view class="container">
+
+  <view class="container-left">
+    <view class="image-view">
+      <view class="image-view-label">上装</view>
+      <image bindtap="chooseImage" data-handle="clothes" src="{{clothesImage}}" mode="aspectFill" class="image"></image>
+    </view>
+    <view class="image-view">
+      <view class="image-view-label">下装</view>
+      <image bindtap="chooseImage" data-handle="bottoms" src="{{bottomsImage}}" mode="aspectFill" class="image"></image>
+    </view>
+  </view>
+  <view class="container-right">
+    <view class="image-box-view">
+      <view class="image-view-label">配饰</view>
+      <image bindtap="chooseImage" data-handle="accessories" src="{{accessoriesImage}}" mode="aspectFill" class="image-box"></image>
+    </view>
+    <view class="image-box-view">
+      <view class="image-view-label">袜子</view>
+      <image bindtap="chooseImage" data-handle="socks" src="{{socksImage}}" mode="aspectFill" class="image-box"></image>
+    </view>
+    <view class="image-box-view">
+      <view class="image-view-label">鞋子</view>
+      <image bindtap="chooseImage" data-handle="shoe" src="{{shoeImage}}" mode="aspectFill" class="image-box"></image>
+    </view>
+    <view class="image-box-view image-save-btn" bindtap="saveMatch">保存搭配</view>
+  </view>
+</view>

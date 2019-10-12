@@ -1,0 +1,52 @@
+ 
+<view class="section month_kard_section" >
+
+  <view class="user_info_border_1">
+    <view class="user_info_border_2">
+     <view class="user_info_border_3">
+      <view class="user_info_border_4">
+        
+        <view class="user_info">
+        
+           <view class="user_info_date">{{currentDate}}{{userInfo.nickName}}</view>
+           <view class="user_info_nikename">{{currentMonth}}月 | 加油</view>
+        </view>
+       
+      </view>
+      </view>
+    </view>
+  </view>
+ 
+ 
+</view>
+
+
+<view class="section task-section">
+ 
+   
+ 
+    <!-- <icon type="download" size="30"/> -->
+    
+    <!-- <button style="margin-bottom:20px;" bindtap="add">添加任务</button> -->
+   
+    <view wx:for="{{taskArray}}" wx:key="info">
+      <view class="task_info" >
+        <view class="task_info_basic">
+          <view class="task_info_index">{{index+1}}</view> 
+          <view class="task_info_name">{{item.info}}</view>
+            
+        </view>  
+            
+        <!-- <view class="task_info_operation"><icon type="info" size="26"/><icon type="cancel" size="26"/></view> -->
+       <view class="task_info_operation">{{item.date}}</view>
+      
+      </view>
+    
+    </view>
+ 
+</view>
+ 
+
+ 
+
+ 

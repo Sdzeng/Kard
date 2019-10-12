@@ -1,0 +1,20 @@
+<!--index.wxml-->
+<view id='id-container' class="container" bindtouchstart='ontouchstart' catchtouchmove='ontouchmove' bindtouchend='ontouchend'>
+   <view class='msg-list' animation='{{msgListAnimation}}'>
+       <view wx:for="{{msgList}}" wx:key="id"  class='msg-item' animation='{{item.wrapAnimation}}'> 
+            <view id='{{item.id}}' class='msg' animation='{{item.animation}}'>
+                <image class='header-img' src="{{item.headerImg}}" ></image>
+                <text class='user-name'>{{item.userName}}</text>
+                <text class='msg-text'>{{item.msgText}}</text>
+            </view>
+            <view class='msg-menu'>
+                <view id='{{item.id}}' class='menu-delete'>
+                    删除
+                </view>
+                <view id='{{item.id}}' class='menu-mark'>
+                    标记未读
+                </view>
+            </view>
+       </view>
+   </view>
+</view>

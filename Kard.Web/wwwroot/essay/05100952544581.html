@@ -1,0 +1,295 @@
+﻿ <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title> 在ASP.NET CORE下生成PDF文档-馆花-核心技术</title>
+    <meta name="renderer" content="webkit" />
+    <meta name="keywords"
+          content="人工智能,AI,核心技术,开发者,博客园,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,技术社区,技术" />
+    <meta name="description"
+          content="核心技术是一个面向开发者的知识分享社区，致力并专注于为开发者打造一个纯净的技术交流社区，推动并帮助开发者通过互联网分享知识，从而让更多开发者从中受益。核心技术的使命是帮助开发者用人工智能代码改变世界。" />
+    <meta name="author" content="Bit" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta property="og:description" content="原文链接：https://www" />
+
+    <link rel="icon" href="/image/logo-tab_16x16.ico" sizes="16x16">
+
+    <link rel="stylesheet" href="/plugins/tinymce/js/tinymce/skins/ui/oxide/content.min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="/plugins/tinymce/js/tinymce/css/codepen.min.css" type="text/css" media="screen">
+
+        <link rel="stylesheet" href="/css/kard.css" type="text/css" media="screen">
+
+    <link rel="stylesheet" href="/css/tinymce_editor.css" type="text/css" media="screen">
+
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?859279995ee2971ae63f27a948d9f465";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+<body id="essayDetailPage">
+
+    <nav id="navbar" class="navbar bg-default navbar-bottom-shadow">
+
+        <div class="navbar-logo">
+            <a href="/"><span><img src="/image/logo-nav.png"></span></a>
+        </div>
+        <div class="navbar-left">
+            <ul id="menuList" class="navbar-nav"></ul>
+        </div>
+        <div class="navbar-right">
+            <ul class="navbar-nav">
+                <li id="authBtns1">
+                    <a href="http://www.coretn.cn/login.html" target="_self">登陆</a>|<a href="http://www.coretn.cn/register.html"
+                                                                  target="_blank">注册</a>
+                </li>
+                <li id="authBtns2"><a href="http://www.coretn.cn/user-center.html" target="_self">我的</a>|<a id="btnLogout">退出</a></li>
+                <!-- <li><a id="btnTest">测试登陆状态</a></li> -->
+            </ul>
+        </div>
+
+    </nav>
+
+    <div class="navigation">
+        <div class="navigation-link"><a href="/">首页</a>\<a href="http://www.coretn.cn/search.html?keyword=.Net core" class="category">.Net core</a></div>
+    </div>
+    <div class="essay-detail-info" data-id="135">
+
+        <div class="essay-detail-info-left">
+
+            <div class="essay-detail-title" >
+                在ASP.NET CORE下生成PDF文档
+              
+            </div>
+            <div class="essay-detail-subheading">
+
+                <div class="essay-detail-remark">
+
+                    <span><img class='lazy' src='/image/default-avatar.jpg' data-initpic="user/18/avatar.jpg?v=092122032495" data-original="">馆花</span> 
+                     <span>内网IP </span><span data-creationtime="2019/5/10 9:52:54"></span><span class="browse-num"></span> 
+
+                </div>
+                <div class="essay-detail-tag">
+
+                          <span data-tagid='548'>分享</span>
+
+                    </div>
+            </div>
+
+
+            <div class="mce-content-body essay-detail-content">
+                <p><span style="font-family: 微软雅黑; font-size: medium;" data-mce-style="font-family: 微软雅黑; font-size: medium;">原文链接：</span><a title="https://www.c-sharpcorner.com/article/creating-pdf-in-asp-net-core-mvc-using-rotativa-aspnetcore/" href="https://www.c-sharpcorner.com/article/creating-pdf-in-asp-net-core-mvc-using-rotativa-aspnetcore/" data-mce-href="https://www.c-sharpcorner.com/article/creating-pdf-in-asp-net-core-mvc-using-rotativa-aspnetcore/"><span style="font-family: 微软雅黑; font-size: medium;" data-mce-style="font-family: 微软雅黑; font-size: medium;">https://www.c-sharpcorner.com/article/creating-pdf-in-asp-net-core-mvc-using-rotativa-aspnetcore/</span></a></p><p><a href="https://images2018.cnblogs.com/blog/81754/201806/81754-20180607083119251-785067488.png" data-mce-href="https://images2018.cnblogs.com/blog/81754/201806/81754-20180607083119251-785067488.png"><span style="font-family: 微软雅黑; font-size: medium;" data-mce-style="font-family: 微软雅黑; font-size: medium;"><img title="1528265575(1)" src="http://www.coretn.cn/user/18/media/20190510/100952333747.png" alt="1528265575(1)" width="769" height="276" border="0" data-mce-src="http://www.coretn.cn/user/18/media/20190510/100952333747.png"></span></a></p><p><span style="font-family: 微软雅黑; font-size: medium;" data-mce-style="font-family: 微软雅黑; font-size: medium;">引入类库：Rotativa.AspNetCore</span></p><p><span style="font-family: 微软雅黑; font-size: medium;" data-mce-style="font-family: 微软雅黑; font-size: medium;">修改类Startup的方法Configure(IApplicationBuilder app, IHostingEnvironment env)</span></p><p><span style="font-family: 微软雅黑; font-size: medium;" data-mce-style="font-family: 微软雅黑; font-size: medium;">添加如下代码：</span></p><pre class="language-csharp" contenteditable="false">RotativaConfiguration<span class="token punctuation">.</span><span class="token function">Setup</span><span class="token punctuation">(</span>env<span class="token punctuation">)</span><span class="token punctuation">;</span></pre><p><span style="font-family: 微软雅黑; font-size: medium;" data-mce-style="font-family: 微软雅黑; font-size: medium;">调用ViewAsPdf 方法</span></p><pre class="language-csharp" contenteditable="false"><span class="token keyword">public</span> IActionResult <span class="token function">Index</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+     <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ViewAsPdf</span><span class="token punctuation">(</span><span class="token string">"Index"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></pre><p><span style="font-family: 微软雅黑; font-size: medium;" data-mce-style="font-family: 微软雅黑; font-size: medium;">zai www文件夹中添加必要的文件：</span></p><p><a href="https://images2018.cnblogs.com/blog/81754/201806/81754-20180607083120427-1290363812.png" data-mce-href="https://images2018.cnblogs.com/blog/81754/201806/81754-20180607083120427-1290363812.png"><span style="font-family: 微软雅黑; font-size: medium;" data-mce-style="font-family: 微软雅黑; font-size: medium;"><img title="1528265872(1)" src="http://www.coretn.cn/user/18/media/20190510/100952413279.png" alt="1528265872(1)" width="244" height="193" border="0" data-mce-src="http://www.coretn.cn/user/18/media/20190510/100952413279.png">﻿</span></a></p><p><span style="font-family: 微软雅黑; font-size: medium;" data-mce-style="font-family: 微软雅黑; font-size: medium;">view 内容</span></p><pre class="language-markup" contenteditable="false">@{
+     Layout = null;
+}
+
+<span class="token doctype">&lt;!DOCTYPE html&gt;</span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">&gt;</span></span>
+     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>viewport<span class="token punctuation">"</span></span> <span class="token attr-name">content</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>width<span class="token punctuation">=</span>device-width<span class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span>
+     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">&gt;</span></span>Index<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">&gt;</span></span>
+     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>header</span><span class="token punctuation">&gt;</span></span>
+         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">&gt;</span></span>Invoice<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">&gt;</span></span>
+         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>address</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>Jonathan Neal<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>101 E. Chapman Ave<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">&gt;</span></span>Orange, CA 92866<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>(800) 555-1234<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
+         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>address</span><span class="token punctuation">&gt;</span></span>
+     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>header</span><span class="token punctuation">&gt;</span></span>
+     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>article</span><span class="token punctuation">&gt;</span></span>
+         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">&gt;</span></span>Recipient<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">&gt;</span></span>
+         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>address</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>Demo Company<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">&gt;</span></span>c/o Saineshwar<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
+         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>address</span><span class="token punctuation">&gt;</span></span>
+         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>table</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>meta<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>tr</span><span class="token punctuation">&gt;</span></span>
+                 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>th</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>Invoice #<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>th</span><span class="token punctuation">&gt;</span></span>
+                 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>td</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>000001<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>td</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>tr</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>tr</span><span class="token punctuation">&gt;</span></span>
+                 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>th</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>Date<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>th</span><span class="token punctuation">&gt;</span></span>
+                 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>td</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>January 1, 2018<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>td</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>tr</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>tr</span><span class="token punctuation">&gt;</span></span>
+                 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>th</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>Amount Due<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>th</span><span class="token punctuation">&gt;</span></span>
+                 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>td</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>prefix<span class="token punctuation">"</span></span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>à¤° <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">&gt;</span></span>600.00<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>td</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>tr</span><span class="token punctuation">&gt;</span></span>
+         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>table</span><span class="token punctuation">&gt;</span></span>
+         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>table</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>inventory<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>thead</span><span class="token punctuation">&gt;</span></span>
+                 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>tr</span><span class="token punctuation">&gt;</span></span>
+                     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>th</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>Item<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>th</span><span class="token punctuation">&gt;</span></span>
+                     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>th</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>Description<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>th</span><span class="token punctuation">&gt;</span></span>
+                     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>th</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>Rate<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>th</span><span class="token punctuation">&gt;</span></span>
+                     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>th</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>Quantity<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>th</span><span class="token punctuation">&gt;</span></span>
+                     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>th</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>Price<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>th</span><span class="token punctuation">&gt;</span></span>
+                 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>tr</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>thead</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>tbody</span><span class="token punctuation">&gt;</span></span>
+                 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>tr</span><span class="token punctuation">&gt;</span></span>
+                     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>td</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>cut<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>Front End Consultation<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>td</span><span class="token punctuation">&gt;</span></span>
+                     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>td</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>Experience Review<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>td</span><span class="token punctuation">&gt;</span></span>
+                     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>td</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">data-prefix</span><span class="token punctuation">&gt;</span></span>à¤° <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>150.00<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>td</span><span class="token punctuation">&gt;</span></span>
+                     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>td</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>4<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>td</span><span class="token punctuation">&gt;</span></span>
+                     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>td</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">data-prefix</span><span class="token punctuation">&gt;</span></span>à¤° <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">&gt;</span></span>600.00<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>td</span><span class="token punctuation">&gt;</span></span>
+                 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>tr</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>tbody</span><span class="token punctuation">&gt;</span></span>
+         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>table</span><span class="token punctuation">&gt;</span></span>
+
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>table</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>balance<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>tr</span><span class="token punctuation">&gt;</span></span>
+                 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>th</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>Total<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>th</span><span class="token punctuation">&gt;</span></span>
+                 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>td</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">data-prefix</span><span class="token punctuation">&gt;</span></span>à¤° <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">&gt;</span></span>600.00<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>td</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>tr</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>tr</span><span class="token punctuation">&gt;</span></span>
+                 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>th</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>Amount Paid<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>th</span><span class="token punctuation">&gt;</span></span>
+                 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>td</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">data-prefix</span><span class="token punctuation">&gt;</span></span>à¤° <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>0.00<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>td</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>tr</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>tr</span><span class="token punctuation">&gt;</span></span>
+                 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>th</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>Balance Due<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>th</span><span class="token punctuation">&gt;</span></span>
+                 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>td</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">data-prefix</span><span class="token punctuation">&gt;</span></span>à¤° <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">&gt;</span></span>600.00<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>td</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>tr</span><span class="token punctuation">&gt;</span></span>
+         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>table</span><span class="token punctuation">&gt;</span></span>
+     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>article</span><span class="token punctuation">&gt;</span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>aside</span><span class="token punctuation">&gt;</span></span>
+         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>Additional Notes<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">&gt;</span></span>
+         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">contenteditable</span><span class="token punctuation">&gt;</span></span>
+             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>A finance charge of 1.5% will be made on unpaid balances after 30 days.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
+         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>aside</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">&gt;</span></span></pre><p><span style="font-family: 微软雅黑; font-size: medium;" data-mce-style="font-family: 微软雅黑; font-size: medium;">最终效果图：</span></p><p><a href="https://images2018.cnblogs.com/blog/81754/201806/81754-20180607083121465-1748382279.png" data-mce-href="https://images2018.cnblogs.com/blog/81754/201806/81754-20180607083121465-1748382279.png"><span style="font-family: 微软雅黑; font-size: medium;" data-mce-style="font-family: 微软雅黑; font-size: medium;"><img title="1528331432(1)" src="http://www.coretn.cn/user/18/media/20190510/100952507142.png" alt="1528331432(1)" width="900" height="428" border="0" data-mce-src="http://www.coretn.cn/user/18/media/20190510/100952507142.png"></span></a></p>
+          
+            </div>
+
+
+            <div class="essay-detail-like-share">
+            </div>
+
+            <div class="essay-author">
+                <div class="essay-author-avatar">
+                    <img class='lazy' src='/image/default-avatar.jpg' data-original=''>
+                </div>
+                <div class="essay-author-txt">
+                    <div class="essay-author-txt-name">
+                        <span>馆花</span> <span>关注</span>
+                    </div>
+                    <div class="essay-author-txt-introduction">
+                        前端 | 理想工作室 | 约稿联系：632110344@qq.com
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="essay-detail-comment-like">
+
+                <ul class="comment-like-menu">
+                    <li class="comment-like-menu-active">评论</li>
+                    <li>喜欢</li>
+                </ul>
+                <div class="comment-like-list">
+                    <div class="comment-list comment-like-content-active">
+                        <div class="comment-textarea-info">
+                            <textarea class="unify-input comment-new-textarea" id="newComment" rows="5"
+                                      placeholder="说几句..." data-parent-id=""></textarea>
+                            <div class="comment-new-btns">
+                                <span class="comment-new-overnum">0/140</span>
+                                <a class="comment-new-submit">完成</a>
+                            </div>
+                        </div>
+                        <div class="comment-info-list">
+                      
+
+                        </div>
+
+                    </div>
+                    <div class="like-list">
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="essay-detail-info-right">
+
+            <div class="essay-score">
+                <div>
+                    <div class="essay-score-num"></div>
+                    <div class="essay-score-start">
+                        <div class="big-star"></div>
+                        <div class="people-grade"></div>
+                    </div>
+                </div>
+            </div>
+
+ 
+            <div class="essay-similar">
+                <h4 class="category">相似</h4>
+                <div class="essay-similar-a">
+                </div>
+
+            </div>
+            <div class="essay-other">
+                <h4>作者其他文章</h4>
+                <div class="essay-other-a">
+              
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <div class="go-to-top" style="display: block;">
+            <a href="javascript:;" class="lnk-back-top"><span>返回页顶</span></a>
+        </div>
+
+    </div>
+
+    <footer class="min-footer">
+        <div>
+            <div>
+                <span>©Bit-版权所有</span>
+            </div>
+
+            <div>
+                <span><a target="_blank" href="">关于Bit</a></span>
+                <span><a target="_blank" href="">在Bit工作</a></span>
+                <span><a target="_blank" href="">联系我们</a></span>
+                <span><a target="_blank" href="">免责声明</a></span>
+                <span><a target="_blank" href="">帮助中心</a></span>
+                <span><a target="_blank" href="">Bit广告</a></span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 公共js -->
+    <script type="text/javascript" src="/js/jquery-3.1.1.min.js?v=1.0.0"></script>
+    <script type="text/javascript" src="/js/jquery.lazyload.min.js?v=1.0.0"></script>
+    <script type="text/javascript" src="/js/storage.js?v=1.0.0"></script>
+    <script type="text/javascript" src="/js/util.js?v=1.0.0"></script>
+    <script type="text/javascript" src="/js/base.js?v=1.0.0"></script>
+    <!-- <script type="text/javascript" src="/plugins/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
+    <script type="text/javascript" src="/plugins/tinymce/js/tinymce/tinymce.min.js"></script> -->
+
+    <script type="text/javascript" src="/js/essay-detail.js?v=1.0.0"></script>
+
+
+
+</body>
+
+</html>

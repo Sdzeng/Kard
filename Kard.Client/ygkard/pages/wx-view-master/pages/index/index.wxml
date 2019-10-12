@@ -1,0 +1,9 @@
+<!--index.wxml-->
+<view class="container">
+  <view id='id-wx-view' class='wx-view' animation='{{wxViewAnimation}}' 
+    bindtouchstart='ontouch' catchtouchmove='ontouch' bindtouchend='ontouch'>
+    <view wx:for="{{itemList}}" wx:key="id"  class='item'>
+      {{item.text}}
+    </view>
+  </view>
+</view>

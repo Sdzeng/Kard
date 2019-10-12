@@ -1,0 +1,20 @@
+1.复制github 上面的文件
+2.修改package.json
+"devDependencies": {
+   ...
+    "@ckeditor/ckeditor5-markdown-gfm": "^11.0.0"
+  },
+
+npm install
+
+或者 npm install --save-dev <package-name>
+3.修改src/ckeditor.js
+import GFMDataProcessor from '@ckeditor/ckeditor5-markdown-gfm/src/gfmdataprocessor';
+ 
+ClassicEditor.builtinPlugins = [
+...
+	GFMDataProcessor
+];
+
+4 安装yarn https://yarnpkg.com/en/docs/install#windows-stable
+执行 yarn run build

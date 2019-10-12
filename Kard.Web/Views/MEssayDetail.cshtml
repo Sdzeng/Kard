@@ -1,0 +1,102 @@
+﻿@model Kard.Core.Dtos.EssayDto
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit" />
+    <meta name="keywords"
+          content="人工智能,AI,核心技术,开发者,博客园,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,技术社区,技术" />
+    <meta name="description"
+          content="核心技术是一个面向开发者的知识分享社区，致力并专注于为开发者打造一个纯净的技术交流社区，推动并帮助开发者通过互联网分享知识，从而让更多开发者从中受益。核心技术的使命是帮助开发者用人工智能代码改变世界。" />
+    <meta name="author" content="Bit" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <meta property="og:description" content="@Model.Meta" />
+    <title>@String.Concat(Model.Title, "-", Model.KuserNickName, "-核心技术")</title>
+
+
+    <link rel="stylesheet" href="/plugins/tinymce/js/tinymce/skins/ui/oxide/content.min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="/plugins/tinymce/js/tinymce/css/codepen.min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="/css/m-kard.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="/css/tinymce_editor.css" type="text/css" media="screen">
+
+
+    <!-- <link rel="stylesheet/less" href="../less/m-kard.less" type="text/css" media="screen">
+    <script type="text/javascript" src="../js/less.js?v=1.0.0"></script> -->
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?859279995ee2971ae63f27a948d9f465";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+</head>
+<body id="mEssayDetailPage" class="">
+
+    <div class="essay-detail-info" data-id="@Model.Id">
+        <div class="essay-detail-title">@Model.Title</div>
+
+        <div class="essay-min-author">
+            <div class="essay-min-author-left">
+                <div class="essay-min-author-avatar"><img class='lazy' src='/image/default-avatar.jpg' data-initpic="@Model.KuserAvatarUrl" data-original='' />@Model.KuserNickName</div>
+                <div class="essay-min-author-txt">
+                    <div class="essay-min-author-txt-name"></div>
+                    <div class="essay-min-author-txt-introduction"><span data-creationtime="@Model.CreationTime">发布</span> <span class="browse-num">阅读</span><span class="essay-score"> 分</span> </div>
+                </div>
+            </div>
+
+
+            <div class="essay-min-author-right">
+                <span>关注</span>
+            </div>
+        </div>
+
+        <!--<div class="essay-detail-tag"></div>-->
+        <div class="ckeditor-data essay-detail-content">   @Html.Raw(Model.Content)</div>
+
+        <div class="essay-detail-like-share"></div>
+
+
+        <div class="essay-author">
+            <div class="essay-author-avatar">
+                <img class='lazy' src='/image/default-avatar.jpg' data-original=''>
+            </div>
+            <div class="essay-author-txt">
+                <div class="essay-author-txt-name">
+                    <span>@Model.KuserNickName</span>  <span>关注</span>
+                </div>
+                <div class="essay-author-txt-introduction">
+                    @Model.KuserIntroduction
+                </div>
+            </div>
+        </div>
+
+
+        <div class="comment-list">
+            <ul class="comment-menu"><li>评论</li></ul>
+            <div class="comment-info-list"></div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+    <script type="text/javascript" src="/js/jquery-3.1.1.min.js?v=1.0.0"></script>
+    <script type="text/javascript" src="/js/jquery.lazyload.min.js?v=1.0.0"></script>
+    <script type="text/javascript" src="/js/util.js?v=1.0.0"></script>
+    <script type="text/javascript" src="/js/base.js?v=1.0.0"></script>
+    <script type="text/javascript" src="/js/m-essay-detail.js?v=1.0.1"></script>
+
+</body>
+</html>
