@@ -188,7 +188,7 @@ namespace Kard.Web
             //});
             #endregion
 
-            #region cookie 鉴权方案
+            #region 认证：你是谁？
             Action<CookieAuthenticationOptions> cookieSettingAction = (o) =>
             {
                 o.Cookie.HttpOnly = true;//置为后台只读模式,前端无法通过JS来获取cookie值,可以有效的防止XXS攻击
@@ -199,14 +199,14 @@ namespace Kard.Web
                 o.ExpireTimeSpan = TimeSpan.FromDays(7);  //当HttpContext.SignInAsync的IsPersistent = true 时生效
                 //o.SessionStore = true;
             };
-            //授权后使用的session cookie名称按选择的AuthenticationScheme（授权方案）定，比如.AspNetCore.Cookies 或  .AspNetCore.WeChatApp
+            //授权后使用的session cookie名称按选择的AuthenticationScheme（认证方案）定，比如.AspNetCore.Cookies 或  .AspNetCore.WeChatApp
             //AddCookie内部调用AddScheme
-            //AddOAuth内部调用AddRemoteScheme（远程登陆） AddGoogle AddFacebook AddTwitter内部都是调用AddOAuth
+            //AddOAuth内部调用AddRemoteScheme（远程认证） AddGoogle AddFacebook AddTwitter内部都是调用AddOAuth
             services.AddAuthentication()
-            //添加登陆方案(scheme)1:web 
-           .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, cookieSettingAction)
-            //添加登陆方案(scheme)2:wechatapp 
-            .AddCookie(WeChatAppDefaults.AuthenticationScheme, cookieSettingAction);
+            //基于认证方案里的cookie认证
+           .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, cookieSettingAction);
+            ////添加认证方案(scheme)2:wechatapp 
+            //.AddCookie(WeChatAppDefaults.AuthenticationScheme, cookieSettingAction);
 
 
             //GDPR 《通用数据保护条例》（General Data Protection Regulation，简称GDPR）
@@ -218,6 +218,38 @@ namespace Kard.Web
             //    options.MinimumSameSitePolicy = SameSiteMode.None;
             //});
 
+            #endregion
+
+            #region 授权：谁能做什么？Policy-->>每个Policy对应多个Requirement(条件)-->每个Requirement对应0或1个Handler
+            //基于Scheme(认证方案)、角色的授权最终都会生成授权策略进行授权，授权策略本质上就是对Claims的一系列断言。
+            // [Authorize(Roles = "admin")] 等同于下
+
+            services.AddAuthorization(options =>
+            {
+
+                //同一个策略的上一个Handler（对应Requirement）明确表示验证失败后，是否继续执行下一个Handler,默认true
+                options.InvokeHandlersAfterFailure = false;
+                //策略授权
+                options.AddPolicy("AdminPolicy", policy => policy.RequireRole("admin"));
+
+                //每个策略下包含多个Requirement条件,每个Requirement对应0或1个Handler,
+                //Handler里没有明确表示  context.Fail()或  context.Succeed(requirement),则授权失败；
+                //Handler只要有一个context.Fail()则授权失败；
+                //Handler里没有明确表示  context.Fail(),只要有context.Succeed(requirement)就成功；
+                //Handler里没有
+                //一个Authorize or Policy为一个策略
+            });
+            // [Authorize("AdminPolicy")] 
+
+            //InvokeHandlersAfterFailure作用（一个Policy的handlers）
+            //foreach (var handler in handlers)
+            //{
+            //    await handler.HandleAsync(authContext);
+            //    if (!_options.InvokeHandlersAfterFailure && authContext.HasFailed)
+            //    {
+            //        break;
+            //    }
+            //}
             #endregion
 
             #region 静态资源压缩

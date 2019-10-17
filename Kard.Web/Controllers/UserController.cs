@@ -21,8 +21,10 @@ using System.Web;
 
 namespace Kard.Web.Controllers
 {
-    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-    [Authorize(AuthenticationSchemes = WeChatAppDefaults.AuthenticationScheme)]
+    //基于Scheme(认证方案)的授权
+    [Authorize(AuthenticationSchemes = $"{CookieAuthenticationDefaults.AuthenticationScheme},{WeChatAppDefaults.AuthenticationScheme}")]
+    //基于策略的授权
+    [Authorize("AdminPolicy")]
     [Produces("application/json")]
     [Route("user")]
     public class UserController : BaseController
