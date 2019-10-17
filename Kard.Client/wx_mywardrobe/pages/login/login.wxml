@@ -1,0 +1,10 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="userinfo">
+    <button  open-type="getUserInfo" bindgetuserinfo="wxlogin"> 微信登陆 </button>
+    <button  open-type="getUserInfo" bindgetuserinfo="wxlogin"> 邮箱登陆 </button>
+  </view>
+  <view class="usermotto">
+    
+  </view>
+</view>

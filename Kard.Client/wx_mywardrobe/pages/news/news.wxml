@@ -1,0 +1,22 @@
+<view class="container">
+  <view wx:if="{{chooseImage}}">
+    <view bindtap="chooseImage" class="img-btn">
+      <image src="{{cameraPath}}" mode="aspectFill" class="img"></image>
+    </view>
+    <view class="img-tip">宝贝拍张照</view>
+  </view>
+  <view wx:else class="show-news">
+    <image src="{{image}}" bindtap="chooseImage" mode="aspectFill" class="newsPicture"></image>
+
+    <view class="category_btns">
+      <view class="category_btn" hover-class="category_btn_touch" hover-start-time="{{20}}" bindtap="btnAdd">上装</view>
+      <view class="category_btn" hover-class="category_btn_touch" hover-start-time="{{20}}" bindtap="btnSearch">裤装</view>
+      <view class="category_btn" hover-class="category_btn_touch" hover-start-time="{{20}}" bindtap="btnPin">裙装</view>
+      <view class="category_btn" hover-class="category_btn_touch" hover-start-time="{{20}}" bindtap='setting'>鞋靴</view>
+       <view class="category_btn" hover-class="category_btn_touch" hover-start-time="{{20}}" bindtap="btnAdd">上装</view>
+      <view class="category_btn" hover-class="category_btn_touch" hover-start-time="{{20}}" bindtap="btnSearch">裤装</view>
+      <view class="category_btn" hover-class="category_btn_touch" hover-start-time="{{20}}" bindtap="btnPin">裙装</view>
+      <view class="category_btn" hover-class="category_btn_touch" hover-start-time="{{20}}" bindtap='setting'>鞋靴</view>
+    </view>
+  </view>
+</view>

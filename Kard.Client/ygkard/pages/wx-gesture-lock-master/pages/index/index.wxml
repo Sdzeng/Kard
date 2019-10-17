@@ -1,0 +1,5 @@
+<!--index.wxml-->
+<view class="container">
+  <canvas disable-scroll = true canvas-id="id-gesture-lock" class="gesture-lock" bindtouchstart="onTouchStart"
+    catchtouchmove = "onTouchMove2" bindtouchmove="onTouchMove" bindtouchend="onTouchEnd"></canvas>
+</view>

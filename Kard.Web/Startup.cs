@@ -80,9 +80,10 @@ namespace Kard.Web
 
             services.AddMvc(options =>
             {
+                options.Filters.Add<GlobalAuthorizationFilter>();
+                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowSpecificOrigin"));
                 //全局异常过滤器
                 options.Filters.Add<GlobalExceptionFilter>();
-                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowSpecificOrigin"));
             });
 
             #region api文档

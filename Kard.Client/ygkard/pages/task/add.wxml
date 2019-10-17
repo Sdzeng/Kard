@@ -1,0 +1,175 @@
+<view class="page {{(showDateDialog||showTimeDialog) ? 'page-keep' : ''}}">
+  <form bindsubmit="formSubmit">
+
+    <view class="section">
+      <view class="btn-block">
+        <view class="btn-default" hover-class="btn-default-click" catchtap='formReset'>取消</view>
+        <button type="primary" style="border:0;" formType="submit">添加</button>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-row">
+        <view class="section-row-icon iconfont icon-pin"></view>
+        <view class="section-row-content">
+          <view class="section-row-txt">循环</view>
+          <view class="section-row-switch" hover-start-time="{{20}}">
+            <switch name="isLongTerm" catchchange="switchIsLongTerm" color="#a5d6a7" />
+          </view>
+        </view>
+      </view>
+
+
+
+      <view class="section-row">
+        <view class="section-row-icon iconfont icon-calendar"></view>
+
+        <view class="section-row-content">
+          <view hidden="{{!isLongTerm}}" catchtap="dateDialog" class="task-datetime-longterm" hover-class='task-datetime-touch' hover-start-time="{{20}}">
+            <view name="taskStartDate">{{startDate.year}}年{{startDate.month}}月{{startDate.day}}日</view>
+            <view name="taskEndDate">{{endDate.year}}年{{endDate.month}}月{{endDate.day}}日</view>
+          </view>
+          <view hidden="{{isLongTerm}}" catchtap="dateDialog" class="task-datetime" hover-class='task-datetime-touch' hover-start-time="{{20}}">
+            <view name="taskStartDate">{{startDate.year}}年{{startDate.month}}月{{startDate.day}}日</view>
+          </view>
+          <view class="task-angle" hover-class='task-datetime-touch'></view>
+          <view catchtap="timeDialog" class="task-datetime" hover-class='task-datetime-touch' hover-start-time="{{20}}">
+            <view name="taskStartTime">{{ startTime.hour
+              <10 ? "0"+startTime.hour :startTime.hour}}:{{ startTime.minute<10? "0"+startTime.minute:startTime.minute}}</view>
+
+                <view id="taskEndTime" name="taskEndTime">{{endTime.hour
+                  <10 ? "0"+endTime.hour :endTime.hour}}:{{endTime.minute<10? "0"+endTime.minute:endTime.minute}}</view>
+                </view>
+            </view>
+          </view>
+
+
+          <view wx:if="{{isLongTerm}}" class="section-row">
+            <view class="section-row-icon iconfont icon-process"></view>
+            <view class="section-row-content task-week">
+              <view class="task-week-btn {{item.choosed ? 'task-week-btn-choosed' : ''}}" wx:for="{{weekList}}" wx:key="index" data-idx="{{index}}" catchtap="tapWeekItem">{{item.text}}</view>
+            </view>
+          </view>
+
+
+          <view class="section-area-row">
+            <view class="section-row-icon iconfont icon-edit"></view>
+            <view class="section-row-content">
+              <textarea class="task-content" name="content" auto-height auto-focus placeholder-class="task-content-placeholder" />
+            </view>
+          </view>
+
+        </view>
+
+
+
+
+        <view class="section">
+
+          <view class="section-row">
+            <view class="section-row-icon iconfont icon-remind"></view>
+            <view class="section-row-content">
+              <view class="section-row-txt">提醒</view>
+              <view class="section-row-switch" hover-start-time="{{20}}" hover-stay-time="{{70}}">
+                <switch checked name="isRemind" color="#a5d6a7" />
+              </view>
+            </view>
+          </view>
+
+
+
+        </view>
+
+
+
+
+
+  </form>
+
+
+
+  <view wx:if="{{showDateDialog||showTimeDialog}}" class="dialog-marsk" catchtouchmove="preventTouchMove"></view>
+  <view wx:if="{{showDateDialog}}" class="date-picker-dialog">
+
+    <picker-view class="date_picker_view" indicator-style="height:50px;color:#72d55d;" value="{{dateIndexs}}" catchchange="datePickerChange">
+      <picker-view-column>
+        <view class="date_picker_view_cols" wx:for="{{startYearList}}" wx:key="*this">{{item}}</view>
+      </picker-view-column>
+      <picker-view-column>
+        <view class="date_picker_view_cols" wx:for="{{startMonthList}}" wx:key="*this">{{item
+          <10? "0"+item:item}} </view>
+      </picker-view-column>
+      <picker-view-column>
+        <view class="date_picker_view_cols" wx:for="{{startDayList}}" wx:key="*this">{{item
+          <10? "0"+item:item}} </view>
+      </picker-view-column>
+
+
+
+      <block wx:if="{{isLongTerm}}">
+        <picker-view-column>
+          <view class="date_picker_view_cols">-</view>
+        </picker-view-column>
+        <picker-view-column>
+          <view class="date_picker_view_cols" wx:for="{{endYearList}}" wx:key="*this">{{item}}</view>
+        </picker-view-column>
+        <picker-view-column>
+          <view class="date_picker_view_cols" wx:for="{{endMonthList}}" wx:key="*this">{{item
+            <10? "0"+item:item}} </view>
+        </picker-view-column>
+        <picker-view-column>
+          <view class="date_picker_view_cols" wx:for="{{endDayList}}" wx:key="*this">{{item
+            <10? "0"+item:item}} </view>
+        </picker-view-column>
+      </block>
+    </picker-view>
+
+
+    <view class="dialog_btns">
+      <view data-type="cancel" catchtap="dateDialogBtn" class="btn-default" hover-class="btn-default-click" hover-start-time="{{20}}">取消</view>
+      <view data-type="confirm" catchtap="dateDialogBtn" class="btn-confirm" hover-class="btn-confirm-click" hover-start-time="{{20}}">确定</view>
+    </view>
+
+    </view>
+
+    <view wx:if="{{showTimeDialog}}" class="date-picker-dialog">
+
+      <picker-view class="time_picker_view" indicator-style="height:50px;color:#72d55d;" value="{{timeIndexs}}" catchchange="timePickerChange">
+        <picker-view-column>
+          <view class="date_picker_view_cols" wx:for="{{startHourList}}" wx:key="*this">{{item
+            <10? "0"+item:item}}时</view>
+        </picker-view-column>
+        <picker-view-column>
+          <view class="date_picker_view_cols" wx:for="{{startMinuteList}}" wx:key="*this">{{item
+            <10? "0"+item:item}}分</view>
+        </picker-view-column>
+
+
+        <picker-view-column>
+          <view class="date_picker_view_cols">-</view>
+        </picker-view-column>
+
+        <picker-view-column>
+          <view class="date_picker_view_cols" wx:for="{{endHourList}}" wx:key="*this">{{item
+            <10? "0"+item:item}}时</view>
+        </picker-view-column>
+        <picker-view-column>
+          <view class="date_picker_view_cols" wx:for="{{endMinuteList}}" wx:key="*this">{{item
+            <10? "0"+item:item}}分</view>
+        </picker-view-column>
+
+      </picker-view>
+
+
+      <view class="dialog_btns">
+        <view data-type="cancel" catchtap="timeDialogBtn" class="btn-default" hover-class="btn-default-click" hover-start-time="{{20}}">取消</view>
+        <view data-type="confirm" catchtap="timeDialogBtn" class="btn-confirm" hover-class="btn-confirm-click" hover-start-time="{{20}}">确定</view>
+      </view>
+
+      </view>
+
+
+
+
+
+      </view>

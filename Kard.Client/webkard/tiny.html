@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+
+</head>
+
+<body>
+    <div id="good">Next, use our Get Started docs to setup Tiny!</div>
+
+    <!-- 公共js -->
+    <script type="text/javascript" src="/js/jquery-3.1.1.min.js?v=1.0.0"></script>
+    <script type="text/javascript" src="/js/base.js?v=1.0.0"></script>
+    <script type="text/javascript" src="/plugins/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
+    <script type="text/javascript" src="/plugins/tinymce/js/tinymce/tinymce.min.js"></script>
+    <script>tinymce.init({
+            selector: '#good',
+            language: 'zh_CN',
+            // plugins: 'print preview fullpage powerpaste searchreplace autolink directionality advcode visualblocks visualchars fullscreen image link media mediaembed template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount tinymcespellchecker a11ychecker imagetools textpattern help formatpainter permanentpen pageembed tinycomments mentions linkchecker', 
+            // toolbar: 'formatselect | bold italic strikethrough forecolor backcolor permanentpen formatpainter | link image media pageembed | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat | addcomment',
+            plugins: 'print autoresize preview fullpage paste searchreplace autolink directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking emoticons anchor toc insertdatetime advlist lists wordcount  imagetools textpattern help textcolor colorpicker link',
+            toolbar: 'formatselect | bold italic strikethrough forecolor backcolor permanentpen formatpainter | link image media pagebreak | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent | removeformat ',
+            automatic_uploads: true,
+            // images_upload_url: basejs.requestDomain + "/common/uploadfile",
+            // images_upload_credentials: true,
+            //images_upload_base_path: basejs.requestDomain,
+            automatic_uploads: true,
+            images_upload_handler: function (blobInfo, success, failure) {
+                const formData = new FormData();
+                formData.append('flie', blobInfo.blob());
+
+                var helper = new httpHelper({
+                    url: basejs.requestDomain + "/common/uploadfile",
+                    type: 'POST',
+                    async: false,
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (resultDto) {
+
+                        if (resultDto.result) {
+                            success(resultDto.data.url);
+                        }
+                        else {
+                            failure(resultDto.message);
+                        }
+                    }
+                });
+
+
+                helper.send();
+
+
+
+            },
+            templates: [
+                { title: 'Test template 1', content: 'Test 1' },
+                { title: 'Test template 2', content: 'Test 2' }
+            ],
+
+            content_css: [
+
+                '/plugins/tinymce/js/tinymce/css/codepen.min.css'
+            ],
+            content_style: [
+                'body{ padding:30px; margin:auto;font-size:16px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; line-height:1.3; letter-spacing: -0.03em;color:#222} h1,h2,h3,h4,h5,h6 {font-weight:400;margin-top:1.2em} h1 {} h2{} .tiny-table {width:100%; border-collapse: collapse;} .tiny-table td, th {border: 1px solid #555D66; padding:10px; text-align:left;font-size:16px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; line-height:1.6;} .tiny-table th {background-color:#E2E4E7}'
+            ],
+            visual_table_class: 'tiny-table'
+        });</script>
+</body>
+
+</html>
