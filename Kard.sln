@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kard.Web", "Kard.Web\Kard.Web.csproj", "{E367A798-6505-4C83-B46C-D597993512BB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kard.Core", "Kard.Core\Kard.Core.csproj", "{E6528D36-4647-453B-920C-3B59DF2CEE02}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kard", "Kard\Kard.csproj", "{E7E21DCF-FB40-41F9-A8E5-414411230D8C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kard.Dapper.Mysql", "Kard.Dapper.Mysql\Kard.Dapper.Mysql.csproj", "{17A4D241-870F-4C25-B09F-9125535B126E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kard.Web", "Kard.Web\Kard.Web.csproj", "{217DEE6B-5C17-451C-A149-9968CE206783}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E367A798-6505-4C83-B46C-D597993512BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E367A798-6505-4C83-B46C-D597993512BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E367A798-6505-4C83-B46C-D597993512BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E367A798-6505-4C83-B46C-D597993512BB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E6528D36-4647-453B-920C-3B59DF2CEE02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E6528D36-4647-453B-920C-3B59DF2CEE02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6528D36-4647-453B-920C-3B59DF2CEE02}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{17A4D241-870F-4C25-B09F-9125535B126E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17A4D241-870F-4C25-B09F-9125535B126E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17A4D241-870F-4C25-B09F-9125535B126E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{217DEE6B-5C17-451C-A149-9968CE206783}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{217DEE6B-5C17-451C-A149-9968CE206783}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{217DEE6B-5C17-451C-A149-9968CE206783}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{217DEE6B-5C17-451C-A149-9968CE206783}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
