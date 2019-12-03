@@ -17,15 +17,6 @@
     <!--<link rel="stylesheet/less" href="/less/kard.less" type="text/css" media="screen">
     <script type="text/javascript" src="/js/less.js?v=1.0.0"></script>-->
 
-    <script>
-            var _hmt = _hmt || [];
-            (function() {
-              var hm = document.createElement("script");
-              hm.src = "https://hm.baidu.com/hm.js?859279995ee2971ae63f27a948d9f465";
-              var s = document.getElementsByTagName("script")[0]; 
-              s.parentNode.insertBefore(hm, s);
-            })();
-     </script>
 </head>
 <body id="loginPage">
 
@@ -55,7 +46,6 @@
                 <div><label for="password">密码</label><input id="password" name="password" class="unify-input" type="password" /></div>
                 <div><span><input id="remember" name="remember" class="unify-input" type="checkbox" checked="checked" /><label for="remember">记住我</label></span> <span><a href="">忘记密码了</a></span></div>
                 <div><input type="submit" value="登陆" /> </div>
-                <div><input name="loginType" value="accountLogin" type="hidden" />  </div>
             </form>
             <form id="phoneLogin" class="login-form">
                 <div id="showAccountLogin">账号密码登陆</div>
@@ -68,7 +58,7 @@
         <div class="goto-register-info">
             <div>还没有核心技术帐号？<a href="/register.html">立即注册</a></div>
             <div>第三方登陆：微信</div>
-            <div><div></div></div>
+            <div><div id="login_qr"></div></div>
         </div>
     </div>
     <footer class="min-footer">
@@ -89,11 +79,24 @@
     </footer>
     <!-- 公共js -->
     <script type="text/javascript" src="/js/jquery-3.1.1.min.js?v=1.0.0"></script>
+    <script type="text/javascript" src="https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
     <script type="text/javascript" src="/js/storage.js?v=1.0.0"></script>
     <script type="text/javascript" src="/js/base.js?v=1.0.0"></script>
 
     <script type="text/javascript" src="/js/login.js?v=1.0.0"></script>
 
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?859279995ee2971ae63f27a948d9f465";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+ 
+    </script>
 
 
 </body>

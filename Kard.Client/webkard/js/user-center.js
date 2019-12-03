@@ -58,7 +58,7 @@
         },
         essay:  ("<div class='result-warp essay-warp'>"+
         "<div class='result-info' style='width:890px;'>" +
-        "<div class='essay-header'><a class='essay-title' href='#{essayDetailPage}'>#{essayTitle}</a> <a href='/editor.html?id=#{essayId}' class='essay-edit'>编辑</a></div>" +
+        "<div class='essay-header'><a class='essay-title' href='#{essayDetailPage}'>#{essayTitle}</a> <a href='/editor.html?id=#{essayId}' class='essay-edit'>编辑</a><a data-id=#{essayId} class='essay-delete'>删除</a></div>" +
         "<div class='essay-content'><a  href='#{essayDetailPage}'>#{essaySubContent}</a></div>" +
         "<div class='essay-footer'>" +
         "<span>#{isPublish}</span> "+
@@ -424,6 +424,30 @@
                 }
 
                 $("#my-content", _this.data.scope).append(essayHtml);
+                $(".essay-delete",_this.data.scope).click(function(){
+                    var essayDiv = $(this).parent().parent().parent();
+                    var essayId = $(this).attr("data-id");
+                    var helper = new httpHelper({
+                        url: basejs.requestDomain + "/essay/delete",
+                        type: 'POST',
+                        data: {
+                            id:essayId
+                        },
+                        success: function (resultDto) {
+                            if (resultDto.result) {
+                                essayDiv.remove()
+                            }
+                            else {
+                                $(this).text(resultDto.message);
+                            }
+            
+                        }
+                    });
+            
+            
+                    helper.send();
+
+                });
                
                 successFunc&&successFunc(resultDto);
 
@@ -541,7 +565,6 @@
 
         return httpPars;
     }
-
 
 
 };

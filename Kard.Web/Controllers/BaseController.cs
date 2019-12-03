@@ -1,5 +1,7 @@
 ﻿using Kard.Extensions;
 using Kard.Runtime.Session;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -8,6 +10,7 @@ using System.IO;
 
 namespace Kard.Web.Controllers
 {
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public abstract class BaseController : ControllerBase
     {
         protected readonly ILogger _logger;

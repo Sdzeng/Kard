@@ -11,10 +11,12 @@ using System.Text;
 
 namespace Kard.Dapper.Mysql.Repositories
 {
-    public class EssayLikeRepository : Repository, IEssayLikeRepository
+    public class EssayLikeRepository : IEssayLikeRepository
     {
-        public EssayLikeRepository(IConfiguration configuration, ILogger<Repository> logger) : base(configuration, logger)
+        private readonly IDefaultRepository _defaultRepository;
+        public EssayLikeRepository(IDefaultRepository defaultRepository)
         {
+            _defaultRepository = defaultRepository;
         }
 
         public ResultDto ChangeEssayLike(long userId, long essayId)
@@ -32,7 +34,7 @@ namespace Kard.Dapper.Mysql.Repositories
 
             try
             {
-                var ee = ConnExecute(conn => conn.Execute("changeEssayLike", pars, commandType: CommandType.StoredProcedure));//res2.Count = 80
+                var ee = _defaultRepository.ConnExecute(conn => conn.Execute("changeEssayLike", pars, commandType: CommandType.StoredProcedure));//res2.Count = 80
                 var likeNum = pars.Get<int>("@olikeNum");
                 var isLike = pars.Get<byte>("@oisLike") == 1;
 
@@ -55,7 +57,7 @@ namespace Kard.Dapper.Mysql.Repositories
                 where essayLike.EssayId=@EssayId 
                order by essayLike.CreationTime desc";
 
-            return ConnExecute(conn => conn.Query<EssayLikeDto>(sql, new { EssayId = id }));
+            return _defaultRepository.ConnExecute(conn => conn.Query<EssayLikeDto>(sql, new { EssayId = id }));
         }
     }
 }

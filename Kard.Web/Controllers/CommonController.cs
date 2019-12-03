@@ -27,8 +27,7 @@ using Senparc.Weixin.MP.Helpers;
 
 namespace Kard.Web.Controllers
 {
-    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-    [Authorize(AuthenticationSchemes = WeChatAppDefaults.AuthenticationScheme)]
+
     [Produces("application/json")]
     [Route("common")]
     public class CommonController : BaseController

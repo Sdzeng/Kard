@@ -30,8 +30,6 @@ using System.Threading.Tasks;
 
 namespace Kard.Web.Controllers
 {
-    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-    [Authorize(AuthenticationSchemes = WeChatAppDefaults.AuthenticationScheme)]
     [Produces("application/json")]
     [Route("essay")]
     public class EssayController : BaseController
@@ -40,6 +38,7 @@ namespace Kard.Web.Controllers
         private readonly IServiceProvider _serviceProvider;
         private readonly IRazorViewEngine _razorViewEngine;
         private readonly ITempDataProvider _tempDataProvider;
+        private readonly IRepositoryFactory _repositoryFactory;
         private readonly IDefaultRepository _defaultRepository;
         private readonly IConfiguration _configuration;
 
@@ -47,10 +46,9 @@ namespace Kard.Web.Controllers
             IServiceProvider serviceProvider,
             IRazorViewEngine razorViewEngine,
             ITempDataProvider tempDataProvider,
-
+            IRepositoryFactory repositoryFactory,
             ILogger<EssayController> logger,
             IMemoryCache memoryCache,
-            IDefaultRepository defaultRepository,
             IKardSession kardSession,
             IConfiguration configuration) : base(logger, memoryCache, kardSession)
         {
@@ -58,7 +56,8 @@ namespace Kard.Web.Controllers
             _serviceProvider = serviceProvider;
             _razorViewEngine = razorViewEngine;
             _tempDataProvider = tempDataProvider;
-            _defaultRepository = defaultRepository;
+            _repositoryFactory = repositoryFactory;
+            _defaultRepository = repositoryFactory.GetRepository<IDefaultRepository>();
             _configuration = configuration;
         }
 
@@ -77,7 +76,7 @@ namespace Kard.Web.Controllers
         public ResultDto GetInfo(long id)
         {
             //单品信息
-            var essayEntity = _defaultRepository.Essay.GetEssayDto(id, _kardSession.UserId);
+            var essayEntity = _repositoryFactory.GetRepository<IEssayRepository>().GetEssayDto(id, _kardSession.UserId);
 
             var resultDto = new ResultDto();
             resultDto.Result = essayEntity != null;
@@ -87,7 +86,7 @@ namespace Kard.Web.Controllers
             //增加阅读数
             Task.Run(() =>
             {
-                var result = _defaultRepository.Essay.UpdateBrowseNum(id);
+                var result = _repositoryFactory.GetRepository<IEssayRepository>().UpdateBrowseNum(id);
                 if (!result)
                 {
                     _logger.LogError($"统计：单品{id}增加阅读数失败");
@@ -235,15 +234,15 @@ namespace Kard.Web.Controllers
             if (essayEntity.SubContent.Length > 100)
             {
                 essayEntity.SubContent = essayEntity.SubContent.Remove(100) + "...";
-            };
+            }
 
-
+            essayEntity.IsPublish = essayEntity.IsPublish;
             essayEntity.Location = Utils.GetCity(HttpContext, _memoryCache);
-            essayEntity.Score = 6m;
+            essayEntity.Score = essayEntity.Score>0 ? essayEntity.Score:6m;
             essayEntity.ScoreHeadCount = 1;
             essayEntity.AuditCreation(userId);
             tagList.AuditCreation(userId);
-            var resultDto = _defaultRepository.Essay.AddEssay(essayEntity, essayContentEntity, tagList);
+            var resultDto = _repositoryFactory.GetRepository<IEssayRepository>().AddEssay(essayEntity, essayContentEntity, tagList);
 
             if (resultDto.Result)
             {
@@ -260,7 +259,7 @@ namespace Kard.Web.Controllers
         private async Task<ResultDto<string>> CreateHtml(long id, string oldUrl = null)
         {
             //单品信息
-            var essayEntity = _defaultRepository.Essay.GetHtmlEssayDto(id);
+            var essayEntity = _repositoryFactory.GetRepository<IEssayRepository>().GetHtmlEssayDto(id);
             essayEntity.Meta = essayEntity.SubContent;
             if (essayEntity.Meta.Contains("。"))
             {
@@ -292,7 +291,7 @@ namespace Kard.Web.Controllers
 
             var folderPath = "essay";
             var mfolderPath = Path.Combine("essay", "m");
-            string fileName = oldUrl.Replace(folderPath, "").Replace("\\","").Replace("/", "");// $"{DateTime.Now.ToString("MMddHHmmssffff")}.html";
+            string fileName = $"{DateTime.Now.ToString("MMddHHmmssffff")}.html";
             var page=WriteViewToFileAsync("EssayDetail", essayEntity, folderPath, fileName);
             await WriteViewToFileAsync("MEssayDetail", essayEntity, mfolderPath, fileName);
 
@@ -414,7 +413,7 @@ namespace Kard.Web.Controllers
             entity.AuditLastModification(userId);
             tagList.AuditCreation(userId);
 
-            var result = _defaultRepository.Essay.UpdateEssay(entity, essayContentEntity, tagList);
+            var result = _repositoryFactory.GetRepository<IEssayRepository>().UpdateEssay(entity, essayContentEntity, tagList);
 
             if (result)
             {
@@ -434,6 +433,46 @@ namespace Kard.Web.Controllers
             return await Task.FromResult(resultDto);
         }
 
+
+        /// 删除纪录
+        /// </summary>
+        /// <param name="essayEntity"></param>
+        /// <param name="essayContentEntity"></param>
+        /// <param name="tagList"></param>
+        [HttpPost("delete")]
+        public async Task<ResultDto> Delete(long id)
+        {
+            var resultDto = new ResultDto();
+            var userId = _kardSession.UserId.Value;
+
+            if (id <= 0)
+            {
+                resultDto.Result = false;
+                resultDto.Message = "删除失败，Id为空";
+                return resultDto;
+            }
+
+            var entity = _defaultRepository.FirstOrDefault<EssayEntity>(id);
+            if (entity == null)
+            {
+                resultDto.Result = false;
+                resultDto.Message = "删除失败，未找到文章";
+                return resultDto;
+            }
+
+            if (entity.CreatorUserId != userId)
+            {
+                resultDto.Result = false;
+                resultDto.Message = "删除失败，这不是您的文章";
+                return resultDto;
+            }
+
+          
+            resultDto = await _repositoryFactory.Default.DeleteAsync<EssayEntity>(new  { Id=id},isPhysics:true);
+            return resultDto;
+           
+        }
+
         /// <summary>
         /// 相似列表
         /// </summary>
@@ -444,7 +483,7 @@ namespace Kard.Web.Controllers
         {
             var resultDto = new ResultDto<IEnumerable<EssayEntity>>();
             resultDto.Result = true;
-            resultDto.Data = _defaultRepository.Essay.GetEssaySimilarList(essayId);
+            resultDto.Data = _repositoryFactory.GetRepository<IEssayRepository>().GetEssaySimilarList(essayId);
             return await Task.FromResult(resultDto);
         }
 
@@ -459,7 +498,7 @@ namespace Kard.Web.Controllers
         {
             var resultDto = new ResultDto<IEnumerable<EssayEntity>>();
             resultDto.Result = true;
-            resultDto.Data = _defaultRepository.Essay.GetEssayOtherList(essayId);
+            resultDto.Data = _repositoryFactory.GetRepository<IEssayRepository>().GetEssayOtherList(essayId);
             return await Task.FromResult(resultDto);
         }
 
@@ -475,7 +514,7 @@ namespace Kard.Web.Controllers
         [HttpPost("like")]
         public async Task<ResultDto> Like(long essayId)
         {
-            return await Task.FromResult(_defaultRepository.EssayLike.ChangeEssayLike(_kardSession.UserId.Value, essayId));
+            return await Task.FromResult(_repositoryFactory.GetRepository<IEssayLikeRepository>().ChangeEssayLike(_kardSession.UserId.Value, essayId));
         }
 
         /// <summary>
@@ -489,7 +528,7 @@ namespace Kard.Web.Controllers
         {
             var resultDto = new ResultDto<IEnumerable<EssayLikeDto>>();
             resultDto.Result = true;
-            resultDto.Data = _defaultRepository.EssayLike.GetEssayLikeList(essayId);
+            resultDto.Data = _repositoryFactory.GetRepository<IEssayLikeRepository>().GetEssayLikeList(essayId);
             return await Task.FromResult(resultDto);
         }
 
@@ -525,7 +564,7 @@ namespace Kard.Web.Controllers
         [HttpGet("commentlist")]
         public async Task<ResultDto<IEnumerable<EssayCommentDto>>> GetCommentList(long essayId)
         {
-            var essayCommentList = _defaultRepository.EssayComment.GetEssayCommentList(essayId) ?? new List<EssayCommentDto>();
+            var essayCommentList = _repositoryFactory.GetRepository<IEssayCommentRepository>().GetEssayCommentList(essayId) ?? new List<EssayCommentDto>();
             var pageCommentList = essayCommentList.Where((item, index) => index < 10);
 
             var resultDto = new ResultDto<IEnumerable<EssayCommentDto>>();

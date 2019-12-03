@@ -24,7 +24,6 @@ using System.Threading.Tasks;
 
 namespace Kard.Web.Controllers
 {
-    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     [Produces("application/json")]
     [Route("webuser")]
     public class WebUserController : BaseController

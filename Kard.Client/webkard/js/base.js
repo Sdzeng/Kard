@@ -1,8 +1,8 @@
 var basejs = {
-    requestDomain: "http://192.168.10.3:5000",
-    cdnDomain: "http://192.168.10.3:5000",
-    // requestDomain: "http://api.coretn.cn:81",
-    // cdnDomain:"http://www.coretn.cn",
+    // requestDomain: "http://192.168.2.211:5000",
+    // cdnDomain: "http://192.168.2.211:5000",
+    requestDomain: "http://api.coretn.cn:81",
+    cdnDomain:"http://www.coretn.cn",
     defaults: {
         type: "POST",
         async: true,
@@ -346,7 +346,7 @@ var topMenu = {
         $("#btnLogout").click(function () {
 
             var helper = new httpHelper({
-                url: basejs.requestDomain + "/webuser/logout",
+                url: basejs.requestDomain + "/login/logout",
                 type: "GET",
                 success: function (data) {
                     if (data.result) {

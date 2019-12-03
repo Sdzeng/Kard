@@ -9,10 +9,12 @@ using System.Text;
 
 namespace Kard.Dapper.Mysql.Repositories
 {
-    public class CoverRepository : Repository, ICoverRepository
+    public class CoverRepository: ICoverRepository
     {
-        public CoverRepository(IConfiguration configuration, ILogger<Repository> logger) : base(configuration, logger)
+        private readonly IDefaultRepository _defaultRepository;
+        public CoverRepository(IDefaultRepository defaultRepository) 
         {
+            _defaultRepository = defaultRepository;
         }
 
         public CoverDto GetDateCover(DateTime showDate)
@@ -35,7 +37,7 @@ namespace Kard.Dapper.Mysql.Repositories
 		                        left join essay on cover.essayid= essay.id 
                                 left join kuser on essay.creatoruserid=kuser.id 
                                 where essay.isdeleted=0 ";
-            return ConnExecute(conn =>
+            return _defaultRepository.ConnExecute(conn =>
             {
                 return conn.QueryFirstOrDefault<CoverDto>(sql, new { ShowDate = showDate });
             });

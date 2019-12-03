@@ -9,16 +9,18 @@ using System.Text;
 
 namespace Kard.Dapper.Mysql.Repositories
 {
-    public class KuserRepository : Repository, IKuserRepository
+    public class KuserRepository : IKuserRepository
     {
-        public KuserRepository(IConfiguration configuration, ILogger<Repository> logger) : base(configuration, logger)
+        private readonly IDefaultRepository _defaultRepository;
+        public KuserRepository(IDefaultRepository defaultRepository)
         {
+            _defaultRepository = defaultRepository;
         }
 
         public IEnumerable<KuserEntity> GetExistUser(string name, string phone, string nickName)
         {
             string sql = "select *  from kuser where `Name`=@Name or Phone=@Phone or NickName=@NickName";
-            return ConnExecute(conn => conn.Query<KuserEntity>(sql, new { Name = name, Phone = phone, NickName = nickName }));
+            return _defaultRepository.ConnExecute(conn => conn.Query<KuserEntity>(sql, new { Name = name, Phone = phone, NickName = nickName }));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Kard.Core.Dtos;
 using Kard.Core.Entities;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,6 +11,17 @@ namespace Kard.Core.IRepositories
 {
     public interface IDefaultRepository: IRepository
     {
+        string ConnectionString { get; }
+
+        IConfiguration Configuration { get; }
+
+        IDbConnection DbConnection { get; }
+
+        TResult ConnExecute<TResult>(Func<IDbConnection, TResult> predicate);
+
+        TResult TransExecute<TResult>(Func<IDbConnection, IDbTransaction, TResult> predicate, IsolationLevel? isolationLevel = null);
+
+
         #region CRUD
 
         #region Create
@@ -60,25 +72,18 @@ namespace Kard.Core.IRepositories
 
         Task<ResultDto> DeleteAsync<T>(T entity, int? commandTimeout = null) where T : class;
 
+        ResultDto Delete<T>(object predicate, int? commandTimeout = null, bool isPhysics = false) where T : class;
+
+        Task<ResultDto> DeleteAsync<T>(object predicate, int? commandTimeout = null, bool isPhysics = false) where T : class;
+
         ResultDto DeleteList<T>(object predicate, int? commandTimeout = null) where T : class;
 
         #endregion
 
- 
+
         #endregion
 
-        ICoverRepository Cover { get; }
 
-        IEssayCommentRepository EssayComment { get; }
-
-        IEssayLikeRepository EssayLike { get; }
-
-        IEssayRepository Essay { get; }
-
-
-        IKuserRepository Kuser { get; }
-
-        ILongTaskRepository LongTask { get; }
 
     }
 }

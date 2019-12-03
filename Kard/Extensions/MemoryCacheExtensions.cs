@@ -13,11 +13,11 @@ namespace Kard.Extensions
             Check.NotNull(memoryCache, nameof(memoryCache));
 
             var cacheValue = memoryCache.GetOrCreate(cacheKey, (cacheEntry) => {
-                if (absoluteSeconds != null)
+                if (absoluteSeconds.HasValue)
                 {
                     cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(absoluteSeconds.Value));
                 }
-                if (slidingSeconds != null)
+                if (slidingSeconds.HasValue)
                 {
                     cacheEntry.SetSlidingExpiration(TimeSpan.FromSeconds(slidingSeconds.Value));
                 }

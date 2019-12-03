@@ -121,7 +121,7 @@
             var httpPars = {
                 url: basejs.requestDomain + "/home/essays",
                 type: "GET",
-                data: { keyword: "",pageIndex:1, pageSize: 15,orderBy:"choiceness" },
+                data: { keyword: "",pageIndex:1, pageSize: 15,orderBy:"" },
                 success: function (resultDto) {
                     //设置essays加载更多
                     if (!resultDto.result) {

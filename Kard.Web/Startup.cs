@@ -1,5 +1,6 @@
 ﻿using Kard.Core.AppServices.Baiduspider;
 using Kard.Core.Entities;
+using Kard.DI;
 using Kard.Extensions;
 using Kard.Json;
 using Kard.Runtime.Security.Authentication.WeChat;
@@ -194,8 +195,8 @@ namespace Kard.Web
             {
                 o.Cookie.HttpOnly = true;//置为后台只读模式,前端无法通过JS来获取cookie值,可以有效的防止XXS攻击
                 //o.Cookie.Domain = ".corntn.cn";
-                o.LoginPath = "/user/notlogin";
-                o.AccessDeniedPath = "/user/notlogin";
+                o.LoginPath = "/login/notlogin";
+                o.AccessDeniedPath = "/login/notlogin";
                 o.SlidingExpiration = true;
                 o.ExpireTimeSpan = TimeSpan.FromDays(7);  //当HttpContext.SignInAsync的IsPersistent = true 时生效
                 //o.SessionStore = true;
@@ -279,6 +280,8 @@ namespace Kard.Web
 
             services.TryAddScoped<IPasswordHasher<KuserEntity>, PasswordHasher<KuserEntity>>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            KardIoc.ServiceProvider = services.BuildServiceProvider();
             #endregion
 
 

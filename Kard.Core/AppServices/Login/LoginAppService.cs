@@ -25,6 +25,7 @@ namespace Kard.Core.AppServices.Default
         private readonly IKardSession _kardSession;
         private readonly IPasswordHasher<KuserEntity> _passwordHasher;
         //private readonly IPasswordValidator<KuserEntity> _passwordValidator;
+        private readonly IRepositoryFactory _repositoryFactory;
         private readonly IDefaultRepository _defaultRepository;
 
  
@@ -32,13 +33,14 @@ namespace Kard.Core.AppServices.Default
              IServiceProvider serviceProvider,
             IKardSession kardSession,
             IPasswordHasher<KuserEntity> passwordHasher,
-            IDefaultRepository defaultRepository)
+              IRepositoryFactory repositoryFactory)
         {
           
             _kardSession = kardSession;
             _passwordHasher = passwordHasher;
 
-            _defaultRepository = defaultRepository;
+            _repositoryFactory = repositoryFactory;
+            _defaultRepository = repositoryFactory.GetRepository<IDefaultRepository>();
 
 
             //测试
@@ -201,7 +203,7 @@ namespace Kard.Core.AppServices.Default
         private ResultDto AccountRegister(KuserEntity user)
         {
             var resultDto = new ResultDto();
-            var existUserList = _defaultRepository.Kuser.GetExistUser(user.Name, user.Phone, user.NickName);
+            var existUserList = _repositoryFactory.GetRepository<IKuserRepository>().GetExistUser(user.Name, user.Phone, user.NickName);
             var existName = existUserList.Where(u => u.Name == user.Name).Any();
             var existPhone = existUserList.Where(u => u.Phone == user.Phone).Any();
             var existNickName = existUserList.Where(u => u.NickName == user.NickName).Any();
@@ -268,7 +270,7 @@ namespace Kard.Core.AppServices.Default
             user.AuthenticationType = scheme;
             var caimsIdentity = new ClaimsIdentity(user);
 
-            caimsIdentity.AddClaim(new Claim(KardClaimTypes.IsLogin, (user.Id > 0).ToString()));
+            //caimsIdentity.AddClaim(new Claim(KardClaimTypes.IsLogin, (user.Id > 0).ToString()));
 
             if (user.Id > 0)
             {
@@ -277,7 +279,7 @@ namespace Kard.Core.AppServices.Default
 
             if (!user.WxOpenId.IsNullOrEmpty())
             {
-                caimsIdentity.AddClaim(new Claim(KardClaimTypes.WxOpenId, user.WxOpenId));
+                caimsIdentity.AddClaim(new Claim(KardClaimTypes.WxUnionId, user.WxOpenId));
             }
 
             //if (!user.WxSessionKey.IsNullOrEmpty())
@@ -291,16 +293,16 @@ namespace Kard.Core.AppServices.Default
                 caimsIdentity.AddClaim(new Claim(KardClaimTypes.Name, user.Name));
             }
 
-            if (!user.NickName.IsNullOrEmpty())
-            {
-                caimsIdentity.AddClaim(new Claim(KardClaimTypes.NickName, user.NickName));
-            }
+            //if (!user.NickName.IsNullOrEmpty())
+            //{
+            //    caimsIdentity.AddClaim(new Claim(KardClaimTypes.NickName, user.NickName));
+            //}
 
 
-            if (!user.Phone.IsNullOrEmpty())
-            {
-                caimsIdentity.AddClaim(new Claim(KardClaimTypes.Phone, user.Phone));
-            }
+            //if (!user.Phone.IsNullOrEmpty())
+            //{
+            //    caimsIdentity.AddClaim(new Claim(KardClaimTypes.Phone, user.Phone));
+            //}
 
 
             //if (!user.Email.IsNullOrEmpty())

@@ -1,17 +1,31 @@
-﻿namespace Kard.Runtime.Session
+﻿using Kard.DI;
+
+namespace Kard.Runtime.Session
 {
-    public interface IKardSession//: IAbpSession
+    public interface IKardSession:ISingletonService
     {
         /// <summary>
         /// 是否已登陆
         /// </summary>
         bool? IsLogin { get; }
+
+        /// <summary>
+        /// 认证类型
+        /// </summary>
+        string AuthenticationType { get; }
+
         /// <summary>
         /// 用户编号
         /// </summary>
         long? UserId { get; }
 
-        string WxOpenId { get; }
+
+        /// <summary>
+        /// 微信UnionId
+        /// </summary>
+        string WxUnionId { get; }
+
+
 
         //string WxSessionKey { get; }
         /// <summary>
@@ -19,25 +33,9 @@
         /// </summary>
         string Name { get; }
 
-        /// <summary>
-        /// 昵称
-        /// </summary>
-        string NickName { get; }
 
-        /// <summary>
-        /// 手机
-        /// </summary>
-        string Phone { get; }
+        SessionData Data { get; }
 
-        /// <summary>
-        /// 邮箱
-        /// </summary>
-        //string Email { get; }
-
-       
-
-
-
-      
+        void RefreshData();
     }
 }

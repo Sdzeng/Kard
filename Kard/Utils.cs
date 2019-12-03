@@ -141,7 +141,7 @@ namespace Kard
                     string info = Utils.HttpGet("http://ip.taobao.com/service/getIpInfo.php?ip=" + ip);
                     string re = Utils.Unicode2String(info);
                     var taobao = Serialize.FromJson<ResTaobaoIpDto>(re);
-                    if (taobao.code == 0)
+                    if (taobao.code == 0&& taobao.data.city!="内网IP")
                     {
                         return taobao.data.city;
                     }

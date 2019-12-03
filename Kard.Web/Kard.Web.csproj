@@ -37,6 +37,7 @@
     <Compile Remove="Controllers\CoverController.cs" />
     <Compile Remove="Controllers\ErrorController.cs" />
     <Compile Remove="Controllers\ValuesController.cs" />
+    <Compile Remove="Controllers\WebUserController.cs" />
     <Compile Remove="Middlewares\ImageHandle\ImageHandleExtensions.cs" />
     <Compile Remove="Middlewares\ImageHandle\ImageHandleFileContext.cs" />
     <Compile Remove="Middlewares\ImageHandle\ImageHandleMiddleware.cs" />

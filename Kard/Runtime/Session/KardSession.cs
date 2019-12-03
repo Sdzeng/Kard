@@ -1,15 +1,18 @@
 ﻿using Kard.DI;
 using Kard.Runtime.Security;
+using Microsoft.Extensions.Caching.Memory;
+using System;
 using System.Linq;
 
 namespace Kard.Runtime.Session
 {
-    public class KardSession : IKardSession, ISingletonService
+    public abstract class KardSession : IKardSession
     {
-
+     
         public KardSession(IPrincipalAccessor principalAccessor)
         {
             PrincipalAccessor = principalAccessor;
+         
         }
 
 
@@ -19,20 +22,28 @@ namespace Kard.Runtime.Session
         {
             get
             {
+                return PrincipalAccessor.Principal?.Identity.IsAuthenticated;
+                //var userIdClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.IsLogin);
+                //if (string.IsNullOrEmpty(userIdClaim?.Value))
+                //{
+                //    return null;
+                //}
 
-                var userIdClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.IsLogin);
-                if (string.IsNullOrEmpty(userIdClaim?.Value))
-                {
-                    return null;
-                }
+                //bool isLogin;
+                //if (!bool.TryParse(userIdClaim.Value, out isLogin))
+                //{
+                //    return null;
+                //}
 
-                bool isLogin;
-                if (!bool.TryParse(userIdClaim.Value, out isLogin))
-                {
-                    return null;
-                }
+                //return isLogin;
+            }
+        }
 
-                return isLogin;
+        public string AuthenticationType
+        {
+            get
+            {
+                return PrincipalAccessor.Principal?.Identity.AuthenticationType;
             }
         }
 
@@ -57,12 +68,12 @@ namespace Kard.Runtime.Session
             }
         }
 
-        public  string WxOpenId
+        public  string WxUnionId
         {
             get
             {
 
-                var wxOpenIdClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.WxOpenId);
+                var wxOpenIdClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.WxUnionId);
                 if (string.IsNullOrEmpty(wxOpenIdClaim?.Value))
                 {
                     return null;
@@ -71,23 +82,6 @@ namespace Kard.Runtime.Session
                 return wxOpenIdClaim.Value;
             }
         }
-
-
-        //public string WxSessionKey
-        //{
-        //    get
-        //    {
-
-        //        var wxSessionKeyClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.WxSessionKey);
-        //        if (string.IsNullOrEmpty(wxSessionKeyClaim?.Value))
-        //        {
-        //            return null;
-        //        }
-
-        //        return wxSessionKeyClaim.Value;
-        //    }
-        //}
-
 
 
         /// <summary>
@@ -108,63 +102,13 @@ namespace Kard.Runtime.Session
             }
         }
 
-
-        /// <summary>
-        /// 昵称
-        /// </summary>
-        public virtual string NickName
-        {
-            get
-            {
-
-                var nickNameClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.NickName);
-                if (string.IsNullOrEmpty(nickNameClaim?.Value))
-                {
-                    return null;
-                }
-
-                return nickNameClaim.Value;
-            }
-        }
+        public abstract SessionData Data { get; }
 
 
-        /// <summary>
-        /// 手机
-        /// </summary>
-        public virtual string Phone
-        {
-            get
-            {
+        public abstract void RefreshData();
+        
 
-                var nameClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.Phone);
-                if (string.IsNullOrEmpty(nameClaim?.Value))
-                {
-                    return null;
-                }
-
-                return nameClaim.Value;
-            }
-        }
-
-
-        /// <summary>
-        /// 邮箱
-        /// </summary>
-        //public virtual string Email
-        //{
-        //    get
-        //    {
-
-        //        var nameClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == KardClaimTypes.Email);
-        //        if (string.IsNullOrEmpty(nameClaim?.Value))
-        //        {
-        //            return null;
-        //        }
-
-        //        return nameClaim.Value;
-        //    }
-        //}
-
- 
     }
+
+         
 }

@@ -19,13 +19,13 @@ namespace Kard.Web.Controllers
     [Route("home")]
     public class HomeController : BaseController
     {
-        private readonly IDefaultRepository _defaultRepository;
+        private readonly IRepositoryFactory _repositoryFactory;
         public HomeController(ILogger<HomeController> logger,
             IMemoryCache memoryCache,
-            IDefaultRepository defaultRepository,
+            IRepositoryFactory repositoryFactory,
             IKardSession kardSession) : base(logger, memoryCache, kardSession)
         {
-            _defaultRepository = defaultRepository;
+            _repositoryFactory = repositoryFactory;
         }
 
 
@@ -47,12 +47,12 @@ namespace Kard.Web.Controllers
             //coverDto.EssayContent = Utils.ContentRegex.Replace(coverDto.EssayContent, "");
             //return new ResultDto<CoverDto>() { Result = true, Data = coverDto };
 
-            var coverDto = _defaultRepository.Cover.GetDateCover(today);
+            var coverDto = _repositoryFactory.GetRepository<ICoverRepository>().GetDateCover(today);
             if (coverDto.EssayContent.Contains("。"))
             {
                 coverDto.EssayContent = coverDto.EssayContent.Split("。")[0] + "。";
             }
-       
+
             return await Task.FromResult(new ResultDto<CoverDto>() { Result = true, Data = coverDto });
 
         }
@@ -63,10 +63,10 @@ namespace Kard.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("essays")]
-        public async Task<ResultDto> GetEssays(string keyword, string orderBy,int pageIndex = 1, int pageSize = 20)
+        public async Task<ResultDto> GetEssays(string keyword, string orderBy, int pageIndex = 1, int pageSize = 20)
         {
-            var essayList = _defaultRepository.Essay.GetHomeMediaPictureList(keyword, pageIndex, pageSize + 1, orderBy) ?? new List<TopMediaDto>();
-             
+            var essayList = _repositoryFactory.GetRepository<IEssayRepository>().GetHomeMediaPictureList(keyword, pageIndex, pageSize + 1, orderBy) ?? new List<TopMediaDto>();
+
             var hasNextPage = essayList.Count() > pageSize;
             var resultDto = new ResultDto();
             resultDto.Result = true;

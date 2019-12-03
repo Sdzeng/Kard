@@ -1,6 +1,6 @@
 ﻿{
   "captureStartupErrors": true,
   "detailedErrors": true,
-  "urls": "http://192.168.10.3:5000",
+  "urls": "http://192.168.2.211:5000",
   "environment": "Development"
 }

@@ -10,12 +10,15 @@ using System.Text;
 
 namespace Kard.Dapper.Mysql.Repositories
 {
-    public class LongTaskRepository : Repository, ILongTaskRepository
+    public class LongTaskRepository :ILongTaskRepository
     {
-        public LongTaskRepository(IConfiguration configuration, ILogger<Repository> logger) : base(configuration, logger)
+        private readonly IDefaultRepository _defaultRepository;
+        private readonly ILogger _logger;
+        public LongTaskRepository(IDefaultRepository defaultRepository, ILogger<LongTaskRepository> logger)
         {
+            _defaultRepository = defaultRepository;
+            _logger = logger;
         }
-
 
         public ResultDto AddTask(LongTaskEntity entity)
         {
@@ -23,7 +26,7 @@ namespace Kard.Dapper.Mysql.Repositories
             var taskWeekDay = (int)taskDate.DayOfWeek;
             var taskWeekList = entity.Week.Split(',').Select(w => Convert.ToInt32(w));
 
-            return TransExecute((conn, trans) =>
+            return _defaultRepository.TransExecute((conn, trans) =>
             {
                 var createResult = new ResultDto();
                 var createLongResult = conn.CreateAndGetId<LongTaskEntity, long>(entity, trans);
@@ -61,7 +64,7 @@ namespace Kard.Dapper.Mysql.Repositories
 
                 if (!conn.CreateList(taskEntityList, trans).Result)
                 {
-                    _logger.LogError("添加小目标失败，已撤销");
+                    //_logger.LogError("添加小目标失败，已撤销");
                     createResult.Result = false;
                     createResult.Message = "添加小目标失败";
                     return createResult;

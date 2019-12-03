@@ -21,27 +21,28 @@ using System.Web;
 
 namespace Kard.Web.Controllers
 {
-    //基于Scheme(认证方案)的授权
-    [Authorize(AuthenticationSchemes = $"{CookieAuthenticationDefaults.AuthenticationScheme},{WeChatAppDefaults.AuthenticationScheme}")]
-    //基于策略的授权
-    [Authorize("AdminPolicy")]
+    ////基于Scheme(认证方案)的授权
+    //[Authorize(AuthenticationSchemes = $"{CookieAuthenticationDefaults.AuthenticationScheme},{WeChatAppDefaults.AuthenticationScheme}")]
+    ////基于策略的授权
+    //[Authorize("AdminPolicy")]
     [Produces("application/json")]
     [Route("user")]
     public class UserController : BaseController
     {
         private readonly IHostingEnvironment _env;
-
+        private readonly IRepositoryFactory _repositoryFactory;
         private readonly IDefaultRepository _defaultRepository;
         public UserController(IHostingEnvironment env,
             ILogger<UserController> logger,
             IMemoryCache memoryCache,
-            IDefaultRepository defaultRepository,
+            IRepositoryFactory repositoryFactory,
             IKardSession kardSession)
             : base(logger, memoryCache, kardSession)
         {
             //HttpContext.Session.SetString("UserId", user.Id.ToString());
             _env = env;
-            _defaultRepository = defaultRepository;
+            _repositoryFactory = repositoryFactory;
+            _defaultRepository = repositoryFactory.GetRepository<IDefaultRepository>() ;
         }
 
         //[Authorize(Roles = "member", AuthenticationSchemes= "members")]
@@ -187,7 +188,7 @@ namespace Kard.Web.Controllers
         public async Task<ResultDto> GetUserNews(int pageIndex, int pageSize)
         {
             var resultDto = new ResultDto();
-            var newsList = _defaultRepository.Essay.GetUserNews(_kardSession.UserId.Value, pageIndex, pageSize + 1, "t.CreationTime desc");
+            var newsList = _repositoryFactory.GetRepository<IEssayRepository>().GetUserNews(_kardSession.UserId.Value, pageIndex, pageSize + 1, "t.CreationTime desc");
             var hasNextPage = newsList.Count() > pageSize;
      
             resultDto.Result = true;
@@ -208,7 +209,7 @@ namespace Kard.Web.Controllers
         public async Task<ResultDto> GetUserEssay(int pageIndex, int pageSize)
         {
             var resultDto = new ResultDto();
-            var essayList = _defaultRepository.Essay.GetUserEssay(_kardSession.UserId.Value, pageIndex, pageSize + 1, "CreationTime desc");
+            var essayList = _repositoryFactory.GetRepository<IEssayRepository>().GetUserEssay(_kardSession.UserId.Value, pageIndex, pageSize + 1, "CreationTime desc");
             var hasNextPage = essayList.Count() > pageSize;
 
             resultDto.Result = true;
@@ -230,7 +231,7 @@ namespace Kard.Web.Controllers
         public async Task<ResultDto> GetEssay(long userId,int pageIndex, int pageSize)
         {
             var resultDto = new ResultDto();
-            var essayList = _defaultRepository.Essay.GetUserEssay(userId, pageIndex, pageSize + 1, "CreationTime desc",true);
+            var essayList = _repositoryFactory.GetRepository<IEssayRepository>().GetUserEssay(userId, pageIndex, pageSize + 1, "CreationTime desc",true);
             var hasNextPage = essayList.Count() > pageSize;
 
             resultDto.Result = true;
@@ -251,7 +252,7 @@ namespace Kard.Web.Controllers
         public async Task<ResultDto> GetUserLike(int pageIndex, int pageSize)
         {
             var resultDto = new ResultDto();
-            var likeList = _defaultRepository.Essay.GetUserLike(_kardSession.UserId.Value, pageIndex, pageSize + 1, "a.CreationTime desc");
+            var likeList = _repositoryFactory.GetRepository<IEssayRepository>().GetUserLike(_kardSession.UserId.Value, pageIndex, pageSize + 1, "a.CreationTime desc");
             var hasNextPage = likeList.Count() > pageSize;
 
             resultDto.Result = true;
@@ -273,7 +274,7 @@ namespace Kard.Web.Controllers
         public async Task<ResultDto> GetUserComment(int pageIndex, int pageSize)
         {
             var resultDto = new ResultDto();
-            var commentList = _defaultRepository.Essay.GetUserComment(_kardSession.UserId.Value, pageIndex, pageSize + 1, "a.CreationTime desc");
+            var commentList = _repositoryFactory.GetRepository<IEssayRepository>().GetUserComment(_kardSession.UserId.Value, pageIndex, pageSize + 1, "a.CreationTime desc");
             var hasNextPage = commentList.Count() > pageSize;
 
             resultDto.Result = true;
@@ -294,7 +295,7 @@ namespace Kard.Web.Controllers
         public async Task<ResultDto> GetUserFans(int pageIndex, int pageSize)
         {
             var resultDto = new ResultDto();
-            var fansList = _defaultRepository.Essay.GetUserFans(_kardSession.UserId.Value, pageIndex, pageSize + 1, "a.CreationTime desc");
+            var fansList = _repositoryFactory.GetRepository<IEssayRepository>().GetUserFans(_kardSession.UserId.Value, pageIndex, pageSize + 1, "a.CreationTime desc");
             var hasNextPage = fansList.Count() > pageSize;
 
             resultDto.Result = true;
@@ -316,7 +317,7 @@ namespace Kard.Web.Controllers
         public async Task<ResultDto> GetFans(long userId,int pageIndex, int pageSize)
         {
             var resultDto = new ResultDto();
-            var fansList = _defaultRepository.Essay.GetUserFans(userId, pageIndex, pageSize + 1, "a.CreationTime desc");
+            var fansList = _repositoryFactory.GetRepository<IEssayRepository>().GetUserFans(userId, pageIndex, pageSize + 1, "a.CreationTime desc");
             var hasNextPage = fansList.Count() > pageSize;
 
             resultDto.Result = true;
@@ -392,24 +393,7 @@ namespace Kard.Web.Controllers
 
 
 
-        /// <summary>
-        /// 未登录返回结果
-        /// </summary>
-        /// <returns></returns>
-
-        [HttpGet("notlogin")]
-        [AllowAnonymous]
-        public async Task<IActionResult > NotLogin()
-        {
-            var rs = new JsonResult(new
-            {
-                message = "您未登录不能查看该内容"
-
-            });
-
-            rs.StatusCode = 401;
-            return await Task.FromResult(rs);
-        }
+     
         #endregion
     }
 }

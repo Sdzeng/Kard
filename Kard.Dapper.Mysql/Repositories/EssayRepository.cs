@@ -14,10 +14,12 @@ using System.Text.RegularExpressions;
 
 namespace Kard.Dapper.Mysql.Repositories
 {
-    public class EssayRepository : Repository, IEssayRepository
+    public class EssayRepository :  IEssayRepository
     {
-        public EssayRepository(IConfiguration configuration, ILogger<Repository> logger) : base(configuration, logger)
+        private readonly IDefaultRepository _defaultRepository;
+        public EssayRepository(IDefaultRepository defaultRepository)
         {
+            _defaultRepository = defaultRepository;
         }
 
         public IEnumerable<TopMediaDto> GetHomeMediaPictureList(string keyword, int pageIndex, int pageSize, string orderBy)
@@ -35,6 +37,7 @@ namespace Kard.Dapper.Mysql.Repositories
                 switch (orderBy)
                 {
                     case "choiceness": orderBy = "(essay.LikeNum+essay.ShareNum+essay.BrowseNum+essay.CommentNum) desc,essay.Score desc,essay.Id desc"; break;
+                    
                     default: break;
                 }
             }
@@ -45,7 +48,7 @@ namespace Kard.Dapper.Mysql.Repositories
                 essay  
                 join kuser on essay.CreatorUserId=kuser.Id  
                 left join tag on essay.Id=tag.EssayId and tag.Sort=1 
-                where essay.IsPublish=1 {((!string.IsNullOrEmpty(keyword )) ? " and (essay.Category like @Keyword or essay.Title like @Keyword ) " : "")} 
+                where essay.IsPublish=1 and essay.IsDeleted=0 {((!string.IsNullOrEmpty(keyword )) ? " and (essay.Category like @Keyword or essay.Title like @Keyword ) " : "")} 
                 order by {orderBy} limit @PageStart,@PageSize
                 ";
 
@@ -78,7 +81,7 @@ namespace Kard.Dapper.Mysql.Repositories
             //    return dtoList;
             //});
 
-            return ConnExecute(conn =>
+            return _defaultRepository.ConnExecute(conn =>
             {
 
                 var dtoList = conn.Query<TopMediaDto, TagEntity, TopMediaDto>(sql, (dto, tag) =>
@@ -106,7 +109,7 @@ namespace Kard.Dapper.Mysql.Repositories
             int pageStart = ((pageIndex - 1) * pageSize);
             pageStart = pageStart > 0 ? (pageStart - 1) : pageStart;
             string followUserSql = "select BeConcernedUserId from kuserFans where CreatorUserId =@CreatorUserId ";
-            var followUsers = Query<long>(followUserSql, new { CreatorUserId = userId }).ToList();
+            var followUsers = _defaultRepository.Query<long>(followUserSql, new { CreatorUserId = userId }).ToList();
             followUsers.Add(userId);
             string sql = $@"select t.* from(
                                     select 'essay' as newsType,a.Id,a.CreationTime,a.Title as EssayTitle,a.PageUrl as EssayPageUrl,b.NickName,b.AvatarUrl from essay a join kuser b on a.CreatorUserId=b.id where a.IsPublish=1 and a.IsDeleted=0 and a.CreatorUserId in @FollowUsers 
@@ -121,19 +124,19 @@ namespace Kard.Dapper.Mysql.Repositories
                                     ) t
                                     order by {orderBy} limit @PageStart,@PageSize";
 
-            var userNewsDtoList = ConnExecute(conn => conn.Query<UserNewsDto>(sql, new { FollowUsers = followUsers, CreatorUserId = userId, PageStart = pageStart, PageSize = pageSize })) ?? new List<UserNewsDto>();
+            var userNewsDtoList = _defaultRepository.ConnExecute(conn => conn.Query<UserNewsDto>(sql, new { FollowUsers = followUsers, CreatorUserId = userId, PageStart = pageStart, PageSize = pageSize })) ?? new List<UserNewsDto>();
             foreach (var dto in userNewsDtoList)
             {
                 object info = null;
                 switch (dto.NewsType)
                 {
                     case "essay":
-                        info = ConnExecute(conn => conn.QueryFirstOrDefault<EssayEntity>("select Id,Title,SubContent,Location, Category, CoverMediaType, CoverPath, CoverExtension,CreationTime from essay where id=@Id", new { Id = dto.Id }));
+                        info = _defaultRepository.ConnExecute(conn => conn.QueryFirstOrDefault<EssayEntity>("select Id,Title,SubContent,Location, Category, CoverMediaType, CoverPath, CoverExtension,CreationTime from essay where id=@Id", new { Id = dto.Id }));
                         break;
-                    case "essayLike": info = FirstOrDefault<EssayLikeEntity>(dto.Id); break;
-                    case "essayComment": info = FirstOrDefault<EssayCommentEntity>(dto.Id); break;
-                    case "kuserFans": info = FirstOrDefault<KuserFansEntity>(dto.Id); break;
-                    case "kuserFollow": info = FirstOrDefault<KuserFansEntity>(dto.Id); break;
+                    case "essayLike": info = _defaultRepository.FirstOrDefault<EssayLikeEntity>(dto.Id); break;
+                    case "essayComment": info = _defaultRepository.FirstOrDefault<EssayCommentEntity>(dto.Id); break;
+                    case "kuserFans": info = _defaultRepository.FirstOrDefault<KuserFansEntity>(dto.Id); break;
+                    case "kuserFollow": info = _defaultRepository.FirstOrDefault<KuserFansEntity>(dto.Id); break;
                     default: continue;
                 }
                 resultList.Add(new { Dto = dto, Info = info });
@@ -152,7 +155,7 @@ namespace Kard.Dapper.Mysql.Repositories
           
             string sql = $@"select * from essay  where CreatorUserId =@CreatorUserId and IsDeleted=0 {(isPublish.HasValue? "and IsPublish=@IsPublish":"")}  order by {orderBy} limit @PageStart,@PageSize";
 
-            var essayEntityList = ConnExecute(conn =>  conn.Query<EssayEntity>(sql, new { CreatorUserId = userId, IsPublish= isPublish,PageStart = pageStart, PageSize = pageSize }))??new List<EssayEntity>();
+            var essayEntityList =  _defaultRepository.ConnExecute(conn =>  conn.Query<EssayEntity>(sql, new { CreatorUserId = userId, IsPublish= isPublish,PageStart = pageStart, PageSize = pageSize }))??new List<EssayEntity>();
 
             return essayEntityList;
         }
@@ -166,7 +169,7 @@ namespace Kard.Dapper.Mysql.Repositories
 
             string sql = $@"select a.*,b.Title as EssayTitle,b.PageUrl EssayPageUrl  from essayLike a join essay b on  a.EssayId=b.Id  where a.CreatorUserId =@CreatorUserId and b.IsPublish=1 and b.IsDeleted=0 order by {orderBy} limit @PageStart,@PageSize";
 
-            var essayEntityList = ConnExecute(conn => conn.Query<EssayLikeDto>(sql, new { CreatorUserId = userId, PageStart = pageStart, PageSize = pageSize })) ?? new List<EssayLikeDto>();
+            var essayEntityList =  _defaultRepository.ConnExecute(conn => conn.Query<EssayLikeDto>(sql, new { CreatorUserId = userId, PageStart = pageStart, PageSize = pageSize })) ?? new List<EssayLikeDto>();
 
             return essayEntityList;
         }
@@ -180,7 +183,7 @@ namespace Kard.Dapper.Mysql.Repositories
 
             string sql = $@"select a.*,b.Title as EssayTitle,b.PageUrl EssayPageUrl,d.AvatarUrl KuserAvatarUrl,d.NickName KuserNickName  from essayComment a join essay b on  a.EssayId=b.Id left join essayComment c on a.ParentId=c.Id left join kuser d on c.CreatorUserId=d.Id   where a.CreatorUserId =@CreatorUserId and b.IsPublish=1 and b.IsDeleted=0 order by {orderBy} limit @PageStart,@PageSize";
 
-            var essayEntityList = ConnExecute(conn => conn.Query<EssayCommentDto>(sql, new { CreatorUserId = userId, PageStart = pageStart, PageSize = pageSize })) ?? new List<EssayCommentDto>();
+            var essayEntityList =  _defaultRepository.ConnExecute(conn => conn.Query<EssayCommentDto>(sql, new { CreatorUserId = userId, PageStart = pageStart, PageSize = pageSize })) ?? new List<EssayCommentDto>();
 
             return essayEntityList;
         }
@@ -193,7 +196,7 @@ namespace Kard.Dapper.Mysql.Repositories
 
             string sql = $@"select b.Id KuserId,b.AvatarUrl KuserAvatarUrl,b.NickName KuserNickName  from kuserFans a  join kuser b on a.CreatorUserId=b.Id   where a.BeConcernedUserId =@BeConcernedUserId order by {orderBy} limit @PageStart,@PageSize";
 
-            var essayEntityList = ConnExecute(conn => conn.Query<EssayLikeDto>(sql, new { BeConcernedUserId = userId, PageStart = pageStart, PageSize = pageSize })) ?? new List<EssayLikeDto>();
+            var essayEntityList =  _defaultRepository.ConnExecute(conn => conn.Query<EssayLikeDto>(sql, new { BeConcernedUserId = userId, PageStart = pageStart, PageSize = pageSize })) ?? new List<EssayLikeDto>();
 
             return essayEntityList;
         }
@@ -207,7 +210,7 @@ namespace Kard.Dapper.Mysql.Repositories
         //        left join tag on essay.Id=tag.EssayId 
         //        order by essay.LikeNum desc,media.Sort ";
 
-        //    return ConnExecute(conn =>
+        //    return  _defaultRepository.ConnExecute(conn =>
         //    {
 
         //        var essayList = conn.Query<EssayDto, TagEntity, EssayDto>(sql, (essay, tag) =>
@@ -236,7 +239,7 @@ namespace Kard.Dapper.Mysql.Repositories
                 left join kuser on essay.CreatorUserId=kuser.Id 
                 where essay.id=@EssayId  ";
 
-            return ConnExecute(conn =>
+            return  _defaultRepository.ConnExecute(conn =>
             {
                 var essayDto = conn.QueryFirstOrDefault<EssayDto>(sql, new { EssayId = id});
                 essayDto.TagList = conn.Query<TagEntity>("select * from tag where EssayId=@EssayId  order by  Sort", new { EssayId = id, })?.ToList();
@@ -253,7 +256,7 @@ namespace Kard.Dapper.Mysql.Repositories
                 left join essayLike on essay.Id=essayLike.EssayId and essayLike.CreatorUserId=@CurrentUserId 
                 where essay.id=@EssayId  ";
 
-            return ConnExecute(conn => conn.QueryFirstOrDefault<EssayDto>(sql, new { EssayId = id, CurrentUserId = currentUserId }));
+            return  _defaultRepository.ConnExecute(conn => conn.QueryFirstOrDefault<EssayDto>(sql, new { EssayId = id, CurrentUserId = currentUserId }));
         
         }
 
@@ -263,7 +266,7 @@ namespace Kard.Dapper.Mysql.Repositories
         public ResultDto<long> AddEssay(EssayEntity essayEntity, EssayContentEntity essayConentEntity, IEnumerable<TagEntity> tagList)
         {
             var resultDto = new ResultDto<long>();
-            resultDto.Result= base.TransExecute((conn, trans) =>
+            resultDto.Result = _defaultRepository.TransExecute((conn, trans) =>
             {
 
                 var insertAndGetIdResultDto = conn.CreateAndGetId<EssayEntity, long>(essayEntity, trans);
@@ -301,7 +304,7 @@ namespace Kard.Dapper.Mysql.Repositories
 
         public bool UpdateEssay(EssayEntity essayEntity,EssayContentEntity essayContentEntity, IEnumerable<TagEntity> tagList)
         {
-            return base.TransExecute((conn, trans) =>
+            return _defaultRepository.TransExecute((conn, trans) =>
             {
                 var updateResult = conn.Update(essayEntity, trans);
                 if (!updateResult)
@@ -342,7 +345,7 @@ namespace Kard.Dapper.Mysql.Repositories
             //单个改动使用update的排他（update\delete\insert InnoDB会自动给涉及数据集加上）行锁（使用索引）就行
             string sql = "update essay set  BrowseNum=(BrowseNum+1) where Id=@Id";
 
-            var result = ConnExecute(conn => conn.Execute(sql, new { Id = id }));
+            var result =  _defaultRepository.ConnExecute(conn => conn.Execute(sql, new { Id = id }));
             return result > 0;
         }
 
@@ -356,7 +359,7 @@ namespace Kard.Dapper.Mysql.Repositories
              join (select essay.*,tag.TagName  from essay join tag on  essay.Id<>@EssayId and essay.IsPublish=1 and essay.IsDeleted=0 and essay.Id=tag.EssayId )  b on a.Category=b.Category and a.TagName=b.TagName 
             order by b.LikeNum desc,b.CreationTime desc limit 10";
 
-            return ConnExecute(conn => conn.Query<EssayEntity>(sql, new { EssayId = id }));
+            return  _defaultRepository.ConnExecute(conn => conn.Query<EssayEntity>(sql, new { EssayId = id }));
         }
 
 
@@ -364,7 +367,7 @@ namespace Kard.Dapper.Mysql.Repositories
         {
             string sql = @"select * from essay where IsPublish=1 and IsDeleted=0 and  Id<>@EssayId and CreatorUserId=(select CreatorUserId from essay where Id=@EssayId) order by LikeNum desc,CreationTime desc limit 10";
 
-            return ConnExecute(conn => conn.Query<EssayEntity>(sql, new { EssayId = id }));
+            return  _defaultRepository.ConnExecute(conn => conn.Query<EssayEntity>(sql, new { EssayId = id }));
         }
 
 

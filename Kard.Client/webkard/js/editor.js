@@ -375,7 +375,8 @@ var editorjs = {
                     coverPath: $("#btnAddPic", _this.data.scope).attr("data-file-url"),
                     coverExtension: $("#btnAddPic", _this.data.scope).attr("data-file-extension"),
                     category: category,
-                    isPublish: $("#isPublish", _this.data.scope).prop("checked")
+                    isPublish: $("#isPublish", _this.data.scope).prop("checked"),
+                    score: $("#score", _this.data.scope).val()
                    
                 },
                 essayContentEntity: {

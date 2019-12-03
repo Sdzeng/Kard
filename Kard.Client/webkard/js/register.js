@@ -8,7 +8,7 @@ var registerjs = {
     bindCover: function () {
         var _this = this;
 
-        //ÉèÖÃÊ×Ò³·âÃæ
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½
         topCover.getHomeCover(function (resultDto) {
             var data = resultDto.data;
             //data = JSON.parse(data);
@@ -23,11 +23,11 @@ var registerjs = {
  
         $(".register-form", _this.data.scope).submit(function (event) {
 
-            // ×èÖ¹±íµ¥Ìá½»  
+            // ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½á½»  
             event.preventDefault();
 
             var helper = new httpHelper({
-                url: basejs.requestDomain + "/webuser/register",//this.url || this.form.action,
+                url: basejs.requestDomain + "/login/accountregister",//this.url || this.form.action,
                 type: 'POST',
                 //contentType: "application/json;charset=utf-8",
                 data: $(this).serialize(),//{"username":$("#username").val()},//
@@ -55,7 +55,7 @@ var registerjs = {
 };
 
 $(function () {
-    //²Ëµ¥
+    //ï¿½Ëµï¿½
     topMenu.bindMenu();
 
     registerjs.init();
