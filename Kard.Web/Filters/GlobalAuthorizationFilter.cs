@@ -18,18 +18,32 @@ namespace Kard.Web.Filters
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var controllerActionDescriptor = context.ActionDescriptor as ControllerActionDescriptor;
 
-            if (controllerActionDescriptor != null
-               || controllerActionDescriptor.MethodInfo.IsDefined(typeof(AuthorizeAttribute), true)
-               || controllerActionDescriptor.MethodInfo.IsDefined(typeof(AllowAnonymousAttribute), true))
+            var controllerActionDescriptor = context.ActionDescriptor as ControllerActionDescriptor;
+            if (controllerActionDescriptor == null)
+            {
+                context.Result = new StatusCodeResult(404);
+                return;
+            }
+
+            if (controllerActionDescriptor.MethodInfo.IsDefined(typeof(AllowAnonymousAttribute), true))
             {
                 return;
             }
 
+            //var user = context.HttpContext.User;
+            //if (!user.Identity.IsAuthenticated) {
+            //    context.Result = new StatusCodeResult(401);
+            //    return;
+            //}
 
-            //ForbidResult：未授权403 ChallengeResult：未认证401
-            context.Result = new ForbidResult();
+            if (!controllerActionDescriptor.MethodInfo.IsDefined(typeof(AuthorizeAttribute), true))
+            {
+                //context.HttpContext.Response.StatusCode = 403;
+                //context.Result = new ForbidResult(user.Identity.AuthenticationType);
+                context.Result = new StatusCodeResult(403);
+                return;
+            }
         }
 
 
