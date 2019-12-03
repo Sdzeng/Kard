@@ -25,6 +25,7 @@
   -moz-box-sizing: border-box;
   /*IE8*/
   box-sizing: border-box;
+  background-position: 0% 0%;
 }
 html {
   font-family: sans-serif;
@@ -264,8 +265,14 @@ th {
 .bg-default {
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
   background-repeat: no-repeat;
-  background-size: 100%;
+  /*Firefox3.5+*/
+  -webkit-background-size: 100%;
+  /*Safari3.2+*/
+  -o-background-size: 100%;
+  /*Opera9.6*/
   -moz-background-size: 100%;
+  /*IE8*/
+  background-size: 100%;
   background-attachment: fixed;
 }
 .unify-input {

@@ -114,6 +114,15 @@
   box-sizing: @boxmodel;
 }
 
+// Box sizing
+.background-size(@boxmodel) {
+  -moz-background-size: @boxmodel; /*Firefox3.5+*/
+  -webkit-background-size: @boxmodel; /*Safari3.2+*/
+  -o-background-size: @boxmodel; /*Opera9.6*/
+  -moz-background-size: @boxmodel; /*IE8*/
+  background-size: @boxmodel;
+}
+
 // CSS3 Content Columns
 .content-columns(@column-count; @column-gap: @grid-gutter-width) {
   -webkit-column-count: @column-count;
