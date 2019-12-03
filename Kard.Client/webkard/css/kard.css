@@ -263,8 +263,9 @@ th {
 }*/
 .bg-default {
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
-  background-position: 0px -200px;
-  background-size: cover;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  -moz-background-size: 100%;
   background-attachment: fixed;
 }
 .unify-input {

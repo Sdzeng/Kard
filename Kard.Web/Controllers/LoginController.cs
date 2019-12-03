@@ -359,7 +359,7 @@ namespace Kard.Web.Controllers
         /// </summary>
         /// <returns></returns>
 
-        [HttpGet("notlogin")]
+        [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> NotLogin()
         {

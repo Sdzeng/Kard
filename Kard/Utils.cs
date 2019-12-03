@@ -3,9 +3,11 @@ using Kard.Extensions;
 using Kard.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -14,6 +16,48 @@ namespace Kard
 {
     public static class Utils
     {
+
+        /// <summary>
+        /// 获取客户端ip
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="real"></param>
+        /// <returns></returns>
+        public static string GetClientIP(HttpContext context, bool real = true)
+        {
+            var result = context.Connection.RemoteIpAddress.MapToIPv4().ToString();
+            var headers = context.Request.Headers;
+            StringValues sVals = string.Empty;
+            if (headers.TryGetValue("X-Psc-Client-IP", out sVals) && ValidateIPAddress(sVals.First()))
+            {
+                result = sVals.First();
+            }
+            else if (headers.TryGetValue("X-OPW-Real-IP", out sVals) && ValidateIPAddress(sVals.First()))
+            {
+                result = sVals.First();
+            }
+            if (!real)
+            {
+                if (headers.TryGetValue("X-Forwarded-For", out sVals) && ValidateIPAddress(sVals.First()))
+                {
+                    result = sVals.First();
+                }
+                else if (headers.TryGetValue("X-Surfcache-For", out sVals) && ValidateIPAddress(sVals.First()))
+                {
+                    result = sVals.First();
+                }
+                else if (headers.TryGetValue("X-Real-IP", out sVals) && ValidateIPAddress(sVals.First()))
+                {
+                    result = sVals.First();
+                }
+                else if (headers.TryGetValue("Client-IP", out sVals) && ValidateIPAddress(sVals.First()))
+                {
+                    result = sVals.First();
+                }
+            }
+            return result;
+        }
+
         /// <summary>
         /// 验证IP地址格式
         /// </summary>
@@ -21,9 +65,10 @@ namespace Kard
         /// <returns></returns>
         public static bool ValidateIPAddress(string ipAddress)
         {
-            Regex validipregex = new Regex(@"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
-            return (ipAddress != "" && validipregex.IsMatch(ipAddress.Trim())) ? true : false;
+            return  Regex.IsMatch(ipAddress, @"^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$");
         }
+
+
 
         /// <summary>
         /// HTTP GET方式请求数据.
@@ -129,7 +174,7 @@ namespace Kard
 
         public static string GetCity(HttpContext context, IMemoryCache memoryCache)
         {
-            var ip = context.GetClientIpAddress();
+            var ip = Utils.GetClientIP(context);
             string city = "技术星球";
             if (Utils.ValidateIPAddress(ip))
             {
