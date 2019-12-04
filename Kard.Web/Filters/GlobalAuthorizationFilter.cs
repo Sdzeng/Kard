@@ -26,7 +26,9 @@ namespace Kard.Web.Filters
                 return;
             }
 
-            if (controllerActionDescriptor.MethodInfo.IsDefined(typeof(AllowAnonymousAttribute), true))
+ 
+
+            if (controllerActionDescriptor.ControllerTypeInfo.IsDefined(typeof(AllowAnonymousAttribute), true)||controllerActionDescriptor.MethodInfo.IsDefined(typeof(AllowAnonymousAttribute), true))
             {
                 return;
             }
@@ -37,7 +39,7 @@ namespace Kard.Web.Filters
             //    return;
             //}
 
-            if (!controllerActionDescriptor.MethodInfo.IsDefined(typeof(AuthorizeAttribute), true))
+            if (!controllerActionDescriptor.ControllerTypeInfo.IsDefined(typeof(AuthorizeAttribute), true)&&!controllerActionDescriptor.MethodInfo.IsDefined(typeof(AuthorizeAttribute), true))
             {
                 //context.HttpContext.Response.StatusCode = 403;
                 //context.Result = new ForbidResult(user.Identity.AuthenticationType);
