@@ -1,6 +1,7 @@
 ﻿using Kard.Core.Dtos;
 using Kard.Core.Entities;
 using Kard.Core.IRepositories;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,26 @@ namespace Kard.Core.AppServices.Baiduspider
     public class BaiduspiderAppService : IBaiduspiderAppService
     {
         private readonly IDefaultRepository _defaultRepository;
-        public BaiduspiderAppService(IDefaultRepository defaultRepository) {
+        private readonly ILogger _logger;
+        public BaiduspiderAppService(IDefaultRepository defaultRepository, ILogger<BaiduspiderAppService> logger) {
             _defaultRepository = defaultRepository;
+            _logger = logger;
         }
+
+
+        public void Baiduspider(string pageUrl)
+        {
+            Task.Run(() =>
+            {
+                var pageUrls = new List<string> { pageUrl };
+                var urls = pageUrls.Select(item => $"http://www.coretn.cn/{item}").ToList();
+                urls.AddRange(pageUrls.Select(item => ($"http://www.coretn.cn/{item}").Replace("essay/", "essay/m/")));
+                var pars = string.Join("\n", urls);
+                string postResult = Utils.HttpPost("http://data.zz.baidu.com/urls?site=www.coretn.cn&token=ZxOJuNTh1YFbQF1m", pars, "'text/plain");
+                _logger.LogInformation($"推送页面{pageUrl}，结果{postResult}");
+            });
+        }
+
         public async Task<ResultDto> BaiduspiderAsync(List<string> urls=null)
         {
             if (urls == null || urls.Count() <= 0) {
@@ -42,5 +60,9 @@ namespace Kard.Core.AppServices.Baiduspider
 
             return await Task.FromResult(new ResultDto { Result = true, Data = postResult });
         }
+
+
+
+
     }
 }

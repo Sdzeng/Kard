@@ -1,4 +1,5 @@
-﻿using Kard.Core.Dtos;
+﻿using Kard.Core.AppServices.Baiduspider;
+using Kard.Core.Dtos;
 using Kard.Core.Entities;
 using Kard.Core.IRepositories;
 using Kard.Extensions;
@@ -41,6 +42,7 @@ namespace Kard.Web.Controllers
         private readonly IRepositoryFactory _repositoryFactory;
         private readonly IDefaultRepository _defaultRepository;
         private readonly IConfiguration _configuration;
+        private readonly IBaiduspiderAppService _baiduspiderAppService;
 
         public EssayController(IHostingEnvironment env,
             IServiceProvider serviceProvider,
@@ -50,7 +52,8 @@ namespace Kard.Web.Controllers
             ILogger<EssayController> logger,
             IMemoryCache memoryCache,
             IKardSession kardSession,
-            IConfiguration configuration) : base(logger, memoryCache, kardSession)
+            IConfiguration configuration,
+            IBaiduspiderAppService baiduspiderAppService) : base(logger, memoryCache, kardSession)
         {
             _env = env;
             _serviceProvider = serviceProvider;
@@ -59,6 +62,7 @@ namespace Kard.Web.Controllers
             _repositoryFactory = repositoryFactory;
             _defaultRepository = repositoryFactory.GetRepository<IDefaultRepository>();
             _configuration = configuration;
+            _baiduspiderAppService = baiduspiderAppService;
         }
 
         #region essay
@@ -249,9 +253,13 @@ namespace Kard.Web.Controllers
                 var createHtmlResult = await CreateHtml(resultDto.Data);
                 essayEntity.PageUrl = createHtmlResult.Data;
                 await _defaultRepository.UpdateAsync(essayEntity);
+
+                _baiduspiderAppService.Baiduspider(essayEntity.PageUrl);
                 //string cacheKey = $"homeCover[{DateTime.Now.ToString("yyyyMMdd")}]";
                 //_memoryCache.Remove(cacheKey);
             }
+
+                
             return await Task.FromResult(resultDto);
         }
 
@@ -426,8 +434,16 @@ namespace Kard.Web.Controllers
             if (result)
             {
                 var createHtmlResult = await CreateHtml(entity.Id, entity.PageUrl);
-                entity.PageUrl = createHtmlResult.Data;
-                await _defaultRepository.UpdateAsync(entity);
+
+                _baiduspiderAppService.Baiduspider(entity.PageUrl);
+
+                result = createHtmlResult.Result;
+            }
+           
+
+
+            if (result)
+            {
                 resultDto.Result = true;
                 resultDto.Message = "修改成功";
                 string cacheKey = $"homeCover[{DateTime.Now.ToString("yyyyMMdd")}]";

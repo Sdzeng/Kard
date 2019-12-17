@@ -166,30 +166,33 @@ namespace Kard.Web.Controllers
         //}
 
        /// <summary>
-       /// 提交链接
+       /// 手动提交链接
        /// </summary>
        /// <param name="urls"></param>
        /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("baiduspider")]
-        public async Task<IActionResult> Baiduspider(List<string> urls)
+        public async Task<ResultDto> Baiduspider(List<string> urls)
         {
-            var spiderWorker = new ThreadWorker(_threadWorkerlogger, new WorkTaskArgs
-            {
-                WorkName = "百度爬虫",//定制订单逾期（过期）判断 | 推广订单逾期（过期）判断 | 公共（推荐）
-                ThreadInterval = 3*60*60,//3小时执行一次
-                TaskMethod = (log, taskArgs) =>
-                {
-                    return  _baiduspiderAppService.BaiduspiderAsync(urls).Result.Result;
-                }
-            });
+            //var spiderWorker = new ThreadWorker(_threadWorkerlogger, new WorkTaskArgs
+            //{
+            //    WorkName = "百度爬虫",//定制订单逾期（过期）判断 | 推广订单逾期（过期）判断 | 公共（推荐）
+            //    ThreadInterval = 3*60*60,//3小时执行一次
+            //    TaskMethod = (log, taskArgs) =>
+            //    {
+            //        return  _baiduspiderAppService.BaiduspiderAsync(urls).Result.Result;
+            //    }
+            //});
 
-            var workers = new CompositeWorker();
-            workers.Add(spiderWorker);
-            workers.Start();
+            //var workers = new CompositeWorker();
+            //workers.Add(spiderWorker);
+            //workers.Start();
 
-            return await Task.FromResult(Content("启动成功"));
-       
+            //return await Task.FromResult(Content("启动成功"));
+
+ 
+            return await _baiduspiderAppService.BaiduspiderAsync(urls);
+
         }
 
     }

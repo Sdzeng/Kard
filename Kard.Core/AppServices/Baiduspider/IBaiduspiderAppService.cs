@@ -8,6 +8,7 @@ namespace Kard.Core.AppServices.Baiduspider
 {
     public interface IBaiduspiderAppService : IAppService
     {
+        void Baiduspider(string pageUrl);
         Task<ResultDto> BaiduspiderAsync(List<string> urls = null);
     }
 }
