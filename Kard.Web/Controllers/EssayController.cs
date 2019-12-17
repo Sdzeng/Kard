@@ -64,7 +64,7 @@ namespace Kard.Web.Controllers
         #region essay
 
 
-       
+
 
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Kard.Web.Controllers
         }
 
 
-        
+
 
 
         /// <summary>
@@ -109,11 +109,11 @@ namespace Kard.Web.Controllers
         {
             //单品信息
             var essayEntity = await _defaultRepository.FirstOrDefaultAsync<EssayEntity>(id);
-            var essayContentEntity = _defaultRepository.FirstOrDefaultByPredicate<EssayContentEntity>(new { EssayId=id});
+            var essayContentEntity = _defaultRepository.FirstOrDefaultByPredicate<EssayContentEntity>(new { EssayId = id });
             var tagList = _defaultRepository.QueryByPredicate<TagEntity>(new { EssayId = id });
             var resultDto = new ResultDto();
             resultDto.Result = essayEntity != null;
-            resultDto.Data =new { essay = essayEntity, essayContent= essayContentEntity, tagList };
+            resultDto.Data = new { essay = essayEntity, essayContent = essayContentEntity, tagList };
 
             return await Task.FromResult(resultDto);
         }
@@ -219,7 +219,7 @@ namespace Kard.Web.Controllers
         //    return result;
         //}
 
-         
+
 
         /// 添加纪录
         /// </summary>
@@ -238,7 +238,7 @@ namespace Kard.Web.Controllers
 
             essayEntity.IsPublish = essayEntity.IsPublish;
             essayEntity.Location = Utils.GetCity(HttpContext, _memoryCache);
-            essayEntity.Score = essayEntity.Score>0 ? essayEntity.Score:6m;
+            essayEntity.Score = essayEntity.Score > 0 ? essayEntity.Score : 6m;
             essayEntity.ScoreHeadCount = 1;
             essayEntity.AuditCreation(userId);
             tagList.AuditCreation(userId);
@@ -256,8 +256,9 @@ namespace Kard.Web.Controllers
         }
 
 
-        private async Task<ResultDto<string>> CreateHtml(long id, string oldUrl = null)
+        private async Task<ResultDto<string>> CreateHtml(long id, string pageUrl = null)
         {
+
             //单品信息
             var essayEntity = _repositoryFactory.GetRepository<IEssayRepository>().GetHtmlEssayDto(id);
             essayEntity.Meta = essayEntity.SubContent;
@@ -274,31 +275,37 @@ namespace Kard.Web.Controllers
                 essayEntity.Meta = essayEntity.Meta.Remove(15);
             }
 
-            if (!string.IsNullOrEmpty(oldUrl))
+            var fileName=string.Empty;
+            if (string.IsNullOrEmpty(pageUrl))
             {
-                var oldFile = Path.Combine(_env.WebRootPath, oldUrl);
+                fileName = $"{DateTime.Now.ToString("MMddHHmmssffff")}.html";
+            }
+            else
+            {
+                var oldFile = Path.Combine(_env.WebRootPath, pageUrl);
                 if (System.IO.File.Exists(oldFile))
                 {
                     System.IO.File.Delete(oldFile);
                 }
 
-                oldFile = Path.Combine(_env.WebRootPath, oldUrl.Replace("essay",Path.Combine("essay","m")));
-                if (System.IO.File.Exists(oldFile))
+                var oldMFile = Path.Combine(_env.WebRootPath, pageUrl.Replace("essay", Path.Combine("essay", "m")));
+                if (System.IO.File.Exists(oldMFile))
                 {
-                    System.IO.File.Delete(oldFile);
+                    System.IO.File.Delete(oldMFile);
                 }
+
+                fileName = Path.GetFileName(pageUrl);
             }
 
             var folderPath = "essay";
             var mfolderPath = Path.Combine("essay", "m");
-            string fileName = $"{DateTime.Now.ToString("MMddHHmmssffff")}.html";
-            var page=WriteViewToFileAsync("EssayDetail", essayEntity, folderPath, fileName);
+            var page = WriteViewToFileAsync("EssayDetail", essayEntity, folderPath, fileName);
             await WriteViewToFileAsync("MEssayDetail", essayEntity, mfolderPath, fileName);
 
             return await page;
         }
 
-        private async Task<ResultDto<string>> WriteViewToFileAsync(string viewName, object model, string folderPath,string fileName)
+        private async Task<ResultDto<string>> WriteViewToFileAsync(string viewName, object model, string folderPath, string fileName)
         {
             var resultDto = new ResultDto<string> { Result = false };
             try
@@ -308,12 +315,12 @@ namespace Kard.Web.Controllers
                 if (string.IsNullOrWhiteSpace(html))
                     return resultDto;
 
-              
-            
 
-              
+
+
+
                 string absolutePath = Path.Combine(_env.WebRootPath, folderPath);
-            
+
 
                 string fullPath = Path.Combine(absolutePath, fileName);
                 if (!Directory.Exists(absolutePath))
@@ -326,7 +333,7 @@ namespace Kard.Web.Controllers
                 resultDto.Data = Path.Combine(folderPath, fileName).Replace("\\", "/");
 
 
-              
+
             }
             catch (Exception ex)
             {
@@ -400,6 +407,7 @@ namespace Kard.Web.Controllers
             entity.CoverExtension = essayEntity.CoverExtension;
             entity.Category = essayEntity.Category;
             entity.IsPublish = essayEntity.IsPublish;
+            essayEntity.Score = essayEntity.Score > 0 ? essayEntity.Score : 6m;
 
             entity.SubContent = Utils.ContentRegex.Replace(essayContentEntity.Content, "");
             if (entity.SubContent.Length > 100)
@@ -407,9 +415,9 @@ namespace Kard.Web.Controllers
                 entity.SubContent = entity.SubContent.Remove(100) + "...";
             };
 
-             
+
             essayEntity.Location = Utils.GetCity(HttpContext, _memoryCache);
-         
+
             entity.AuditLastModification(userId);
             tagList.AuditCreation(userId);
 
@@ -467,10 +475,10 @@ namespace Kard.Web.Controllers
                 return resultDto;
             }
 
-          
-            resultDto = await _repositoryFactory.Default.DeleteAsync<EssayEntity>(new  { Id=id},isPhysics:true);
+
+            resultDto = await _repositoryFactory.Default.DeleteAsync<EssayEntity>(new { Id = id }, isPhysics: true);
             return resultDto;
-           
+
         }
 
         /// <summary>

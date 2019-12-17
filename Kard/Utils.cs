@@ -174,7 +174,7 @@ namespace Kard
 
         public static string GetCity(HttpContext context, IMemoryCache memoryCache)
         {
-            var ip = Utils.GetClientIP(context);
+            var ip = Utils.GetClientIP(context,false);
             string city = "技术星球";
             if (Utils.ValidateIPAddress(ip))
             {

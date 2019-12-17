@@ -138,7 +138,7 @@ body {
 }
 .essay-detail-info .essay-author {
   padding: 10px;
-  margin: 40px 0px;
+  margin: 40px 0px 5px 0px;
   background-color: #fff6ed;
 }
 .essay-detail-info .essay-author-avatar {
@@ -190,6 +190,11 @@ body {
                     @media (min-width: @screen-lg-min) {
                         width: 260px;
                     }*/
+}
+.essay-detail-info .wx-qrcode {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 .essay-detail-info .comment-list {
   margin-top: 20px;

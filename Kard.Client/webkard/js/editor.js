@@ -12,15 +12,15 @@ var editorjs = {
     init: function () {
         var _this = this;
 
-        $(".isay-info-category-span", _this.data.scope).click(function () {
-            $(".isay-info-category-span-checked", _this.data.scope).removeClass("isay-info-category-span-checked");
+        $(".isay-info-tag-span", _this.data.scope).click(function () {
+            $(".isay-info-tag-span-checked", _this.data.scope).removeClass("isay-info-tag-span-checked");
             $("#category", _this.data.scope).val("");
-            $(this).addClass("isay-info-category-span-checked");
+            $(this).addClass("isay-info-tag-span-checked");
 
         });
 
         $("#category", _this.data.scope).change(function () {
-            $(".isay-info-category-span-checked", _this.data.scope).removeClass("isay-info-category-span-checked");
+            $(".isay-info-tag-span-checked", _this.data.scope).removeClass("isay-info-tag-span-checked");
         });
 
         $(".btn-save", _this.data.scope).click(function () {
@@ -303,12 +303,12 @@ var editorjs = {
                             $("input:radio[name='tagRadio'][value='" + resultDto.data.tagList[0].tagName + "']", _this.data.scope).attr("checked", "checked");
                         }
 
-                        var categoryObj = $(".isay-info-category-span[data-val='" + resultDto.data.essay.category + "']");
-                        if (categoryObj && categoryObj.length > 0) {
-                            categoryObj.addClass("isay-info-category-span-checked");
+                        var tagObj = $(".isay-info-tag-span[data-val='" + resultDto.data.tagList[0].tagName + "']");
+                        if (tagObj && tagObj.length > 0) {
+                            tagObj.addClass("isay-info-tag-span-checked");
                         }
                         else {
-                            $("#category", _this.data.scope).val(resultDto.data.essay.category);
+                            $("#tag", _this.data.scope).val(resultDto.data.tagList[0].tagName);
                         }
                         
                         $('#isPublish', _this.data.scope).attr("checked", resultDto.data.essay.isPublish);
@@ -331,11 +331,11 @@ var editorjs = {
 
 
         var title = $("#isayTitle", _this.data.scope).val();
-        var tag = $("input:radio[name='tagRadio']:checked", _this.data.scope).val();
+        var category = $("input:radio[name='categoryRadio']:checked", _this.data.scope).val();
 
-        var category = $(".isay-info-category-span-checked", _this.data.scope).attr("data-val");
-        if (!category) {
-            category = $("#category", _this.data.scope).val();
+        var tag = $(".isay-info-tag-span-checked", _this.data.scope).attr("data-val");
+        if (!tag) {
+            tag = $("#tag", _this.data.scope).val();
         }
         //var isOriginal = $("#isOriginal", _this.data.scope).prop('checked');
 

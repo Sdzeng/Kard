@@ -1041,7 +1041,7 @@ th {
 .essay-detail-info-left .essay-detail-subheading .essay-detail-tag {
   color: white;
 }
-.essay-detail-info-left .essay-detail-subheading .essay-detail-tag span {
+.essay-detail-info-left .essay-detail-subheading .essay-detail-tag a {
   padding: 2px 10px;
   background-color: #f2f8f2;
   color: #4f946e;
@@ -1049,11 +1049,11 @@ th {
   border-radius: 2px;
   cursor: pointer;
 }
-.essay-detail-info-left .essay-detail-subheading .essay-detail-tag span:hover {
+.essay-detail-info-left .essay-detail-subheading .essay-detail-tag a:hover {
   border-color: #c4e2d8;
   background-color: #eff5ef;
 }
-.essay-detail-info-left .essay-detail-subheading .essay-detail-tag span:not(:first-child) {
+.essay-detail-info-left .essay-detail-subheading .essay-detail-tag a:not(:first-child) {
   margin-left: 10px;
 }
 .essay-detail-info-left .essay-detail-content {
@@ -1068,7 +1068,6 @@ th {
   height: auto;
   max-width: 100%;
   max-height: 100%;
-  margin-top: 20px;
 }
 .essay-detail-info-left .essay-detail-like-share {
   margin-top: 60px;
@@ -1932,10 +1931,10 @@ th {
 .isay-info-other-item .item-info input[type="radio"] {
   margin: 0px 5px 0px 10px;
 }
-.isay-info-category {
+.isay-info-tag {
   align-items: flex-start;
 }
-.isay-info-category-span {
+.isay-info-tag-span {
   font-size: 14px;
   padding: 6px 10px;
   text-align: center;
@@ -1946,13 +1945,13 @@ th {
   cursor: pointer;
   margin: 0px 10px 10px 0px;
 }
-.isay-info-category-span:hover {
+.isay-info-tag-span:hover {
   background: #039993;
 }
-.isay-info-category-span-checked {
+.isay-info-tag-span-checked {
   background-color: #039993;
 }
-.isay-info-category-input {
+.isay-info-tag-input {
   height: 28px;
   font-size: 14px;
   border: 1px solid #ccc;

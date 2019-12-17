@@ -92,7 +92,7 @@
 
                     @foreach (var tag in Model.TagList)
                     {
-                          <span data-tagid='@tag.Id'>@tag.TagName</span>
+                          <a  href="http://www.coretn.cn/search.html?keyword=@tag.TagName"  data-tagid='@tag.Id'>@tag.TagName</a>
                     }
 
                     </div>

@@ -15,7 +15,7 @@
     <meta property="og:description" content="@Model.Meta" />
     <title>@String.Concat(Model.Title, "-", Model.KuserNickName, "-核心技术")</title>
 
-
+    <link rel="icon" href="/image/logo-tab_16x16.ico" sizes="16x16">
     <link rel="stylesheet" href="/plugins/tinymce/js/tinymce/skins/ui/oxide/content.min.css" type="text/css" media="screen">
     <link rel="stylesheet" href="/plugins/tinymce/js/tinymce/css/codepen.min.css" type="text/css" media="screen">
     <link rel="stylesheet" href="/css/m-kard.css" type="text/css" media="screen">
@@ -51,7 +51,7 @@
 
 
             <div class="essay-min-author-right">
-                <span>关注</span>
+                <span>@Model.Category</span>
             </div>
         </div>
 
@@ -74,6 +74,8 @@
                 </div>
             </div>
         </div>
+
+        <div class="wx-qrcode"><img class='lazy' src='/image/qrcode.jpg' /></div>
 
 
         <div class="comment-list">
