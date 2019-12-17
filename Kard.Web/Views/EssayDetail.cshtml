@@ -70,7 +70,7 @@
     </nav>
 
     <div class="navigation">
-        <div class="navigation-link"><a href="/">首页</a>\<a href="http://www.coretn.cn/search.html?keyword=@Model.Category" class="category">@Model.Category</a></div>
+        <div class="navigation-link"><a href="/">首页</a>\<a href="http://www.coretn.cn/search.html?keyword=@Model.TagList.FirstOrDefault()?.TagName" >@Model.TagList.FirstOrDefault()?.TagName</a></div>
     </div>
     <div class="essay-detail-info" data-id="@Model.Id">
 
@@ -88,14 +88,9 @@
                      <span>@Model.Location </span><span data-creationtime="@Model.CreationTime"></span><span class="browse-num"></span> 
 
                 </div>
-                <div class="essay-detail-tag">
-
-                    @foreach (var tag in Model.TagList)
-                    {
-                          <a  href="http://www.coretn.cn/search.html?keyword=@tag.TagName"  data-tagid='@tag.Id'>@tag.TagName</a>
-                    }
-
-                    </div>
+                <div class="essay-detail-category">
+                          <a  href="http://www.coretn.cn/search.html?keyword=@Model.Category"  data-tagid='@Model.Category'></a>
+                   </div>
             </div>
 
 

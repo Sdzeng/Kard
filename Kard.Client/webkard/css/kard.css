@@ -1038,10 +1038,10 @@ th {
 .essay-detail-info-left .essay-detail-subheading .essay-detail-remark span:not(:first-child) {
   margin-left: 10px;
 }
-.essay-detail-info-left .essay-detail-subheading .essay-detail-tag {
+.essay-detail-info-left .essay-detail-subheading .essay-detail-category {
   color: white;
 }
-.essay-detail-info-left .essay-detail-subheading .essay-detail-tag a {
+.essay-detail-info-left .essay-detail-subheading .essay-detail-category a {
   padding: 2px 10px;
   background-color: #f2f8f2;
   color: #4f946e;
@@ -1049,11 +1049,11 @@ th {
   border-radius: 2px;
   cursor: pointer;
 }
-.essay-detail-info-left .essay-detail-subheading .essay-detail-tag a:hover {
+.essay-detail-info-left .essay-detail-subheading .essay-detail-category a:hover {
   border-color: #c4e2d8;
   background-color: #eff5ef;
 }
-.essay-detail-info-left .essay-detail-subheading .essay-detail-tag a:not(:first-child) {
+.essay-detail-info-left .essay-detail-subheading .essay-detail-category a:not(:first-child) {
   margin-left: 10px;
 }
 .essay-detail-info-left .essay-detail-content {
