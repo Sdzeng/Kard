@@ -264,14 +264,22 @@
                 //    topMediaPictureHtml += topMediaPictureHtml;
                 //}
             }
+
             if (isChangeCategory) {
-                $(".section-style-title-little", $title).html("<span>" + basejs.arrDistinct(titleTagArr).join("</span><span>") + "</span>");
+                //$(".section-style-title-little", $title).html("<span>" + basejs.arrDistinct(titleTagArr).join("</span><span>") + "</span>");
                 $(".section-style-body-block", $body).html(pictureHtml);
             }
             else {
-                $(".section-style-title-little", $title).append("<span>" + basejs.arrDistinct(titleTagArr).join("</span><span>") + "</span>");
+                //$(".section-style-title-little", $title).append("<span>" + basejs.arrDistinct(titleTagArr).join("</span><span>") + "</span>");
                 $(".section-style-body-block", $body).append(pictureHtml);
             }
+ 
+
+            if($(".section-style-title-little", $title).html()==""){
+                $(".section-style-title-little", $title).html("<span>" + basejs.arrDistinct(titleTagArr).join("</span><span>") + "</span>");
+            }
+
+         
 
         }
 
