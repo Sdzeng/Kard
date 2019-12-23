@@ -7,27 +7,29 @@ Page({
   data: {
     opacityScroll:0,
     imgUrls: [
-      'http://www.coretn.cn/user/1/media/20191205/051208178429.jpg',
-      'http://www.coretn.cn/user/1/media/20191205/051208178429.jpg',
+      'https://hbimg.huabanimg.com/cb0b95e3b457f788000564e0c3d0f6890711e75d981001-VvlHQM_fw658',
+      'http://www.coretn.cn/user/1/media/20191216/162201390216.jpg',
       'http://www.coretn.cn/user/1/media/20191205/051208178429.jpg',
       'http://www.coretn.cn/user/1/media/20191216/162201390216.jpg',
-      'http://www.coretn.cn/user/1/media/20191216/162220173392.jpg',
     ]
-  },
-  //滚动条监听
-  scroll: function (e) {
-    const that = this
-    console.log("yes")
-    // const scrollTop=e.detail.scrollTop
-    // const opacityScroll= (scrollTop /100) > 1 ? 1 :(scrollTop /100)
-    // that.setData({opacityScroll: e.detail.scrollTop})
   },
   //事件处理函数
   btnSearch: function(e){
-    console.log(e);
-    wx.navigateTo({
-      url: '../../pages/news/news'
-    })
+    console.log("btnSearch")
+    wx.navigateTo({ url:"/pages/search/search"})
+
+  },
+  //监听屏幕滚动 判断上下滚动
+  onPageScroll: function (ev) {
+    var that = this;
+    //当滚动的top值最大或最小时，为什么要做这一步是因为在手机实测小程序的时候会发生滚动条回弹，所以为了处理回弹，设置默认最大最小值
+    if (ev.scrollTop <= 0) {
+      ev.scrollTop = 0;
+    } else if (ev.scrollTop > wx.getSystemInfoSync().windowHeight) {
+      ev.scrollTop = wx.getSystemInfoSync().windowHeight;
+    }
+    const opacityScroll= (ev.scrollTop /100) > 1 ? 1 :(ev.scrollTop /100)
+    that.setData({ opacityScroll: opacityScroll })
   },
   onLoad: function () {
 

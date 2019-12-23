@@ -1,0 +1,7 @@
+<!--pages/search/search.wxml-->
+<text>pages/search/search.wxml</text>
+<scroll-view  bindscroll="viewScroll"  scroll-x style="height:600px;"  >
+
+<view  style="height:800px;">
+</view>
+</scroll-view>

@@ -4,7 +4,8 @@
     "pages/news/news",
     "pages/match/match",
     "pages/login/login",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/search/search"
   ],
   "window": {
     "navigationStyle": "default",

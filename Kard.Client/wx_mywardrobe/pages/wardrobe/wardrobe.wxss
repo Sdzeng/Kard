@@ -6,9 +6,10 @@
   left: 0rpx;
   top: 0rpx;
   background-color: white;
-  height: 140rpx;
+  height: 138rpx;
   opacity:1;
   z-index: 50;
+  border-bottom:1rpx solid rgba(0,0,0,0.2);
 }
 
 
@@ -23,10 +24,10 @@
 .swiper-view-search-image image{
 
   width: 480rpx;
-  height: 64rpx;
+  height: 62rpx;
   border-radius: 32rpx;
-  background-color: rgb(165, 165, 165);
-  
+  background-color: rgb(228, 228, 228);
+   border:1rpx solid rgba(236, 234, 234, 0.2);
 }
  
 .swiper {
