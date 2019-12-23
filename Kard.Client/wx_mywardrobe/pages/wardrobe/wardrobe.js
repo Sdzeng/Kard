@@ -5,6 +5,22 @@ Page({
    * 页面的初始数据
    */
   data: {
+    imgUrls: [
+      'http://www.coretn.cn/user/1/media/20191205/051208178429.jpg',
+      'http://www.coretn.cn/user/1/media/20191205/051208178429.jpg',
+      'http://www.coretn.cn/user/1/media/20191205/051208178429.jpg',
+      'http://www.coretn.cn/user/1/media/20191216/162201390216.jpg',
+      'http://www.coretn.cn/user/1/media/20191216/162220173392.jpg',
+    ]
+  },
+  //事件处理函数
+  btnSearch: function(e){
+    console.log(e);
+    wx.navigateTo({
+      url: '../../pages/news/news'
+    })
+  },
+  onLoad: function () {
 
   },
 

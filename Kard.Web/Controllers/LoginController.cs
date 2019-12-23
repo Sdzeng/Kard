@@ -36,12 +36,11 @@ namespace Kard.Web.Controllers
         private readonly IConfiguration _configuration;
 
         public LoginController(
-          ILogger<LoginController> logger,
           IMemoryCache memoryCache,
           ILoginAppService loginAppService,
           IKardSession kardSession,
           IConfiguration configuration,
-          IRepositoryFactory repositoryFactory) : base(logger, memoryCache, kardSession)
+          IRepositoryFactory repositoryFactory) : base(memoryCache, kardSession)
         {
             _loginAppService = loginAppService;
             _configuration = configuration;

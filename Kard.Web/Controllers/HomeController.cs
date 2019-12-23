@@ -20,10 +20,10 @@ namespace Kard.Web.Controllers
     public class HomeController : BaseController
     {
         private readonly IRepositoryFactory _repositoryFactory;
-        public HomeController(ILogger<HomeController> logger,
+        public HomeController(
             IMemoryCache memoryCache,
             IRepositoryFactory repositoryFactory,
-            IKardSession kardSession) : base(logger, memoryCache, kardSession)
+            IKardSession kardSession) : base( memoryCache, kardSession)
         {
             _repositoryFactory = repositoryFactory;
         }

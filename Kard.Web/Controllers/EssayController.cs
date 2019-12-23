@@ -49,11 +49,10 @@ namespace Kard.Web.Controllers
             IRazorViewEngine razorViewEngine,
             ITempDataProvider tempDataProvider,
             IRepositoryFactory repositoryFactory,
-            ILogger<EssayController> logger,
             IMemoryCache memoryCache,
             IKardSession kardSession,
             IConfiguration configuration,
-            IBaiduspiderAppService baiduspiderAppService) : base(logger, memoryCache, kardSession)
+            IBaiduspiderAppService baiduspiderAppService) : base( memoryCache, kardSession)
         {
             _env = env;
             _serviceProvider = serviceProvider;
@@ -93,7 +92,7 @@ namespace Kard.Web.Controllers
                 var result = _repositoryFactory.GetRepository<IEssayRepository>().UpdateBrowseNum(id);
                 if (!result)
                 {
-                    _logger.LogError($"统计：单品{id}增加阅读数失败");
+                    _logger.Error($"统计：单品{id}增加阅读数失败");
                 }
             });
 
@@ -382,7 +381,7 @@ namespace Kard.Web.Controllers
         /// <param name="essayContentEntity"></param>
         /// <param name="tagList"></param>
         [HttpPost("update")]
-        public async Task<ResultDto> Update(EssayEntity essayEntity, EssayContentEntity essayContentEntity, IEnumerable<TagEntity> tagList)
+        public async Task<ResultDto> Update(EssayEntity essayEntity,EssayContentEntity essayContentEntity, IEnumerable<TagEntity> tagList)
         {
             var resultDto = new ResultDto();
             var userId = _kardSession.UserId.Value;
@@ -415,7 +414,7 @@ namespace Kard.Web.Controllers
             entity.CoverExtension = essayEntity.CoverExtension;
             entity.Category = essayEntity.Category;
             entity.IsPublish = essayEntity.IsPublish;
-            essayEntity.Score = essayEntity.Score > 0 ? essayEntity.Score : 6m;
+            entity.Score = essayEntity.Score > 0 ? essayEntity.Score : 6m;
 
             entity.SubContent = Utils.ContentRegex.Replace(essayContentEntity.Content, "");
             if (entity.SubContent.Length > 100)
@@ -424,8 +423,8 @@ namespace Kard.Web.Controllers
             };
 
 
-            essayEntity.Location = Utils.GetCity(HttpContext, _memoryCache);
-
+            entity.Location = Utils.GetCity(HttpContext, _memoryCache);
+      
             entity.AuditLastModification(userId);
             tagList.AuditCreation(userId);
 
@@ -643,7 +642,7 @@ namespace Kard.Web.Controllers
                 Message = "查询成功"
             };
 
-            _logger.LogDebug(Serialize.ToJson(new { url, appId, jsTicket, timestamp, nonceStr, signature }));
+            _logger.Debug(Serialize.ToJson(new { url, appId, jsTicket, timestamp, nonceStr, signature }));
             return await Task.FromResult(resultDto);
         }
 

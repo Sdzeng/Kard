@@ -1,8 +1,8 @@
 {
   "pages": [
+    "pages/wardrobe/wardrobe",
     "pages/news/news",
     "pages/match/match",
-    "pages/wardrobe/wardrobe",
     "pages/login/login",
     "pages/logs/logs"
   ],
@@ -19,6 +19,12 @@
     "color": "#1aad16",
     "list": [
       {
+        "pagePath": "pages/wardrobe/wardrobe",
+        "text": "首页",
+        "iconPath": "/icons/account.png",
+        "selectedIconPath": "/icons/account_select.png"
+      },
+      {
         "pagePath": "pages/news/news",
         "text": "新入",
         "iconPath": "/icons/account.png",
@@ -27,12 +33,6 @@
       {
         "pagePath": "pages/match/match",
         "text": "搭配",
-        "iconPath": "/icons/account.png",
-        "selectedIconPath": "/icons/account_select.png"
-      },
-      {
-        "pagePath": "pages/wardrobe/wardrobe",
-        "text": "衣橱",
         "iconPath": "/icons/account.png",
         "selectedIconPath": "/icons/account_select.png"
       }

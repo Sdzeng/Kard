@@ -1,2 +1,11 @@
-<!--pages/wardrobe/wardrobe.wxml-->
-<text>pages/wardrobe/wardrobe.wxml</text>
+<view>
+    <view class="swiper-view-search" hover-class="plus-hover">
+      <image src="" bindtap="btnSearch"></image>
+    </view>
+
+    <swiper class="swiper" indicator-dots="true" autoplay="true" interval="3000" >
+      <swiper-item wx:for="{{imgUrls}}"> 
+        <image src='{{item}}' mode='aspectFill' />
+      </swiper-item>
+    </swiper>
+</view>

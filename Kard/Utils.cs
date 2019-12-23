@@ -1,8 +1,10 @@
-﻿using Kard.Dtos;
+﻿using Kard.DI;
+using Kard.Dtos;
 using Kard.Extensions;
 using Kard.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
@@ -16,7 +18,7 @@ namespace Kard
 {
     public static class Utils
     {
-
+        private static readonly ILogger _logger =KardIoc.GetService<ILogger<string>>();
         /// <summary>
         /// 获取客户端ip
         /// </summary>
@@ -174,7 +176,8 @@ namespace Kard
 
         public static string GetCity(HttpContext context, IMemoryCache memoryCache)
         {
-            var ip = Utils.GetClientIP(context,false);
+            
+           var ip = Utils.GetClientIP(context,false);
             string city = "技术星球";
             if (Utils.ValidateIPAddress(ip))
             {
@@ -184,11 +187,15 @@ namespace Kard
 
                     #region 通过IP获取详细地址（淘宝接口）
                     string info = Utils.HttpGet("http://ip.taobao.com/service/getIpInfo.php?ip=" + ip);
-                    string re = Utils.Unicode2String(info);
-                    var taobao = Serialize.FromJson<ResTaobaoIpDto>(re);
-                    if (taobao.code == 0&& taobao.data.city!="内网IP")
+                  
+                    if (!string.IsNullOrEmpty(info))
                     {
-                        return taobao.data.city;
+                        string re = Utils.Unicode2String(info);
+                        var taobao = Serialize.FromJson<ResTaobaoIpDto>(re);
+                        if (taobao != null && taobao.code == 0 && taobao.data.city != "内网IP")
+                        {
+                            return taobao.data.city;
+                        }
                     }
 
                     return "技术星球";
@@ -197,6 +204,8 @@ namespace Kard
                 });
             }
 
+
+            _logger.LogInformation($"IP:{ip},City:{city}");
             return city;
         }
 

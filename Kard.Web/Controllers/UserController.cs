@@ -33,11 +33,11 @@ namespace Kard.Web.Controllers
         private readonly IRepositoryFactory _repositoryFactory;
         private readonly IDefaultRepository _defaultRepository;
         public UserController(IHostingEnvironment env,
-            ILogger<UserController> logger,
+    
             IMemoryCache memoryCache,
             IRepositoryFactory repositoryFactory,
             IKardSession kardSession)
-            : base(logger, memoryCache, kardSession)
+            : base( memoryCache, kardSession)
         {
             //HttpContext.Session.SetString("UserId", user.Id.ToString());
             _env = env;

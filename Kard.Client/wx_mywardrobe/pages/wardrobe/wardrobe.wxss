@@ -1,1 +1,50 @@
 /* pages/wardrobe/wardrobe.wxss */
+.swiper-view-search{
+  width: 100%;
+  position:fixed;
+  left: 30rpx;
+  top: 52rpx;
+  z-index: 100;
+}
+
+.swiper-view-search image{
+
+  width: 480rpx;
+  height: 64rpx;
+  border-radius: 32rpx;
+  background-color: rgb(250, 248, 248);
+  
+}
+ 
+.swiper {
+width: 100%;
+height: 650rpx;
+}
+
+.swiper image{
+width: 100%;
+height: 650rpx;
+}
+
+.swiper .wx-swiper-dots.wx-swiper-dots-horizontal{
+     margin-bottom: 2rpx;
+     display:flex;
+     justify-content:flex-end;
+     width: 86%;
+}
+
+.swiper .wx-swiper-dot{
+    width:20rpx;
+    display: inline-flex;
+    height: 4rpx;
+    justify-content:flex-end;
+}
+.swiper .wx-swiper-dot::before{
+    content: '';
+    flex-grow: 1; 
+    background: rgba(165, 165, 165, 0.8);
+ 
+}
+.swiper .wx-swiper-dot-active::before{
+    background:white;
+}

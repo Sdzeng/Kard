@@ -7,7 +7,8 @@ Page({
 
   },
   //事件处理函数
-  bindViewTap: function() {
+  bindViewTap: function(e) {
+    console.log(e);
     wx.navigateTo({
       url: '../logs/logs'
     })

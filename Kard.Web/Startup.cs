@@ -22,6 +22,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.Extensions.WebEncoders;
+using NLog;
 using NLog.Extensions.Logging;
 using NLog.Web;
 using Senparc.CO2NET;
@@ -292,9 +293,11 @@ namespace Kard.Web
         // 请求管道会按顺序执行下列委托（中间件），返回顺序则相反；
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IOptions<SenparcSetting> senparcSetting, IOptions<SenparcWeixinSetting> senparcWeixinSetting)
         {
-     
-            var logger = loggerFactory.CreateLogger("Startup");
-            logger.LogInformation($"启动环境:{Serialize.ToJson(env)}");
+            loggerFactory.AddNLog();
+            env.ConfigureNLog("nlog.config");
+            var logger = LogManager.GetCurrentClassLogger(); 
+            //var logger = loggerFactory.CreateLogger("Startup");
+            logger.Info($"启动环境:{Serialize.ToJson(env)}");
 
             if (env.IsDevelopment())
             {

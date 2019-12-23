@@ -35,21 +35,18 @@ namespace Kard.Web.Controllers
         private readonly IHostingEnvironment _env;
         private readonly IBaiduspiderAppService _baiduspiderAppService;
         private readonly IConfiguration _configuration;
-        private readonly ILogger<ThreadWorker> _threadWorkerlogger;
 
         public CommonController(IHostingEnvironment env,
-            ILogger<EssayController> logger,
-            ILogger<ThreadWorker> threadWorkerlogger,
             IMemoryCache memoryCache,
             IBaiduspiderAppService baiduspiderAppService,
 
             IKardSession kardSession,
-            IConfiguration configuration) : base(logger, memoryCache, kardSession)
+            IConfiguration configuration) : base( memoryCache, kardSession)
         {
             _env = env;
             _baiduspiderAppService = baiduspiderAppService;
             _configuration = configuration;
-            _threadWorkerlogger = threadWorkerlogger;
+          
         }
 
 
