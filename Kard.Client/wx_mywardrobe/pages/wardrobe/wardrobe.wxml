@@ -1,11 +1,20 @@
-<view>
-    <view class="swiper-view-search" hover-class="plus-hover">
-      <image src="" bindtap="btnSearch"></image>
-    </view>
 
+  <scroll-view scroll-y="true" style="height:800px;white-space:nowrap;" bindscroll="scroll">
+  <view style="">
+   <view class="swiper-view-search-bar" style="opacity:{{opacityScroll}}"></view>
+
+   <view class="swiper-view-search-image"> 
+      <image src="" bindtap="btnSearch"></image>
+   </view>
+
+    
     <swiper class="swiper" indicator-dots="true" autoplay="true" interval="3000" >
       <swiper-item wx:for="{{imgUrls}}"> 
         <image src='{{item}}' mode='aspectFill' />
       </swiper-item>
     </swiper>
-</view>
+
+    were
+  </view>
+    </scroll-view>
+ 

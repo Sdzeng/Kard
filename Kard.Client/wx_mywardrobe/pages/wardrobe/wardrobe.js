@@ -5,6 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    opacityScroll:0,
     imgUrls: [
       'http://www.coretn.cn/user/1/media/20191205/051208178429.jpg',
       'http://www.coretn.cn/user/1/media/20191205/051208178429.jpg',
@@ -12,6 +13,14 @@ Page({
       'http://www.coretn.cn/user/1/media/20191216/162201390216.jpg',
       'http://www.coretn.cn/user/1/media/20191216/162220173392.jpg',
     ]
+  },
+  //滚动条监听
+  scroll: function (e) {
+    const that = this
+    console.log("yes")
+    // const scrollTop=e.detail.scrollTop
+    // const opacityScroll= (scrollTop /100) > 1 ? 1 :(scrollTop /100)
+    // that.setData({opacityScroll: e.detail.scrollTop})
   },
   //事件处理函数
   btnSearch: function(e){

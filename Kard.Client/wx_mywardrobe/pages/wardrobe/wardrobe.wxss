@@ -1,18 +1,31 @@
 /* pages/wardrobe/wardrobe.wxss */
-.swiper-view-search{
+
+.swiper-view-search-bar{
+  width: 100%;
+  position:fixed;
+  left: 0rpx;
+  top: 0rpx;
+  background-color: white;
+  height: 140rpx;
+  opacity:1;
+  z-index: 50;
+}
+
+
+.swiper-view-search-image{
   width: 100%;
   position:fixed;
   left: 30rpx;
-  top: 52rpx;
+  top: 50rpx;
   z-index: 100;
 }
 
-.swiper-view-search image{
+.swiper-view-search-image image{
 
   width: 480rpx;
   height: 64rpx;
   border-radius: 32rpx;
-  background-color: rgb(250, 248, 248);
+  background-color: rgb(165, 165, 165);
   
 }
  
