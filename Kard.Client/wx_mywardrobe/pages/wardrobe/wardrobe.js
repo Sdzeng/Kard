@@ -28,11 +28,13 @@ Page({
     } else if (ev.scrollTop > wx.getSystemInfoSync().windowHeight) {
       ev.scrollTop = wx.getSystemInfoSync().windowHeight;
     }
-    const opacityScroll= (ev.scrollTop /100) > 1 ? 1 :(ev.scrollTop /100)
+    const opacityScroll= (ev.scrollTop /200) > 1 ? 1 :(ev.scrollTop /200)
     that.setData({ opacityScroll: opacityScroll })
   },
-  onLoad: function () {
-
+  onGotUserInfo: function (e) {
+    console.log(e.detail.errMsg)
+    console.log(e.detail.userInfo)
+    console.log(e.detail.rawData)
   },
 
   /**

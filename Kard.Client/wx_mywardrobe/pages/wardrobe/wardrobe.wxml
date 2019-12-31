@@ -1,8 +1,6 @@
-
- 
-  <view style="height:3000px;">
+<view style="height:3000px;">
+  <view>
    <view class="swiper-view-search-bar" style="opacity:{{opacityScroll}}"></view>
-
    <view class="swiper-view-search-image"> 
       <image src="/images/search.png" bindtap="btnSearch"></image>
    </view>
@@ -13,8 +11,34 @@
         <image src='{{item}}' mode='aspectFill' />
       </swiper-item>
     </swiper>
-
- 
   </view>
+
+  <view class="category-list">
+  <view class="category"> 
+    <image src="" class="category-image"></image>
+    <view class="category-txt">上装</view>  
+  </view>
+  <view class="category"> 
+    <image src="" class="category-image"></image>
+    <view class="category-txt">裤子</view>  
+  </view>
+   <view class="category"> 
+    <image src="" class="category-image"></image>
+    <view class="category-txt">鞋子</view>  
+  </view>
+   <view class="category"> 
+    <image src="" class="category-image"></image>
+    <view class="category-txt">佩饰</view>  
+  </view>
+   <view class="category"> 
+    <image src="" class="category-image"></image>
+    <view class="category-txt">套装</view>  
+  </view>
+  </view>
+
+  <open-data type="getPhoneNumber">
+  <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo">获取用户信息</button>
+  
+</view>
  
  

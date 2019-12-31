@@ -17,8 +17,7 @@ namespace Kard.Core.Entities
         public long Id { get; set; }
 
         public string UserType { get; set; }
-        public string WxOpenId { get; set; }
-        public string WxSessionKey { get; set; }
+
 
         public string Name { get; set; }
 
@@ -35,7 +34,7 @@ namespace Kard.Core.Entities
         public int? Gender { get; set; }
 
         public string City { get; set; }
-        public string Language { get; set; }
+        public string Country { get; set; }
         public int FollowNum { get; set; }
         public int LikeNum { get; set; }
         public int FansNum { get; set; }

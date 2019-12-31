@@ -255,25 +255,25 @@ var editorjs = {
             setup: function(ed) {
                 
              
-               ed.ui.registry.addContextToolbar('imagealignment', {
-                predicate: function (node) {
-                  return node.nodeName.toLowerCase() === 'img'
-                },
-                items: 'alignleft aligncenter alignright | rotateleft rotateright | flipv fliph | editimage imageoptions',
-                position: 'node',
-                scope: 'node'
-              });
+            //    ed.ui.registry.addContextToolbar('imagealignment', {
+            //     predicate: function (node) {
+            //       return node.nodeName.toLowerCase() === 'img'
+            //     },
+            //     items: 'alignleft aligncenter alignright | rotateleft rotateright | flipv fliph | editimage imageoptions',
+            //     position: 'node',
+            //     scope: 'node'
+            //   });
           
              
                  
-              ed.ui.registry.addContextToolbar('textselection', {
-                predicate: function (node) {
-                  return !ed.selection.isCollapsed();
-                },
-                items: 'bold italic blockquote | image | codesample',
-                position: 'selection',
-                scope: 'node'
-              });
+            //   ed.ui.registry.addContextToolbar('textselection', {
+            //     predicate: function (node) {
+            //       return !ed.selection.isCollapsed();
+            //     },
+            //     items: 'bold italic blockquote | image | codesample',
+            //     position: 'selection',
+            //     scope: 'node'
+            //   });
 
              }
              

@@ -16,6 +16,7 @@
     <PackageReference Include="Dapper" Version="1.50.5" />
     <PackageReference Include="DapperExtensions.NetCore" Version="2.0.6" />
     <PackageReference Include="MySql.Data" Version="8.0.12" />
+    <PackageReference Include="Senparc.Weixin.MP" Version="16.6.15" />
   </ItemGroup>
 
   <ItemGroup>

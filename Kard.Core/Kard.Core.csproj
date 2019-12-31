@@ -23,4 +23,8 @@
     <Folder Include="AppServices\Login\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Senparc.Weixin.MP" Version="16.6.15" />
+  </ItemGroup>
+
 </Project>

@@ -8,13 +8,15 @@ using Kard.Runtime.Security.Authentication.WeChat;
 using Kard.Runtime.Session;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Senparc.Weixin;
+using Senparc.Weixin.MP.AdvancedAPIs;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Text;
+
 
 
 namespace Kard.Core.AppServices.Default
@@ -27,21 +29,23 @@ namespace Kard.Core.AppServices.Default
         //private readonly IPasswordValidator<KuserEntity> _passwordValidator;
         private readonly IRepositoryFactory _repositoryFactory;
         private readonly IDefaultRepository _defaultRepository;
+        private readonly IKuserRepository _kuserRepository;
+        private readonly IConfiguration _configuration;
 
- 
         public LoginAppService(
              IServiceProvider serviceProvider,
             IKardSession kardSession,
+             IConfiguration configuration,
             IPasswordHasher<KuserEntity> passwordHasher,
               IRepositoryFactory repositoryFactory)
         {
-          
+
             _kardSession = kardSession;
             _passwordHasher = passwordHasher;
-
+            _configuration = configuration;
             _repositoryFactory = repositoryFactory;
             _defaultRepository = repositoryFactory.GetRepository<IDefaultRepository>();
-
+            _kuserRepository = repositoryFactory.GetRepository<IKuserRepository>();
 
             //测试
             //scope.Dispose()-->childProvider.Dispose()删除对Service实例的引用
@@ -55,21 +59,6 @@ namespace Kard.Core.AppServices.Default
                 string ee = result.ToString();
             }
         }
-
-
-
-        //public ResultDto Signup(KuserEntity user)
-        //{
-        //    var resultDto = new ResultDto();
-        //    bool isExist=  _defaultRepository.IsExistUser(user.Name,user.Phone, user.Email);
-        //    if (isExist)
-        //    {
-        //        resultDto.Message = $"已存在登陆名{user.Name}";
-        //        return resultDto;
-        //    }
-
-        //    return resultDto;
-        //}
 
 
 
@@ -117,76 +106,108 @@ namespace Kard.Core.AppServices.Default
         }
 
 
-
-
-        public ResultDto<ClaimsIdentity> WxLogin(string code, WeChatUserDto userInfo)
+        public ResultDto<ClaimsIdentity> WxAppLogin(string code)
         {
-            var result = new ResultDto<ClaimsIdentity>();
-            var appid = "wx109fc14b4956fc70";
-            var secret = "a8e7f19d69cbde0272fd866fe7392874";
-            var url = $"https://api.weixin.qq.com/sns/jscode2session?appid={appid}&secret={secret}&js_code={code}&grant_type=authorization_code";
-            
-            var client = new HttpClient();
-            var json = client.GetStringAsync(url).Result;
-            var wxAuthDto = Serialize.FromJson<WxAuthDto>(json);
-            if (wxAuthDto.errcode.HasValue && !string.IsNullOrEmpty(wxAuthDto.errmsg))
+            var resultDto = new ResultDto<ClaimsIdentity>();
+            var appId = _configuration.GetValue<string>("AppSetting:WeChat:App:AppId");
+            var appSecret = _configuration.GetValue<string>("AppSetting:WeChat:App:AppSecret");
+            var accessTokenResult = OAuthApi.GetAccessToken(appId, appSecret, code);
+            if (accessTokenResult == null || accessTokenResult.errcode != ReturnCode.请求成功)
             {
-                result.Result = false;
-                result.Message = $"{wxAuthDto.errcode}:{wxAuthDto.errmsg}";
-                return result;
+                resultDto.Result = false;
+                resultDto.Message = "错误：" + accessTokenResult.errmsg;
+                return resultDto;
             }
 
-
-
-            var user = _defaultRepository.FirstOrDefaultByPredicate<KuserEntity>(new { WxOpenId = wxAuthDto.openid });
-            if (user != null)
+            var oAuthUserInfo = OAuthApi.GetUserInfo(accessTokenResult.access_token, accessTokenResult.openid);
+            var kuserWeChatEntity = _defaultRepository.FirstOrDefaultByPredicate<KuserWeChatEntity>(new { UnionId = oAuthUserInfo.unionid });
+            if (kuserWeChatEntity == null)
             {
-                user.WxSessionKey = wxAuthDto.session_key;
-                user.AvatarUrl = userInfo.AvatarUrl;
-                user.NickName = userInfo.NickName;
-                user.City = userInfo.City;
-                user.Language = userInfo.Language;
-                user.Gender = userInfo.Gender;
-
-                var updateUserResultDto = _defaultRepository.Update(user);
-                if (!updateUserResultDto.Result)
-                {
-                    result.Result = false;
-                    result.Message = $"用户{user.NickName}被带晕";
-                    return result;
-                }
+                _kuserRepository.AddUser(oAuthUserInfo);
             }
+
+ 
             else
             {
-                user = new KuserEntity();
-                user.WxOpenId = wxAuthDto.openid;
-                user.WxSessionKey = wxAuthDto.session_key;
-                user.UserType = "WeChatApp";
-                user.KroleId = 1;
-                user.AvatarUrl = userInfo.AvatarUrl;
-                user.NickName = userInfo.NickName;
-                user.City = userInfo.City;
-                user.Language = userInfo.Language;
-                user.Gender = userInfo.Gender;
-                user.CreationTime = DateTime.Now;
-
-                var createResult = _defaultRepository.CreateAndGetId<KuserEntity, long>(user);
-                if (!createResult.Result)
-                {
-                    result.Result = false;
-                    result.Message = $"用户{user.NickName}被迷路";
-                    return result;
-                }
+                resultDto.Result = false;
+                resultDto.Message = "密码错误";
             }
 
 
-
-            result.Result = true;
-            result.Message = "login成功";
-            result.Data = AddSessionData(user, WeChatAppDefaults.AuthenticationScheme);
-
-            return result;
+            return resultDto;
         }
+
+
+
+
+        //public ResultDto<ClaimsIdentity> WxLogin(string code, WeChatUserDto userInfo)
+        //{
+        //    var result = new ResultDto<ClaimsIdentity>();
+        //    var appid = "wx109fc14b4956fc70";
+        //    var secret = "a8e7f19d69cbde0272fd866fe7392874";
+        //    var url = $"https://api.weixin.qq.com/sns/jscode2session?appid={appid}&secret={secret}&js_code={code}&grant_type=authorization_code";
+
+        //    var client = new HttpClient();
+        //    var json = client.GetStringAsync(url).Result;
+        //    var wxAuthDto = Serialize.FromJson<WxAuthDto>(json);
+        //    if (wxAuthDto.errcode.HasValue && !string.IsNullOrEmpty(wxAuthDto.errmsg))
+        //    {
+        //        result.Result = false;
+        //        result.Message = $"{wxAuthDto.errcode}:{wxAuthDto.errmsg}";
+        //        return result;
+        //    }
+
+
+
+        //    var user = _defaultRepository.FirstOrDefaultByPredicate<KuserEntity>(new { WxOpenId = wxAuthDto.openid });
+        //    if (user != null)
+        //    {
+        //        user.WxSessionKey = wxAuthDto.session_key;
+        //        user.AvatarUrl = userInfo.AvatarUrl;
+        //        user.NickName = userInfo.NickName;
+        //        user.City = userInfo.City;
+        //        user.Country = userInfo.Language;
+        //        user.Gender = userInfo.Gender;
+
+        //        var updateUserResultDto = _defaultRepository.Update(user);
+        //        if (!updateUserResultDto.Result)
+        //        {
+        //            result.Result = false;
+        //            result.Message = $"用户{user.NickName}被带晕";
+        //            return result;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        user = new KuserEntity();
+        //        user.WxOpenId = wxAuthDto.openid;
+        //        user.WxSessionKey = wxAuthDto.session_key;
+        //        user.UserType = "WeChatApp";
+        //        user.KroleId = 1;
+        //        user.AvatarUrl = userInfo.AvatarUrl;
+        //        user.NickName = userInfo.NickName;
+        //        user.City = userInfo.City;
+        //        user.Country = userInfo.Language;
+        //        user.Gender = userInfo.Gender;
+        //        user.CreationTime = DateTime.Now;
+
+        //        var createResult = _defaultRepository.CreateAndGetId<KuserEntity, long>(user);
+        //        if (!createResult.Result)
+        //        {
+        //            result.Result = false;
+        //            result.Message = $"用户{user.NickName}被迷路";
+        //            return result;
+        //        }
+        //    }
+
+
+
+        //    result.Result = true;
+        //    result.Message = "login成功";
+        //    result.Data = AddSessionData(user, WeChatAppDefaults.AuthenticationScheme);
+
+        //    return result;
+        //}
 
 
         public ResultDto Register(string registerType, KuserEntity user)
@@ -195,7 +216,7 @@ namespace Kard.Core.AppServices.Default
             switch (registerType)
             {
                 case "accountRegister": resultDto = AccountRegister(user); break;
-                //case "wxRegister": resultDto = WxRegister(user); break;
+                    //case "wxRegister": resultDto = WxRegister(user); break;
             }
             return resultDto;
         }
@@ -230,7 +251,7 @@ namespace Kard.Core.AppServices.Default
             //resultDto.Result = _defaultRepository.CreateAccountUser(user);
             //resultDto.Message = resultDto.Result?"注册成功": "注册失败";
             //return resultDto;
-            var createResultDto= _defaultRepository.CreateAndGetId<KuserEntity,long>(user);
+            var createResultDto = _defaultRepository.CreateAndGetId<KuserEntity, long>(user);
             resultDto.Result = createResultDto.Result;
             resultDto.Message = createResultDto.Message;
             return resultDto;
@@ -277,10 +298,10 @@ namespace Kard.Core.AppServices.Default
                 caimsIdentity.AddClaim(new Claim(KardClaimTypes.UserId, user.Id.ToString()));
             }
 
-            if (!user.WxOpenId.IsNullOrEmpty())
-            {
-                caimsIdentity.AddClaim(new Claim(KardClaimTypes.WxUnionId, user.WxOpenId));
-            }
+            //if (!user.WxOpenId.IsNullOrEmpty())
+            //{
+            //    caimsIdentity.AddClaim(new Claim(KardClaimTypes.WxUnionId, user.WxOpenId));
+            //}
 
             //if (!user.WxSessionKey.IsNullOrEmpty())
             //{
