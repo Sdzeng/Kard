@@ -36,7 +36,7 @@
   </view>
   </view>
 
-  <open-data type="getPhoneNumber">
+
   <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo">获取用户信息</button>
   
 </view>

@@ -3,7 +3,7 @@
   //  "windowsAuthentication": false,
   //  "anonymousAuthentication": true,
   //  "iisExpress": {
-  //    "applicationUrl": "http://192.168.10.2:3703/",
+  //    "applicationUrl": "http://localhost:3703/",
   //    "sslPort": 0
   //  }
   //},
@@ -23,9 +23,9 @@
   //    "environmentVariables": {
   //      "ASPNETCORE_ENVIRONMENT": "Development"  //Development Production
 
- 
+
   //    },
-  //    "applicationUrl": "http://192.168.10.2:3703/"
+  //    "applicationUrl": "http://localhost:3703/"
   //  }
   //}
 }
